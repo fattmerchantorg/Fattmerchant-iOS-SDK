@@ -7,7 +7,7 @@ The Fattmerchant iOS SDK provides a simple way to accept a payment on your iOS a
 * [Getting Started](#getting-started)
 * [Testing](#testing)
 
-![Tokenization Info](/assets/images/tokenization-info.png)
+![Tokenization Info](https://raw.githubusercontent.com/fattmerchantorg/Fattmerchant-iOS-SDK/master/assets/images/tokenization-info.png)
 
 ## Try it out! Please!
 The Fattmerchant iOS SDK comes with a Swift Playground. All you need to get started is your `web payments token`, provided to you by your trusty Fattmerchant Account Manager. You can find the playground, called `Tokenization.Playground` in the project root 🤓
@@ -39,11 +39,11 @@ import Fattmerchant
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		FattmerchantConfiguration.shared.webPaymentsToken = "mywebpaymentstoken"
 		// ...
 		return true
-	}
+  }
 }
 ```
 
@@ -77,13 +77,11 @@ Once you have a `CreditCard` object, call the `tokenize(:)` method on  `Fattmerc
 ```swift
 let fattClient = FattmerchantApi(webPaymentsToken: "mywebpaymentstoken")
 fattClient.tokenize(card) { (response) in
-
-  	if case let .success(paymentMethod) = response {
-    	let paymentToken = paymentMethod.id
-    	print("I must now use \(paymentToken) to create a payment.")
-  	}
-
-	// Success! You can now run a transaction with Fattmerchant using paymentToken as the PaymentMethod
+  if case let .success(paymentMethod) = response {
+    let paymentToken = paymentMethod.id
+    print("I must now use \(paymentToken) to create a payment.")
+  }
+  // Success! You can now run a transaction with Fattmerchant using paymentToken as the PaymentMethod
 }
 ```
 
@@ -92,24 +90,24 @@ Or you can set a delegate to be notified.
 ```swift
 class MyClass: FattmerchantApiDelegate {
 
-	func gottaHaveThatFunc() {
-		...
-		let fattClient = FattmerchantApi(webPaymentsToken: "mywebpaymentstoken")
-		fattClient.delegate = self
-		fattClient.tokenize(card)
-	}
+  func gottaHaveThatFunc() {
+    ...
+    let fattClient = FattmerchantApi(webPaymentsToken: "mywebpaymentstoken")
+    fattClient.delegate = self
+    fattClient.tokenize(card)
+  }
 
 	func fattmerchantApi(_ fattmerchantApi: FattmerchantApi, didCreatePaymentMethod paymentMethod: PaymentMethod) {
-		let paymentToken = paymentMethod.token
-  		// You can now run a transaction with Fattmerchant using paymentToken as the PaymentMethod
-	}
+    let paymentToken = paymentMethod.token
+    // You can now run a transaction with Fattmerchant using paymentToken as the PaymentMethod
+  }
   
-  	func fattmerchantApi(_ fattmerchantApi: FattmerchantApi, didReceiveError: Error) {
-    	if case let .tokenizationError(errors) = error {
-      		print("Uh oh! 😡 We got errors!")
-      		errors.forEach { print($0) }
-    	}
-  	}
+  func fattmerchantApi(_ fattmerchantApi: FattmerchantApi, didReceiveError: Error) {
+    if case let .tokenizationError(errors) = error {
+      print("Uh oh! 😡 We got errors!")
+      errors.forEach { print($0) }
+    }
+  }
 }
 ```
 
@@ -118,7 +116,7 @@ class MyClass: FattmerchantApiDelegate {
 Now that you have the token representing the payment method, you can send it to your server to run a payment with it. You have to setup a way for your backend to accept the token and create a transaction with it.
 
 ## <a name="testing">Testing</a>
-If you'd like to try tokenization without real payment information, you can use the `CreditCard.createTestCreditCard()` or `BankAccount.createTestBankAccount()` methods to get a test credit card or bank account.
+If you'd like to try tokenization without real payment information, you can use the `CreditCard.testCreditCard()` or `BankAccount.testBankAccount()` methods to get a test credit card or bank account.
 
 ```swift
 let creditCard = CreditCard.testCreditCard()
