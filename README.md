@@ -40,9 +40,9 @@ import Fattmerchant
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-		FattmerchantConfiguration.shared.webPaymentsToken = "mywebpaymentstoken"
-		// ...
-		return true
+    FattmerchantConfiguration.shared.webPaymentsToken = "mywebpaymentstoken"
+    // ...
+    return true
   }
 }
 ```
@@ -97,7 +97,7 @@ class MyClass: FattmerchantApiDelegate {
     fattClient.tokenize(card)
   }
 
-	func fattmerchantApi(_ fattmerchantApi: FattmerchantApi, didCreatePaymentMethod paymentMethod: PaymentMethod) {
+  func fattmerchantApi(_ fattmerchantApi: FattmerchantApi, didCreatePaymentMethod paymentMethod: PaymentMethod) {
     let paymentToken = paymentMethod.token
     // You can now run a transaction with Fattmerchant using paymentToken as the PaymentMethod
   }
