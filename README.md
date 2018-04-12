@@ -91,7 +91,7 @@ Or you can set a delegate to be notified.
 class MyClass: FattmerchantApiDelegate {
 
   func gottaHaveThatFunc() {
-    ...
+    // ...
     let fattClient = FattmerchantApi(webPaymentsToken: "mywebpaymentstoken")
     fattClient.delegate = self
     fattClient.tokenize(card)
