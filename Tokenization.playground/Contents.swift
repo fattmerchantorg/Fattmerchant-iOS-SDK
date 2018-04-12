@@ -5,7 +5,12 @@ import PlaygroundSupport; PlaygroundPage.current.needsIndefiniteExecution = true
 
 //: ### Easy peasy setup
 FattmerchantConfiguration.shared.webPaymentsToken = "<your webpayments token here>"
-FattmerchantConfiguration.shared.baseUrl = URL(string: "https://apidev01.fattlabs.com")! // this step is only for FM. Will be removed for distribution
+
+/*:
+ #### ¡WARNING!
+ > Please DO NOT send more than five tokenization requests per minute.
+ > You will be rate limited, and that would be awful.
+ */
 
 //: ### Supa fast credit card tokenization
 let card = CreditCard.testCreditCard()
