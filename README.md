@@ -71,6 +71,17 @@ let bankAccount = BankAccount(routingNumber: "021000021",
                               accountType: .checking)
 ```
 
+#### Associate a Customer
+If you want to associate a Customer with the new PaymentMethod, all you have to do is pass is set the `customerId` on the `CreditCard` or `BankAccount`
+
+```swift
+let card = CreditCard(personName: "Joan Parsnip",
+                      cardNumber: "4111111111111111",
+                      cardExp: "1220",
+                      addressZip: "32814",
+                      customerId: "7404cae1-86ba-408c-bb43-8c5cacfdcaab")
+```
+
 #### Get a payment method token
 Once you have a `CreditCard` object, call the `tokenize(:)` method on  `FattmerchantAPI` object and pass a block to run once tokenization is complete.
 

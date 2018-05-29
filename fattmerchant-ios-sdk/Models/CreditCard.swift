@@ -34,6 +34,7 @@ public struct CreditCard: Codable {
   public var phone: String?
   public var email: String?
   private var method: String = "card"
+  public var customerId: String?
 
   public init(personName: String, cardNumber: String, cardExp: String, addressZip: String) {
     self.personName = personName
@@ -51,7 +52,8 @@ public struct CreditCard: Codable {
     address1 = "address_1",
     address2 = "address_2",
     addressCity = "address_city",
-    addressState = "address_state"
+    addressState = "address_state",
+    customerId = "customer_id"
   }
 
   /// Creates a test credit card

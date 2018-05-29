@@ -36,6 +36,7 @@ public struct BankAccount: Codable {
   public var note: String?
   public var phone: String?
   public var email: String?
+  public var customerId: String?
   private var method: PaymentMethodType = PaymentMethodType.bank
 
   public init(personName: String, bankType: String, bankHolderType: BankHolderType, bankAccount: String, bankRouting: String,
@@ -60,7 +61,8 @@ public struct BankAccount: Codable {
     address1 = "address_1",
     address2 = "address_2",
     addressCity = "address_city",
-    addressState = "address_state"
+    addressState = "address_state",
+    customerId = "customer_id"
   }
 
   /// Creates a test bank account
