@@ -2,25 +2,40 @@
 ---
 
 @import "{{ site.theme }}";
+@import url(https://fonts.googleapis.com/css?family=Nunito:300,500);
+
+$navy: #00416B;
+$navy-dark: #386486;
+$accent-blue: #45B5D0;
+$navy-60: #6C87A3;
+
+body {
+	font-family: Nunito;	
+}
 
 .page-header {
-	background-color: #2e3c4f;
+	background-color: $navy;
 	background-image: none;
+	
+	a {
+		color: #ffffff;
+	}
 }
 
 a {
-	color: #f36b21;
+	color: $accent-blue;
 }
 
 .main-content {
-	color: #545d6d;
-
-	h1 {
-		color: #545d6d;
-	}
-
-	h4 {
-		color: #545d6d;
+	color: $navy-60;
+	
+	h1, h2, h3, h4, h5, h6 {
+		font-size: 1.2em;
 		font-weight: bold;
+		color: $navy-dark;
+		
+		a {
+			color: $navy-dark;
+		}
 	}
 }
