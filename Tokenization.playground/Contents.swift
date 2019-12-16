@@ -2,7 +2,6 @@
 import Foundation
 import Fattmerchant
 import PlaygroundSupport; PlaygroundPage.current.needsIndefiniteExecution = true
-
 //: ### Easy peasy setup
 FattmerchantConfiguration.shared.webPaymentsToken = "<your webpayments token here>"
 
