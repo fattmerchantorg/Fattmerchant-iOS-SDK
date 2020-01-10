@@ -39,8 +39,8 @@ public struct BankAccount: Codable {
   public var customerId: String?
   private var method: PaymentMethodType = PaymentMethodType.bank
 
-  public init(personName: String, bankType: String, bankHolderType: BankHolderType, bankAccount: String, bankRouting: String,
-       addressZip: String) {
+  public init(
+    personName: String, bankType: String, bankHolderType: BankHolderType, bankAccount: String, bankRouting: String, addressZip: String) {
     self.personName = personName
     self.bankType = bankType
     self.bankHolderType = bankHolderType
@@ -69,7 +69,14 @@ public struct BankAccount: Codable {
   ///
   /// - Returns: a test bank account
   public static func testBankAccount() -> BankAccount {
-    var bankAccount = BankAccount(personName: "Jim Parsnip", bankType: "savings", bankHolderType: .business, bankAccount: "9876543210", bankRouting: "021000021", addressZip: "32822")
+    var bankAccount = BankAccount(
+      personName: "Jim Parsnip",
+      bankType: "savings",
+      bankHolderType: .business,
+      bankAccount: "9876543210",
+      bankRouting: "021000021",
+      addressZip: "32822"
+    )
 
     bankAccount.address1 = "123 Orange Ave"
     bankAccount.address2 = "Unit 309"
@@ -86,7 +93,14 @@ public struct BankAccount: Codable {
   ///
   /// - Returns: a test bank account
   public static func failingTestBankAccount() -> BankAccount {
-    var bankAccount = BankAccount(personName: "Jim Parsnip", bankType: "", bankHolderType: .business, bankAccount: "9876543210", bankRouting: "021000021", addressZip: "32822")
+    var bankAccount = BankAccount(
+      personName: "Jim Parsnip",
+      bankType: "",
+      bankHolderType: .business,
+      bankAccount: "9876543210",
+      bankRouting: "021000021",
+      addressZip: "32822"
+    )
 
     bankAccount.address1 = "123 Orange Ave"
     bankAccount.address2 = "Unit 309"

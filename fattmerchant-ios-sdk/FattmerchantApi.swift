@@ -43,7 +43,7 @@ public class FattmerchantApi {
 
   public enum Error: Swift.Error {
     case tokenizationError([String])
-    case unknownError()
+    case unknownError
   }
 
   public enum Response {
@@ -89,7 +89,6 @@ public class FattmerchantApi {
         self.delegate?.fattmerchantApi(self, didCreatePaymentMethod: paymentMethod)
       case .failure(let error):
         self.delegate?.fattmerchantApi(self, didReceiveError: error)
-        break
       }
     }
   }
@@ -115,7 +114,6 @@ public class FattmerchantApi {
         self.delegate?.fattmerchantApi(self, didCreatePaymentMethod: paymentMethod)
       case .failure(let error):
         self.delegate?.fattmerchantApi(self, didReceiveError: error)
-        break
       }
     }
   }
@@ -132,7 +130,7 @@ public class FattmerchantApi {
         let paymentMethod = try JSONDecoder().decode(PaymentMethod.self, from: data)
         completion(.success(paymentMethod: paymentMethod))
       } catch {
-        var error: Error = .unknownError()
+        var error: Error = .unknownError
 
         // When the API is unable to tokenize a payment method because of an error in the json
         // content, e.g. invalid payment method type, it returns json in the following structure
@@ -147,11 +145,9 @@ public class FattmerchantApi {
           case let map as [String: [String]]:
             let errorStrings = map.values.flatMap {$0}
             error = FattmerchantApi.Error.tokenizationError(errorStrings)
-            break
 
           case let arr as [String]:
             error = FattmerchantApi.Error.tokenizationError(arr)
-            break
 
           default: break
           }

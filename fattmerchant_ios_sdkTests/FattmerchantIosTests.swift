@@ -19,7 +19,6 @@
 //
 
 import XCTest
-@testable import Fattmerchant
 
 class FattmerchantIosTests: XCTestCase {
 

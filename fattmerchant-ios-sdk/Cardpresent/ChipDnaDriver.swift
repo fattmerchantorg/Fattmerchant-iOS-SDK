@@ -21,14 +21,14 @@ class ChipDnaDriver {
     let parameters = CCParameters()
     parameters.setValue("password", forKey: CCParamPassword)
     parameters.setValue(CCValueTrue, forKey: CCParamAutoConfirm)
-    let initResult = ChipDnaMobile.initialize(parameters)
+    _ = ChipDnaMobile.initialize(parameters)
 
     // Set creds
     let properties = CCParameters()
     properties.setValue("apikey", forKey: CCParamApiKey)
     properties.setValue("appid", forKey: CCParamApplicationIdentifier)
     properties.setValue(CCValueEnvironmentLive, forKey: CCParamEnvironment)
-    let credsResult = ChipDnaMobile.sharedInstance()?.setProperties(properties)
+    _ = ChipDnaMobile.sharedInstance()?.setProperties(properties)
 
     // Check if something went wrong
     return true
