@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChipDnaDriver: MobileReaderDriver {
+class ChipDnaDriver {
 
   struct SelectablePinPad {
     var name: String
@@ -34,19 +34,17 @@ class ChipDnaDriver: MobileReaderDriver {
     return true
   }
 
-  func searchForReaders(args: [String: Any]) -> [MobileReader]? {
-    let params = CCParameters()
-    params.setValue(CCValueBluetooth, forKey: CCParamPinPadConnectionType)
-
-//    ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector("onConnectAndConfigure"))
-
-    return nil
-  }
+//  func searchForReaders(args: [String: Any]) -> [MobileReader]? {
+//    let params = CCParameters()
+//    params.setValue(CCValueBluetooth, forKey: CCParamPinPadConnectionType)
+//
+////    ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector("onConnectAndConfigure"))
+//
+//    return nil
+//  }
 
   @objc func onConnectAndConfigure(parameters: CCParameters) {
 
   }
-
-
 
 }

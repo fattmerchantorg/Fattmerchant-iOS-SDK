@@ -21,14 +21,14 @@
 import XCTest
 @testable import Fattmerchant
 
-class fattmerchant_ios_sdkTests: XCTestCase {
+class FattmerchantIosTests: XCTestCase {
 
   var configuration: FattmerchantConfiguration!
   var fattClient: FattmerchantApi!
 
   override func setUp() {
     super.setUp()
-    configuration = FattmerchantConfiguration(hostedPaymentsId: "fattwars")
+    configuration = FattmerchantConfiguration(hostedPaymentsId: "Kitchen-Scout-fe70cc865774")
     configuration.baseUrl = URL(string: "https://apidev01.fattlabs.com")!
     fattClient = FattmerchantApi(configuration!)
   }
@@ -126,9 +126,9 @@ class fattmerchant_ios_sdkTests: XCTestCase {
 
       case .failure(let error):
         if case let FattmerchantApi.Error.tokenizationError(messages) = error {
-          XCTAssertTrue(messages.count > 0)
+          XCTAssertFalse(messages.isEmpty, "Could not tokenize")
         } else {
-          XCTFail()
+          XCTFail("Failed to tokenize, but didn't get error")
         }
       }
       expectation.fulfill()
