@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import shared
 
 class ChipDnaDriver: MobileReaderDriver {
 
@@ -48,31 +47,6 @@ class ChipDnaDriver: MobileReaderDriver {
 
   }
 
-  /*
- log("Search for readers")
- val parameters = Parameters().apply {
- add(ParameterKeys.SearchConnectionTypeBluetooth, ParameterValues.TRUE)
- }
- ChipDnaMobile.getInstance().clearAllAvailablePinPadsListeners()
-
- val pinPads = suspendCancellableCoroutine<List<SelectablePinPad>> { cont ->
- val availablePinPadsListener: IAvailablePinPadsListener? = null
- ChipDnaMobile.getInstance().addAvailablePinPadsListener { params ->
- log("Inside IAvailablePinPadsListener")
- val availablePinPadsXml = params?.getValue(ParameterKeys.AvailablePinPads)
- val pinPads = deserializePinPads(availablePinPadsXml!!)
- availablePinPadsListener?.let { ChipDnaMobile.getInstance().removeAvailablePinPadsListener(it) }
-
- cont.resume(pinPads)
- }
-
- ChipDnaMobile.getInstance().getAvailablePinPads(parameters)
- }
-
- return pinPads.map {
- mapPinPadToMobileReader(it)
- }
- */
 
 
 }

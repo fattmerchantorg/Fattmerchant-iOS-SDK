@@ -27,4 +27,3 @@ FOUNDATION_EXPORT double fattmerchant_ios_sdkVersionNumber;
 FOUNDATION_EXPORT const unsigned char fattmerchant_ios_sdkVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <fattmerchant_ios_sdk/PublicHeader.h>
-
