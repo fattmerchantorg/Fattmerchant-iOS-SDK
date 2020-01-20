@@ -21,12 +21,15 @@
 import Foundation
 
 /// A payment method such as a credit card or a bank account
-public struct PaymentMethod: Codable {
-  public var id: String
-  public var method: PaymentMethodType
-  public var nickname: String
-  public var hasCvv: Bool
-  public var personName: String
+public class PaymentMethod: Model {
+  public var id: String?
+  public var method: PaymentMethodType?
+  public var merchantId: String?
+  public var customerId: String?
+  var tokenize: Bool?
+  public var nickname: String?
+  public var hasCvv: Bool?
+  public var personName: String?
   public var cardType: String?
   public var cardLastFour: String?
   public var cardExp: String?
@@ -34,15 +37,16 @@ public struct PaymentMethod: Codable {
   public var bankType: String?
   public var bankHolderType: BankHolderType?
 
-  enum CodingKeys: String, CodingKey {
-    case id, method, nickname,
-    hasCvv = "has_cvv",
-    personName = "person_name",
-    cardType = "card_type",
-    cardLastFour = "card_last_four",
-    cardExp = "card_exp",
-    bankName = "bank_name",
-    bankType = "bank_type",
-    bankHolderType = "bank_holder_type"
-  }
+  //TODO: Remove these commented lines
+//  enum CodingKeys: String, CodingKey {
+//    case id, method, nickname,
+//    hasCvv = "has_cvv",
+//    personName = "person_name",
+//    cardType = "card_type",
+//    cardLastFour = "card_last_four",
+//    cardExp = "card_exp",
+//    bankName = "bank_name",
+//    bankType = "bank_type",
+//    bankHolderType = "bank_holder_type"
+//  }
 }

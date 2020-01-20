@@ -23,6 +23,7 @@ import Foundation
 internal class Networking {
 
   var baseUrl: URL
+  var apiKey: String?
 
   init(_ baseUrl: URL) {
     self.baseUrl = baseUrl
@@ -33,7 +34,7 @@ internal class Networking {
 
     let session = URLSession(configuration: .default)
 
-    session.dataTask(with: request as URLRequest) { (data, _, _) in
+    session.dataTask(with: request as URLRequest) { (data, _, _) in //TODO: This isn't using response or error and is super naive
       completion(data != nil, data)
     }.resume()
   }
@@ -51,6 +52,11 @@ internal class Networking {
     dataTask(request: request, method: "POST", completion: completion)
   }
 
+  func put(_ path: String, body: Data? = nil, completion: @escaping (Bool, Any?) -> Void) {
+    let request = urlRequest(path: path, body: body)
+    dataTask(request: request, method: "PUT", completion: completion)
+  }
+
   func urlRequest(path: String, body: Data? = nil) -> NSMutableURLRequest {
     // Set url
     let url = baseUrl.appendingPathComponent(path)
@@ -59,6 +65,10 @@ internal class Networking {
     // Set headers
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+    if let token = apiKey {
+      request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    }
 
     // Set body
     request.httpBody = body
