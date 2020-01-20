@@ -62,5 +62,4 @@ class MockDriver: MobileReaderDriver {
     completion(transactionResult)
   }
 
-
 }
