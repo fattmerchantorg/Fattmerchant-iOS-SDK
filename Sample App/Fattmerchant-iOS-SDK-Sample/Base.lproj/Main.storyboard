@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Fattmerchant_iOS_SDK_Sample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="52l-64-EqX">
+                                <rect key="frame" x="20" y="44" width="374" height="818"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="KoI-Tz-bhx">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="468"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Su6-lv-kN3">
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="300"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="300" id="zIx-aF-lhm"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8yi-c2-smr">
+                                                <rect key="frame" x="0.0" y="312" width="374" height="30"/>
+                                                <state key="normal" title="Initialize"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXo-M4-aSr">
+                                                <rect key="frame" x="0.0" y="354" width="374" height="30"/>
+                                                <state key="normal" title="Connect Reader"/>
+                                                <connections>
+                                                    <action selector="onConnectReaderButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uqJ-mx-nM9"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRt-g0-2qt">
+                                                <rect key="frame" x="0.0" y="396" width="374" height="30"/>
+                                                <state key="normal" title="Refund Payment"/>
+                                                <connections>
+                                                    <action selector="onRefundPaymentButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p63-gv-Dcc"/>
+                                                </connections>
+                                            </button>
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="7yU-ct-go6">
+                                                <rect key="frame" x="0.0" y="438" width="374" height="30"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="1.0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L3o-GT-sFF">
+                                                        <rect key="frame" x="0.0" y="0.0" width="262" height="30"/>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                                    </textField>
+                                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hiy-wA-OMP">
+                                                        <rect key="frame" x="274" y="0.0" width="100" height="30"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <state key="normal" title="Take Payment"/>
+                                                        <connections>
+                                                            <action selector="onTakePaymentButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zvd-HY-rKY"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="Su6-lv-kN3" firstAttribute="leading" secondItem="blO-ge-Ucd" secondAttribute="leading" id="UtJ-H1-w1R"/>
+                                            <constraint firstItem="blO-ge-Ucd" firstAttribute="trailing" secondItem="Su6-lv-kN3" secondAttribute="trailing" id="gWn-I6-TM6"/>
+                                        </constraints>
+                                        <viewLayoutGuide key="safeArea" id="blO-ge-Ucd"/>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="KoI-Tz-bhx" firstAttribute="top" secondItem="52l-64-EqX" secondAttribute="top" id="7gt-PC-VrV"/>
+                                    <constraint firstItem="KoI-Tz-bhx" firstAttribute="leading" secondItem="52l-64-EqX" secondAttribute="leading" id="KQM-kS-Zw0"/>
+                                    <constraint firstAttribute="trailing" secondItem="KoI-Tz-bhx" secondAttribute="trailing" id="anX-cQ-Y6T"/>
+                                    <constraint firstAttribute="bottom" secondItem="KoI-Tz-bhx" secondAttribute="bottom" id="bVF-hQ-mjk"/>
+                                    <constraint firstItem="KoI-Tz-bhx" firstAttribute="centerX" secondItem="52l-64-EqX" secondAttribute="centerX" id="tHp-VN-PHu"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="52l-64-EqX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="OXJ-Lp-nvF"/>
+                            <constraint firstItem="52l-64-EqX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="cBU-E5-9Ok"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="52l-64-EqX" secondAttribute="bottom" id="hYt-pI-mJS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="52l-64-EqX" secondAttribute="trailing" id="nHI-8y-iir"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="activityTextArea" destination="Su6-lv-kN3" id="PRo-1K-Iep"/>
+                        <outlet property="connectReaderButton" destination="PXo-M4-aSr" id="wuu-v6-ts2"/>
+                        <outlet property="initializeButton" destination="8yi-c2-smr" id="Ph2-JN-G0Z"/>
+                        <outlet property="refundPaymentButton" destination="WRt-g0-2qt" id="b19-K8-EiU"/>
+                        <outlet property="totalTextInput" destination="L3o-GT-sFF" id="v8u-WR-0dv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="134.59821428571428"/>
+        </scene>
+    </scenes>
+</document>

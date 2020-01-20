@@ -134,16 +134,6 @@
 		D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7113A23D63B0D00EF98DB /* Environment.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		D7B7112F23D58C6C00EF98DB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D7B7112B23D58C6C00EF98DB /* Fattmerchant-iOS-SDK-Sample.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D7B7111623D58C4A00EF98DB;
-			remoteInfo = "Fattmerchant-iOS-SDK-Sample";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		D73247AB23C4E5AD003CF1C6 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -254,7 +244,6 @@
 		D793091523D2568D0066FCA2 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		D7B7110223D35FA500EF98DB /* MockDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDriver.swift; sourceTree = "<group>"; };
 		D7B7110423D35FD500EF98DB /* MockMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMobileReader.swift; sourceTree = "<group>"; };
-		D7B7112B23D58C6C00EF98DB /* Fattmerchant-iOS-SDK-Sample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Fattmerchant-iOS-SDK-Sample.xcodeproj"; path = "../Fattmerchant-iOS-SDK-Sample/Fattmerchant-iOS-SDK-Sample.xcodeproj"; sourceTree = "<group>"; };
 		D7B7113A23D63B0D00EF98DB /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -289,7 +278,6 @@
 		591C2086206EB12F00C848DA = {
 			isa = PBXGroup;
 			children = (
-				D7B7112B23D58C6C00EF98DB /* Fattmerchant-iOS-SDK-Sample.xcodeproj */,
 				5984E3F5207E872E002A6F73 /* Tokenization.playground */,
 				591C2092206EB12F00C848DA /* fattmerchant-ios-sdk */,
 				591C20A0206EB26700C848DA /* fattmerchant_ios_sdkTests */,
@@ -518,14 +506,6 @@
 			path = Cardpresent;
 			sourceTree = "<group>";
 		};
-		D7B7112C23D58C6C00EF98DB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				D7B7113023D58C6C00EF98DB /* Fattmerchant-iOS-SDK-Sample.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -636,12 +616,6 @@
 			mainGroup = 591C2086206EB12F00C848DA;
 			productRefGroup = 591C2091206EB12F00C848DA /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = D7B7112C23D58C6C00EF98DB /* Products */;
-					ProjectRef = D7B7112B23D58C6C00EF98DB /* Fattmerchant-iOS-SDK-Sample.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				591C208F206EB12F00C848DA /* Fattmerchant */,
@@ -649,16 +623,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		D7B7113023D58C6C00EF98DB /* Fattmerchant-iOS-SDK-Sample.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Fattmerchant-iOS-SDK-Sample.app";
-			remoteRef = D7B7112F23D58C6C00EF98DB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		591C208E206EB12F00C848DA /* Resources */ = {
