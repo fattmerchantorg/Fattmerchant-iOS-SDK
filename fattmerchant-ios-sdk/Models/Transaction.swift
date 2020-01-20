@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Transaction: Model {
+public class Transaction: Model {
   var id: String?
   var authId: String?
   var createdAt: String?

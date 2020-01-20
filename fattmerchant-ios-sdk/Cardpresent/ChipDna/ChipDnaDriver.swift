@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChipDnaDriver: MobileReaderDriver {
+class ChipDnaDriver: NSObject, MobileReaderDriver {
 
   struct SelectablePinPad {
     var name: String
@@ -104,6 +104,8 @@ class ChipDnaDriver: MobileReaderDriver {
     didFindAvailablePinPads = { pinPads in
       completion(pinPads.map({ MobileReader.from(pinPad: $0) }))
     }
+
+    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(nil) //TODO: Listen to the result and handle the error
   }
 
   /// Connects the mobile reader and prepares it for use
@@ -157,32 +159,16 @@ class ChipDnaDriver: MobileReaderDriver {
   }
 
   fileprivate func deserializeAvailablePinPads(pinPadsXml: String) -> [SelectablePinPad]? {
-    var availablePinPadsList: [SelectablePinPad] = []
+    var availablePinPadsList: [SelectablePinPad]?
 
-    //TODO: Make sure this doesn't fail. ChipDna...deserializeAvailable... returns a force-unwrapped value
-    guard let availablePinPadsDict = ChipDnaMobileSerializer.deserializeAvailablePinPadsString(pinPadsXml) as? [String: Any] else {
-      fatalError("Couldn't deserialize pin pads")
+    guard
+      let availablePinPadsDict = ChipDnaMobileSerializer.deserializeAvailablePinPadsString(pinPadsXml) as? [String: Any],
+      let btPinPads = availablePinPadsDict[CCValueBluetooth] as? [String] else {
       return nil
     }
 
-    //TODO: Verify that this actually returns an array of strings
-    guard let connectionTypes = availablePinPadsDict.keys as? [String] else {
-      //TODO: Remove this fatal error
-      fatalError("Couldn't deserialize pin pads")
-    }
-
-    let smartDict = availablePinPadsDict as? [String: [String]]
-
-    //TODO: This can be better with a foreach on the dictionary
-    for connectionType in connectionTypes {
-      guard let pinPadNames = availablePinPadsDict[connectionType] as? [String] else {
-        //TODO: Remove this fatal error
-        fatalError("Couldn't deserialize pin pads")
-      }
-
-      for pinPadName in pinPadNames {
-        availablePinPadsList.append(SelectablePinPad(name: pinPadName, connectionType: connectionType))
-      }
+    availablePinPadsList = btPinPads.map { pinPadName in
+      SelectablePinPad(name: pinPadName, connectionType: CCValueBluetooth)
     }
 
     return availablePinPadsList
@@ -190,7 +176,7 @@ class ChipDnaDriver: MobileReaderDriver {
 
   // MARK: - ChipDna Listeners
 
-  @objc func onAvailablePinPads(parameters: CCParameters) {
+  @objc public func onAvailablePinPads(parameters: CCParameters) {
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
 
     // Make sure that there is a job for this to do after serialization
@@ -212,10 +198,7 @@ class ChipDnaDriver: MobileReaderDriver {
 
   @objc func onConnectAndConfigure(parameters: CCParameters) {
     ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
-
-    if parameters[CCParamResult] == CCValueTrue {
-
-    }
+    didConnectAndConfigure?(parameters[CCParamResult] == CCValueTrue)
   }
 
 }

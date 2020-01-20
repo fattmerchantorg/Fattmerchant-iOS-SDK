@@ -59,7 +59,7 @@ class RefundMobileReaderTransaction {
 
   }
 
-  fileprivate func submitRefundToOmni(with result: TransactionResult, failure: (OmniException) -> Void, completion: (Transaction) -> Void) {
+  fileprivate func submitRefundToOmni(with result: TransactionResult, failure: @escaping (OmniException) -> Void, completion: @escaping (Transaction) -> Void) {
     let refundedTransaction = Transaction()
     refundedTransaction.total = transaction.total
     refundedTransaction.paymentMethodId = transaction.paymentMethodId

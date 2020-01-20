@@ -8,8 +8,8 @@
 
 import Foundation
 
-class MobileReader {
-  var name: String
+public class MobileReader {
+  public var name: String
 
   init(name: String) {
     self.name = name

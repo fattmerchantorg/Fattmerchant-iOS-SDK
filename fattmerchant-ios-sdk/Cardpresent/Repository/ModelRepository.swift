@@ -31,7 +31,7 @@ protocol ModelRepository {
   ///   - model: the model to be created in Omni
   ///   - completion: block to run upon completion
   ///   - error: the block to run if an error is thrown
-  func create(model: OmniModel, completion: CompletionHandler, error: ErrorHandler)
+  func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
   /// Updates an instance of the model in Omni
   ///
@@ -39,7 +39,7 @@ protocol ModelRepository {
   ///   - model: the model to be updated in Omni
   ///   - completion: block to run upon completion
   ///   - error: the block to run if an error is thrown
-  func update(model: OmniModel, completion: CompletionHandler, error: ErrorHandler)
+  func update(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
   /// Deletes an instance of the model in Omni
   ///
@@ -47,7 +47,7 @@ protocol ModelRepository {
   ///   - model: the model to be created in Omni
   ///   - completion: block to run upon completion
   ///   - error: the block to run if an error is thrown
-  func delete(model: OmniModel, completion: EmptyCompletionHandler, error: ErrorHandler)
+  func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler)
 
   /// Gets a model with the given id from Omni
   ///
@@ -55,23 +55,23 @@ protocol ModelRepository {
   ///   - model: the model to be created in Omni
   ///   - completion: block to run upon completion
   ///   - error: the block to run if an error is thrown
-  func getById(id: String, completion: CompletionHandler, error: ErrorHandler)
+  func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
   /// Gets a list of the current type from omni
   ///
   /// - Parameters:
   ///   - completion: block to run upon completion
   ///   - error: the block to run if an error is thrown
-  func getList(completion: CompletionHandler, error: ErrorHandler)
+  func getList(completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
 }
 
 extension ModelRepository {
-  func create(model: OmniModel, completion: CompletionHandler, error: ErrorHandler) {}
-  func update(model: OmniModel, completion: CompletionHandler, error: ErrorHandler) {}
-  func delete(model: OmniModel, completion: EmptyCompletionHandler, error: ErrorHandler) {}
-  func getById(id: String, completion: CompletionHandler, error: ErrorHandler) {}
-  func getList(completion: CompletionHandler, error: ErrorHandler) {}
+  func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
+  func update(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
+  func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {}
+  func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
+  func getList(completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
 }
 
 extension ModelRepository where OmniModel: OmniEndpoint {
@@ -80,23 +80,14 @@ extension ModelRepository where OmniModel: OmniEndpoint {
     self.init(omniApi: omniApi)
   }
 
-  var omniApi: OmniApi {
-    get {
-      return omniApi
-    }
-
-    set (val) {
-      self.omniApi = val
-    }
-
-  }
-
   func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
-    omniApi.request(method: "post", urlString: OmniModel.resourceEndpoint(), completion: completion, failure: error)
+    let data = try? JSONEncoder().encode(model)
+    omniApi.request(method: "post", urlString: OmniModel.resourceEndpoint(), body: data, completion: completion, failure: error)
   }
 
   func update(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
-    omniApi.request(method: "put", urlString: OmniModel.resourceEndpoint(), completion: completion, failure: error)
+    let data = try? JSONEncoder().encode(model)
+    omniApi.request(method: "put", urlString: OmniModel.resourceEndpoint(), body: data, completion: completion, failure: error)
   }
 
   func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {

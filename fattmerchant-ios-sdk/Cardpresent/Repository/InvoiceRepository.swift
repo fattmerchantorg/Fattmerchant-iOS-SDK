@@ -24,4 +24,9 @@ enum CreateInvoiceException: OmniException {
 
 class InvoiceRepository: ModelRepository {
   typealias OmniModel = Invoice
+  var omniApi: OmniApi
+
+  required init(omniApi: OmniApi) {
+    self.omniApi = omniApi
+  }
 }

@@ -8,30 +8,30 @@
 
 import Foundation
 
-struct Amount {
-  let cents: Int
+public struct Amount {
+  public let cents: Int
 
-  init(cents: Int) {
+  public init(cents: Int) {
     self.cents = cents
   }
 
-  init(dollars: Double) {
+  public init(dollars: Double) {
     self.cents = Int(dollars * 100.0)
   }
 
-  func centsString() -> String {
+  public func centsString() -> String {
     return String(cents)
   }
 
-  func dollarsString() -> String {
+  public func dollarsString() -> String {
     return String.init(format: "%.2f", dollars())
   }
 
-  func dollars() -> Double {
+  public func dollars() -> Double {
     return Double(cents) / 100.0
   }
 
-  func pretty() -> String {
+  public func pretty() -> String {
     return "$\(dollarsString())"
   }
 

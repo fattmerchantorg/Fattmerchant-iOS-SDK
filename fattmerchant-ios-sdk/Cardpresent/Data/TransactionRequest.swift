@@ -8,6 +8,10 @@
 
 import Foundation
 
-struct TransactionRequest {
-  var amount: Amount
+public struct TransactionRequest {
+  public var amount: Amount
+
+  public init(amount: Amount) {
+    self.amount = amount
+  }
 }

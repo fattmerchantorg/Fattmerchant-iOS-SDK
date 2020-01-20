@@ -102,7 +102,7 @@ class TakeMobileReaderPayment {
     }
   }
 
-  fileprivate func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: (OmniException) -> Void, _ completion: (Transaction) -> Void) {
+  fileprivate func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
     guard let paymentMethodId = paymentMethod.id else {
@@ -165,8 +165,8 @@ class TakeMobileReaderPayment {
   fileprivate func updateInvoice(_ invoice: Invoice,
                                  with paymentMethod: PaymentMethod,
                                  and customer: Customer,
-                                 _ failure: (OmniException) -> Void,
-                                 completion: (Invoice) -> Void) {
+                                 _ failure: @escaping (OmniException) -> Void,
+                                 completion: @escaping (Invoice) -> Void) {
     let invoice = invoice
 
     guard let paymentMethodId = paymentMethod.id else {
@@ -228,7 +228,7 @@ class TakeMobileReaderPayment {
     paymentMethodRepository.create(model: paymentMethodToCreate, completion: completion, error: failure)
   }
 
-  fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: (OmniException) -> Void, _ completion: (Customer) -> Void) {
+  fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
     let customerToCreate = Customer()
     customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
     customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
@@ -239,7 +239,7 @@ class TakeMobileReaderPayment {
     driver.performTransaction(with: self.request, completion: completion) //TODO: Handle errors
   }
 
-  fileprivate func createInvoice(_ failure: (OmniException) -> Void, _ completion: (Invoice) -> Void) {
+  fileprivate func createInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
     let invoiceToCreate = Invoice()
     invoiceToCreate.total = request.amount.dollarsString()
     invoiceToCreate.url = "https://fattpay.com/#/bill"

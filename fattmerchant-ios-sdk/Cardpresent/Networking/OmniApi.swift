@@ -30,25 +30,6 @@ class OmniApi {
     }
   }
 
-  enum Environment {
-    case LIVE
-    case DEV
-
-    func baseUrlString() -> String {
-      switch self {
-      case .DEV:
-      return "https://apidev.fattlabs.com"
-      case .LIVE:
-        return "https://apiprod.fattlabs.com"
-      }
-    }
-
-    func baseUrl() -> URL? {
-      return URL(string: baseUrlString())
-    }
-
-  }
-
   func getSelf(completion: @escaping (Self) -> Void, failure: @escaping (OmniException) -> Void ) {
     request(method: "get", urlString: "/self", completion: completion, failure: failure)
   }

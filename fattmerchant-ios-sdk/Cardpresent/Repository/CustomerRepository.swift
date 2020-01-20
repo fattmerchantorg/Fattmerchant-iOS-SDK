@@ -24,4 +24,9 @@ enum CreateCustomerException: OmniException {
 
 class CustomerRepository: ModelRepository {
   typealias OmniModel = Customer
+  var omniApi: OmniApi
+
+  required init(omniApi: OmniApi) {
+    self.omniApi = omniApi
+  }
 }
