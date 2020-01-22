@@ -32,7 +32,7 @@ public class Omni: NSObject {
   private var mobileReaderDriverRepository = MobileReaderDriverRepository()
 
   /// The queue that Omni should use to communicate back with its listeners
-  public var ipreferredQueue: DispatchQueue = DispatchQueue.main
+  public var preferredQueue: DispatchQueue = DispatchQueue.main
 
   public struct InitParams {
     var appId: String
