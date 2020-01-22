@@ -59,6 +59,10 @@
 		D71B6FD4239E98B5007FB7C4 /* libLumberjack.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D71B6FB4239E98B5007FB7C4 /* libLumberjack.a */; };
 		D71B6FD5239E98B5007FB7C4 /* RequestQueueStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6FB5239E98B5007FB7C4 /* RequestQueueStatus.h */; };
 		D71B6FD6239E98B5007FB7C4 /* VersionInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6FB6239E98B5007FB7C4 /* VersionInformation.h */; };
+		D760D82823D87F5D0075057C /* InvoiceJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82723D87F5D0075057C /* InvoiceJson.swift */; };
+		D760D82A23D884680075057C /* CustomerJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82923D884680075057C /* CustomerJson.swift */; };
+		D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82B23D884F70075057C /* PaymentMethodJson.swift */; };
+		D760D82F23D885250075057C /* TransactionJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82E23D885250075057C /* TransactionJson.swift */; };
 		D765D46623CC465800656040 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D46523CC465800656040 /* Customer.swift */; };
 		D765D46723CC465800656040 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D46523CC465800656040 /* Customer.swift */; };
 		D765D46923CC467100656040 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D46823CC467100656040 /* Model.swift */; };
@@ -198,6 +202,10 @@
 		D71B6FB4239E98B5007FB7C4 /* libLumberjack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLumberjack.a; sourceTree = "<group>"; };
 		D71B6FB5239E98B5007FB7C4 /* RequestQueueStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestQueueStatus.h; sourceTree = "<group>"; };
 		D71B6FB6239E98B5007FB7C4 /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
+		D760D82723D87F5D0075057C /* InvoiceJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceJson.swift; sourceTree = "<group>"; };
+		D760D82923D884680075057C /* CustomerJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJson.swift; sourceTree = "<group>"; };
+		D760D82B23D884F70075057C /* PaymentMethodJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodJson.swift; sourceTree = "<group>"; };
+		D760D82E23D885250075057C /* TransactionJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionJson.swift; sourceTree = "<group>"; };
 		D765D46523CC465800656040 /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
 		D765D46823CC467100656040 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		D765D46B23CC478000656040 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
@@ -312,8 +320,8 @@
 		591C20A0206EB26700C848DA /* fattmerchant_ios_sdkTests */ = {
 			isa = PBXGroup;
 			children = (
+				D760D82D23D885120075057C /* Raw Json */,
 				D7B7110123D35F9000EF98DB /* Cardpresent */,
-				D765D49023CE6A3D00656040 /* MerchantJson.swift */,
 				591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */,
 				591C20A3206EB26700C848DA /* Info.plist */,
 				D765D48623CE422400656040 /* JSONValueTest.swift */,
@@ -441,6 +449,18 @@
 				D71B6FAC239E98B5007FB7C4 /* libsqlcipher-4.0.1.a */,
 			);
 			path = SQLCipher;
+			sourceTree = "<group>";
+		};
+		D760D82D23D885120075057C /* Raw Json */ = {
+			isa = PBXGroup;
+			children = (
+				D760D82923D884680075057C /* CustomerJson.swift */,
+				D760D82B23D884F70075057C /* PaymentMethodJson.swift */,
+				D765D49023CE6A3D00656040 /* MerchantJson.swift */,
+				D760D82723D87F5D0075057C /* InvoiceJson.swift */,
+				D760D82E23D885250075057C /* TransactionJson.swift */,
+			);
+			path = "Raw Json";
 			sourceTree = "<group>";
 		};
 		D765D47723CC4AFF00656040 /* Repository */ = {
@@ -726,6 +746,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D765D48823CE422400656040 /* JSONValueTest.swift in Sources */,
+				D760D82A23D884680075057C /* CustomerJson.swift in Sources */,
 				D765D4A023CFCA1400656040 /* Amount.swift in Sources */,
 				D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */,
 				D7B7110323D35FA500EF98DB /* MockDriver.swift in Sources */,
@@ -737,6 +758,7 @@
 				D765D49723CFC1A000656040 /* InvoiceRepository.swift in Sources */,
 				D702B7CD23C8F80200B8AB79 /* CreditCard.swift in Sources */,
 				D79308D523D24C880066FCA2 /* Endpoints.swift in Sources */,
+				D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */,
 				D7B7110523D35FD500EF98DB /* MockMobileReader.swift in Sources */,
 				D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */,
 				D765D49A23CFC22600656040 /* PaymentMethodRepository.swift in Sources */,
@@ -747,6 +769,7 @@
 				D765D48523CE41A500656040 /* JSONValue.swift in Sources */,
 				D702B7D023C8F80200B8AB79 /* PaymentMethodType.swift in Sources */,
 				D765D47323CC49C800656040 /* Self.swift in Sources */,
+				D760D82F23D885250075057C /* TransactionJson.swift in Sources */,
 				D765D46D23CC478000656040 /* Invoice.swift in Sources */,
 				D765D48023CCBBFD00656040 /* OmniException.swift in Sources */,
 				D702B7D123C8F80200B8AB79 /* Networking.swift in Sources */,
@@ -761,6 +784,7 @@
 				D702B7BE23C8D0DD00B8AB79 /* OmniApi.swift in Sources */,
 				D79308A023D0A1B50066FCA2 /* AmountTests.swift in Sources */,
 				D765D49D23CFC32200656040 /* TransactionRepository.swift in Sources */,
+				D760D82823D87F5D0075057C /* InvoiceJson.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
