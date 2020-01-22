@@ -8,6 +8,20 @@
 
 import Foundation
 
+enum OmniNetworkingException: OmniException {
+  case couldNotGetMerchantDetails
+
+  static var mess: String = "Omni Networking Exception"
+
+  var detail: String? {
+    switch self {
+    case .couldNotGetMerchantDetails:
+      return "Could not get merchant details from Omni"
+    }
+  }
+}
+
+//TODO: Need to write a doc comment here
 public class Omni: NSObject {
 
   private var omniApi = OmniApi()
@@ -18,7 +32,7 @@ public class Omni: NSObject {
   private var mobileReaderDriverRepository = MobileReaderDriverRepository()
 
   /// The queue that Omni should use to communicate back with its listeners
-  public var preferredQueue: DispatchQueue = DispatchQueue.main
+  public var ipreferredQueue: DispatchQueue = DispatchQueue.main
 
   public struct InitParams {
     var appId: String
@@ -39,6 +53,7 @@ public class Omni: NSObject {
     paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
   }
 
+  //TODO: Need to write a doc comment here
   public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (OmniException) -> Void) {
     omniApi = OmniApi()
     omniApi.apiKey = params.apiKey
@@ -49,7 +64,8 @@ public class Omni: NSObject {
     omniApi.getSelf(completion: { myself in
 
       guard let merchant = myself.merchant else {
-        fatalError("Couldn't get merchant from getself")
+        error(OmniNetworkingException.couldNotGetMerchantDetails)
+        return
       }
 
       let args: [String: Any] = [
