@@ -46,21 +46,29 @@ class OmniApi {
     let client = Networking(baseUrl)
     client.apiKey = apiKey
 
-    print(apiKey)
-
     let request = client.urlRequest(path: urlString, body: body)
 
     print(request.debugDescription)
 
+    if let body = body, let bodyString = String(data: body, encoding: .utf8) {
+      print("REQUEST BODY:")
+      print(bodyString)
+      print()
+    }
+
     client.dataTask(request: request, method: method) { (success, obj) in
-      print(obj)
 
       if let data = obj as? Data {
-        print(obj)
+
         do {
-          let model = try JSONDecoder().decode(T.self, from: data)
-          print(model)
+          let jsonDecoder = JSONDecoder()
+          jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+          let model = try jsonDecoder.decode(T.self, from: data)
           completion(model)
+        } catch DecodingError.typeMismatch(let type, let context) {
+          print(context)
+        } catch let decodingError as DecodingError {
+          print(decodingError)
         } catch {
           var error: OmniException = OmniNetworkingException.couldNotParseResponse(nil)
 

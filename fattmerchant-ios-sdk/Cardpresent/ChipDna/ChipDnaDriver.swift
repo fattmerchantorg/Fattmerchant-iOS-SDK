@@ -135,7 +135,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 //
 //      }
 
-      let success = result[CCParamTransactionResult] == CCValueDeclined
+      let success = result[CCParamTransactionResult] == CCValueApproved
 
       var transactionResult = TransactionResult()
       transactionResult.request = request
@@ -145,13 +145,15 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.cardHolderLastName = result[CCParamCardHolderLastName]
       transactionResult.authCode = result[CCParamAuthCode]
       transactionResult.cardType = result[CCParamCardSchemeId]?.lowercased()
-      transactionResult.userReference = result[CCParamTransactionResult]
+      transactionResult.userReference = result[CCParamUserReference]
 
       completion(transactionResult)
       return
     }
 
     chipDnaTransactionListener.bindToChipDna()
+
+    ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }
 
   func refund(transaction: Transaction, completion: (TransactionResult) -> Void) {

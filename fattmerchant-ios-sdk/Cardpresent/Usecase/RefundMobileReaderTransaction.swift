@@ -47,7 +47,7 @@ class RefundMobileReaderTransaction {
     }
 
     // Can't refund transaction that has been refunded already
-    guard transaction.totalRefunded == "0" || transaction.totalRefunded == nil else {
+    guard transaction.totalRefunded == 0 || transaction.totalRefunded == nil else {
       failure(Exception.transactionNotRefundable(details: "Transaction already refunded"))
       return
     }

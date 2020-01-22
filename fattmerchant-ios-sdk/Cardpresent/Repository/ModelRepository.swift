@@ -38,8 +38,9 @@ protocol ModelRepository {
   /// - Parameters:
   ///   - model: the model to be updated in Omni
   ///   - completion: block to run upon completion
+  ///   - id: the id fo the model to be updated in Omni
   ///   - error: the block to run if an error is thrown
-  func update(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
+  func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
   /// Deletes an instance of the model in Omni
   ///
@@ -68,7 +69,7 @@ protocol ModelRepository {
 
 extension ModelRepository {
   func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
-  func update(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
+  func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
   func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {}
   func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
   func getList(completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
@@ -80,14 +81,21 @@ extension ModelRepository where OmniModel: OmniEndpoint {
     self.init(omniApi: omniApi)
   }
 
+  fileprivate func jsonEncoder() -> JSONEncoder {
+    let encoder = JSONEncoder()
+    encoder.keyEncodingStrategy = .convertToSnakeCase
+    return encoder
+  }
+
   func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
-    let data = try? JSONEncoder().encode(model)
+    let data = try? jsonEncoder().encode(model)
     omniApi.request(method: "post", urlString: OmniModel.resourceEndpoint(), body: data, completion: completion, failure: error)
   }
 
-  func update(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
-    let data = try? JSONEncoder().encode(model)
-    omniApi.request(method: "put", urlString: OmniModel.resourceEndpoint(), body: data, completion: completion, failure: error)
+  func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
+    let data = try? jsonEncoder().encode(model)
+    let endpoint = "\(OmniModel.resourceEndpoint())/\(id)"
+    omniApi.request(method: "put", urlString: endpoint, body: data, completion: completion, failure: error)
   }
 
   func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {

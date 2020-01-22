@@ -28,7 +28,6 @@ public class PaymentMethod: Model {
   public var customerId: String?
   var tokenize: Bool?
   public var nickname: String?
-  public var hasCvv: Bool?
   public var personName: String?
   public var cardType: String?
   public var cardLastFour: String?

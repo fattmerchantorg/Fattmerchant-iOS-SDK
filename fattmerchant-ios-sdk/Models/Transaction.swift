@@ -42,8 +42,8 @@ public class Transaction: Model {
   var response: JSONValue?
   var spreedlyToken: String?
   var success: Bool?
-  var total: String?
-  var totalRefunded: String?
+  var total: Double?
+  var totalRefunded: Double?
   var type: String?
   var updatedAt: String?
   var userId: String?

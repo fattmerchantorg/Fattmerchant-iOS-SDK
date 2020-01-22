@@ -10,7 +10,7 @@ import Foundation
 
 class Invoice: Model {
   var id: String?
-  var balanceDue: String?
+  var balanceDue: Double?
   var createdAt: String?
   var customerId: String?
   var deletedAt: String?
@@ -26,8 +26,8 @@ class Invoice: Model {
   var scheduleId: String?
   var sentAt: String?
   var status: String?
-  var total: String?
-  var totalPaid: String?
+  var total: Double?
+  var totalPaid: Double?
   var updatedAt: String?
   var url: String?
   var userId: String?

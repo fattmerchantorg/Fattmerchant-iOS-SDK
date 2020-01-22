@@ -16,9 +16,6 @@ class Customer: Model {
   var addressCountry: String?
   var addressState: String?
   var addressZip: String?
-  var allowInvoiceCreditCardPayments: Bool?
-  var ccEmails: String?
-  var ccSms: String?
   var company: String?
   var createdAt: String?
   var deletedAt: String?

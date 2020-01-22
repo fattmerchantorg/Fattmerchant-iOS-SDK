@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChipDnaTransactionListener {
+class ChipDnaTransactionListener: NSObject {
 
   /// Called when ChipDna finishes a transaction
   var onFinished: ((CCParameters) -> Void)?
@@ -42,7 +42,7 @@ class ChipDnaTransactionListener {
   }
 
   @objc fileprivate func onTransactionFinished(parameters: CCParameters) {
-
+    onFinished?(parameters)
   }
 
   @objc fileprivate func onDeferredAuthorization(parameters: CCParameters) {
@@ -50,7 +50,9 @@ class ChipDnaTransactionListener {
   }
 
   @objc fileprivate func onSignatureVerification(parameters: CCParameters) {
-
+    let approveSignatureParams = CCParameters()
+    approveSignatureParams.setValue(CCValueTrue, forKey: CCParamResult)
+    ChipDnaMobile.sharedInstance().continueSignatureVerification(approveSignatureParams)
   }
 
   @objc fileprivate func onVoiceReferral(parameters: CCParameters) {

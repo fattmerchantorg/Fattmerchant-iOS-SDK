@@ -149,7 +149,7 @@ class TakeMobileReaderPayment {
     }
 
     transactionToCreate.paymentMethodId = paymentMethodId
-    transactionToCreate.total = request.amount.dollarsString()
+    transactionToCreate.total = request.amount.dollars()
     transactionToCreate.success = result.success ?? false
     transactionToCreate.lastFour = lastFour
     transactionToCreate.meta = transactionMetaJson
@@ -167,7 +167,12 @@ class TakeMobileReaderPayment {
                                  and customer: Customer,
                                  _ failure: @escaping (OmniException) -> Void,
                                  completion: @escaping (Invoice) -> Void) {
-    let invoice = invoice
+    let newInvoice = Invoice()
+
+    guard let id = invoice.id else {
+      failure(Exception.couldNotUpdateInvoice(detail: "Invoice id is required"))
+      return
+    }
 
     guard let paymentMethodId = paymentMethod.id else {
       failure(Exception.couldNotUpdateInvoice(detail: "Payment method id is required"))
@@ -179,9 +184,9 @@ class TakeMobileReaderPayment {
       return
     }
 
-    invoice.customerId = customerId
-    invoice.paymentMethodId = paymentMethodId
-    invoiceRepository.update(model: invoice, completion: completion, error: failure)
+    newInvoice.customerId = customerId
+    newInvoice.paymentMethodId = paymentMethodId
+    invoiceRepository.update(model: newInvoice, id: id, completion: completion, error: failure)
   }
 
   fileprivate func getLastFour(for maskedPan: String?) -> String? {
@@ -198,11 +203,6 @@ class TakeMobileReaderPayment {
   fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
     let paymentMethodToCreate = PaymentMethod()
 
-    guard let merchantId = customer.merchantId else {
-      failure(Exception.couldNotCreateCustomer(detail: "Merchant id is required"))
-      return
-    }
-
     guard let customerId = customer.id else {
       failure(Exception.couldNotCreateCustomer(detail: "Customer id is required"))
       return
@@ -218,7 +218,6 @@ class TakeMobileReaderPayment {
       return
     }
 
-    paymentMethodToCreate.merchantId = merchantId
     paymentMethodToCreate.customerId = customerId
     paymentMethodToCreate.method = PaymentMethodType.card
     paymentMethodToCreate.cardLastFour = lastFour
@@ -241,7 +240,7 @@ class TakeMobileReaderPayment {
 
   fileprivate func createInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
     let invoiceToCreate = Invoice()
-    invoiceToCreate.total = request.amount.dollarsString()
+    invoiceToCreate.total = request.amount.dollars()
     invoiceToCreate.url = "https://fattpay.com/#/bill"
     let invoiceMeta = [
       "subtotal": self.request.amount.dollarsString()
