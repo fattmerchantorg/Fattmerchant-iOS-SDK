@@ -11,7 +11,7 @@ import Fattmerchant
 
 class ViewController: UIViewController {
 
-  var omni: Omni!
+  var omni: Omni? = nil
 
   @IBOutlet weak var activityTextArea: UITextView!
   @IBOutlet weak var initializeButton: UIButton!
@@ -31,12 +31,7 @@ class ViewController: UIViewController {
     self.takePayment()
   }
 
-  let apiKey =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMy"
-  + "MyIsImdvZFVzZXIiOnRydWUsInN1YiI6IjMwYzZlZWI2LTY0YjYtNDdmNi1iY2Y2LTc4N2E5YzU4Nzk4YiIsImlzcyI6Imh0dHA6L"
-  + "y9hcGlkZXYwMS5mYXR0bGFicy5jb20vYXV0aGVudGljYXRlIiwiaWF0IjoxNTc"
-  + "5NTA0MzcwLCJleHAiOjE1Nzk1OTA3NzAsIm5iZiI6MTU3OTUwNDM3MCwianRpIjoiNEEwTjlOM25ob0hpTm1BS"
-  + "iJ9.6YCODhA-ogmRhiAWeRhXvgm0WmxL_0iVnKpwJ--E0_s"
+  let apiKey = "seyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsInN1YiI6IjMwYzZlZWI2LTY0YjYtNDdmNi1iY2Y2LTc4N2E5YzU4Nzk4YiIsImlzcyI6Imh0dHA6Ly9hcGlkZXYwMS5mYXR0bGFicy5jb20vYXV0aGVudGljYXRlIiwiaWF0IjoxNTc5NjM2MTI3LCJleHAiOjE1Nzk3MjI1MjcsIm5iZiI6MTU3OTYzNjEyNywianRpIjoieWl3eTVhVk5Oelc4MmhYbiJ9.7xL7q2hnhCXWwV1Uz7xYs_yelH_Cz7XwH2NzAfzzLL4"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -44,14 +39,24 @@ class ViewController: UIViewController {
   }
 
   fileprivate func initializeOmni() {
+    // instantiate Omni and store somewhere
     omni = Omni()
+
     log("Attempting initalization...")
-    omni.initialize(params: initParams(), completion: {
+
+    // Initialize Omni
+    omni?.initialize(params: initParams(), completion: {
       self.initializeButton.isHidden = true
       self.log("Initialized")
     }) { (error) in
-      self.log(error.message)
+      // Log the error that we got from omni
+      var errorMessage = error.message
+      if let detail = error.detail {
+        errorMessage += ". \(detail)"
+      }
+      self.log(errorMessage)
     }
+
   }
 
   fileprivate func log(_ message: String) {
@@ -61,7 +66,7 @@ class ViewController: UIViewController {
   }
 
   fileprivate func takePayment() {
-    omni.takeMobileReaderTransaction(request: createTransactionRequest(), completion: { completedTransaction in
+    omni?.takeMobileReaderTransaction(request: createTransactionRequest(), completion: { completedTransaction in
       self.log("Finished transaction successfully")
     }) { error in
       self.log(error.message)
@@ -79,8 +84,10 @@ class ViewController: UIViewController {
 
   fileprivate func searchForReaders() {
     log("Attempting to connect reader...")
-    omni.getAvailableReaders(completion: { readers in
 
+    omni?.getAvailableReaders(completion: { readers in
+
+      // Make sure we have at least one reader available
       guard !readers.isEmpty else {
         self.log("No readers found")
         return
@@ -104,15 +111,21 @@ class ViewController: UIViewController {
   }
 
   fileprivate func connectReader(reader: MobileReader, completion: @escaping (MobileReader) -> Void) {
-    omni.connect(reader: reader, completion: completion) {
+    omni?.connect(reader: reader, completion: completion) {
       self.log("Couldn't connect reader")
     }
   }
 
+  /// Makes the user choose which reader to connect to
+  ///
+  /// - Parameters:
+  ///   - readers: an array of MobileReader to choose from
+  ///   - completion: a block to run once the reader is chosen. Will receive a MobileReader
   fileprivate func chooseReader(from readers: [MobileReader], _ completion: (MobileReader) -> Void ) {
     completion(readers.first!)
   }
 
+  /// - Returns: A string for the current time in the format "1:02PM"
   fileprivate func timestamp() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "hhmm", options: 0, locale: Locale.current)
