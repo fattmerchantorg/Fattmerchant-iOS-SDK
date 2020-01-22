@@ -22,10 +22,37 @@ class JsonValueTests: XCTestCase {
     return encoder
   }
 
+  func testPaymentMethodJson() {
+    let jsonData = paymentMethodJson.data(using: .utf8)!
+    let paymentMethod = try? jsonDecoder.decode(PaymentMethod.self, from: jsonData)
+    XCTAssertNotNil(paymentMethod, "Parsing payment method failed")
+    XCTAssertNotNil(paymentMethod?.id, "Parsed payment method doesn't have id")
+  }
+
+  func testTransactionJson() {
+    let jsonData = transactionjson.data(using: .utf8)!
+    let transaction = try? jsonDecoder.decode(Transaction.self, from: jsonData)
+    XCTAssertNotNil(transaction, "Parsing transaction failed")
+    XCTAssertNotNil(transaction?.id, "Parsed transaction doesn't have id")
+  }
+
+  func testDecodeCustomerJson() {
+    let jsonData = customerJson.data(using: .utf8)!
+    let customer = try? jsonDecoder.decode(Customer.self, from: jsonData)
+    XCTAssertNotNil(customer, "Parsing customer failed")
+    XCTAssertNotNil(customer?.id, "Parsed customer doesn't have id")
+  }
+
+  func testDecodeInvoiceJson() {
+    let jsonData = invoiceJson.data(using: .utf8)!
+      let invoice = try? jsonDecoder.decode(Invoice.self, from: jsonData)
+      XCTAssertNotNil(invoice, "Parsing invoice failed")
+      XCTAssertNotNil(invoice?.id, "Parsed invoice doesn't have id")
+  }
+
   func testDecodeMerchantJson() {
     let jsonData = merchantJson.data(using: .utf8)!
     let merchant = try? jsonDecoder.decode(Merchant.self, from: jsonData)
-
     XCTAssertNotNil(merchant, "Parsing merchant failed")
     XCTAssertNotNil(merchant?.id, "Parsed merchant doesn't have id")
   }
