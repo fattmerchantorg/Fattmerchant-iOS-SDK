@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     self.takePayment()
   }
 
-  let apiKey = "seyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsInN1YiI6IjMwYzZlZWI2LTY0YjYtNDdmNi1iY2Y2LTc4N2E5YzU4Nzk4YiIsImlzcyI6Imh0dHA6Ly9hcGlkZXYwMS5mYXR0bGFicy5jb20vYXV0aGVudGljYXRlIiwiaWF0IjoxNTc5NjM2MTI3LCJleHAiOjE1Nzk3MjI1MjcsIm5iZiI6MTU3OTYzNjEyNywianRpIjoieWl3eTVhVk5Oelc4MmhYbiJ9.7xL7q2hnhCXWwV1Uz7xYs_yelH_Cz7XwH2NzAfzzLL4"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsInN1YiI6IjMwYzZlZWI2LTY0YjYtNDdmNi1iY2Y2LTc4N2E5YzU4Nzk4YiIsImlzcyI6Imh0dHA6Ly9hcGlkZXYwMS5mYXR0bGFicy5jb20vYXV0aGVudGljYXRlIiwiaWF0IjoxNTc5Njk2NTQyLCJleHAiOjE1Nzk3ODI5NDIsIm5iZiI6MTU3OTY5NjU0MiwianRpIjoiM1ZXZXFLVlVBc01tU3pCeCJ9._sW3onnx4QgsVY6BvFiloW3P7U1NntoOcG_ogqvcZbw"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -49,14 +49,17 @@ class ViewController: UIViewController {
       self.initializeButton.isHidden = true
       self.log("Initialized")
     }) { (error) in
-      // Log the error that we got from omni
-      var errorMessage = error.message
-      if let detail = error.detail {
-        errorMessage += ". \(detail)"
-      }
-      self.log(errorMessage)
+      self.log(error)
     }
 
+  }
+
+  fileprivate func log(_ error: OmniException) {
+    var errorMessage = error.message
+    if let detail = error.detail {
+      errorMessage += ". \(detail)"
+    }
+    self.log(errorMessage)
   }
 
   fileprivate func log(_ message: String) {
@@ -69,7 +72,7 @@ class ViewController: UIViewController {
     omni?.takeMobileReaderTransaction(request: createTransactionRequest(), completion: { completedTransaction in
       self.log("Finished transaction successfully")
     }) { error in
-      self.log(error.message)
+      self.log(error)
     }
   }
 
@@ -106,7 +109,7 @@ class ViewController: UIViewController {
       }
 
     }) { (error) in
-      self.log(error.message)
+      self.log(error)
     }
   }
 

@@ -41,6 +41,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app uses Bluetooth to connect to the mobile reader</string>
 	<key>UISupportedExternalAccessoryProtocols</key>
 	<array>
 		<string>com.bbpos.bt.wisepad</string>
