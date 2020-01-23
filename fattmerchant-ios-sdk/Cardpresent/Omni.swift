@@ -10,6 +10,7 @@ import Foundation
 
 enum OmniNetworkingException: OmniException {
   case couldNotGetMerchantDetails
+  case couldNotGetPaginatedTransactions
 
   static var mess: String = "Omni Networking Exception"
 
@@ -17,6 +18,9 @@ enum OmniNetworkingException: OmniException {
     switch self {
     case .couldNotGetMerchantDetails:
       return "Could not get merchant details from Omni"
+
+    case .couldNotGetPaginatedTransactions:
+      return "Could not get paginated transactions"
     }
   }
 }
@@ -53,7 +57,11 @@ public class Omni: NSObject {
     paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
   }
 
-  //TODO: Need to write a doc comment here
+  /// Used to initialize the Omni object
+  /// - Parameters:
+  ///   - params: an instance of InitParams which contains all necessary information to initialize omni
+  ///   - completion: a completion block to run once finished
+  ///   - error: an error block to run in case something goes wrong
   public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (OmniException) -> Void) {
     omniApi = OmniApi()
     omniApi.apiKey = params.apiKey
@@ -82,8 +90,7 @@ public class Omni: NSObject {
 
   }
 
-  /// Caputeres a mobile reader transaction
-  ///
+  /// Captures a mobile reader transaction
   /// - Parameters:
   ///   - request: A request for a Transaction
   ///   - completion: Called when the operation is complete successfully. Receives a Transaction
@@ -101,12 +108,21 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
 
+  /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
+  /// - Parameters:
+  ///   - transaction: the transaction to refund
+  ///   - completion: Receives the Transaction that represents the refund in Omni
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func refundMobileReaderTransaction(transaction: Transaction, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository, transactionRepository: transactionRepository, transaction: transaction)
+    job.start(completion: completion, failure: error)
+  }
+
   /// Finds the available readers that Omni can connect to
-  ///
   /// - Parameters:
   ///   - completion: Receives an array of MobileReaders that are available
   ///   - error: Receives any errors that happened while attempting the operation
-  public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void ) {
+  public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void) {
     SearchForReaders(mobileReaderDriverRepository: mobileReaderDriverRepository, args: [:]).start(completion: { (readers) in
       self.preferredQueue.async { completion(readers) }
     }, failure: ({ exception in
@@ -114,7 +130,7 @@ public class Omni: NSObject {
     }))
   }
 
-  /// Attempts to connect to the given [MobileReader]
+  /// Attempts to connect to the given MobileReader
   ///
   /// - Parameters:
   ///   - reader: The MobileReader to connect
@@ -131,6 +147,20 @@ public class Omni: NSObject {
         }
       }
     }
+  }
+
+  /// Retrieves a list of the most recent mobile reader transactions from Omni
+  /// - Parameters:
+  ///   - completion: Receives a list of Transactions
+  ///   - error: A block to call if this operation fails
+  public func getMobileReaderTransactions(completion: @escaping ([Transaction]) -> Void, error: @escaping (OmniException) -> Void) {
+    transactionRepository.getList(completion: ({ paginatedTransactions in
+      guard let transactions = paginatedTransactions.data else {
+        error(OmniNetworkingException.couldNotGetPaginatedTransactions)
+        return
+      }
+      completion(transactions)
+    }), error: error)
   }
 
 }

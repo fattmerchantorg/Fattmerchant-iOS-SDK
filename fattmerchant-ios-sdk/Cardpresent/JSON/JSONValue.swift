@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum JSONValue: Codable, Equatable {
+public enum JSONValue: Codable, Equatable {
 
   public enum JSONValueError: Error {
     case InitializationError(message: String)

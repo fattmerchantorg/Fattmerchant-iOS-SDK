@@ -63,7 +63,7 @@ protocol ModelRepository {
   /// - Parameters:
   ///   - completion: block to run upon completion
   ///   - error: the block to run if an error is thrown
-  func getList(completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
+  func getList(completion: @escaping (PaginatedData<OmniModel>) -> Void, error: @escaping ErrorHandler)
 
 }
 
@@ -72,7 +72,7 @@ extension ModelRepository {
   func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
   func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {}
   func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
-  func getList(completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {}
+  func getList(completion: @escaping (PaginatedData<OmniModel>) -> Void, error: @escaping ErrorHandler) {}
 }
 
 extension ModelRepository where OmniModel: OmniEndpoint {
@@ -107,7 +107,7 @@ extension ModelRepository where OmniModel: OmniEndpoint {
     omniApi.request(method: "get", urlString: endpoint, completion: completion, failure: error)
   }
 
-  func getList(completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
+  func getList(completion: @escaping (PaginatedData<OmniModel>) -> Void, error: @escaping ErrorHandler) {
     omniApi.request(method: "get", urlString: OmniModel.resourceEndpoint(), completion: completion, failure: error)
   }
 
