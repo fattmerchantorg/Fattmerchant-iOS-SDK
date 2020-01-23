@@ -43,12 +43,13 @@ class OmniApi {
       return
     }
 
+    print("------ HTTP REQUEST ------")
     let client = Networking(baseUrl)
     client.apiKey = apiKey
 
     let request = client.urlRequest(path: urlString, body: body)
 
-    print(request.debugDescription)
+    print("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
 
     if let body = body, let bodyString = String(data: body, encoding: .utf8) {
       print("REQUEST BODY:")
@@ -59,6 +60,11 @@ class OmniApi {
     client.dataTask(request: request, method: method) { (success, obj) in
 
       if let data = obj as? Data {
+        if let dataString = String(data: data, encoding: .utf8) {
+          print("RESPONSE:")
+          print(dataString)
+          print()
+        }
 
         do {
           let jsonDecoder = JSONDecoder()
