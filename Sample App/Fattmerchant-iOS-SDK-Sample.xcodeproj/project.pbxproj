@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D781037D23D959FA00256F2F /* TransactionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */; };
 		D7B7111A23D58C4A00EF98DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7111923D58C4A00EF98DB /* AppDelegate.swift */; };
 		D7B7111C23D58C4A00EF98DB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7111B23D58C4A00EF98DB /* ViewController.swift */; };
 		D7B7111F23D58C4A00EF98DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7B7111D23D58C4A00EF98DB /* Main.storyboard */; };
@@ -31,6 +32,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPickerViewController.swift; sourceTree = "<group>"; };
 		D7B7111623D58C4A00EF98DB /* Fattmerchant-iOS-SDK-Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fattmerchant-iOS-SDK-Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7B7111923D58C4A00EF98DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7B7111B23D58C4A00EF98DB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 				D7B7112023D58C4B00EF98DB /* Assets.xcassets */,
 				D7B7112223D58C4B00EF98DB /* LaunchScreen.storyboard */,
 				D7B7112523D58C4B00EF98DB /* Info.plist */,
+				D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */,
 			);
 			path = "Fattmerchant-iOS-SDK-Sample";
 			sourceTree = "<group>";
@@ -155,6 +158,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D781037D23D959FA00256F2F /* TransactionPickerViewController.swift in Sources */,
 				D7B7111C23D58C4A00EF98DB /* ViewController.swift in Sources */,
 				D7B7111A23D58C4A00EF98DB /* AppDelegate.swift in Sources */,
 			);

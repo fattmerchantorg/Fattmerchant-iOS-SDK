@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     self.takePayment()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsInN1YiI6IjMwYzZlZWI2LTY0YjYtNDdmNi1iY2Y2LTc4N2E5YzU4Nzk4YiIsImlzcyI6Imh0dHA6Ly9hcGlkZXYwMS5mYXR0bGFicy5jb20vYXV0aGVudGljYXRlIiwiaWF0IjoxNTc5Njk2NTQyLCJleHAiOjE1Nzk3ODI5NDIsIm5iZiI6MTU3OTY5NjU0MiwianRpIjoiM1ZXZXFLVlVBc01tU3pCeCJ9._sW3onnx4QgsVY6BvFiloW3P7U1NntoOcG_ogqvcZbw"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImE2MWQ3OGNjLWNkZTktNDRhYy04YTE4LTMwYzM5YmUwNTg3OSIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1Nzk3OTMzMzQsImV4cCI6MTU3OTg3OTczNCwibmJmIjoxNTc5NzkzMzM0LCJqdGkiOiJxZUpNdFM0Uk5EYUc2UmEwIn0.QbvtLHPgu-oaBXOtbDjvhEPuRGz8ecsx7ZHjSpZTZk4"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -52,6 +52,25 @@ class ViewController: UIViewController {
       self.log(error)
     }
 
+  }
+
+  fileprivate func chooseTransaction(from transactions: [Transaction], completion: (Transaction?) -> Void) {
+
+    DispatchQueue.main.async {
+      let picker = TransactionPickerViewController()
+      picker.transactions = transactions
+      self.present(picker, animated: true, completion: nil)
+    }
+  }
+
+  fileprivate func fetchTransactions() {
+    omni?.getMobileReaderTransactions(completion: { transactions in
+      self.chooseTransaction(from: transactions) { chosenTransaction in
+        self.refundPayment()
+      }
+    }, error: { error in
+      self.log(error)
+    })
   }
 
   fileprivate func log(_ error: OmniException) {
@@ -82,7 +101,7 @@ class ViewController: UIViewController {
   }
 
   fileprivate func refundPayment() {
-
+    fetchTransactions()
   }
 
   fileprivate func searchForReaders() {
