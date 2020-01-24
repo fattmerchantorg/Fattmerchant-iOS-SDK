@@ -109,7 +109,7 @@ class ViewController: UIViewController {
       self.log("Refunded transaction successfully")
     }, error: { error in
       self.log(error)
-    })
+    }) 
   }
 
   fileprivate func searchForReaders() {

@@ -11,6 +11,7 @@ import Foundation
 enum RefundException: OmniException {
   case transactionNotRefundable(details: String?)
   case couldNotFindMobileReaderForRefund
+  case errorRefunding(details: String?)
 
   static var mess: String = "Could not refund transaction"
 
@@ -21,6 +22,9 @@ enum RefundException: OmniException {
 
     case .couldNotFindMobileReaderForRefund:
       return "Mobile reader driver responsible for performing refund could not be found"
+
+    case .errorRefunding(let d):
+      return d ?? "Error while performing refund"
     }
   }
 }
@@ -74,10 +78,10 @@ class RefundMobileReaderTransaction {
     transactionRepository.create(model: refundedTransaction, completion: completion, error: failure)
   }
 
-  fileprivate func refund(transaction: Transaction, failure: (OmniException) -> Void, completion: @escaping (TransactionResult) -> Void) {
+  fileprivate func refund(transaction: Transaction, failure: @escaping (OmniException) -> Void, completion: @escaping (TransactionResult) -> Void) {
     mobileReaderDriverRepository.getDriverFor(transaction: transaction) { driver in
       if let driver = driver {
-        driver.refund(transaction: transaction, completion: completion) // TODO: Handle error
+        driver.refund(transaction: transaction, completion: completion, error: failure) // TODO: Handle error
       } else {
         failure(Exception.couldNotFindMobileReaderForRefund)
       }

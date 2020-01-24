@@ -156,8 +156,86 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }
 
-  func refund(transaction: Transaction, completion: (TransactionResult) -> Void) {
-    //TODO: Implement this
+  /// Attempts a refund in ChipDna
+  ///
+  /// This will attempt to refund the full amount for the Transaction.
+  /// - Parameters:
+  ///   - transaction: the Transaction you intend to refund
+  ///   - completion: A block to run after the refund is complete
+  ///   - error: A block to run in case an error occurs
+  func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+    // Get user reference. This is what we use to reference the transaction within NMI
+    guard let userRef = extractUserReference(from: transaction) else {
+      error(RefundException.transactionNotRefundable(details: "Could not find user reference"))
+      return
+    }
+
+    // Get the amount to refund from the transaction
+    guard let amountDollars = transaction.total else {
+      error(RefundException.transactionNotRefundable(details: "Could not find amount to refund"))
+      return
+    }
+
+    // Create the params for the 3rd-party refund
+    let refundRequestParams = CCParameters()
+    refundRequestParams[CCParamUserReference] = generateChipDnaTransactionUserReference()
+    refundRequestParams[CCParamSaleReference] = userRef
+    refundRequestParams[CCParamAmount] = Amount(dollars: amountDollars).centsString()
+    refundRequestParams[CCParamCurrency] = "USD"
+
+    // Do the 3rd party refund
+    guard let result = ChipDnaMobile.sharedInstance()?.linkedRefundTransaction(refundRequestParams) else {
+      error(RefundException.transactionNotRefundable(details: "Error while performing refund"))
+      return
+    }
+
+    // Check status
+    if let _ = result[CCParamError] {
+      error(RefundException.errorRefunding(details: "Error while performing refund"))
+    } else {
+      let transactionResult = TransactionResult()
+      transaction.success = true
+      transaction.type = "refund"
+      completion(transactionResult)
+    }
+  }
+
+  fileprivate func refund2(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+
+    let request = TransactionRequest(amount: Amount(dollars: transaction.total!))
+
+    let requestParams = CCParameters(transactionRequest: request)
+    requestParams[CCParamTransactionType] = CCValueRefund
+    requestParams[CCParamSaleReference] = extractUserReference(from: transaction)!
+
+    chipDnaTransactionListener.detachFromChipDna()
+
+    chipDnaTransactionListener.onFinished = { result in
+
+      let success = result[CCParamTransactionResult] == CCValueApproved
+
+      var transactionResult = TransactionResult()
+      transactionResult.request = request
+      transactionResult.success = success
+      transactionResult.maskedPan = result[CCParamMaskedPan]
+      transactionResult.cardHolderFirstName = result[CCParamCardHolderFirstName]
+      transactionResult.cardHolderLastName = result[CCParamCardHolderLastName]
+      transactionResult.authCode = result[CCParamAuthCode]
+      transactionResult.cardType = result[CCParamCardSchemeId]?.lowercased()
+      transactionResult.userReference = result[CCParamUserReference]
+      transactionResult.transactionType = "refund"
+
+      completion(transactionResult)
+      return
+    }
+
+    chipDnaTransactionListener.bindToChipDna()
+
+    ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
+  }
+
+  fileprivate func extractUserReference(from transaction: Transaction) -> String? {
+    return transaction.meta?["nmiUserRef"]
   }
 
   fileprivate func deserializeAvailablePinPads(pinPadsXml: String) -> [SelectablePinPad]? {

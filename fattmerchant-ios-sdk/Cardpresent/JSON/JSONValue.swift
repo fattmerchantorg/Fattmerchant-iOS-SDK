@@ -55,6 +55,44 @@ public enum JSONValue: Codable, Equatable {
     return nil
   }
 
+  subscript(key: String) -> Int? {
+    if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
+      guard
+        let val = dict[key],
+        val != nil,
+        case let JSONValue.int(i) = val!
+      else {
+        return nil
+      }
+
+      return i
+    }
+    return nil
+  }
+
+  subscript(key: String) -> String? {
+    if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
+      guard
+        let val = dict[key],
+        val != nil,
+        case let JSONValue.string(i) = val!
+      else {
+        return nil
+      }
+
+      return i
+    }
+    return nil
+  }
+
+  subscript<T>(key: String) -> T? {
+    if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
+      
+      return (dict[key] as? T) ?? nil
+    }
+    return nil
+  }
+
   public init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
     if let value = try? container.decode(String.self) {
