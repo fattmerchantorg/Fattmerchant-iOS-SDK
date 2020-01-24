@@ -20,7 +20,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var totalTextInput: UITextField!
 
   @IBAction func onRefundPaymentButtonPress(_ sender: UIButton) {
-    self.refundPayment()
+    self.fetchTransactions()
   }
 
   @IBAction func onConnectReaderButtonPress(_ sender: UIButton) {
@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     self.takePayment()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImE2MWQ3OGNjLWNkZTktNDRhYy04YTE4LTMwYzM5YmUwNTg3OSIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1Nzk3OTMzMzQsImV4cCI6MTU3OTg3OTczNCwibmJmIjoxNTc5NzkzMzM0LCJqdGkiOiJxZUpNdFM0Uk5EYUc2UmEwIn0.QbvtLHPgu-oaBXOtbDjvhEPuRGz8ecsx7ZHjSpZTZk4"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1Nzk4MTMxMjUsImV4cCI6MTU3OTg5OTUyNSwibmJmIjoxNTc5ODEzMTI1LCJqdGkiOiI5ZlBMUWdSY2FBSnYwRGcwIn0.egIkoGpemCQKOnar9XIBryOHQTz5cPSUfcchpZ0OxbY"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -54,11 +54,11 @@ class ViewController: UIViewController {
 
   }
 
-  fileprivate func chooseTransaction(from transactions: [Transaction], completion: (Transaction?) -> Void) {
-
+  fileprivate func chooseTransaction(from transactions: [Transaction], completion: @escaping (Transaction) -> Void) {
     DispatchQueue.main.async {
       let picker = TransactionPickerViewController()
       picker.transactions = transactions
+      picker.onTransactionChosen = completion
       self.present(picker, animated: true, completion: nil)
     }
   }
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
   fileprivate func fetchTransactions() {
     omni?.getMobileReaderTransactions(completion: { transactions in
       self.chooseTransaction(from: transactions) { chosenTransaction in
-        self.refundPayment()
+        self.refund(chosenTransaction)
       }
     }, error: { error in
       self.log(error)
@@ -83,7 +83,11 @@ class ViewController: UIViewController {
 
   fileprivate func log(_ message: String) {
     DispatchQueue.main.async {
+      let textCount: Int = ("\n \(self.timestamp()) | \(message)" + self.activityTextArea.text).count
       self.activityTextArea.insertText("\n \(self.timestamp()) | \(message)")
+      if textCount > 1 {
+        self.activityTextArea.scrollRangeToVisible(NSMakeRange(textCount - 1, 1))
+      }
     }
   }
 
@@ -100,41 +104,39 @@ class ViewController: UIViewController {
     return request
   }
 
-  fileprivate func refundPayment() {
-    fetchTransactions()
+  fileprivate func refund(_ transaction: Transaction) {
+    omni?.refundMobileReaderTransaction(transaction: transaction, completion: { (refundedTransaction) in
+      self.log("Refunded transaction successfully")
+    }, error: { error in
+      self.log(error)
+    })
   }
 
   fileprivate func searchForReaders() {
-    log("Attempting to connect reader...")
-
+    log("Searching for available reader...")
     omni?.getAvailableReaders(completion: { readers in
-
-      // Make sure we have at least one reader available
       guard !readers.isEmpty else {
         self.log("No readers found")
         return
       }
-
       self.log("Found readers:")
-
       for reader in readers {
         self.log(reader.name)
       }
-
       self.chooseReader(from: readers) { chosenReader in
         self.connectReader(reader: chosenReader, completion: { connectedReader in
-          self.log("Connected reader: \(connectedReader.name)")
+          self.log("Connected reader: \(connectedReader)")
         })
       }
-
     }) { (error) in
       self.log(error)
     }
   }
 
   fileprivate func connectReader(reader: MobileReader, completion: @escaping (MobileReader) -> Void) {
+    self.log("Trying to connect to \(reader)")
     omni?.connect(reader: reader, completion: completion) {
-      self.log("Couldn't connect reader")
+      self.log("Couldn't connect to \(reader)")
     }
   }
 
@@ -143,8 +145,22 @@ class ViewController: UIViewController {
   /// - Parameters:
   ///   - readers: an array of MobileReader to choose from
   ///   - completion: a block to run once the reader is chosen. Will receive a MobileReader
-  fileprivate func chooseReader(from readers: [MobileReader], _ completion: (MobileReader) -> Void ) {
-    completion(readers.first!)
+  fileprivate func chooseReader(from readers: [MobileReader], _ completion: @escaping (MobileReader) -> Void ) {
+    // If there is only one reader, automatically choose that one
+    guard readers.count > 1 else {
+      completion(readers[0])
+      return
+    }
+
+    let pickerController = StringPickerController(values: readers) { reader in
+      if let chosenReader = reader {
+        completion(chosenReader)
+      }
+
+      self.dismiss(animated: true, completion: nil)
+    }
+    modalPresentationStyle = .pageSheet
+    present(pickerController, animated: true, completion: nil)
   }
 
   /// - Returns: A string for the current time in the format "1:02PM"

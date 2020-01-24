@@ -13,6 +13,8 @@ import Fattmerchant
 class TransactionPickerViewController: UITableViewController {
 
   var transactions: [Transaction] = []
+  var onTransactionChosen: ((Transaction) -> Void)?
+  var onCancel: (() -> Void)?
 
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let label = UILabel()
@@ -30,6 +32,16 @@ class TransactionPickerViewController: UITableViewController {
     cell.textLabel?.text = pretty(transaction: transaction)
     cell.detailTextLabel?.text = transaction.id
     return cell
+  }
+
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    if transactions.count > indexPath.row {
+      onTransactionChosen?(transactions[indexPath.row])
+    } else {
+      onCancel?()
+    }
+
+    parent?.dismiss(animated: true, completion: nil)
   }
 
   override func numberOfSections(in tableView: UITableView) -> Int {
