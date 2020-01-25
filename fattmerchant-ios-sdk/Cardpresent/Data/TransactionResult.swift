@@ -44,4 +44,8 @@ struct TransactionResult {
   /** A user-defined string used to refer to the transaction */
   var userReference: String?
 
+  /// The ID of this transaction in the 3rd party responsible for performing it.
+  ///
+  /// For example, in the case of NMI, this would be the CardEaseReferenceId
+  var externalId: String?
 }

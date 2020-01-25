@@ -87,7 +87,6 @@ public enum JSONValue: Codable, Equatable {
 
   subscript<T>(key: String) -> T? {
     if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
-      
       return (dict[key] as? T) ?? nil
     }
     return nil

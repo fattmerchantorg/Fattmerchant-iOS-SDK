@@ -146,6 +146,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.authCode = result[CCParamAuthCode]
       transactionResult.cardType = result[CCParamCardSchemeId]?.lowercased()
       transactionResult.userReference = result[CCParamUserReference]
+      transactionResult.externalId = result[CCParamCardEaseReference]
 
       completion(transactionResult)
       return
@@ -164,8 +165,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///   - completion: A block to run after the refund is complete
   ///   - error: A block to run in case an error occurs
   func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-    // Get user reference. This is what we use to reference the transaction within NMI
-    guard let userRef = extractUserReference(from: transaction) else {
+    // Get card ease reference. This is what we use to reference the transaction within NMI
+    guard let cardEaseReference = extractCardEaseReference(from: transaction) else {
       error(RefundException.transactionNotRefundable(details: "Could not find user reference"))
       return
     }
@@ -179,7 +180,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     // Create the params for the 3rd-party refund
     let refundRequestParams = CCParameters()
     refundRequestParams[CCParamUserReference] = generateChipDnaTransactionUserReference()
-    refundRequestParams[CCParamSaleReference] = userRef
+    refundRequestParams[CCParamCardEaseReference] = cardEaseReference
     refundRequestParams[CCParamAmount] = Amount(dollars: amountDollars).centsString()
     refundRequestParams[CCParamCurrency] = "USD"
 
@@ -232,6 +233,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     chipDnaTransactionListener.bindToChipDna()
 
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
+  }
+
+  fileprivate func extractCardEaseReference(from transaction: Transaction) -> String? {
+    return transaction.meta?["cardEaseReference"]
   }
 
   fileprivate func extractUserReference(from transaction: Transaction) -> String? {

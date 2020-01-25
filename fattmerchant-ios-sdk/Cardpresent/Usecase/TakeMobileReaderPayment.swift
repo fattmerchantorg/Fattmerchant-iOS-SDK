@@ -115,7 +115,7 @@ class TakeMobileReaderPayment {
         return
     }
 
-    guard let userRef = result.userReference, let transactionMetaJson = [ "nmiUserRef": userRef ].jsonValue() else {
+    guard let transactionMetaJson = createTransactionMetaJson(from: result) else {
       failure(Exception.couldNotCreateTransaction(detail: "Could not generate transaction meta json"))
       return
     }
@@ -128,7 +128,7 @@ class TakeMobileReaderPayment {
     let gatewayResponse = [
       "gateway_specific_response_fields": [
         "nmi": [
-          "authcode": authCode
+          "authcode": authCode,
         ]
       ]
     ]
@@ -160,6 +160,23 @@ class TakeMobileReaderPayment {
     transactionToCreate.invoiceId = invoiceId
     transactionToCreate.response = gatewayResponseJson
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
+  }
+
+
+  /// Creates a JSONValue object that from the transactionResult, including only the items that make up the TransactionMeta
+  /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
+  fileprivate func createTransactionMetaJson(from transactionResult: TransactionResult) -> JSONValue? {
+    var dict: [String: String] = [:]
+
+    if let userRef = transactionResult.userReference {
+      dict["nmiUserRef"] = userRef
+    }
+
+    if let externalId = transactionResult.externalId {
+      dict["cardEaseReference"] = externalId
+    }
+
+    return dict.jsonValue()
   }
 
   fileprivate func updateInvoice(_ invoice: Invoice,
