@@ -120,22 +120,19 @@ class TakeMobileReaderPayment {
       return
     }
 
-    guard let authCode = result.authCode else {
-      failure(Exception.couldNotCreateTransaction(detail: "Auth code is required"))
-      return
-    }
 
-    let gatewayResponse = [
-      "gateway_specific_response_fields": [
-        "nmi": [
-          "authcode": authCode,
+    var gatewayResponseJson: JSONValue?
+
+    if let authCode = result.authCode {
+      let gatewayResponse = [
+        "gateway_specific_response_fields": [
+          "nmi": [
+            "authcode": authCode,
+          ]
         ]
       ]
-    ]
 
-    guard let gatewayResponseJson = gatewayResponse.jsonValue() else {
-      failure(Exception.couldNotCreateTransaction(detail: "Could not generate gatewayResponse json"))
-      return
+      gatewayResponseJson = gatewayResponse.jsonValue()
     }
 
     guard let customerId = customer.id else {
