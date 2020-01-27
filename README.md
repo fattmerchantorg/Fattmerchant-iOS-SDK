@@ -6,6 +6,7 @@ The Fattmerchant iOS SDK provides a simple way to accept a payment on your iOS a
 * [Installation](#installation)
 * [Getting Started](#getting-started)
 * [Testing](#testing)
+* [Taking a payment with a mobile reader](https://fattmerchantorg.github.io/fattmerchant-android-sdk/cardpresent/)
 
 ![Tokenization Info](https://raw.githubusercontent.com/fattmerchantorg/Fattmerchant-iOS-SDK/master/assets/images/tokenization-info.png)
 
