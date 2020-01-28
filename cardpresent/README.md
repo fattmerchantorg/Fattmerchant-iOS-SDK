@@ -19,7 +19,7 @@ In order to build and run with the Cardpresent functionality, you must include t
 	* com.miura.shuttle
 	* com.datecs.pinpad
 
-![Tokenization Info](https://raw.githubusercontent.com/fattmerchantorg/Fattmerchant-iOS-SDK/master/assets/images/cardpresent-info-plist.png.png)
+![Tokenization Info](https://raw.githubusercontent.com/fattmerchantorg/Fattmerchant-iOS-SDK/master/assets/images/cardpresent-info-plist.png)
 
 ## Initialize
 
