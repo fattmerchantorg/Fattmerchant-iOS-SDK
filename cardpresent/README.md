@@ -72,8 +72,8 @@ omni?.getAvailableReaders(completion: { readers in
 	}) { (error) in
 		// Something went wrong
 	}	
-}) { (error) in
-  self.log(error)
+}) { 
+	self.log("Couldn't connect to the mobile reader")
 }
 ```
 
@@ -97,7 +97,11 @@ omni.takeMobileReaderTransaction(request, { completedTransaction in
 
 
 ## Refunding a Payment
-To refund a payment, you must first get the `Transaction` that you want to refund. Once you do, you can 
+. You can use the [Omni API](https://fattmerchant.docs.apiary.io/#reference/0/transactions) to do so. 
+Once you get the transaction, you can use the `refundMobileReaderTransaction` method to attempt the refund.
+
+> At this time, you may only refund transactions that were performed on the same device that performed the original transaction 
+
 
 ```swift
 // Attain a transaction
