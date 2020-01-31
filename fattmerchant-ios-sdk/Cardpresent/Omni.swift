@@ -25,9 +25,23 @@ enum OmniNetworkingException: OmniException {
   }
 }
 
+enum OmniGeneralException: OmniException {
+  case uninitialized
+
+  static var mess: String = "Omni General Error"
+
+  var detail: String? {
+    switch self {
+    case .uninitialized:
+      return "Omni has not been initialized yet"
+    }
+  }
+}
+
 //TODO: Need to write a doc comment here
 public class Omni: NSObject {
 
+  private var initialized: Bool = false
   private var omniApi = OmniApi()
   private var transactionRepository: TransactionRepository!
   private var invoiceRepository: InvoiceRepository!
@@ -55,6 +69,13 @@ public class Omni: NSObject {
     invoiceRepository = InvoiceRepository(omniApi: omniApi)
     customerRepository = CustomerRepository(omniApi: omniApi)
     paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
+  }
+
+  /// True when Omni is initialized. False otherwise
+  public var isInitialized: Bool {
+    get {
+      return initialized
+    }
   }
 
   /// Used to initialize the Omni object
@@ -96,6 +117,10 @@ public class Omni: NSObject {
   ///   - completion: Called when the operation is complete successfully. Receives a Transaction
   ///   - error: Receives any errors that happened while attempting the operation
   public func takeMobileReaderTransaction(request: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
     let job = TakeMobileReaderPayment(
       mobileReaderDriverRepository: mobileReaderDriverRepository,
       invoiceRepository: invoiceRepository,
@@ -114,6 +139,10 @@ public class Omni: NSObject {
   ///   - completion: Receives the Transaction that represents the refund in Omni
   ///   - error: Receives any errors that happened while attempting the operation
   public func refundMobileReaderTransaction(transaction: Transaction, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
     let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository, transactionRepository: transactionRepository, transaction: transaction)
     job.start(completion: completion, failure: error)
   }
@@ -123,6 +152,10 @@ public class Omni: NSObject {
   ///   - completion: Receives an array of MobileReaders that are available
   ///   - error: Receives any errors that happened while attempting the operation
   public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
     SearchForReaders(mobileReaderDriverRepository: mobileReaderDriverRepository, args: [:]).start(completion: { (readers) in
       self.preferredQueue.async { completion(readers) }
     }, failure: ({ exception in
@@ -137,6 +170,10 @@ public class Omni: NSObject {
   ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
   ///   - error: A block to call if this operation fails
   public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping () -> Void) {
+    guard initialized else {
+      return error()
+    }
+
     let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
     task.start { success in
       self.preferredQueue.async {
@@ -154,6 +191,10 @@ public class Omni: NSObject {
   ///   - completion: Receives a list of Transactions
   ///   - error: A block to call if this operation fails
   public func getMobileReaderTransactions(completion: @escaping ([Transaction]) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
     transactionRepository.getList(completion: ({ paginatedTransactions in
       guard let transactions = paginatedTransactions.data else {
         error(OmniNetworkingException.couldNotGetPaginatedTransactions)
