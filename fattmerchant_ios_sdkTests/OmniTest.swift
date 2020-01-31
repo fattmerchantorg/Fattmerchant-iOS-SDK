@@ -26,7 +26,7 @@ class OmniTest: XCTestCase {
       }
     }
 
-    // Teset that connect reader fails
+    // Test that connect reader fails
     let connectReaderFails = XCTestExpectation(description: "Omni throws an uninitialized error")
     omni.connect(reader: MockMobileReader(name: "reader"), completion: { _ in
       XCTFail("Omni expected to throw an uninitialized exception, but didn't")
