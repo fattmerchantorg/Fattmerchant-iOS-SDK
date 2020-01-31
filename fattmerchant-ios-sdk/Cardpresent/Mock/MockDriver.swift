@@ -10,7 +10,7 @@ import Foundation
 
 class MockDriver: MobileReaderDriver {
 
-  var reader = MockMobileReader(name: "Mock Reader")
+  var reader = MobileReader(name: "Reader")
 
   func isReadyToTakePayment(completion: (Bool) -> Void) {
     completion(true)
@@ -38,6 +38,23 @@ class MockDriver: MobileReaderDriver {
       authCode: "abc123",
       transactionType: "charge",
       amount: request.amount,
+      cardType: "visa",
+      userReference: "cdm-123123"
+    )
+
+    completion(transactionResult)
+  }
+
+  func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+    let transactionResult = TransactionResult(
+      request: nil,
+      success: true,
+      maskedPan: "411111111234",
+      cardHolderFirstName: "William",
+      cardHolderLastName: "Holder",
+      authCode: "def456",
+      transactionType: "refund",
+      amount: Amount(cents: 5),
       cardType: "visa",
       userReference: "cdm-123123"
     )
