@@ -16,6 +16,13 @@ extension MobileReader {
 
 extension CCParameters {
 
+  /// The param value to make NMI add a customer to the customer vault
+  ///
+  /// This should be used with the CCParamCustomerVaultCommand and passed into startTransaction()
+  var ParamValueAddCustomer: String {
+    return "add-customer"
+  }
+
   subscript(key: String) -> String? {
     get {
       guard
@@ -41,6 +48,7 @@ extension CCParameters {
     self[CCParamPaymentMethod] = CCValueCard
     self[CCParamAutoConfirm] = CCValueTrue
     self[CCParamTransactionType] = CCValueSale
+    self[CCParamCustomerVaultCommand] = ParamValueAddCustomer
   }
 
 }
