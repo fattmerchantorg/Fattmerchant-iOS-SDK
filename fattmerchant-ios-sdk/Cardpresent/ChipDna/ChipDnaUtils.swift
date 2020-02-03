@@ -48,7 +48,10 @@ extension CCParameters {
     self[CCParamPaymentMethod] = CCValueCard
     self[CCParamAutoConfirm] = CCValueTrue
     self[CCParamTransactionType] = CCValueSale
-    self[CCParamCustomerVaultCommand] = ParamValueAddCustomer
+
+    if transactionRequest.tokenize {
+      self[CCParamCustomerVaultCommand] = ParamValueAddCustomer
+    }
   }
 
 }

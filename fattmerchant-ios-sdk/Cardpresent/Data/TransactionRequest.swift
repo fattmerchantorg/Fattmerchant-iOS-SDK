@@ -11,7 +11,19 @@ import Foundation
 public struct TransactionRequest {
   public var amount: Amount
 
+  /// The option to tokenize the payment method for later usage
+  ///
+  /// - Note: Defaults to true
+  ///
+  /// Set this to false if you do not want the payment method stored
+  public var tokenize: Bool = true
+
   public init(amount: Amount) {
     self.amount = amount
+  }
+
+  public init(amount: Amount, tokenize: Bool) {
+    self.amount = amount
+    self.tokenize = tokenize
   }
 }
