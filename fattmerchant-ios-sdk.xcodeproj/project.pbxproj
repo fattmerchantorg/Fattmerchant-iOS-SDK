@@ -135,7 +135,6 @@
 		D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793090D23D256540066FCA2 /* AVFoundation.framework */; };
 		D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */; };
 		D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D79308FE23D255260066FCA2 /* CoreAudio.framework */; };
-		D7B7110323D35FA500EF98DB /* MockDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7110223D35FA500EF98DB /* MockDriver.swift */; };
 		D7B7110523D35FD500EF98DB /* MockMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7110423D35FD500EF98DB /* MockMobileReader.swift */; };
 		D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793090523D255430066FCA2 /* AudioToolbox.framework */; };
 		D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091523D2568D0066FCA2 /* MediaPlayer.framework */; };
@@ -147,7 +146,10 @@
 		D7C17B2423E4BA200031D9BB /* TakeMobileReaderPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308BD23D0AF3D0066FCA2 /* TakeMobileReaderPayment.swift */; };
 		D7C17B2523E4BA200031D9BB /* SearchForReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308C023D0E0B40066FCA2 /* SearchForReaders.swift */; };
 		D7C17B2623E4BA200031D9BB /* RefundMobileReaderTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308C323D0E3C90066FCA2 /* RefundMobileReaderTransaction.swift */; };
-		D7C17B2723E4BB610031D9BB /* MockDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7110223D35FA500EF98DB /* MockDriver.swift */; };
+		D7C17B2723E4BB610031D9BB /* (null) in Sources */ = {isa = PBXBuildFile; };
+		D7C17B2A23E9D2C00031D9BB /* TakeMobileReaderPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308BD23D0AF3D0066FCA2 /* TakeMobileReaderPayment.swift */; };
+		D7C17B2C23EA00EB0031D9BB /* MockDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */; };
+		D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -265,9 +267,9 @@
 		D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		D793091123D256690066FCA2 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D793091523D2568D0066FCA2 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		D7B7110223D35FA500EF98DB /* MockDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDriver.swift; sourceTree = "<group>"; };
 		D7B7110423D35FD500EF98DB /* MockMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMobileReader.swift; sourceTree = "<group>"; };
 		D7B7113A23D63B0D00EF98DB /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDriver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -515,7 +517,7 @@
 		D7692F2523E4B88700CB0954 /* Mock */ = {
 			isa = PBXGroup;
 			children = (
-				D7B7110223D35FA500EF98DB /* MockDriver.swift */,
+				D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -743,7 +745,7 @@
 				D765D46923CC467100656040 /* Model.swift in Sources */,
 				5993C25A2076BD16004DDA9F /* Networking.swift in Sources */,
 				D79308D223D22F480066FCA2 /* ChipDnaTransactionUserReference.swift in Sources */,
-				D7C17B2723E4BB610031D9BB /* MockDriver.swift in Sources */,
+				D7C17B2723E4BB610031D9BB /* (null) in Sources */,
 				D79308C123D0E0B40066FCA2 /* SearchForReaders.swift in Sources */,
 				D79308B023D0AA9A0066FCA2 /* TransactionType.swift in Sources */,
 				D765D48423CE41A500656040 /* JSONValue.swift in Sources */,
@@ -752,6 +754,7 @@
 				5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */,
 				D765D47223CC49C800656040 /* Self.swift in Sources */,
 				D79308CB23D229420066FCA2 /* ChipDnaUtils.swift in Sources */,
+				D7C17B2C23EA00EB0031D9BB /* MockDriver.swift in Sources */,
 				D765D46C23CC478000656040 /* Invoice.swift in Sources */,
 				D765D47F23CCBBFD00656040 /* OmniException.swift in Sources */,
 				D79308C423D0E3C90066FCA2 /* RefundMobileReaderTransaction.swift in Sources */,
@@ -778,7 +781,7 @@
 				D765D4A023CFCA1400656040 /* Amount.swift in Sources */,
 				D7C17B2523E4BA200031D9BB /* SearchForReaders.swift in Sources */,
 				D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */,
-				D7B7110323D35FA500EF98DB /* MockDriver.swift in Sources */,
+				D7C17B2A23E9D2C00031D9BB /* TakeMobileReaderPayment.swift in Sources */,
 				D765D47023CC488000656040 /* Merchant.swift in Sources */,
 				D765D47A23CC4B1100656040 /* CustomerRepository.swift in Sources */,
 				D765D47623CC4A1400656040 /* Transaction.swift in Sources */,
@@ -793,6 +796,7 @@
 				D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */,
 				D7692F1B23E4B49B00CB0954 /* MobileReaderDriverRepository.swift in Sources */,
 				D7B7110523D35FD500EF98DB /* MockMobileReader.swift in Sources */,
+				D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */,
 				D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */,
 				D765D49A23CFC22600656040 /* PaymentMethodRepository.swift in Sources */,
 				D765D47D23CCBB0500656040 /* ModelRepository.swift in Sources */,

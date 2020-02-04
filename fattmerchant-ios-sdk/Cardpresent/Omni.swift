@@ -105,6 +105,7 @@ public class Omni: NSObject {
       print("Initializing drivers")
       InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
         print("Completed initilization")
+        self.initialized = true
         self.preferredQueue.async(execute: completion)
       }, failure: error)
     }, failure: error)

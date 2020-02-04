@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// An object that can perform CRUD operations on a Model
 protocol ModelRepository {
 
   /// The type of the model that this repository deals with.
@@ -81,7 +82,7 @@ extension ModelRepository where OmniModel: OmniEndpoint {
     self.init(omniApi: omniApi)
   }
 
-  fileprivate func jsonEncoder() -> JSONEncoder {
+  internal func jsonEncoder() -> JSONEncoder {
     let encoder = JSONEncoder()
     encoder.keyEncodingStrategy = .convertToSnakeCase
     return encoder
