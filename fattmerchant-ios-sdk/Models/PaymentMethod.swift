@@ -27,7 +27,7 @@ public class PaymentMethod: Model {
   public var merchantId: String?
   public var customerId: String?
 
-  /// Wether or not Omni should tokenize this PaymentMethod
+  /// Whether or not Omni should tokenize this PaymentMethod
   ///
   /// - Note:
   /// If this field is true, `paymentToken` must be `null`

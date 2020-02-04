@@ -11,7 +11,7 @@ import Foundation
 /// An object that represents an intent to make a transaction
 ///
 /// This object contains necessary data about transaction parameters, such as how much money should
-/// be collected and wether or not the payment method should be tokenized
+/// be collected and whether or not the payment method should be tokenized
 ///
 /// ## Example usage with Tokenization
 /// ```
@@ -47,7 +47,7 @@ public struct TransactionRequest {
   /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
-  ///   - tokenize: A value that dictates wether or not the payment method used in the transaction
+  ///   - tokenize: A value that dictates whether or not the payment method used in the transaction
   ///   should be tokenized
   public init(amount: Amount, tokenize: Bool) {
     self.amount = amount
