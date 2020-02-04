@@ -26,7 +26,25 @@ public class PaymentMethod: Model {
   public var method: PaymentMethodType?
   public var merchantId: String?
   public var customerId: String?
+
+  /// Wether or not Omni should tokenize this PaymentMethod
+  ///
+  /// - Note:
+  /// If this field is true, `paymentToken` must be `null`
   var tokenize: Bool?
+
+  /// The token that represents this payment method
+  ///
+  /// The only use-case for this field is storing the token within Omni. After cardpresent tokenization,
+  /// we can create a PaymentMethod using this class. If we include the paymentToken, then we can later
+  /// store it as an already-tokenized PaymentMethod
+  ///
+  /// - Important:
+  ///   Omni performs transactions with this token. Therefore, it is crucial that only the actual payment
+  ///   token be placed here
+  ///
+  /// - Note: If this field is not `null`, then `tokenize` must be `false`
+  internal var paymentToken: String?
   public var nickname: String?
   public var personName: String?
   public var cardType: String?
@@ -36,16 +54,4 @@ public class PaymentMethod: Model {
   public var bankType: String?
   public var bankHolderType: BankHolderType?
 
-  //TODO: Remove these commented lines
-//  enum CodingKeys: String, CodingKey {
-//    case id, method, nickname,
-//    hasCvv = "has_cvv",
-//    personName = "person_name",
-//    cardType = "card_type",
-//    cardLastFour = "card_last_four",
-//    cardExp = "card_exp",
-//    bankName = "bank_name",
-//    bankType = "bank_type",
-//    bankHolderType = "bank_holder_type"
-//  }
 }
