@@ -8,6 +8,10 @@
 
 import Foundation
 
+/// An object that represents the result of a transaction
+///
+/// This object contains necessary data about the transaction that occured, such as how much money was
+/// collected and details about the payment method used
 struct TransactionResult {
 
   var request: TransactionRequest?
@@ -48,4 +52,7 @@ struct TransactionResult {
   ///
   /// For example, in the case of NMI, this would be the CardEaseReferenceId
   var externalId: String?
+
+  /// The token that represents this payment method
+  internal var paymentToken: String?
 }
