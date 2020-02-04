@@ -29,4 +29,16 @@ class PaymentMethodRepository: ModelRepository {
   required init(omniApi: OmniApi) {
     self.omniApi = omniApi
   }
+
+  /// Creates an already-tokenized PaymentMethod in Omni
+  /// - Parameters:
+  ///   - model: The PaymentMethod to tokenize
+  ///   - completion: A block to run once the operation is finished. Takes a PaymentMethod
+  ///   - error: A block to run if the operation fails
+  func createTokenizedPaymentMethod(model: PaymentMethod, completion: @escaping (PaymentMethod) -> Void, error: @escaping ErrorHandler) {
+    let data = try? jsonEncoder().encode(model)
+    let urlString = "/payment-method/token"
+    omniApi.request(method: "post", urlString: urlString, body: data, completion: completion, failure: error)
+  }
+
 }

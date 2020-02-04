@@ -238,7 +238,16 @@ class TakeMobileReaderPayment {
     paymentMethodToCreate.cardType = cardType
     paymentMethodToCreate.personName = "\(customer.firstname ?? "") \(customer.lastname ?? "")"
     paymentMethodToCreate.tokenize = false
-    paymentMethodRepository.create(model: paymentMethodToCreate, completion: completion, error: failure)
+    paymentMethodToCreate.paymentToken = result.paymentToken
+
+    // When the payment method was tokenized, we want to use the
+    // createTokenizedPaymentMethod method since it tells Omni to save the token
+    if paymentMethodToCreate.paymentToken != nil {
+      paymentMethodRepository.createTokenizedPaymentMethod(model: paymentMethodToCreate, completion: completion, error: failure)
+    } else {
+      paymentMethodRepository.create(model: paymentMethodToCreate, completion: completion, error: failure)
+    }
+
   }
 
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
