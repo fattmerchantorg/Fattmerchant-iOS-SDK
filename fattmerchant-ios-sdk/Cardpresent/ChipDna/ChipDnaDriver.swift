@@ -146,7 +146,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.authCode = result[CCParamAuthCode]
       transactionResult.cardType = result[CCParamCardSchemeId]?.lowercased()
       transactionResult.userReference = result[CCParamUserReference]
-      transactionResult.externalId = result[CCParamCardEaseReference]
+      transactionResult.localId = result[CCParamCardEaseReference]
+      transactionResult.externalId = result[CCParamTransactionId]
 
       if let token = result[CCParamCustomerVaultId] {
         transactionResult.paymentToken = "nmi_\(token)"
