@@ -169,8 +169,12 @@ class TakeMobileReaderPayment {
       dict["nmiUserRef"] = userRef
     }
 
+    if let localId = transactionResult.localId {
+      dict["cardEaseReference"] = localId
+    }
+
     if let externalId = transactionResult.externalId {
-      dict["cardEaseReference"] = externalId
+      dict["nmiTransactionId"] = externalId
     }
 
     return dict.jsonValue()
