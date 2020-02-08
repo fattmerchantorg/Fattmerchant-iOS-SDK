@@ -8,6 +8,18 @@
 
 import Foundation
 
+/**
+ An object that represents an amount of money
+
+ Use and instance of `Amount` to work safely with amounts of money. Avoiding the passing of dollars and cents eliminates ambiguity in the transaction flow
+
+ ## Usage
+ ```
+ var amount = Amount(cents: 599)
+ // or
+ var amount = Amount(dollars: 5.99)
+ ```
+ */
 public struct Amount {
   public let cents: Int
 
