@@ -52,7 +52,7 @@ public struct Amount {
     return String(cents)
   }
 
-  /// A string representation of the dollar amount with two decimal places. Does **not** have the dollar sign
+  /// A string representation of the dollar amount with two significant figures. Does **not** have the dollar sign
   ///
   /// ### Example
   /// ```
@@ -66,18 +66,18 @@ public struct Amount {
     return String.init(format: "%.2f", dollars())
   }
 
-  /// A string representation of the dollar amount with no truncation of the decimal places. Does **not** have the dollar sign
+  /// A string representation of the dollar amount with two significant figures. Does **not** have the dollar sign
   ///
   /// ### Example
   /// ```
   /// let amount = Amount(dollars: 5.99378)
-  /// amount.dollarsString() // => "5.99378"
+  /// amount.dollars() // => "5.99"
   /// ```
   public func dollars() -> Double {
     return Double(cents) / 100.0
   }
 
-  /// A string representation of the dollar amount with with two decimal places and a dollar sign
+  /// A string representation of the dollar amount with two significant figures and a dollar sign
   ///
   /// ### Example
   /// ```
