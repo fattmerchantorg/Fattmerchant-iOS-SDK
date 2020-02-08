@@ -137,15 +137,28 @@ public class Omni: NSObject {
   /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
   /// - Parameters:
   ///   - transaction: the transaction to refund
+  ///   - refundAmount: the amount of money to refund. When present, this **must** be greater than zero and lesser than or equal to the transaction total
   ///   - completion: Receives the Transaction that represents the refund in Omni
   ///   - error: Receives any errors that happened while attempting the operation
-  public func refundMobileReaderTransaction(transaction: Transaction, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+  public func refundMobileReaderTransaction(transaction: Transaction, refundAmount: Amount? = nil, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
     guard initialized else {
       return error(OmniGeneralException.uninitialized)
     }
 
-    let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository, transactionRepository: transactionRepository, transaction: transaction)
+    let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository,
+                                            transactionRepository: transactionRepository,
+                                            transaction: transaction,
+                                            refundAmount: refundAmount)
     job.start(completion: completion, failure: error)
+  }
+
+  /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
+  /// - Parameters:
+  ///   - transaction: the transaction to refund
+  ///   - completion: Receives the Transaction that represents the refund in Omni
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func refundMobileReaderTransaction(transaction: Transaction, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    refundMobileReaderTransaction(transaction: transaction, refundAmount: nil, completion: completion, error: error)
   }
 
   /// Finds the available readers that Omni can connect to

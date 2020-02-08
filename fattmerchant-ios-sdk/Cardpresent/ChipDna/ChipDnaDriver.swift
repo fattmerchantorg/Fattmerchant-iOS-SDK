@@ -168,8 +168,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   /// - Parameters:
   ///   - transaction: the Transaction you intend to refund
   ///   - completion: A block to run after the refund is complete
+  ///   - refundAmount: The amount to be refunded. If nil is passed, the remaining amount will be refunded
   ///   - error: A block to run in case an error occurs
-  func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+  func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
     // Get card ease reference. This is what we use to reference the transaction within NMI
     guard let cardEaseReference = extractCardEaseReference(from: transaction) else {
       error(RefundException.transactionNotRefundable(details: "Could not find user reference"))
@@ -177,7 +178,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
 
     // Get the amount to refund from the transaction
-    guard let amountDollars = transaction.total else {
+    guard let amountDollars = refundAmount?.dollars() ?? transaction.total else {
       error(RefundException.transactionNotRefundable(details: "Could not find amount to refund"))
       return
     }
@@ -199,9 +200,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     if let _ = result[CCParamError] {
       error(RefundException.errorRefunding(details: "Error while performing refund"))
     } else {
-      let transactionResult = TransactionResult()
-      transaction.success = true
-      transaction.type = "refund"
+      var transactionResult = TransactionResult()
+      transactionResult.success = true
+      transactionResult.transactionType = "refund"
+      transactionResult.amount = refundAmount
       completion(transactionResult)
     }
   }
