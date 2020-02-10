@@ -100,6 +100,11 @@ class RefundMobileReaderTransaction {
       return Exception.transactionNotRefundable(details: "Can not refund voided transaction")
     }
 
+    // Ensure Omni doesn't say the transaction is not refundable
+    if transaction.isRefundable == false {
+      return Exception.transactionNotRefundable(details: "Transaction is not refundable")
+    }
+
     // Account for previous refunds
     if let totalRefunded = transaction.totalRefunded, let transactionTotal = transaction.total {
 
