@@ -119,7 +119,9 @@ public class FattmerchantApi {
   }
 
   private func tokenize<T: Codable>(_ codablePaymentMethod: T, completion: @escaping (Response) -> Void) {
-    guard let paymentData = try? JSONEncoder().encode(codablePaymentMethod)  else { return }
+    let encoder = JSONEncoder()
+    encoder.keyEncodingStrategy = .convertToSnakeCase
+    guard let paymentData = try? encoder.encode(codablePaymentMethod)  else { return }
 
     let path = "/webpayment/\(configuration.webPaymentsToken)/tokenize"
 
@@ -127,7 +129,9 @@ public class FattmerchantApi {
 
     if let data = obj as? Data {
       do {
-        let paymentMethod = try JSONDecoder().decode(PaymentMethod.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let paymentMethod = try decoder.decode(PaymentMethod.self, from: data)
         completion(.success(paymentMethod: paymentMethod))
       } catch {
         var error: Error = .unknownError
