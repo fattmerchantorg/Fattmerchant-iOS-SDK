@@ -54,7 +54,7 @@ class RefundMobileReaderTransaction {
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void ) {
-    if let error = validateRefund() {
+    if let error = RefundMobileReaderTransaction.validateRefund(transaction: transaction, refundAmount: refundAmount) {
       failure(error)
       return
     }
@@ -91,10 +91,9 @@ class RefundMobileReaderTransaction {
     }
   }
 
-
   /// Verifies that the refund about to happen is acceptable
   /// - Returns: OmniException explaining why the refund should not happen. `nil` if the refund is acceptable
-  fileprivate func validateRefund() -> OmniException? {
+  internal static func validateRefund(transaction: Transaction, refundAmount: Amount? = nil) -> OmniException? {
     // Ensure transaction isn't voided
     if transaction.isVoided == true {
       return Exception.transactionNotRefundable(details: "Can not refund voided transaction")
