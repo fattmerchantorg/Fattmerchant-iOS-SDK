@@ -11,7 +11,7 @@ import XCTest
 
 class RefundMobileReaderTransactionTest: XCTestCase {
 
-  class MockApi : OmniApi {
+  class MockApi: OmniApi {
 
   }
 
@@ -31,7 +31,6 @@ class RefundMobileReaderTransactionTest: XCTestCase {
     )
 
     job.validateRefund()
-    
 
     wait(for: [refundComplete], timeout: 10.0)
   }

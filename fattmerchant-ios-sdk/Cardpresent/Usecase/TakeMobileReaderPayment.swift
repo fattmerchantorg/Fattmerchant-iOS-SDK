@@ -120,14 +120,13 @@ class TakeMobileReaderPayment {
       return
     }
 
-
     var gatewayResponseJson: JSONValue?
 
     if let authCode = result.authCode {
       let gatewayResponse = [
         "gateway_specific_response_fields": [
           "nmi": [
-            "authcode": authCode,
+            "authcode": authCode
           ]
         ]
       ]
@@ -158,7 +157,6 @@ class TakeMobileReaderPayment {
     transactionToCreate.response = gatewayResponseJson
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
   }
-
 
   /// Creates a JSONValue object that from the transactionResult, including only the items that make up the TransactionMeta
   /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
@@ -262,7 +260,7 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver, _ failure: (OmniException) -> Void, _ completion: @escaping (TransactionResult) -> Void) {
-    driver.performTransaction(with: self.request, completion: completion) //TODO: Handle errors
+    driver.performTransaction(with: self.request, completion: completion)
   }
 
   fileprivate func createInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
@@ -284,7 +282,6 @@ class TakeMobileReaderPayment {
 
   fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
     repo.getDrivers { (drivers) in
-      // TODO: Support multiple drivers
       guard let driver = drivers.first else {
         failure(TakeMobileReaderPaymentException.mobileReaderDriverNotFound)
         return

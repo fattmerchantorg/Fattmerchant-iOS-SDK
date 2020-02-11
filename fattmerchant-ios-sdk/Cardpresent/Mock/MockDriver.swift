@@ -16,11 +16,11 @@ class MockDriver: MobileReaderDriver {
     completion(true)
   }
 
-  func initialize(args: [String : Any], completion: (Bool) -> Void) {
+  func initialize(args: [String: Any], completion: (Bool) -> Void) {
     completion(true)
   }
 
-  func searchForReaders(args: [String : Any], completion: @escaping ([MobileReader]) -> Void) {
+  func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
     completion([reader])
   }
 

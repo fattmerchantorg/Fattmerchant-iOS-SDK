@@ -34,7 +34,7 @@ internal class Networking {
 
     let session = URLSession(configuration: .default)
 
-    session.dataTask(with: request as URLRequest) { (data, _, _) in //TODO: This isn't using response or error and is super naive
+    session.dataTask(with: request as URLRequest) { (data, _, _) in
       completion(data != nil, data)
     }.resume()
   }

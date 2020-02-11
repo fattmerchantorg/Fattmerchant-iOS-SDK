@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-
 /// Controls a UIPickerView
 class StringPickerController<T: CustomStringConvertible>: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 

@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 /// Generates a user reference for chipDNA transactions
 ///
 /// - Returns: a String containing the generated user reference

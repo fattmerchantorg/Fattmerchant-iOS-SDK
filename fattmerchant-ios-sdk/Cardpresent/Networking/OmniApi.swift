@@ -57,7 +57,7 @@ class OmniApi {
       print()
     }
 
-    client.dataTask(request: request, method: method) { (success, obj) in
+    client.dataTask(request: request, method: method) { (_, obj) in
 
       if let data = obj as? Data {
         if let dataString = String(data: data, encoding: .utf8) {
@@ -71,7 +71,7 @@ class OmniApi {
           jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
           let model = try jsonDecoder.decode(T.self, from: data)
           completion(model)
-        } catch DecodingError.typeMismatch(let type, let context) {
+        } catch DecodingError.typeMismatch(_, let context) {
           print(context)
         } catch let decodingError as DecodingError {
           print(decodingError)

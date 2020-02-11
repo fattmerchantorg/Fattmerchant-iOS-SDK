@@ -105,7 +105,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       completion(pinPads.map({ MobileReader.from(pinPad: $0) }))
     }
 
-    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(nil) //TODO: Listen to the result and handle the error
+    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(nil)
   }
 
   /// Connects the mobile reader and prepares it for use
@@ -119,7 +119,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     requestParams[CCParamPinPadConnectionType] = CCValueBluetooth
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
-    didConnectAndConfigure = completion //TODO: Make this weak?
+    didConnectAndConfigure = completion
     ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
   }
 
@@ -129,11 +129,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     chipDnaTransactionListener.detachFromChipDna()
 
     chipDnaTransactionListener.onFinished = { result in
-      // Check for errors
-      //TODO: Implement this
-//      if let error = result[CCParamError] else {
-//
-//      }
 
       let success = result[CCParamTransactionResult] == CCValueApproved
 
@@ -197,7 +192,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
 
     // Check status
-    if let _ = result[CCParamError] {
+    if result[CCParamError] != nil {
       error(RefundException.errorRefunding(details: "Error while performing refund"))
     } else {
       var transactionResult = TransactionResult()

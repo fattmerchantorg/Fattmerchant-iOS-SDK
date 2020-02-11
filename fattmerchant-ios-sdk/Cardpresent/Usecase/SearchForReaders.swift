@@ -25,7 +25,6 @@ class SearchForReaders {
 
   func start(completion: @escaping ([MobileReader]) -> Void, failure: (OmniException) -> Void) {
     mobileReaderDriverRepository.getDrivers { (drivers) in
-      // TODO: Support multiple drivers
       guard let driver = drivers.first else {
         failure(SearchForReadersException.noMobileReaderAvailable)
         return

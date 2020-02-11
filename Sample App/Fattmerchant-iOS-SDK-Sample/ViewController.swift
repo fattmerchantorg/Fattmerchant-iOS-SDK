@@ -11,7 +11,7 @@ import Fattmerchant
 
 class ViewController: UIViewController {
 
-  var omni: Omni? = nil
+  var omni: Omni?
 
   @IBOutlet weak var activityTextArea: UITextView!
   @IBOutlet weak var initializeButton: UIButton!
@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     self.takePayment()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1Nzk4MTMxMjUsImV4cCI6MTU3OTg5OTUyNSwibmJmIjoxNTc5ODEzMTI1LCJqdGkiOiI5ZlBMUWdSY2FBSnYwRGcwIn0.egIkoGpemCQKOnar9XIBryOHQTz5cPSUfcchpZ0OxbY"
+  let apiKey = "uHHD2Y1TI"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -48,9 +48,9 @@ class ViewController: UIViewController {
     omni?.initialize(params: initParams(), completion: {
       self.initializeButton.isHidden = true
       self.log("Initialized")
-    }) { (error) in
+    }, error: { (error) in
       self.log(error)
-    }
+    })
 
   }
 
@@ -86,30 +86,30 @@ class ViewController: UIViewController {
       let textCount: Int = ("\n \(self.timestamp()) | \(message)" + self.activityTextArea.text).count
       self.activityTextArea.insertText("\n \(self.timestamp()) | \(message)")
       if textCount > 1 {
-        self.activityTextArea.scrollRangeToVisible(NSMakeRange(textCount - 1, 1))
+        self.activityTextArea.scrollRangeToVisible(NSRange(location: textCount - 1, length: 1))
       }
     }
   }
 
   fileprivate func takePayment() {
-    omni?.takeMobileReaderTransaction(request: createTransactionRequest(), completion: { completedTransaction in
+    omni?.takeMobileReaderTransaction(request: createTransactionRequest(), completion: { _ in
       self.log("Finished transaction successfully")
-    }) { error in
+    }, error: { error in
       self.log(error)
-    }
+    })
   }
 
   fileprivate func createTransactionRequest() -> TransactionRequest {
-    let request = TransactionRequest(amount: Amount(cents: 1))
+    let request = TransactionRequest(amount: Amount(cents: 10))
     return request
   }
 
   fileprivate func refund(_ transaction: Transaction) {
-    omni?.refundMobileReaderTransaction(transaction: transaction, completion: { (refundedTransaction) in
+    omni?.refundMobileReaderTransaction(transaction: transaction, refundAmount: Amount(cents: 2), completion: { _ in
       self.log("Refunded transaction successfully")
     }, error: { error in
       self.log(error)
-    }) 
+    })
   }
 
   fileprivate func searchForReaders() {
@@ -128,9 +128,9 @@ class ViewController: UIViewController {
           self.log("Connected reader: \(connectedReader)")
         })
       }
-    }) { (error) in
+    }, error: { (error) in
       self.log(error)
-    }
+    })
   }
 
   fileprivate func connectReader(reader: MobileReader, completion: @escaping (MobileReader) -> Void) {

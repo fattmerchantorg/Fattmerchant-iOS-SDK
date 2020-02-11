@@ -23,7 +23,7 @@ public class Transaction: Model {
   public var totalRefunded: Double?
 
   /// The type of transaction. "charge", "refund", "void"
-  public var type: String? //TODO: Make this an enum
+  public var type: String?
 
   /// The id of the Customer associated with this Transaction in Omni
   public var customerId: String?
@@ -71,7 +71,7 @@ public class Transaction: Model {
   /// The method used in this Transaction.
   ///
   /// Typically "card" or "bank"
-  public var method: String? //TODO: Make this an enum
+  public var method: String?
 
   var authId: String?
   var gateway: String?
@@ -92,8 +92,4 @@ public class Transaction: Model {
   var response: JSONValue?
   var spreedlyToken: String?
   var updatedAt: String?
-
-//  func getMetaString(key: String) -> String? {
-//    return meta?[key] as? String ?? nil
-//  }
 }

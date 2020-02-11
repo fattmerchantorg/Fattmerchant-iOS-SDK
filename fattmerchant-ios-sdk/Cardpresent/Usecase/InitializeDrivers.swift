@@ -33,7 +33,6 @@ class InitializeDrivers {
 
   func start(completion: (Bool) -> Void, failure: (OmniException) -> Void) {
     mobileReaderDriverRepository.getDrivers { (drivers) in
-      //TODO: Please support multiple drivers. At the time of building, there was only 1 driver
 
       guard let driver = drivers.first else {
         failure(InitializeDriversException.noMobileReadersFound)

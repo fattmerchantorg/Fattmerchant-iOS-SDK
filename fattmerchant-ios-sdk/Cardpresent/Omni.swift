@@ -38,7 +38,22 @@ enum OmniGeneralException: OmniException {
   }
 }
 
-//TODO: Need to write a doc comment here
+/**
+ Handles cardpresent payments. This is the object you used for communicating with the Omni platform
+
+ ## Usage
+ Create an instance of Omni
+ ```
+ let omni = Omni()
+ ```
+ Then initialize, passing in an instance of InitParams
+ ```
+ let omniInitParms = Omni.InitParams(appId: "Myappid", apiKey: "omniephemeralkey")
+ omni.initialize(omniInitParams, completion: ..., error: ...)
+ ```
+
+ Once initialized, you can call its methods like `getAvailableReaders` and `takeMobileReaderTransaction`
+ */
 public class Omni: NSObject {
 
   private var initialized: Bool = false
@@ -73,9 +88,7 @@ public class Omni: NSObject {
 
   /// True when Omni is initialized. False otherwise
   public var isInitialized: Bool {
-    get {
-      return initialized
-    }
+    return initialized
   }
 
   /// Used to initialize the Omni object

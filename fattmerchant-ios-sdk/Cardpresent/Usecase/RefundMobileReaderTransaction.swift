@@ -40,7 +40,7 @@ class RefundMobileReaderTransaction {
 
   init(mobileReaderDriverRepository: MobileReaderDriverRepository, transactionRepository: TransactionRepository, transaction: Transaction, refundAmount: Amount? = nil) {
     // Get the amount to refund
-    var amount: Amount? = nil
+    var amount: Amount?
     if let amt = refundAmount {
       amount = amt
     } else if let total = transaction.total {
@@ -84,7 +84,7 @@ class RefundMobileReaderTransaction {
   fileprivate func refund(transaction: Transaction, refundAmount: Amount?, failure: @escaping (OmniException) -> Void, completion: @escaping (TransactionResult) -> Void) {
     mobileReaderDriverRepository.getDriverFor(transaction: transaction) { driver in
       if let driver = driver {
-        driver.refund(transaction: transaction, refundAmount: refundAmount, completion: completion, error: failure) // TODO: Handle error
+        driver.refund(transaction: transaction, refundAmount: refundAmount, completion: completion, error: failure)
       } else {
         failure(Exception.couldNotFindMobileReaderForRefund)
       }
