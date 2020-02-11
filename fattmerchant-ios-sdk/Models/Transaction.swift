@@ -66,7 +66,7 @@ public class Transaction: Model {
   public var createdAt: String?
 
   /// Metadata that is associated with this Transaction
-  public var meta: JSONValue? //TODO: Write more docs about this
+  public var meta: JSONValue?
 
   /// The method used in this Transaction.
   ///

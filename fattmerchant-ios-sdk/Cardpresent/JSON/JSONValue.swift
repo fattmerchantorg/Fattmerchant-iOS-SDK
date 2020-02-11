@@ -8,6 +8,68 @@
 
 import Foundation
 
+/**
+ A class used to encapsulate JSON data
+
+ When consuming JSON data, wrap it in a `JSONValue` and use its type-safe methods to assign and retrieve data. Notice that many of the methods and fields
+ that represent json data take instead a `JSONValue`, expecting the data to be inside it (for example, `Invoice.meta`)
+
+ ## Usage
+
+ `JSONValue` can wrap String, Int, Double, Bool, Array<`JSONValue`> and Dictionary<String, `JSONValue`>
+
+  ```
+   var dict: [String: String] = [:]
+
+   if let userRef = transactionResult.userReference {
+     dict["nmiUserRef"] = userRef
+   }
+
+   if let localId = transactionResult.localId {
+     dict["cardEaseReference"] = localId
+   }
+
+   if let externalId = transactionResult.externalId {
+     dict["nmiTransactionId"] = externalId
+   }
+
+   let jsonDict = JSONValue(dict)
+ ```
+
+ ## Example - Parsing Unstructured Json
+
+ `JSONValue` is especially helpful when consuming JSON data with a nonstandard structure. Since `JSONValue` conforms to `Codable`, you can use it in
+ models to be decoded from said responses
+
+ ```
+ // Consider that you have the following JSON data
+ let personJson =
+ """
+ {
+   "name": "Johnathan Pearson",
+   "meta": {
+     "nickname": "JP"
+   }
+ }
+ """.data(using: .utf8)
+
+ // You could create a class Person, using a JSONValue for meta
+ class Person: Codable {
+  var name: String
+  var meta: JSONValue
+ }
+
+ // Decode
+ let person = try JSONDecoder().decode(Person.self, from: personJsonData!)
+
+ // Get the nickname
+ let nickname: String? = person.meta["nickname"]
+ print(nickname) // => "JP"
+ ```
+
+ ## Note
+ It is best to avoid using JSONValue if you are certain of what the structure of the data you are decoding/encoding is
+ */
 public enum JSONValue: Codable, Equatable {
 
   public enum JSONValueError: Error {
