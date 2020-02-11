@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Fattmerchant'
-  s.version = '1.2.0'
+  s.version = '1.3.0'
   s.license = { :type => 'Apache License, Version 2.0', :text => "© #{ Date.today.year } Fattmerchant, inc" }
   s.summary = 'Fattmerchant iOS SDK'
   s.homepage = 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK'
