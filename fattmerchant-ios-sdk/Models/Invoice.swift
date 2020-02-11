@@ -8,28 +8,29 @@
 
 import Foundation
 
+/// An Invoice in the Omni Platform
 class Invoice: Model {
-  var id: String?
-  var balanceDue: Double?
-  var createdAt: String?
-  var customerId: String?
-  var deletedAt: String?
-  var dueAt: String?
-  var isMerchantPresent: Bool?
-  var isWebpayment: Bool?
-  var merchantId: String?
-  var meta: JSONValue?
-  var paidAt: String?
-  var paymentAttemptFailed: Bool?
-  var paymentAttemptMessage: String?
-  var paymentMethodId: String?
-  var scheduleId: String?
-  var sentAt: String?
-  var status: String?
-  var total: Double?
-  var totalPaid: Double?
-  var updatedAt: String?
-  var url: String?
-  var userId: String?
-  var viewedAt: String?
+  public var id: String?
+  public var balanceDue: Double?
+  public var createdAt: String?
+  public var customerId: String?
+  public var deletedAt: String?
+  public var dueAt: String?
+  public var isMerchantPresent: Bool?
+  public var isWebpayment: Bool?
+  public var merchantId: String?
+  public var meta: JSONValue?
+  public var paidAt: String?
+  public var paymentAttemptFailed: Bool?
+  public var paymentAttemptMessage: String?
+  public var paymentMethodId: String?
+  public var scheduleId: String?
+  public var sentAt: String?
+  public var status: String?
+  public var total: Double?
+  public var totalPaid: Double?
+  public var updatedAt: String?
+  public var url: String?
+  public var userId: String?
+  public var viewedAt: String?
 }

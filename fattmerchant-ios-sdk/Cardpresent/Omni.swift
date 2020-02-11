@@ -39,7 +39,9 @@ enum OmniGeneralException: OmniException {
 }
 
 /**
- Handles cardpresent payments. This is the object you used for communicating with the Omni platform
+ Handles cardpresent payments
+
+ This is the object you used for communicating with the Omni platform
 
  ## Usage
  Create an instance of Omni
@@ -67,10 +69,16 @@ public class Omni: NSObject {
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
 
+  /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
-    var appId: String
-    var apiKey: String
-    var environment: Environment
+    /// An id for your application
+    public var appId: String
+
+    /// An ephemeral Omni api key
+    public var apiKey: String
+
+    /// The Omni enviroment to use
+    public var environment: Environment
 
     public init(appId: String, apiKey: String, environment: Environment = Environment.LIVE) {
       self.appId = appId

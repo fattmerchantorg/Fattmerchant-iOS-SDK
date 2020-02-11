@@ -8,23 +8,24 @@
 
 import Foundation
 
-class Customer: Model {
-  var id: String?
-  var address1: String?
-  var address2: String?
-  var addressCity: String?
-  var addressCountry: String?
-  var addressState: String?
-  var addressZip: String?
-  var company: String?
-  var createdAt: String?
-  var deletedAt: String?
-  var email: String?
-  var firstname: String?
-  var lastname: String?
-  var merchantId: String?
-  var notes: String?
-  var phone: String?
-  var reference: String?
-  var updatedAt: String?
+/// A Customer in the Omni platform
+public class Customer: Model {
+  public var id: String?
+  public var address1: String?
+  public var address2: String?
+  public var addressCity: String?
+  public var addressCountry: String?
+  public var addressState: String?
+  public var addressZip: String?
+  public var company: String?
+  public var createdAt: String?
+  public var deletedAt: String?
+  public var email: String?
+  public var firstname: String?
+  public var lastname: String?
+  public var merchantId: String?
+  public var notes: String?
+  public var phone: String?
+  public var reference: String?
+  public var updatedAt: String?
 }

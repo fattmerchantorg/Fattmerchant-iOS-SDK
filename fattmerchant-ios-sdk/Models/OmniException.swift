@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// An error in the Omni platform
 public protocol OmniException: Error {
   static var mess: String { get }
   var message: String { get }

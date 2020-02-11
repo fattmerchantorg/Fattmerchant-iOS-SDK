@@ -8,8 +8,9 @@
 
 import Foundation
 
+/// A Merchant in the Omni platform
 class Merchant: Model, Codable {
-  var id: String?
+  public var id: String?
   var options: JSONValue?
 
   func emvPassword() -> String? {

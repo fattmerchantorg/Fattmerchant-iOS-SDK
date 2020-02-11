@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A Mobile Reader that can take a payment
 public class MobileReader: CustomStringConvertible {
   public var name: String
 

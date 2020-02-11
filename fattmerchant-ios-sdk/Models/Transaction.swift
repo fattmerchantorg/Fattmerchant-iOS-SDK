@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A Transaction in the Omni Platform
 public class Transaction: Model {
 
   /// The id of the transaction in Omni
