@@ -34,5 +34,5 @@ protocol MobileReaderDriver {
 
   func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void)
 
-  func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
+  func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
 }

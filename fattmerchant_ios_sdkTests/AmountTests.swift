@@ -10,6 +10,10 @@ import XCTest
 
 class AmountTest: XCTestCase {
 
+  func testInitWithDollars() {
+    XCTAssertEqual(Amount(dollars: 5.9876).cents, 598)
+  }
+
   func testCentsString() {
     XCTAssertEqual(Amount(cents: 50).centsString(), "50")
     XCTAssertEqual(Amount(dollars: 50.30).centsString(), "5030")

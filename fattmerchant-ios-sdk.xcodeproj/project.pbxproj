@@ -150,6 +150,7 @@
 		D7C17B2A23E9D2C00031D9BB /* TakeMobileReaderPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308BD23D0AF3D0066FCA2 /* TakeMobileReaderPayment.swift */; };
 		D7C17B2C23EA00EB0031D9BB /* MockDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */; };
 		D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */; };
+		D7D2C51E23F203F8001733A2 /* RefundMobileReaderTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D2C51C23F203CF001733A2 /* RefundMobileReaderTransactionTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -270,6 +271,7 @@
 		D7B7110423D35FD500EF98DB /* MockMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMobileReader.swift; sourceTree = "<group>"; };
 		D7B7113A23D63B0D00EF98DB /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDriver.swift; sourceTree = "<group>"; };
+		D7D2C51C23F203CF001733A2 /* RefundMobileReaderTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundMobileReaderTransactionTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,6 +552,7 @@
 			children = (
 				D7B7110423D35FD500EF98DB /* MockMobileReader.swift */,
 				D7692F2323E4B6BA00CB0954 /* MockMobileReaderDriverRepository.swift */,
+				D7D2C51C23F203CF001733A2 /* RefundMobileReaderTransactionTests.swift */,
 			);
 			path = Cardpresent;
 			sourceTree = "<group>";
@@ -823,6 +826,7 @@
 				591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */,
 				D7692F2423E4B6BA00CB0954 /* MockMobileReaderDriverRepository.swift in Sources */,
 				D702B7BE23C8D0DD00B8AB79 /* OmniApi.swift in Sources */,
+				D7D2C51E23F203F8001733A2 /* RefundMobileReaderTransactionTests.swift in Sources */,
 				D79308A023D0A1B50066FCA2 /* AmountTests.swift in Sources */,
 				D7692F1A23E4B03200CB0954 /* Omni.swift in Sources */,
 				D765D49D23CFC32200656040 /* TransactionRepository.swift in Sources */,

@@ -36,28 +36,31 @@ class RefundMobileReaderTransaction {
   var mobileReaderDriverRepository: MobileReaderDriverRepository
   var transactionRepository: TransactionRepository
   var transaction: Transaction
+  var refundAmount: Amount?
 
-  init(mobileReaderDriverRepository: MobileReaderDriverRepository, transactionRepository: TransactionRepository, transaction: Transaction) {
+  init(mobileReaderDriverRepository: MobileReaderDriverRepository, transactionRepository: TransactionRepository, transaction: Transaction, refundAmount: Amount? = nil) {
+    // Get the amount to refund
+    var amount: Amount? = nil
+    if let amt = refundAmount {
+      amount = amt
+    } else if let total = transaction.total {
+      amount = Amount(dollars: total)
+    }
+
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
     self.transactionRepository = transactionRepository
     self.transaction = transaction
+    self.refundAmount = amount
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void ) {
-    // Ensure transaction isn't voided
-    guard transaction.isVoided != true else {
-      failure(Exception.transactionNotRefundable(details: "Can not refund voided transaction"))
-      return
-    }
-
-    // Can't refund transaction that has been refunded already
-    guard transaction.totalRefunded == 0 || transaction.totalRefunded == nil else {
-      failure(Exception.transactionNotRefundable(details: "Transaction already refunded"))
+    if let error = RefundMobileReaderTransaction.validateRefund(transaction: transaction, refundAmount: refundAmount) {
+      failure(error)
       return
     }
 
     // Do the 3rd-party refund
-    refund(transaction: transaction, failure: failure) { result in
+    refund(transaction: transaction, refundAmount: refundAmount, failure: failure) { result in
       self.submitRefundToOmni(with: result, failure: failure, completion: completion)
     }
 
@@ -65,9 +68,9 @@ class RefundMobileReaderTransaction {
 
   fileprivate func submitRefundToOmni(with result: TransactionResult, failure: @escaping (OmniException) -> Void, completion: @escaping (Transaction) -> Void) {
     let refundedTransaction = Transaction()
-    refundedTransaction.total = transaction.total
+    refundedTransaction.total = result.amount?.dollars()
     refundedTransaction.paymentMethodId = transaction.paymentMethodId
-    refundedTransaction.success = true
+    refundedTransaction.success = result.success
     refundedTransaction.lastFour = transaction.lastFour
     refundedTransaction.type = "refund"
     refundedTransaction.source = transaction.source
@@ -78,14 +81,44 @@ class RefundMobileReaderTransaction {
     transactionRepository.create(model: refundedTransaction, completion: completion, error: failure)
   }
 
-  fileprivate func refund(transaction: Transaction, failure: @escaping (OmniException) -> Void, completion: @escaping (TransactionResult) -> Void) {
+  fileprivate func refund(transaction: Transaction, refundAmount: Amount?, failure: @escaping (OmniException) -> Void, completion: @escaping (TransactionResult) -> Void) {
     mobileReaderDriverRepository.getDriverFor(transaction: transaction) { driver in
       if let driver = driver {
-        driver.refund(transaction: transaction, completion: completion, error: failure) // TODO: Handle error
+        driver.refund(transaction: transaction, refundAmount: refundAmount, completion: completion, error: failure) // TODO: Handle error
       } else {
         failure(Exception.couldNotFindMobileReaderForRefund)
       }
     }
+  }
+
+  /// Verifies that the refund about to happen is acceptable
+  /// - Returns: OmniException explaining why the refund should not happen. `nil` if the refund is acceptable
+  internal static func validateRefund(transaction: Transaction, refundAmount: Amount? = nil) -> OmniException? {
+    // Ensure transaction isn't voided
+    if transaction.isVoided == true {
+      return Exception.transactionNotRefundable(details: "Can not refund voided transaction")
+    }
+
+    // Account for previous refunds
+    if let totalRefunded = transaction.totalRefunded, let transactionTotal = transaction.total {
+
+      // Can't refund transaction that has already been refunded
+      if transactionTotal - totalRefunded < 0.01 {
+        return Exception.transactionNotRefundable(details: "Can not refund transaction that has been fully refunded")
+      }
+
+      // Can't refund more than there is left to refund
+      if let refundAmount = refundAmount, refundAmount.dollars() > (transactionTotal - totalRefunded) {
+        return Exception.transactionNotRefundable(details: "Can not refund more than the original transaction total")
+      }
+
+      // Can't refund zero amount
+      if let refundAmount = refundAmount?.dollars(), refundAmount <= 0.0 {
+        return Exception.transactionNotRefundable(details: "Can not refund zero or negative amounts")
+      }
+    }
+
+    return nil
   }
 
 }
