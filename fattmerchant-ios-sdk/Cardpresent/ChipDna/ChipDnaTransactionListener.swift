@@ -8,6 +8,9 @@
 
 import Foundation
 
+#if targetEnvironment(simulator)
+
+#else
 class ChipDnaTransactionListener: NSObject {
 
   /// Called when ChipDna finishes a transaction
@@ -72,3 +75,4 @@ class ChipDnaTransactionListener: NSObject {
   }
 
 }
+#endif

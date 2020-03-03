@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Fattmerchant'
-  s.version = '1.3.1'
+  s.version = '1.3.2'
   s.license = { :type => 'Apache License, Version 2.0', :text => "© #{ Date.today.year } Fattmerchant, inc" }
   s.summary = 'Fattmerchant iOS SDK'
   s.homepage = 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK'
@@ -8,9 +8,15 @@ Pod::Spec.new do |s|
   s.source = { :git => 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git', :tag => s.version }
 
   s.ios.deployment_target = '8.0'
-  s.osx.deployment_target = '10.10'
-  s.tvos.deployment_target = '9.0'
-  s.watchos.deployment_target = '2.0'
+  s.swift_versions = ['4.0', '4.2', '5.2']  
+  s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
 
-  s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift,a}"
+  s.frameworks = 'UIKit', 'AVFoundation', 'MediaPlayer', 'CoreAudio', 'ExternalAccessory', 'CoreBluetooth', 'AudioToolbox' 
+
+  s.vendored_libraries = 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libChipDnaMobileAPI.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher/libsqlcipher-4.0.1.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libCardEaseXml.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libLumberjack.a'
+
+  s.pod_target_xcconfig = { 
+    'ENABLE_BITCODE' => 'NO' 
+  }
+
 end

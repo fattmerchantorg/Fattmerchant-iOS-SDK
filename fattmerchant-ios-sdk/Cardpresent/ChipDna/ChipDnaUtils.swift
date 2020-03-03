@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if targetEnvironment(simulator)
+
+#else
+
 extension MobileReader {
   static func from(pinPad: ChipDnaDriver.SelectablePinPad) -> MobileReader {
     return MobileReader(name: pinPad.name)
@@ -55,3 +59,5 @@ extension CCParameters {
   }
 
 }
+
+#endif

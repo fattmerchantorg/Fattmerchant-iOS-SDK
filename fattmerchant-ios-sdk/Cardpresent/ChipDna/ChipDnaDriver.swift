@@ -8,6 +8,9 @@
 
 import Foundation
 
+#if targetEnvironment(simulator)
+  
+#else
 class ChipDnaDriver: NSObject, MobileReaderDriver {
 
   struct SelectablePinPad {
@@ -30,13 +33,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///   - args: a Dictionary containing the necessary things to initialize the sdk.
   ///   - completion: a block to run once initialization is complete. The block will receive the value 'true' if initialization was successful, false otherwise
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
-    print("inside init chipdnadriver")
     guard
       let appId = args["appId"] as? String,
       let merchant = args["merchant"] as? Merchant,
       let apiKey = merchant.emvPassword()
       else {
-        print("couldn' get past guard in initialize")
         completion(false)
         return
     }
@@ -289,3 +290,5 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
 }
+
+#endif

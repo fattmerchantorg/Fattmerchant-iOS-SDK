@@ -11,6 +11,8 @@ import Foundation
 /// Responsible for communicating with Omni
 class OmniApi {
 
+  private let debug = false
+
   enum OmniNetworkingException: OmniException {
     case baseUrlNotFound
     case couldNotParseResponse(String?)
@@ -30,7 +32,13 @@ class OmniApi {
     }
   }
 
-  func getSelf(completion: @escaping (Self) -> Void, failure: @escaping (OmniException) -> Void ) {
+  private func log(_ thing: Any) {
+    if debug {
+      print(thing)
+    }
+  }
+
+  func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
     request(method: "get", urlString: "/self", completion: completion, failure: failure)
   }
 
@@ -43,27 +51,27 @@ class OmniApi {
       return
     }
 
-    print("------ HTTP REQUEST ------")
+    log("------ HTTP REQUEST ------")
     let client = Networking(baseUrl)
     client.apiKey = apiKey
 
     let request = client.urlRequest(path: urlString, body: body)
 
-    print("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
+    log("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
 
     if let body = body, let bodyString = String(data: body, encoding: .utf8) {
-      print("REQUEST BODY:")
-      print(bodyString)
-      print()
+      log("REQUEST BODY:")
+      log(bodyString)
+      log("")
     }
 
     client.dataTask(request: request, method: method) { (_, obj) in
 
       if let data = obj as? Data {
         if let dataString = String(data: data, encoding: .utf8) {
-          print("RESPONSE:")
-          print(dataString)
-          print()
+          self.log("RESPONSE:")
+          self.log(dataString)
+          self.log("")
         }
 
         do {
@@ -72,9 +80,9 @@ class OmniApi {
           let model = try jsonDecoder.decode(T.self, from: data)
           completion(model)
         } catch DecodingError.typeMismatch(_, let context) {
-          print(context)
+          self.log(context)
         } catch let decodingError as DecodingError {
-          print(decodingError)
+          self.log(decodingError)
         } catch {
           var error: OmniException = OmniNetworkingException.couldNotParseResponse(nil)
 
