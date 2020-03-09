@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     self.takePayment()
   }
 
-  let apiKey = "uHHD2Y1TI"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1ODM3NTMzNTUsImV4cCI6MTU4MzgzOTc1NSwibmJmIjoxNTgzNzUzMzU1LCJqdGkiOiJVUzlsOFh6VzdibTlJVGg1In0._unkqovdSp4VNBW2kqyv9Oclg5UBu-d09CYopkvIhdM"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -41,6 +41,7 @@ class ViewController: UIViewController {
   fileprivate func initializeOmni() {
     // instantiate Omni and store somewhere
     omni = Omni()
+    omni?.signatureProvider = SignatureViewController()
 
     log("Attempting initalization...")
 
@@ -100,7 +101,7 @@ class ViewController: UIViewController {
   }
 
   fileprivate func createTransactionRequest() -> TransactionRequest {
-    let request = TransactionRequest(amount: Amount(cents: 10))
+    let request = TransactionRequest(amount: Amount(cents: 1))
     return request
   }
 

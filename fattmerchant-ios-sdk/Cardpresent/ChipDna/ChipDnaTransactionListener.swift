@@ -58,6 +58,7 @@ class ChipDnaTransactionListener: NSObject {
 
   @objc fileprivate func onSignatureVerification(parameters: CCParameters) {
     guard let signatureProvider = signatureProvider else {
+
       let approveSignatureParams = CCParameters()
       approveSignatureParams.setValue(CCValueTrue, forKey: CCParamResult)
       ChipDnaMobile.sharedInstance().continueSignatureVerification(approveSignatureParams)
