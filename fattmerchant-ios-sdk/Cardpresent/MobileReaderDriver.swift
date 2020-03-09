@@ -32,7 +32,7 @@ protocol MobileReaderDriver {
 
   func connect(reader: MobileReader, completion: @escaping (Bool) -> Void)
 
-  func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void)
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding, completion: @escaping (TransactionResult) -> Void)
 
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
 }

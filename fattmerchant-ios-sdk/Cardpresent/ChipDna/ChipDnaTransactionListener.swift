@@ -16,8 +16,11 @@ class ChipDnaTransactionListener: NSObject {
   /// Called when ChipDna finishes a transaction
   var onFinished: ((CCParameters) -> Void)?
 
+  /// Provides a signature
+  var signatureProvider: SignatureProviding?
+
   /// Makes this listener bind to the transaction events ChipDna emits
-  func bindToChipDna() {
+  func bindToChipDna(signatureProvider: SignatureProviding? = nil) {
     ChipDnaMobile.addTransactionUpdateTarget(self, action: #selector(onTransactionUpdate(parameters:)))
     ChipDnaMobile.addTransactionFinishedTarget(self, action: #selector(onTransactionFinished(parameters:)))
     ChipDnaMobile.addDeferredAuthorizationTarget(self, action: #selector(onDeferredAuthorization(parameters:)))
@@ -26,6 +29,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.addPartialApprovalTarget(self, action: #selector(onPartialApprove(parameters:)))
     ChipDnaMobile.addForcedAcceptanceTarget(self, action: #selector(onForcedAcceptance(parameters:)))
     ChipDnaMobile.addIdVerificationTarget(self, action: #selector(onIdVerification(parameters:)))
+    self.signatureProvider = signatureProvider
   }
 
   /// Makes this listener stop listening to transaction events from ChipDna
@@ -53,9 +57,19 @@ class ChipDnaTransactionListener: NSObject {
   }
 
   @objc fileprivate func onSignatureVerification(parameters: CCParameters) {
-    let approveSignatureParams = CCParameters()
-    approveSignatureParams.setValue(CCValueTrue, forKey: CCParamResult)
-    ChipDnaMobile.sharedInstance().continueSignatureVerification(approveSignatureParams)
+    guard let signatureProvider = signatureProvider else {
+      let approveSignatureParams = CCParameters()
+      approveSignatureParams.setValue(CCValueTrue, forKey: CCParamResult)
+      ChipDnaMobile.sharedInstance().continueSignatureVerification(approveSignatureParams)
+      return
+    }
+
+    signatureProvider.signatureRequired(completion: { (signature) in
+      let approveSignatureParams = CCParameters()
+      approveSignatureParams.setValue(CCValueTrue, forKey: CCParamResult)
+      approveSignatureParams.setValue(signature, forKey: CCParamSignatureData)
+      ChipDnaMobile.sharedInstance().continueSignatureVerification(approveSignatureParams)
+    })
   }
 
   @objc fileprivate func onVoiceReferral(parameters: CCParameters) {
