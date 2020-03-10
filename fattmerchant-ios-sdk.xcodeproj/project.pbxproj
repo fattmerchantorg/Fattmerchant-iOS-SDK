@@ -108,6 +108,8 @@
 		D78FA929240EA64E00398D81 /* libCardEaseXml.a in Resources */ = {isa = PBXBuildFile; fileRef = D71B6FAF239E98B5007FB7C4 /* libCardEaseXml.a */; };
 		D78FA92A240EA64E00398D81 /* libLumberjack.a in Resources */ = {isa = PBXBuildFile; fileRef = D71B6FB4239E98B5007FB7C4 /* libLumberjack.a */; };
 		D78FA930240EACA200398D81 /* Fattmerchant.h in Headers */ = {isa = PBXBuildFile; fileRef = D78FA92F240EACA200398D81 /* Fattmerchant.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D78FA932240EF48B00398D81 /* SignatureProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78FA931240EF48B00398D81 /* SignatureProviding.swift */; };
+		D78FA933240EF48B00398D81 /* SignatureProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78FA931240EF48B00398D81 /* SignatureProviding.swift */; };
 		D79308A023D0A1B50066FCA2 /* AmountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D793089F23D0A1B50066FCA2 /* AmountTests.swift */; };
 		D79308A423D0A8B10066FCA2 /* MobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308A323D0A8B10066FCA2 /* MobileReader.swift */; };
 		D79308A523D0A8B10066FCA2 /* MobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308A323D0A8B10066FCA2 /* MobileReader.swift */; };
@@ -248,6 +250,7 @@
 		D781037E23D9F85100256F2F /* PaginatedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedData.swift; sourceTree = "<group>"; };
 		D78FA92D240EAC4200398D81 /* fattmerchant_ios_sdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fattmerchant_ios_sdk.h; sourceTree = "<group>"; };
 		D78FA92F240EACA200398D81 /* Fattmerchant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fattmerchant.h; sourceTree = "<group>"; };
+		D78FA931240EF48B00398D81 /* SignatureProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureProviding.swift; sourceTree = "<group>"; };
 		D793089F23D0A1B50066FCA2 /* AmountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountTests.swift; sourceTree = "<group>"; };
 		D79308A323D0A8B10066FCA2 /* MobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReader.swift; sourceTree = "<group>"; };
 		D79308A623D0A9050066FCA2 /* MobileReaderDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDriver.swift; sourceTree = "<group>"; };
@@ -419,14 +422,15 @@
 				D7692F2523E4B88700CB0954 /* Mock */,
 				D79308B623D0AC2E0066FCA2 /* Usecase */,
 				D702B7BB23C8CDE400B8AB79 /* Networking */,
+				D79308B523D0ABC70066FCA2 /* ChipDna */,
 				D765D47723CC4AFF00656040 /* Repository */,
 				D765D48223CE419700656040 /* JSON */,
 				D765D48123CD00C800656040 /* Data */,
 				D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */,
-				D79308B523D0ABC70066FCA2 /* ChipDna */,
 				D79308A623D0A9050066FCA2 /* MobileReaderDriver.swift */,
 				D79308AF23D0AA9A0066FCA2 /* TransactionType.swift */,
 				D79308C623D1045C0066FCA2 /* Omni.swift */,
+				D78FA931240EF48B00398D81 /* SignatureProviding.swift */,
 			);
 			path = Cardpresent;
 			sourceTree = "<group>";
@@ -736,7 +740,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#if which swiftlint >/dev/null; then\n#swiftlint\n#else\n#echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n#fi\n";
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -759,6 +763,7 @@
 				D79308A723D0A9050066FCA2 /* MobileReaderDriver.swift in Sources */,
 				D79308D023D22D900066FCA2 /* ChipDnaTransactionListener.swift in Sources */,
 				D765D49923CFC22600656040 /* PaymentMethodRepository.swift in Sources */,
+				D78FA932240EF48B00398D81 /* SignatureProviding.swift in Sources */,
 				D79308D423D24B680066FCA2 /* Endpoints.swift in Sources */,
 				D765D47C23CCBB0500656040 /* ModelRepository.swift in Sources */,
 				5993C2642077A687004DDA9F /* BankAccount.swift in Sources */,
@@ -814,6 +819,7 @@
 				D79308D523D24C880066FCA2 /* Endpoints.swift in Sources */,
 				D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */,
 				D7692F1B23E4B49B00CB0954 /* MobileReaderDriverRepository.swift in Sources */,
+				D78FA933240EF48B00398D81 /* SignatureProviding.swift in Sources */,
 				D7B7110523D35FD500EF98DB /* MockMobileReader.swift in Sources */,
 				D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */,
 				D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */,
