@@ -58,13 +58,13 @@ enum OmniGeneralException: OmniException {
  */
 public class Omni: NSObject {
 
-  private var initialized: Bool = false
-  private var omniApi = OmniApi()
-  private var transactionRepository: TransactionRepository!
-  private var invoiceRepository: InvoiceRepository!
-  private var customerRepository: CustomerRepository!
-  private var paymentMethodRepository: PaymentMethodRepository!
-  private var mobileReaderDriverRepository = MobileReaderDriverRepository()
+  internal var initialized: Bool = false
+  internal var omniApi = OmniApi()
+  internal var transactionRepository: TransactionRepository!
+  internal var invoiceRepository: InvoiceRepository!
+  internal var customerRepository: CustomerRepository!
+  internal var paymentMethodRepository: PaymentMethodRepository!
+  internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
 
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
@@ -105,7 +105,6 @@ public class Omni: NSObject {
   ///   - completion: a completion block to run once finished
   ///   - error: an error block to run in case something goes wrong
   public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (OmniException) -> Void) {
-    omniApi = OmniApi()
     omniApi.apiKey = params.apiKey
     omniApi.environment = params.environment
     initRepos(omniApi: omniApi)
