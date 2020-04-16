@@ -25,10 +25,19 @@ import Foundation
 /// let amount = Amount(cents: 1999) // $19.99
 /// let request = TransactionRequest(amount: amount, tokenize: false)
 /// ```
+/// ## Charging a card without a mobile reader
+/// ```
+/// // With given card
+/// let card = CreditCard(personName: "Joan Parsnip", cardNumber: "4111111111111111", cardExp: "1230", addressZip: "32822")
+/// let request = TransactionRequest(amount: amount, card: card)
+/// ```
 public struct TransactionRequest {
 
   /// The `Amount` to be collected during the transaction
   public var amount: Amount
+
+  /// The `CreditCard` to charge
+  public var card: CreditCard?
 
   /// The option to tokenize the payment method for later usage
   ///
@@ -44,6 +53,14 @@ public struct TransactionRequest {
     self.amount = amount
   }
 
+  /// Initializes a TransactionRequest with the given amount.
+  ///
+  /// - Parameter amount: The  `Amount` to be collected during the transaction
+  public init(amount: Amount, card: CreditCard) {
+    self.amount = amount
+    self.card = card
+  }
+
   /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
@@ -52,5 +69,17 @@ public struct TransactionRequest {
   public init(amount: Amount, tokenize: Bool) {
     self.amount = amount
     self.tokenize = tokenize
+  }
+
+  /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - tokenize: A value that dictates whether or not the payment method used in the transaction
+  ///   should be tokenized
+  ///   - card: A `CreditCard` to charge
+  public init(amount: Amount, tokenize: Bool, card: CreditCard) {
+    self.amount = amount
+    self.tokenize = tokenize
+    self.card = card
   }
 }
