@@ -15,7 +15,7 @@ class Merchant: Model, Codable {
   public var id: String?
 
   /// A token that enables hosted webpayments
-  internal var hostedPaymentsToken: String
+  internal var hostedPaymentsToken: String?
 
   /// An object that holds optional information about the merchant
   ///

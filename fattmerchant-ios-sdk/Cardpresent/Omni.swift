@@ -25,6 +25,19 @@ enum OmniNetworkingException: OmniException {
   }
 }
 
+enum OmniInitializeException: OmniException {
+  case missingInitializationDetails
+
+  static var mess: String = "Omni Initialization Exception"
+
+  var detail: String? {
+    switch self {
+    case .missingInitializationDetails:
+      return "Missing initialization details"
+    }
+  }
+}
+
 enum OmniGeneralException: OmniException {
   case uninitialized
 
@@ -65,6 +78,7 @@ public class Omni: NSObject {
   internal var customerRepository: CustomerRepository!
   internal var paymentMethodRepository: PaymentMethodRepository!
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
+  internal var merchant: Merchant?
 
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
@@ -72,13 +86,18 @@ public class Omni: NSObject {
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
     /// An id for your application
-    public var appId: String
+    public var appId: String?
 
     /// An ephemeral Omni api key
-    public var apiKey: String
+    public var apiKey: String?
 
     /// The Omni enviroment to use
     public var environment: Environment
+
+    /// The Omni webpayments token
+    ///
+    /// This is used for tokenizing and charging payment methods
+    public var webpaymentsToken: String?
 
     public init(appId: String, apiKey: String, environment: Environment = Environment.LIVE) {
       self.appId = appId
@@ -105,6 +124,11 @@ public class Omni: NSObject {
   ///   - completion: a completion block to run once finished
   ///   - error: an error block to run in case something goes wrong
   public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (OmniException) -> Void) {
+    guard let appId = params.appId, params.apiKey != nil else {
+      error(OmniInitializeException.missingInitializationDetails)
+      return
+    }
+
     omniApi.apiKey = params.apiKey
     omniApi.environment = params.environment
     initRepos(omniApi: omniApi)
@@ -117,8 +141,11 @@ public class Omni: NSObject {
         return
       }
 
+      // Assign merchant to self
+      self.merchant = merchant
+
       let args: [String: Any] = [
-        "appId": params.appId,
+        "appId": appId,
         "merchant": merchant
       ]
 
@@ -128,6 +155,21 @@ public class Omni: NSObject {
       }, failure: error)
     }, failure: error)
 
+  }
+
+  /// Captures a transaction without a mobile reader
+  /// - Parameters:
+  ///   - transactionRequest: A request for a Transaction
+  ///   - completion: Called when the operation is completed successfully. Receives a Transaction
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func pay(transactionRequest: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    guard let merchant = self.merchant else {
+      error(OmniGeneralException.uninitialized)
+      return
+    }
+
+    let job = TakePayment(request: transactionRequest, omniApi: omniApi, merchant: merchant)
+    job.start(completion: completion, failure: error)
   }
 
   /// Captures a mobile reader transaction

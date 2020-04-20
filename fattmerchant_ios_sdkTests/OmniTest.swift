@@ -13,6 +13,7 @@ class OmniTest: XCTestCase {
 
   var omni: Omni = Omni()
   let omniApi = MockOmniApi()
+  let hostedPaymentsToken = "faketoken"
 
   override func setUp() {
     // Mark Omni as initialized so we don't have to run through the initialization. There is a test for the initialization
@@ -20,6 +21,10 @@ class OmniTest: XCTestCase {
 
     // Give omni the mock api
     omni.omniApi = omniApi
+
+    // Give omni a Merchant
+    omni.merchant = Merchant()
+    omni.merchant?.hostedPaymentsToken = hostedPaymentsToken
 
     // Give omni the mock repositories
     omni.mobileReaderDriverRepository = MobileReaderDriverRepository()
@@ -57,6 +62,46 @@ class OmniTest: XCTestCase {
     }
 
     wait(for: [connectedReader], timeout: 10.0)
+  }
+
+  func testCanPayWithCreditCard() {
+    let creditCard = CreditCard(personName: "Joe Tester", cardNumber: "4111111111111111", cardExp: "0230", addressZip: "32812")
+    let transactionRequest = TransactionRequest(amount: Amount(cents: 10), tokenize: false, card: creditCard)
+    let transactionWasCompleted = XCTestExpectation(description: "Transaction completed successfully")
+
+    let data = "{\"card_number\":\"4111111111111111\",\"method\":\"card\",\"person_name\":\"Joe Tester\",\"card_exp\":\"0230\",\"address_zip\":\"32812\"}".data(using: .utf8)
+
+    let paymentMethod = PaymentMethod()
+    paymentMethod.id = "12345"
+    paymentMethod.customerId = "customerid"
+    paymentMethod.merchantId = "merchantid"
+
+    omniApi.stub("post", "/webpayment/\(hostedPaymentsToken)/tokenize", body: data, response: .success(paymentMethod))
+
+    omni.pay(transactionRequest: transactionRequest, completion: { (completedTransaction) in
+      transactionWasCompleted.fulfill()
+    }) { error in
+      XCTFail("Transaction failed")
+    }
+
+    wait(for: [transactionWasCompleted], timeout: 10.0)
+  }
+
+  func testCanNotPayWithCreditCardWithoutMerchant() {
+    omni.merchant = nil
+    let creditCard = CreditCard(personName: "Joe Tester", cardNumber: "4111111111111111", cardExp: "0230", addressZip: "32812")
+    let transactionRequest = TransactionRequest(amount: Amount(cents: 10), tokenize: false, card: creditCard)
+    let transactionFailed = XCTestExpectation(description: "Transaction failed")
+    let expectedError = OmniGeneralException.uninitialized
+
+    omni.pay(transactionRequest: transactionRequest, completion: { _ in
+      XCTFail("Transaction succeeded but shouldnt have")
+    }) { error in
+      XCTAssertEqual(error as! OmniGeneralException, expectedError)
+      transactionFailed.fulfill()
+    }
+
+    wait(for: [transactionFailed], timeout: 10.0)
   }
 
   func testCanNoTakeTransactionIfMobileReaderNotReady() {
@@ -120,12 +165,36 @@ class OmniTest: XCTestCase {
     (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
 
     let missingMerchant = expectation(description: "Couldn't get merchant")
+    let expectedError = OmniNetworkingException.couldNotGetMerchantDetails
 
     omni.initialize(
       params: Omni.InitParams(appId: "123", apiKey: "123"),
       completion: {
         XCTFail()
     }) { error in
+      XCTAssertEqual(error as! OmniNetworkingException, expectedError)
+      XCTAssertNotNil(error.detail)
+      missingMerchant.fulfill()
+    }
+
+    wait(for: [missingMerchant], timeout: 10.0)
+  }
+
+  /// Tests cases where omni initialization fails
+  func testFailedInitializationIfDetailsAreMissing() {
+    let missingMerchant = expectation(description: "Couldnt initialize")
+    var initParams = Omni.InitParams(appId: "", apiKey: "")
+    initParams.appId = nil
+
+    let expectedError = OmniInitializeException.missingInitializationDetails
+
+    omni.initialize(
+      params: initParams,
+      completion: {
+        XCTFail()
+    }) { error in
+      XCTAssertEqual(error as! OmniInitializeException, expectedError)
+      XCTAssertNotNil(error.detail)
       missingMerchant.fulfill()
     }
 
