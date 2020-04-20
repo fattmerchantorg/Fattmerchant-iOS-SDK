@@ -276,6 +276,25 @@ public class Omni: NSObject {
     }
   }
 
+  /// Attempts to disconnect the given MobileReader
+  ///
+  /// - Parameters:
+  ///   - reader: The MobileReader to disconnect
+  ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
+  ///   - error: A block to call if this operation fails
+  public func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
+    let task = DisconnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
+    task.start(completion: { success in
+      self.preferredQueue.async { completion(success) }
+    }, failure: ({ exception in
+      self.preferredQueue.async { error(exception) }
+    }))
+  }
+
   /// Retrieves a list of the most recent mobile reader transactions from Omni
   /// - Parameters:
   ///   - completion: Receives a list of Transactions
