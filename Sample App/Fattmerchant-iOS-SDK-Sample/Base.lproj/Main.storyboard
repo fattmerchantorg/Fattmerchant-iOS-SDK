@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +20,7 @@
                                 <rect key="frame" x="20" y="44" width="374" height="818"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="KoI-Tz-bhx">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="514"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="556"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Su6-lv-kN3">
                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="300"/>
@@ -42,22 +42,29 @@
                                                     <action selector="onConnectReaderButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uqJ-mx-nM9"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Prp-xT-ZQb" userLabel="Get Reader Info">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gbd-Sh-FGn" userLabel="Disconnect Reader Button">
                                                 <rect key="frame" x="0.0" y="396" width="374" height="30"/>
+                                                <state key="normal" title="Disconnect Reader"/>
+                                                <connections>
+                                                    <action selector="onDisconnectButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cLM-Mz-LB4"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Prp-xT-ZQb" userLabel="Get Reader Info">
+                                                <rect key="frame" x="0.0" y="438" width="374" height="30"/>
                                                 <state key="normal" title="Get Reader Info"/>
                                                 <connections>
                                                     <action selector="onGetReaderInfoButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="12R-5b-O8s"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRt-g0-2qt">
-                                                <rect key="frame" x="0.0" y="438" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="480" width="374" height="30"/>
                                                 <state key="normal" title="Refund Payment"/>
                                                 <connections>
                                                     <action selector="onRefundPaymentButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p63-gv-Dcc"/>
                                                 </connections>
                                             </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="7yU-ct-go6">
-                                                <rect key="frame" x="0.0" y="480" width="374" height="34"/>
+                                                <rect key="frame" x="0.0" y="522" width="374" height="34"/>
                                                 <subviews>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="1.0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L3o-GT-sFF">
                                                         <rect key="frame" x="0.0" y="0.0" width="262" height="34"/>
@@ -103,6 +110,7 @@
                     <connections>
                         <outlet property="activityTextArea" destination="Su6-lv-kN3" id="PRo-1K-Iep"/>
                         <outlet property="connectReaderButton" destination="PXo-M4-aSr" id="wuu-v6-ts2"/>
+                        <outlet property="disconnectReaderButton" destination="Gbd-Sh-FGn" id="Ks0-bp-b6w"/>
                         <outlet property="getReaderInfoButton" destination="Prp-xT-ZQb" id="Xc5-FR-mZW"/>
                         <outlet property="initializeButton" destination="8yi-c2-smr" id="Ph2-JN-G0Z"/>
                         <outlet property="refundPaymentButton" destination="WRt-g0-2qt" id="b19-K8-EiU"/>
