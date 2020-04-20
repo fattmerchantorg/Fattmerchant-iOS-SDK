@@ -52,6 +52,8 @@
 		D71B6FD3239E98B5007FB7C4 /* ChipDnaMobile.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6FB3239E98B5007FB7C4 /* ChipDnaMobile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D71B6FD5239E98B5007FB7C4 /* RequestQueueStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6FB5239E98B5007FB7C4 /* RequestQueueStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D71B6FD6239E98B5007FB7C4 /* VersionInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6FB6239E98B5007FB7C4 /* VersionInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D73BBCF2244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */; };
+		D73BBCF3244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */; };
 		D760D82823D87F5D0075057C /* InvoiceJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82723D87F5D0075057C /* InvoiceJson.swift */; };
 		D760D82A23D884680075057C /* CustomerJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82923D884680075057C /* CustomerJson.swift */; };
 		D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82B23D884F70075057C /* PaymentMethodJson.swift */; };
@@ -237,6 +239,7 @@
 		D71B6FB4239E98B5007FB7C4 /* libLumberjack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLumberjack.a; sourceTree = "<group>"; };
 		D71B6FB5239E98B5007FB7C4 /* RequestQueueStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestQueueStatus.h; sourceTree = "<group>"; };
 		D71B6FB6239E98B5007FB7C4 /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
+		D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedMobileReader.swift; sourceTree = "<group>"; };
 		D760D82723D87F5D0075057C /* InvoiceJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceJson.swift; sourceTree = "<group>"; };
 		D760D82923D884680075057C /* CustomerJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJson.swift; sourceTree = "<group>"; };
 		D760D82B23D884F70075057C /* PaymentMethodJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodJson.swift; sourceTree = "<group>"; };
@@ -607,6 +610,7 @@
 				D79308C023D0E0B40066FCA2 /* SearchForReaders.swift */,
 				D79308C323D0E3C90066FCA2 /* RefundMobileReaderTransaction.swift */,
 				D7A28D632436278600FC8872 /* TokenizePaymentMethod.swift */,
+				D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */,
 			);
 			path = Usecase;
 			sourceTree = "<group>";
@@ -799,6 +803,7 @@
 			files = (
 				D7801BF0241F256A00A93001 /* ModelRepository+EndpointDefaultImpl.swift in Sources */,
 				D79308B323D0AAD00066FCA2 /* MobileReaderDriverRepository.swift in Sources */,
+				D73BBCF2244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */,
 				D71B6F91239E971A007FB7C4 /* ChipDnaDriver.swift in Sources */,
 				D765D46F23CC488000656040 /* Merchant.swift in Sources */,
 				D79308BB23D0ADEF0066FCA2 /* InitializeDrivers.swift in Sources */,
@@ -869,6 +874,7 @@
 				D7C17B2423E4BA200031D9BB /* TakeMobileReaderPayment.swift in Sources */,
 				D79308AE23D0AA230066FCA2 /* TransactionResult.swift in Sources */,
 				D765D49723CFC1A000656040 /* InvoiceRepository.swift in Sources */,
+				D73BBCF3244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */,
 				D702B7CD23C8F80200B8AB79 /* CreditCard.swift in Sources */,
 				D7692F1923E4B00500CB0954 /* OmniTest.swift in Sources */,
 				D781038023D9F85100256F2F /* PaginatedData.swift in Sources */,

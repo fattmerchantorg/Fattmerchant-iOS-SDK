@@ -16,6 +16,14 @@ extension MobileReader {
   static func from(pinPad: ChipDnaDriver.SelectablePinPad) -> MobileReader {
     return MobileReader(name: pinPad.name)
   }
+
+  static func from(deviceStatus: DeviceStatus) -> MobileReader {
+    return MobileReader(name: deviceStatus.name,
+                        firmwareVersion: deviceStatus.firmwareVersion,
+                        make: deviceStatus.make,
+                        model: deviceStatus.model,
+                        serialNumber: deviceStatus.serialNumber)
+  }
 }
 
 extension CCParameters {
