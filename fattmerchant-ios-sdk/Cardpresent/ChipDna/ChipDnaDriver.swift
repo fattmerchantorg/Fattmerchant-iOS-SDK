@@ -9,7 +9,7 @@
 import Foundation
 
 #if targetEnvironment(simulator)
-  
+
 #else
 class ChipDnaDriver: NSObject, MobileReaderDriver {
 
@@ -124,7 +124,44 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
   }
 
-  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding ,completion: @escaping (TransactionResult) -> Void) {
+  /// Gets the connected MobileReader
+  /// - Parameters:
+  ///   - completion: the connected MobileReader, if any
+  ///   - error: a block to run if anything goes wrong during the operation
+  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    // ChipDna must be initialized
+    if !ChipDnaMobile.isInitialized() {
+      error(OmniGeneralException.uninitialized)
+    }
+
+    guard
+      let status = ChipDnaMobile.sharedInstance()?.getStatus(nil),
+      let deviceStatusXml = status[CCParamDeviceStatus],
+      let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
+      deviceStatus.deviceStatus == DeviceStatusEnum.connected else {
+      completion(nil)
+      return
+    }
+
+    completion(MobileReader.from(deviceStatus: deviceStatus))
+  }
+
+  /// Attempts to disconnect a connected MobileReader
+  /// - Parameters:
+  ///   - reader: the MobileReader that is to be disconnected
+  ///   - completion: a block to run once done. if disconnected, this receives true
+  ///   - error: a block to run in anything goes wrong during the operation
+  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    // ChipDna must be initialized
+    if !ChipDnaMobile.isInitialized() {
+      error(OmniGeneralException.uninitialized)
+    }
+
+    ChipDnaMobile.dispose(nil)
+    completion(true)
+  }
+
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, completion: @escaping (TransactionResult) -> Void) {
     let requestParams = CCParameters(transactionRequest: request)
 
     chipDnaTransactionListener.detachFromChipDna()

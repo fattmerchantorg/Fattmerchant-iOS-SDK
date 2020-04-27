@@ -56,7 +56,7 @@ class TakeMobileReaderPayment {
   var paymentMethodRepository: PaymentMethodRepository
   var transactionRepository: TransactionRepository
   var request: TransactionRequest
-  var signatureProvider: SignatureProviding
+  var signatureProvider: SignatureProviding?
 
   init(
     mobileReaderDriverRepository: MobileReaderDriverRepository,
@@ -65,7 +65,7 @@ class TakeMobileReaderPayment {
     paymentMethodRepository: PaymentMethodRepository,
     transactionRepository: TransactionRepository,
     request: TransactionRequest,
-    signatureProvider: SignatureProviding) {
+    signatureProvider: SignatureProviding?) {
 
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
     self.invoiceRepository = invoiceRepository
@@ -262,8 +262,8 @@ class TakeMobileReaderPayment {
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
   }
 
-  fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver, signatureProvider: SignatureProviding, _ failure: (OmniException) -> Void, _ completion: @escaping (TransactionResult) -> Void) {
-    driver.performTransaction(with: self.request, signatureProvider: self.signatureProvider, completion: completion)
+  fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver, signatureProvider: SignatureProviding?, _ failure: (OmniException) -> Void, _ completion: @escaping (TransactionResult) -> Void) {
+    driver.performTransaction(with: self.request, signatureProvider: signatureProvider, completion: completion)
   }
 
   fileprivate func createInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {

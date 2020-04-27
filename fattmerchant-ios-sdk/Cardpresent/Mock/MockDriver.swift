@@ -10,10 +10,17 @@ import Foundation
 
 class MockDriver: MobileReaderDriver {
 
-  var reader = MobileReader(name: "Reader")
+  var reader: MobileReader? = MobileReader(name: "Reader",
+                            firmwareVersion: "FakeFirmwareVersion",
+                            make: "FakeMake",
+                            model: "FakeModel",
+                            serialNumber: "FakeSerialNumber")
+
+  /// Set this to false to simulate a busy mobile reader
+  var readyToTakePayment = true
 
   func isReadyToTakePayment(completion: (Bool) -> Void) {
-    completion(true)
+    completion(readyToTakePayment)
   }
 
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
@@ -21,14 +28,22 @@ class MockDriver: MobileReaderDriver {
   }
 
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
-    completion([reader])
+    completion([reader!])
   }
 
   func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
     completion(true)
   }
 
-  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding, completion: @escaping (TransactionResult) -> Void) {
+  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    completion(true)
+  }
+
+  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    completion(reader)
+  }
+
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, completion: @escaping (TransactionResult) -> Void) {
     let transactionResult = TransactionResult(
       request: request,
       success: true,

@@ -10,4 +10,13 @@ import Foundation
 
 class MockMobileReaderDriverRepository: MobileReaderDriverRepository {
 
+  /// The available drivers
+  fileprivate let drivers: [MobileReaderDriver] = [
+    MockDriver()
+  ]
+
+  override func getDrivers(completion: ([MobileReaderDriver]) -> Void) {
+    completion(drivers)
+  }
+
 }
