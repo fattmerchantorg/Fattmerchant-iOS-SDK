@@ -1,0 +1,9 @@
+# .slather.yml
+
+coverage_service: cobertura_xml
+xcodeproj: fattmerchant-ios-sdk.xcodeproj
+workspace: fattmerchant-ios-sdk.xcworkspace
+scheme: fattmerchant-ios-sdk
+configuration: Debug
+ignore:
+  - fattmerchant_ios_sdkTests/*
