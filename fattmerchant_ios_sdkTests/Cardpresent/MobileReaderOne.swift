@@ -8,4 +8,4 @@
 
 import Foundation
 
-class MockMobileReader: MobileReader { }
+class MobileReaderOne: MobileReader { }

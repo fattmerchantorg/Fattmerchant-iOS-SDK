@@ -22,18 +22,50 @@ import Foundation
 
 /// A credit card
 public struct CreditCard: Codable {
+
+  /// The full name of the person
   public var personName: String
+
+  /// The card number
   public var cardNumber: String
+
+  /// The expiration date of the card in MMYY format
+  ///
+  /// Must be in the format MMYY.
+  /// ## Example
+  /// ```
+  /// cardExp = "0122" // Expires on January 2022
+  /// ```
   public var cardExp: String
+
+  /// The zip code of the billing address
   public var addressZip: String
+
+  /// The first line of the billing address
   public var address1: String?
+
+  /// The second line of the billing address
   public var address2: String?
+
+  /// The city of the billing address
   public var addressCity: String?
+
+  /// The state of the billing address
+  /// Must be 2 characters, uppercase
   public var addressState: String?
+
+  /// A note about this card
   public var note: String?
+
+  /// A phone number to associate with this card
   public var phone: String?
+
+  /// An email to associate with this card
   public var email: String?
+
   private var method: String = "card"
+
+  /// The id of a Customer to assocaite with this card
   public var customerId: String?
 
   public init(personName: String, cardNumber: String, cardExp: String, addressZip: String) {

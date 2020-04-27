@@ -12,8 +12,11 @@ class MockDriver: MobileReaderDriver {
 
   var reader = MobileReader(name: "Reader")
 
+  /// Set this to false to simulate a busy mobile reader
+  var readyToTakePayment = true
+
   func isReadyToTakePayment(completion: (Bool) -> Void) {
-    completion(true)
+    completion(readyToTakePayment)
   }
 
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
