@@ -16,6 +16,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var activityTextArea: UITextView!
   @IBOutlet weak var initializeButton: UIButton!
   @IBOutlet weak var connectReaderButton: UIButton!
+  @IBOutlet weak var getReaderInfoButton: UIButton!
   @IBOutlet weak var refundPaymentButton: UIButton!
   @IBOutlet weak var totalTextInput: UITextField!
 
@@ -31,7 +32,11 @@ class ViewController: UIViewController {
     self.takePayment()
   }
 
-  let apiKey = "uHHD2Y1TI"
+  @IBAction func onGetReaderInfoButtonPress(_ sender: UIButton) {
+    self.getReaderInfo()
+  }
+
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1ODczNTgwODUsImV4cCI6MTU4NzQ0NDQ4NSwibmJmIjoxNTg3MzU4MDg1LCJqdGkiOiJHVFprSThFeGdBeWNFY0RuIn0.q8wg7DjlidsU32d6B8qY8gKGp8n0QvRbbcPTBfatLC0"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -138,6 +143,16 @@ class ViewController: UIViewController {
     omni?.connect(reader: reader, completion: completion) {
       self.log("Couldn't connect to \(reader)")
     }
+  }
+
+  fileprivate func getReaderInfo() {
+    self.log("Trying to get info about the connected reader")
+    omni?.getConnectedReader(completion: { reader in
+      var a = reader
+      self.log("Done")
+    }, error: { error in
+      self.log(error.detail ?? "huh")
+    })
   }
 
   /// Makes the user choose which reader to connect to

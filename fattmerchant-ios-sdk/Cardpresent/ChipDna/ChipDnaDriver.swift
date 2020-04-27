@@ -124,6 +124,28 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
   }
 
+  /// Gets the connected MobileReader
+  /// - Parameters:
+  ///   - completion: the connected MobileReader, if any
+  ///   - error: a block to run if anything goes wrong during the operation
+  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    // ChipDna must be initialized
+    if !ChipDnaMobile.isInitialized() {
+      error(OmniGeneralException.uninitialized)
+    }
+
+    guard
+      let status = ChipDnaMobile.sharedInstance()?.getStatus(nil),
+      let deviceStatusXml = status[CCParamDeviceStatus],
+      let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
+      deviceStatus.deviceStatus == DeviceStatusEnum.connected else {
+      completion(nil)
+      return
+    }
+
+    completion(MobileReader.from(deviceStatus: deviceStatus))
+  }
+
   func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void) {
     let requestParams = CCParameters(transactionRequest: request)
 

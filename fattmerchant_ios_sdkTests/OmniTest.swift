@@ -64,6 +64,47 @@ class OmniTest: XCTestCase {
     wait(for: [connectedReader], timeout: 10.0)
   }
 
+  func testCanGetConnectedMobileReader() {
+    let readerFound = XCTestExpectation(description: "Reader was found")
+    omni.getConnectedReader(completion: { connectedReader in
+      readerFound.fulfill()
+    }) { error in
+      XCTFail("Didn't find the reader")
+    }
+
+    wait(for: [readerFound], timeout: 3.0)
+  }
+
+  func testCanNotGetConnectedMobileReaderIfNoneAvailable() {
+    let connectedReaderNil = XCTestExpectation(description: "No connected reader found")
+    omni.mobileReaderDriverRepository.driver = MockDriver()
+    omni.mobileReaderDriverRepository.driver.reader = nil
+    omni.getConnectedReader(completion: { connectedReader in
+      XCTAssertNil(connectedReader)
+      connectedReaderNil.fulfill()
+    }) { error in
+      XCTFail()
+    }
+
+    wait(for: [connectedReaderNil], timeout: 3.0)
+  }
+
+  func testCantGetConnectedMobileReaderIfUninitialized() {
+    omni.initialized = false
+    let errorThrown = XCTestExpectation(description: "Error was thrown")
+    let expectedError = OmniGeneralException.uninitialized
+
+    omni.getConnectedReader(completion: { connectedReader in
+      XCTFail()
+    }) { error in
+      XCTAssertEqual(error as! OmniGeneralException, expectedError)
+      XCTAssertNotNil(error.detail)
+      errorThrown.fulfill()
+    }
+
+    wait(for: [errorThrown], timeout: 3.0)
+  }
+
   func testCanPayWithCreditCard() {
     let creditCard = CreditCard(personName: "Joe Tester", cardNumber: "4111111111111111", cardExp: "0230", addressZip: "32812")
     let transactionRequest = TransactionRequest(amount: Amount(cents: 10), tokenize: false, card: creditCard)

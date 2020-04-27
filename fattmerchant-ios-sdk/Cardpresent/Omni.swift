@@ -237,6 +237,22 @@ public class Omni: NSObject {
     }))
   }
 
+  /// Returns the connected mobile reader
+  /// - Parameters:
+  ///   - completion: Receives the connected mobile reader, if any
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func getConnectedReader(completion: @escaping (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
+    GetConnectedMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository).start(completion: { reader in
+      self.preferredQueue.async { completion(reader) }
+    }, failure: ({ exception in
+      self.preferredQueue.async { error(exception) }
+    }))
+  }
+
   /// Attempts to connect to the given MobileReader
   ///
   /// - Parameters:
