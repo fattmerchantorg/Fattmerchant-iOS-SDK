@@ -32,6 +32,20 @@ class OmniApi {
     }
   }
 
+  /// A Json encoder that should be used for encoding data to send to the Omni API
+  func jsonEncoder() -> JSONEncoder {
+    let encoder = JSONEncoder()
+    encoder.keyEncodingStrategy = .convertToSnakeCase
+    return encoder
+  }
+
+  /// A Json decoder that should be used for encoding data to send to the Omni API
+  func jsonDecoder() -> JSONDecoder {
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    return decoder
+  }
+
   private func log(_ thing: Any) {
     if debug {
       print(thing)
