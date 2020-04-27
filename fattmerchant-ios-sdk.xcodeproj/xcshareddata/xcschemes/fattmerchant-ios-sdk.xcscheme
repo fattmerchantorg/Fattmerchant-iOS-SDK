@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1030"
-   version = "1.3">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -27,8 +27,43 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      codeCoverageEnabled = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "# Pipe output data to a log file&#10;exec &gt; /tmp/$PROJECT_NAME.txt 2&gt;&amp;1&#10;&#10;# Go to the dir where the source code is&#10;cd &quot;$SRCROOT&quot;&#10;&#10;echo $(date +&quot;%r&quot;): fattmerchant-ios-sdk - starting Pre-Actions for Test&#10;&#10;# Run before-build for Code Climate. This will tell Code Climate that we have&#10;# a coverage file pending. It will be built at the post-action by Slather&#10;cc-test-reporter before-build -d&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "591C208F206EB12F00C848DA"
+                     BuildableName = "Fattmerchant.framework"
+                     BlueprintName = "Fattmerchant"
+                     ReferencedContainer = "container:fattmerchant-ios-sdk.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Prepare test coverage data with Slather"
+               scriptText = "# Pipe output data to a tmp file&#10;exec &gt; /tmp/$PROJECT_NAME.txt 2&gt;&amp;1&#10;echo $(date +&quot;%r&quot;): fattmerchant-ios-sdk - starting Post-Actions for Test&#10;cd &quot;$SRCROOT&quot;&#10;&#10;# Slather takes the coverage report and generates a Cobertura XML file. This is&#10;# a file that Code Climate can accept&#10;slather&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "591C208F206EB12F00C848DA"
+                     BuildableName = "Fattmerchant.framework"
+                     BlueprintName = "Fattmerchant"
+                     ReferencedContainer = "container:fattmerchant-ios-sdk.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -57,6 +92,11 @@
                BlueprintName = "FattmerchantTests"
                ReferencedContainer = "container:fattmerchant-ios-sdk.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "FattmerchantIosTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

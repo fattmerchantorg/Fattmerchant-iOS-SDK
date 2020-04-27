@@ -1,6 +1,0 @@
-#!/bin/sh
-
-echo "Upload Code Coverage to Code Climate"
-
-# Run before-build. this sets up the test reporter
-./cc-test-reporter after-build -r b241f9ad19520d81e61ffce4e22edf089a5da9e8dd528f1496ce65d0d74a2104
