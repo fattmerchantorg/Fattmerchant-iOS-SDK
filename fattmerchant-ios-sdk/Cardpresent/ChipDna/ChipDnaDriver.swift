@@ -146,7 +146,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     completion(MobileReader.from(deviceStatus: deviceStatus))
   }
 
-  /// Attempst to disconnect a connected MobileReader
+  /// Attempts to disconnect a connected MobileReader
   /// - Parameters:
   ///   - reader: the MobileReader that is to be disconnected
   ///   - completion: a block to run once done. if disconnected, this receives true
