@@ -24,4 +24,4 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Run a one-line script
-      run: .scripts/upload-code-coverage
+      run: .scripts/cc-test-reporter after-build -r b241f9ad19520d81e61ffce4e22edf089a5da9e8dd528f1496ce65d0d74a2104
