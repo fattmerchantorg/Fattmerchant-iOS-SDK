@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage line-rate="0.0481023830538394" branch-rate="1.0000000000000000" lines-covered="109" lines-valid="2266" branches-covered="0" branches-valid="0" complexity="0.0" timestamp="1587997707" version="Slather 2.4.8">
+<coverage line-rate="0.0481023830538394" branch-rate="1.0000000000000000" lines-covered="109" lines-valid="2266" branches-covered="0" branches-valid="0" complexity="0.0" timestamp="1587998520" version="Slather 2.4.8">
   <sources>
     <source>/Users/tulio/Development/fattmerchant/Fattmerchant-iOS-SDK</source>
   </sources>
