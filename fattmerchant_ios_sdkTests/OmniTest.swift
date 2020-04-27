@@ -77,8 +77,9 @@ class OmniTest: XCTestCase {
 
   func testCanNotGetConnectedMobileReaderIfNoneAvailable() {
     let connectedReaderNil = XCTestExpectation(description: "No connected reader found")
-    omni.mobileReaderDriverRepository.driver = MockDriver()
-    omni.mobileReaderDriverRepository.driver.reader = nil
+    let driver = MockDriver()
+    driver.reader = nil
+    omni.mobileReaderDriverRepository.driver = driver
     omni.getConnectedReader(completion: { connectedReader in
       XCTAssertNil(connectedReader)
       connectedReaderNil.fulfill()
@@ -103,6 +104,21 @@ class OmniTest: XCTestCase {
     }
 
     wait(for: [errorThrown], timeout: 3.0)
+  }
+
+  func testCanDisconnectMobileReader() {
+    let reader = MobileReader(name: "Reader")
+    omni.mobileReaderDriverRepository.driver.reader = reader
+
+    let expectation = XCTestExpectation(description: "Mobile reader is no longer connected")
+    omni.disconnect(reader: reader, completion: { disconnected in
+      XCTAssert(disconnected)
+      expectation.fulfill()
+    }) { _ in
+      XCTFail()
+    }
+
+    wait(for: [expectation], timeout: 10.0)
   }
 
   func testCanPayWithCreditCard() {

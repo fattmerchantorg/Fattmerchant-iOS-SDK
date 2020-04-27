@@ -48,6 +48,10 @@ class MockDriver: MobileReaderDriver {
     completion(true)
   }
 
+  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    completion(true)
+  }
+
   func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
     completion(reader)
   }

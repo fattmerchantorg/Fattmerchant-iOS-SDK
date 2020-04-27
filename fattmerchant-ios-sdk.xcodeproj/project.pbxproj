@@ -54,6 +54,9 @@
 		D71B6FD6239E98B5007FB7C4 /* VersionInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6FB6239E98B5007FB7C4 /* VersionInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D73BBCF2244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */; };
 		D73BBCF3244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */; };
+		D73BBCF5244D7F380052B525 /* DisconnectMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF4244D7F380052B525 /* DisconnectMobileReader.swift */; };
+		D73BBCF7244D805C0052B525 /* DisconnectMobileReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF6244D805C0052B525 /* DisconnectMobileReaderTests.swift */; };
+		D73BBCF9244D81210052B525 /* DisconnectMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF4244D7F380052B525 /* DisconnectMobileReader.swift */; };
 		D760D82823D87F5D0075057C /* InvoiceJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82723D87F5D0075057C /* InvoiceJson.swift */; };
 		D760D82A23D884680075057C /* CustomerJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82923D884680075057C /* CustomerJson.swift */; };
 		D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D760D82B23D884F70075057C /* PaymentMethodJson.swift */; };
@@ -240,6 +243,8 @@
 		D71B6FB5239E98B5007FB7C4 /* RequestQueueStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestQueueStatus.h; sourceTree = "<group>"; };
 		D71B6FB6239E98B5007FB7C4 /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
 		D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedMobileReader.swift; sourceTree = "<group>"; };
+		D73BBCF4244D7F380052B525 /* DisconnectMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisconnectMobileReader.swift; sourceTree = "<group>"; };
+		D73BBCF6244D805C0052B525 /* DisconnectMobileReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisconnectMobileReaderTests.swift; sourceTree = "<group>"; };
 		D760D82723D87F5D0075057C /* InvoiceJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceJson.swift; sourceTree = "<group>"; };
 		D760D82923D884680075057C /* CustomerJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerJson.swift; sourceTree = "<group>"; };
 		D760D82B23D884F70075057C /* PaymentMethodJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodJson.swift; sourceTree = "<group>"; };
@@ -585,6 +590,7 @@
 			children = (
 				D783DAC32449F35E007C0A17 /* TakePaymentTests.swift */,
 				D783DAC5244CB409007C0A17 /* TokenizePaymentMethodTests.swift */,
+				D73BBCF6244D805C0052B525 /* DisconnectMobileReaderTests.swift */,
 			);
 			path = Usecase;
 			sourceTree = "<group>";
@@ -611,6 +617,7 @@
 				D79308C323D0E3C90066FCA2 /* RefundMobileReaderTransaction.swift */,
 				D7A28D632436278600FC8872 /* TokenizePaymentMethod.swift */,
 				D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */,
+				D73BBCF4244D7F380052B525 /* DisconnectMobileReader.swift */,
 			);
 			path = Usecase;
 			sourceTree = "<group>";
@@ -803,6 +810,7 @@
 			files = (
 				D7801BF0241F256A00A93001 /* ModelRepository+EndpointDefaultImpl.swift in Sources */,
 				D79308B323D0AAD00066FCA2 /* MobileReaderDriverRepository.swift in Sources */,
+				D73BBCF5244D7F380052B525 /* DisconnectMobileReader.swift in Sources */,
 				D73BBCF2244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */,
 				D71B6F91239E971A007FB7C4 /* ChipDnaDriver.swift in Sources */,
 				D765D46F23CC488000656040 /* Merchant.swift in Sources */,
@@ -862,6 +870,7 @@
 				D765D4A023CFCA1400656040 /* Amount.swift in Sources */,
 				D783DAC42449F35E007C0A17 /* TakePaymentTests.swift in Sources */,
 				D7C17B2523E4BA200031D9BB /* SearchForReaders.swift in Sources */,
+				D73BBCF7244D805C0052B525 /* DisconnectMobileReaderTests.swift in Sources */,
 				D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */,
 				D7A28D622433E2CA00FC8872 /* TakePayment.swift in Sources */,
 				D7801C00241F355300A93001 /* OmniApi.swift in Sources */,
@@ -900,6 +909,7 @@
 				D765D48523CE41A500656040 /* JSONValue.swift in Sources */,
 				D702B7D023C8F80200B8AB79 /* PaymentMethodType.swift in Sources */,
 				D765D47323CC49C800656040 /* Self.swift in Sources */,
+				D73BBCF9244D81210052B525 /* DisconnectMobileReader.swift in Sources */,
 				D760D82F23D885250075057C /* TransactionJson.swift in Sources */,
 				D765D46D23CC478000656040 /* Invoice.swift in Sources */,
 				D765D48023CCBBFD00656040 /* OmniException.swift in Sources */,

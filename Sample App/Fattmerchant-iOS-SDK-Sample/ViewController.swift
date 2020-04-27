@@ -16,6 +16,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var activityTextArea: UITextView!
   @IBOutlet weak var initializeButton: UIButton!
   @IBOutlet weak var connectReaderButton: UIButton!
+  @IBOutlet weak var disconnectReaderButton: UIButton!
   @IBOutlet weak var getReaderInfoButton: UIButton!
   @IBOutlet weak var refundPaymentButton: UIButton!
   @IBOutlet weak var totalTextInput: UITextField!
@@ -26,6 +27,10 @@ class ViewController: UIViewController {
 
   @IBAction func onConnectReaderButtonPress(_ sender: UIButton) {
     self.searchForReaders()
+  }
+
+  @IBAction func onDisconnectButtonPress(_ sender: Any) {
+    self.disconnectReader()
   }
 
   @IBAction func onTakePaymentButtonPress(_ sender: UIButton) {
@@ -143,6 +148,19 @@ class ViewController: UIViewController {
     omni?.connect(reader: reader, completion: completion) {
       self.log("Couldn't connect to \(reader)")
     }
+  }
+
+  fileprivate func disconnectReader() {
+    omni?.getConnectedReader(completion: { reader in
+      guard let reader = reader else { return }
+      self.omni?.disconnect(reader: reader, completion: { success in
+        self.log(success ? "Successfully disconnected reader" : "Could not disconnect reader")
+      }, error: { error in
+        self.log(error.detail ?? "error disconnecting")
+      })
+    }, error: { error in
+      self.log(error.detail ?? "error getting connected reader")
+    })
   }
 
   fileprivate func getReaderInfo() {
