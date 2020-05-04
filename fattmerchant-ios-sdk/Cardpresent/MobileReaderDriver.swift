@@ -24,9 +24,11 @@ enum MobileReaderDriverException: OmniException {
 
 protocol MobileReaderDriver {
 
+  static var source: String { get }
+
   func isReadyToTakePayment(completion: (Bool) -> Void)
 
-  func initialize(args: [String: Any], completion: (Bool) -> Void)
+  func initialize(args: [String: Any], completion: @escaping (Bool) -> Void)
 
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void)
 

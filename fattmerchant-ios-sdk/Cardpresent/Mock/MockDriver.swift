@@ -32,6 +32,8 @@ class MockDriver: MobileReaderDriver {
   /// Set this to false to simulate a busy mobile reader
   var readyToTakePayment = true
 
+  static var source: String = "MOCKSOURCE"
+
   func isReadyToTakePayment(completion: (Bool) -> Void) {
     completion(readyToTakePayment)
   }

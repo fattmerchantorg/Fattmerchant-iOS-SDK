@@ -18,6 +18,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     var connectionType: String
   }
 
+  /// The place where the transactions take place
+  static var source: String = "NMI"
+
   /// Listens to the transaction events of ChipDna
   fileprivate var chipDnaTransactionListener = ChipDnaTransactionListener()
 
