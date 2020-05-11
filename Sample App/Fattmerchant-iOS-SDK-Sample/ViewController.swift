@@ -41,11 +41,16 @@ class ViewController: UIViewController {
     self.getReaderInfo()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1ODczNTgwODUsImV4cCI6MTU4NzQ0NDQ4NSwibmJmIjoxNTg3MzU4MDg1LCJqdGkiOiJHVFprSThFeGdBeWNFY0RuIn0.q8wg7DjlidsU32d6B8qY8gKGp8n0QvRbbcPTBfatLC0"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1ODkxNjk1OTEsImV4cCI6MTU4OTI1NTk5MSwibmJmIjoxNTg5MTY5NTkxLCJqdGkiOiJ6ZHFpVFNSY2xIdDZQNTlKIn0.ohNKDwACnlf58ZiYjt9D5VJUMGHwG0FF_l50m8gYjG0"
 
   override func viewDidLoad() {
     super.viewDidLoad()
     initializeOmni()
+    totalTextInput.delegate = self
+
+    let tap = UITapGestureRecognizer(target: self.totalTextInput, action: #selector(UIView.endEditing(_:)))
+    tap.cancelsTouchesInView = false
+    self.view.addGestureRecognizer(tap)
   }
 
   fileprivate func initializeOmni() {
@@ -109,13 +114,35 @@ class ViewController: UIViewController {
     })
   }
 
+  fileprivate func getAmount() -> Amount {
+    guard
+      let text = totalTextInput.text ?? totalTextInput.placeholder,
+      let number = numberFormatter().number(from: text)
+      else {
+        return Amount(cents: 1)
+    }
+
+    return Amount(dollars: number.doubleValue)
+  }
+
+  @IBAction fileprivate func payWithCard() {
+    self.log("Attempting CNP Transaction")
+    let card = CreditCard(personName: "Test Payment", cardNumber: "4111111111111111", cardExp: "0224", addressZip: "32812")
+    let transactionRequest = TransactionRequest(amount: getAmount(), card: card)
+    omni?.pay(transactionRequest: transactionRequest, completion: { completedTransaction in
+      self.log("Finished transaction successfully")
+    }, error: { error in
+      self.log(error)
+    })
+  }
+
   fileprivate func createTransactionRequest() -> TransactionRequest {
-    let request = TransactionRequest(amount: Amount(cents: 10))
+    let request = TransactionRequest(amount: getAmount())
     return request
   }
 
   fileprivate func refund(_ transaction: Transaction) {
-    omni?.refundMobileReaderTransaction(transaction: transaction, refundAmount: Amount(cents: 2), completion: { _ in
+    omni?.refundMobileReaderTransaction(transaction: transaction, refundAmount: getAmount(), completion: { _ in
       self.log("Refunded transaction successfully")
     }, error: { error in
       self.log(error)
@@ -205,6 +232,27 @@ class ViewController: UIViewController {
 
   fileprivate func initParams() -> Omni.InitParams {
     return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
+  }
+
+}
+
+extension UIViewController: UITextFieldDelegate {
+
+  fileprivate func numberFormatter() -> NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .currency
+    formatter.locale = .current
+    return formatter
+  }
+
+  public func textFieldDidEndEditing(_ textField: UITextField) {
+    guard let text = textField.text else {
+      return
+    }
+
+    let numberString = text.filter { $0 != "$" }
+    let number = Double(numberString)
+    textField.text = numberFormatter().string(for: number)
   }
 
 }
