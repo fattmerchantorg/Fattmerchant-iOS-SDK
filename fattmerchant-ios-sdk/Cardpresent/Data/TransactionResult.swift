@@ -18,6 +18,9 @@ struct TransactionResult {
 
   var success: Bool?
 
+  /// The place where the transaction took place. For example, "NMI" or "AWC"
+  var source: String = ""
+
   /**
    * The masked card number
    *
@@ -57,6 +60,9 @@ struct TransactionResult {
   ///
   /// For example, in the case of NMI, this would be the CardEaseReferenceId
   var localId: String?
+
+  /// The gateway response in its entirety
+  var gatewayResponse: String?
 
   /// The token that represents this payment method
   internal var paymentToken: String?

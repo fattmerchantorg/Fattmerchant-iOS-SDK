@@ -20,8 +20,13 @@ class AWCDriver: MobileReaderDriver {
   /// Allows us to interact with AnywhereCommerce
   fileprivate var anyPay: AnyPay?
 
+  /// The transaction currently underway
+  fileprivate var currentTransaction: AnyPayTransaction?
+
   /// The place where the transactions take place
   static var source: String = "AWC"
+
+  var familiarSerialNumbers: [String] = []
 
   /// Attempts to initialize the AnyPay SDK
   /// - Parameters:
@@ -51,21 +56,67 @@ class AWCDriver: MobileReaderDriver {
 
     // Authenticate
     anyPay.terminal.endpoint.authenticateTerminal { (authenticated, _) in
-      var _ = authenticated
+      // If we were unable to authenticate with AWC, then clear out the anyPay instance
+      if authenticated == false {
+        self.anyPay = nil
+      }
+
       completion(authenticated)
     }
   }
 
+  func isInitialized(completion: @escaping (Bool) -> Void) {
+    completion(anyPay != nil)
+  }
+
   func isReadyToTakePayment(completion: (Bool) -> Void) {
-    fatalError("Not implemented")
+    // Make sure the reader is connected
+    guard let connectedReader = ANPCardReaderController.shared().connectedReader else {
+      return completion(false)
+    }
+
+    // Make sure reader is idle
+    guard connectedReader.connectionStatus == ANPCardReaderConnectionStatus.CONNECTED else {
+      return completion(false)
+    }
+
+    // Make sure there is no transaction running
+    guard currentTransaction == nil else {
+      return completion(false)
+    }
+
+    completion(true)
   }
 
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
-    fatalError("Not implemented")
+
+    ANPCardReaderController.shared().subscribe { (cardReader: AnyPayCardReader?) in
+      if let serial = cardReader?.serialNumber {
+        self.familiarSerialNumbers.append(serial)
+      }
+
+      completion([MobileReader.from(anyPayCardReader: cardReader!)])
+    }
+
+    ANPCardReaderController.shared().connectBluetoothReader { (devices: [ANPBluetoothDevice]?) in
+      var d = devices
+
+    }
   }
 
   func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
-    fatalError("Not implemented")
+    if ANPCardReaderController.shared().isReaderConnected() &&
+      ANPCardReaderController.shared().connectedReader?.serialNumber == reader.serialNumber {
+      completion(true)
+      return
+    }
+
+    guard let serialNumber = reader.serialNumber else {
+      completion(false)
+      return
+    }
+
+    ANPCardReaderController.shared().connectToBluetoothReader(withSerial: serialNumber)
   }
 
   func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
@@ -73,15 +124,46 @@ class AWCDriver: MobileReaderDriver {
   }
 
   func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void) {
-    fatalError("Not implemented")
+    // Create AnyPay Transaction
+    let transaction = AnyPayTransaction(type: .SALE)
+    transaction?.currency = "USD"
+    transaction?.totalAmount = ANPAmount(string: request.amount.dollarsString())
+
+    transaction?.onSignatureRequired = {
+      print("Creating dummy signature")
+      transaction?.signature = ANPSignature()
+      transaction?.proceed()
+    }
+
+    transaction?.execute({ (transactionStatus, error) in
+      print(transactionStatus)
+      let result = TransactionResult(transaction!)
+      completion(result)
+    }, cardReaderEvent: { message in
+      print(message?.message)
+    })
+    
   }
 
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-    fatalError("Not implemented")
+    let refund = AnyPayTransaction(type: .REFUND)
+    refund?.externalID = transaction.awcExternalId()
+    refund?.totalAmount = ANPAmount(string: refundAmount?.dollarsString())
+
+    refund?.execute({ (transactionStatus, error) in
+      print(transactionStatus)
+      let result = TransactionResult(refund!)
+      completion(result)
+    }, cardReaderEvent: { message in
+      print(message?.message)
+    })
   }
 
   func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
-    fatalError("Not implemented")
+    guard let reader = ANPCardReaderController.shared().connectedReader else {
+      return completion(nil)
+    }
+    completion(MobileReader.from(anyPayCardReader: reader))
   }
 
 }

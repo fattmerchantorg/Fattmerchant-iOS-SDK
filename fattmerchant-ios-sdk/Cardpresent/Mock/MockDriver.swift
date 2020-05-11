@@ -32,6 +32,8 @@ class MockDriver: MobileReaderDriver {
   /// Set this to false to simulate a busy mobile reader
   var readyToTakePayment = true
 
+  var familiarSerialNumbers: [String] = []
+
   static var source: String = "MOCKSOURCE"
 
   func isReadyToTakePayment(completion: (Bool) -> Void) {
@@ -39,6 +41,10 @@ class MockDriver: MobileReaderDriver {
   }
 
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
+    completion(true)
+  }
+
+  func isInitialized(completion: @escaping (Bool) -> Void) {
     completion(true)
   }
 
