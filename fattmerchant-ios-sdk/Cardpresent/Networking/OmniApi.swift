@@ -93,10 +93,6 @@ class OmniApi {
           jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
           let model = try jsonDecoder.decode(T.self, from: data)
           completion(model)
-        } catch DecodingError.typeMismatch(_, let context) {
-          self.log(context)
-        } catch let decodingError as DecodingError {
-          self.log(decodingError)
         } catch {
           var error: OmniException = OmniNetworkingException.couldNotParseResponse(nil)
 
