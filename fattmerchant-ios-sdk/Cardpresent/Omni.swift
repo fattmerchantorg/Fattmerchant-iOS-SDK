@@ -259,21 +259,42 @@ public class Omni: NSObject {
   ///   - reader: The MobileReader to connect
   ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
   ///   - error: A block to call if this operation fails
+  @available (*, deprecated, message: "Please use the connect method that provides error handling")
   public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping () -> Void) {
     guard initialized else {
       return error()
     }
 
     let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
-    task.start { success in
-      self.preferredQueue.async {
-        if success {
-          completion(reader)
-        } else {
-          error()
-        }
-      }
+    task.start(onConnected: { connectedReader in
+      completion(connectedReader)
+    }, onFailed: { _ in
+      error()
+    })
+  }
+
+  /// Attempts to connect to the given MobileReader
+  ///
+  /// - Parameters:
+  ///   - reader: The MobileReader to connect
+  ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
+  ///   - error: A block to call if this operation fails. Receives an OmniException
+  public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
     }
+
+    let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
+    task.start(onConnected: { connectedReader in
+      self.preferredQueue.async {
+        completion(connectedReader)
+      }
+    }, onFailed: { exception in
+      self.preferredQueue.async {
+        error(exception)
+      }
+    })
+
   }
 
   /// Attempts to disconnect the given MobileReader
