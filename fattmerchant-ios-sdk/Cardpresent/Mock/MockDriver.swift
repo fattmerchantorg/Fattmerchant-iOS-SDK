@@ -32,6 +32,13 @@ class MockDriver: MobileReaderDriver {
   /// Set this to false to simulate a busy mobile reader
   var readyToTakePayment = true
 
+  var familiarSerialNumbers: [String] = []
+
+  var isInitialized: Bool = true
+  var shouldConnect: Bool = false
+
+  static var source: String = "MOCKSOURCE"
+
   func isReadyToTakePayment(completion: (Bool) -> Void) {
     completion(readyToTakePayment)
   }
@@ -40,11 +47,23 @@ class MockDriver: MobileReaderDriver {
     completion(true)
   }
 
+  func isInitialized(completion: @escaping (Bool) -> Void) {
+    completion(isInitialized)
+  }
+
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
     completion([reader!])
   }
 
   func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
+    guard shouldConnect else {
+      return completion(false)
+    }
+
+    if let serial = reader.serialNumber {
+      familiarSerialNumbers.append(serial)
+    }
+
     completion(true)
   }
 
