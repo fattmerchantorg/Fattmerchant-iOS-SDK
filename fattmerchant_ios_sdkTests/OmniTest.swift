@@ -28,6 +28,7 @@ class OmniTest: XCTestCase {
 
     // Give omni the mock repositories
     omni.mobileReaderDriverRepository = MobileReaderDriverRepository()
+    omni.mobileReaderDriverRepository.driver = MockDriver()
     omni.invoiceRepository = InvoiceRepository(omniApi: omniApi)
     omni.transactionRepository = TransactionRepository(omniApi: omniApi)
     omni.paymentMethodRepository = MockPaymentMethodRepository(omniApi: omniApi)

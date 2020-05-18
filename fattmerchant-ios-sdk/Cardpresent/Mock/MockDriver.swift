@@ -35,7 +35,7 @@ class MockDriver: MobileReaderDriver {
   var familiarSerialNumbers: [String] = []
 
   var isInitialized: Bool = true
-  var shouldConnect: Bool = false
+  var shouldConnect: Bool = true
 
   static var source: String = "MOCKSOURCE"
 

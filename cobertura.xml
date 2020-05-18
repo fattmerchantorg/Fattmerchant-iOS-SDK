@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage line-rate="0.0526634382566586" branch-rate="1.0000000000000000" lines-covered="174" lines-valid="3304" branches-covered="0" branches-valid="0" complexity="0.0" timestamp="1589810229" version="Slather 2.4.8">
+<coverage line-rate="0.0535714285714286" branch-rate="1.0000000000000000" lines-covered="177" lines-valid="3304" branches-covered="0" branches-valid="0" complexity="0.0" timestamp="1589810629" version="Slather 2.4.8">
   <sources>
     <source>/Users/tulio/Development/fattmerchant/Fattmerchant-iOS-SDK</source>
   </sources>
@@ -519,7 +519,7 @@
         </class>
       </classes>
     </package>
-    <package name="fattmerchant-ios-sdk.Cardpresent" line-rate="0.0625000000000000" branch-rate="1.0000000000000000" complexity="0.0">
+    <package name="fattmerchant-ios-sdk.Cardpresent" line-rate="0.0520833333333333" branch-rate="1.0000000000000000" complexity="0.0">
       <classes>
         <class name="MobileReaderDriver" filename="fattmerchant-ios-sdk/Cardpresent/MobileReaderDriver.swift" line-rate="0.0000000000000000" branch-rate="1.0000000000000000" complexity="0.0">
           <methods/>
@@ -734,7 +734,7 @@
             <line number="21" branch="false" hits="0"/>
           </lines>
         </class>
-        <class name="Omni" filename="fattmerchant-ios-sdk/Cardpresent/Omni.swift" line-rate="0.1290322580645161" branch-rate="1.0000000000000000" complexity="0.0">
+        <class name="Omni" filename="fattmerchant-ios-sdk/Cardpresent/Omni.swift" line-rate="0.1075268817204301" branch-rate="1.0000000000000000" complexity="0.0">
           <methods/>
           <lines>
             <line number="17" branch="false" hits="0"/>
@@ -869,35 +869,35 @@
             <line number="252" branch="false" hits="0"/>
             <line number="253" branch="false" hits="0"/>
             <line number="254" branch="false" hits="0"/>
-            <line number="263" branch="false" hits="0"/>
-            <line number="264" branch="false" hits="0"/>
+            <line number="263" branch="false" hits="1"/>
+            <line number="264" branch="false" hits="1"/>
             <line number="265" branch="false" hits="0"/>
-            <line number="266" branch="false" hits="0"/>
-            <line number="267" branch="false" hits="0"/>
-            <line number="268" branch="false" hits="0"/>
-            <line number="269" branch="false" hits="0"/>
-            <line number="270" branch="false" hits="0"/>
-            <line number="271" branch="false" hits="0"/>
+            <line number="266" branch="false" hits="1"/>
+            <line number="267" branch="false" hits="1"/>
+            <line number="268" branch="false" hits="1"/>
+            <line number="269" branch="false" hits="1"/>
+            <line number="270" branch="false" hits="1"/>
+            <line number="271" branch="false" hits="1"/>
             <line number="272" branch="false" hits="0"/>
             <line number="273" branch="false" hits="0"/>
-            <line number="274" branch="false" hits="0"/>
-            <line number="282" branch="false" hits="1"/>
-            <line number="283" branch="false" hits="1"/>
+            <line number="274" branch="false" hits="1"/>
+            <line number="282" branch="false" hits="0"/>
+            <line number="283" branch="false" hits="0"/>
             <line number="284" branch="false" hits="0"/>
-            <line number="285" branch="false" hits="1"/>
-            <line number="286" branch="false" hits="1"/>
-            <line number="287" branch="false" hits="1"/>
-            <line number="288" branch="false" hits="1"/>
+            <line number="285" branch="false" hits="0"/>
+            <line number="286" branch="false" hits="0"/>
+            <line number="287" branch="false" hits="0"/>
+            <line number="288" branch="false" hits="0"/>
             <line number="289" branch="false" hits="0"/>
             <line number="290" branch="false" hits="0"/>
             <line number="291" branch="false" hits="0"/>
-            <line number="292" branch="false" hits="1"/>
-            <line number="293" branch="false" hits="1"/>
-            <line number="294" branch="false" hits="1"/>
-            <line number="295" branch="false" hits="1"/>
-            <line number="296" branch="false" hits="1"/>
-            <line number="297" branch="false" hits="1"/>
-            <line number="298" branch="false" hits="1"/>
+            <line number="292" branch="false" hits="0"/>
+            <line number="293" branch="false" hits="0"/>
+            <line number="294" branch="false" hits="0"/>
+            <line number="295" branch="false" hits="0"/>
+            <line number="296" branch="false" hits="0"/>
+            <line number="297" branch="false" hits="0"/>
+            <line number="298" branch="false" hits="0"/>
             <line number="306" branch="false" hits="0"/>
             <line number="307" branch="false" hits="0"/>
             <line number="308" branch="false" hits="0"/>
@@ -927,7 +927,7 @@
         </class>
       </classes>
     </package>
-    <package name="fattmerchant-ios-sdk.Cardpresent.Mock" line-rate="0.0977011494252874" branch-rate="1.0000000000000000" complexity="0.0">
+    <package name="fattmerchant-ios-sdk.Cardpresent.Mock" line-rate="0.1321839080459770" branch-rate="1.0000000000000000" complexity="0.0">
       <classes>
         <class name="MockDriver" filename="fattmerchant-ios-sdk/Cardpresent/Mock/MockDriver.swift" line-rate="0.0000000000000000" branch-rate="1.0000000000000000" complexity="0.0">
           <methods/>
@@ -1021,16 +1021,16 @@
             <line number="131" branch="false" hits="0"/>
           </lines>
         </class>
-        <class name="MockDriver" filename="fattmerchant-ios-sdk/Cardpresent/Mock/MockDriver.swift" line-rate="0.1954022988505747" branch-rate="1.0000000000000000" complexity="0.0">
+        <class name="MockDriver" filename="fattmerchant-ios-sdk/Cardpresent/Mock/MockDriver.swift" line-rate="0.2643678160919540" branch-rate="1.0000000000000000" complexity="0.0">
           <methods/>
           <lines>
-            <line number="13" branch="false" hits="3"/>
-            <line number="14" branch="false" hits="3"/>
-            <line number="15" branch="false" hits="3"/>
-            <line number="16" branch="false" hits="3"/>
-            <line number="17" branch="false" hits="3"/>
-            <line number="30" branch="false" hits="3"/>
-            <line number="35" branch="false" hits="3"/>
+            <line number="13" branch="false" hits="4"/>
+            <line number="14" branch="false" hits="4"/>
+            <line number="15" branch="false" hits="4"/>
+            <line number="16" branch="false" hits="4"/>
+            <line number="17" branch="false" hits="4"/>
+            <line number="30" branch="false" hits="4"/>
+            <line number="35" branch="false" hits="4"/>
             <line number="42" branch="false" hits="0"/>
             <line number="43" branch="false" hits="0"/>
             <line number="44" branch="false" hits="0"/>
@@ -1045,15 +1045,15 @@
             <line number="56" branch="false" hits="1"/>
             <line number="58" branch="false" hits="1"/>
             <line number="59" branch="false" hits="1"/>
-            <line number="60" branch="false" hits="1"/>
+            <line number="60" branch="false" hits="0"/>
             <line number="61" branch="false" hits="1"/>
-            <line number="62" branch="false" hits="0"/>
-            <line number="63" branch="false" hits="0"/>
-            <line number="64" branch="false" hits="0"/>
-            <line number="65" branch="false" hits="0"/>
-            <line number="66" branch="false" hits="0"/>
-            <line number="67" branch="false" hits="0"/>
-            <line number="68" branch="false" hits="0"/>
+            <line number="62" branch="false" hits="1"/>
+            <line number="63" branch="false" hits="1"/>
+            <line number="64" branch="false" hits="1"/>
+            <line number="65" branch="false" hits="1"/>
+            <line number="66" branch="false" hits="1"/>
+            <line number="67" branch="false" hits="1"/>
+            <line number="68" branch="false" hits="1"/>
             <line number="70" branch="false" hits="0"/>
             <line number="71" branch="false" hits="0"/>
             <line number="72" branch="false" hits="0"/>
@@ -1658,7 +1658,7 @@
         </class>
       </classes>
     </package>
-    <package name="fattmerchant-ios-sdk.Cardpresent.Usecase" line-rate="0.0524193548387097" branch-rate="1.0000000000000000" complexity="0.0">
+    <package name="fattmerchant-ios-sdk.Cardpresent.Usecase" line-rate="0.0532258064516129" branch-rate="1.0000000000000000" complexity="0.0">
       <classes>
         <class name="ConnectMobileReader" filename="fattmerchant-ios-sdk/Cardpresent/Usecase/ConnectMobileReader.swift" line-rate="0.0000000000000000" branch-rate="1.0000000000000000" complexity="0.0">
           <methods/>
@@ -2325,7 +2325,7 @@
             <line number="101" branch="false" hits="0"/>
           </lines>
         </class>
-        <class name="ConnectMobileReader" filename="fattmerchant-ios-sdk/Cardpresent/Usecase/ConnectMobileReader.swift" line-rate="0.8000000000000000" branch-rate="1.0000000000000000" complexity="0.0">
+        <class name="ConnectMobileReader" filename="fattmerchant-ios-sdk/Cardpresent/Usecase/ConnectMobileReader.swift" line-rate="0.8200000000000000" branch-rate="1.0000000000000000" complexity="0.0">
           <methods/>
           <lines>
             <line number="22" branch="false" hits="1"/>
@@ -2361,10 +2361,10 @@
             <line number="53" branch="false" hits="1"/>
             <line number="54" branch="false" hits="1"/>
             <line number="55" branch="false" hits="1"/>
-            <line number="56" branch="false" hits="0"/>
-            <line number="57" branch="false" hits="0"/>
+            <line number="56" branch="false" hits="1"/>
+            <line number="57" branch="false" hits="1"/>
             <line number="58" branch="false" hits="1"/>
-            <line number="59" branch="false" hits="1"/>
+            <line number="59" branch="false" hits="0"/>
             <line number="60" branch="false" hits="1"/>
             <line number="61" branch="false" hits="1"/>
             <line number="62" branch="false" hits="1"/>
@@ -3569,13 +3569,13 @@
         <class name="MobileReader" filename="fattmerchant-ios-sdk/Models/MobileReader.swift" line-rate="0.8750000000000000" branch-rate="1.0000000000000000" complexity="0.0">
           <methods/>
           <lines>
-            <line number="38" branch="false" hits="3"/>
-            <line number="39" branch="false" hits="3"/>
-            <line number="40" branch="false" hits="3"/>
-            <line number="41" branch="false" hits="3"/>
-            <line number="42" branch="false" hits="3"/>
-            <line number="43" branch="false" hits="3"/>
-            <line number="44" branch="false" hits="3"/>
+            <line number="38" branch="false" hits="4"/>
+            <line number="39" branch="false" hits="4"/>
+            <line number="40" branch="false" hits="4"/>
+            <line number="41" branch="false" hits="4"/>
+            <line number="42" branch="false" hits="4"/>
+            <line number="43" branch="false" hits="4"/>
+            <line number="44" branch="false" hits="4"/>
             <line number="46" branch="false" hits="0"/>
           </lines>
         </class>
