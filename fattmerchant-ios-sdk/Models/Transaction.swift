@@ -74,6 +74,12 @@ public class Transaction: Model {
   /// Typically "card" or "bank"
   public var method: String?
 
+  /// The transaction 'token'
+  ///
+  /// This is technically the id of the transaction in a foreign platform. The Omni API expects this value when we
+  /// create a transaction, but we will likely never receive it.
+  internal var token: String?
+
   var authId: String?
   var gateway: String?
   var gatewayId: String?
@@ -91,6 +97,5 @@ public class Transaction: Model {
   var source: String?
   var sourceIp: String?
   var response: JSONValue?
-  var spreedlyToken: String?
   var updatedAt: String?
 }
