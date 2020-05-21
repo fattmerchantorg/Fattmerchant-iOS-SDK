@@ -163,22 +163,13 @@ class TakeMobileReaderPayment {
   fileprivate func createTransactionMetaJson(from transactionResult: TransactionResult) -> JSONValue? {
     var dict: [String: String] = [:]
 
-    //TODO: Move this somewhere outside the UseCase
-    #if !targetEnvironment(simulator)
-    if transactionResult.source.contains(ChipDnaDriver.source) {
-      if let userRef = transactionResult.userReference {
-        dict["nmiUserRef"] = userRef
-      }
-
-      if let localId = transactionResult.localId {
-        dict["cardEaseReference"] = localId
-      }
-
-      if let localId = transactionResult.localId {
-        dict["cardEaseReference"] = localId
-      }
+    if let userRef = transactionResult.userReference {
+      dict["nmiUserRef"] = userRef
     }
-    #endif
+
+    if let localId = transactionResult.localId {
+      dict["cardEaseReference"] = localId
+    }
 
     if let externalId = transactionResult.externalId {
       dict["nmiTransactionId"] = externalId
