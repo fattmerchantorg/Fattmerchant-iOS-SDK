@@ -36,7 +36,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       customerRepository: customerRepo,
       paymentMethodRepository: paymentMethodRepo,
       transactionRepository: transactionRepo,
-      request: transactionRequest
+      request: transactionRequest,
+      signatureProvider: nil
     ).start(completion: { completedTransaction in
       transactionCompleted.fulfill()
     }) { exception in
@@ -54,7 +55,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       customerRepository: customerRepo,
       paymentMethodRepository: paymentMethodRepo,
       transactionRepository: transactionRepo,
-      request: transactionRequest
+      request: transactionRequest,
+      signatureProvider: nil
     )
 
     // Verify that the externalId is put in the transaction
