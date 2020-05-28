@@ -28,6 +28,7 @@ class OmniTest: XCTestCase {
 
     // Give omni the mock repositories
     omni.mobileReaderDriverRepository = MobileReaderDriverRepository()
+    omni.mobileReaderDriverRepository.driver = MockDriver()
     omni.invoiceRepository = InvoiceRepository(omniApi: omniApi)
     omni.transactionRepository = TransactionRepository(omniApi: omniApi)
     omni.paymentMethodRepository = MockPaymentMethodRepository(omniApi: omniApi)
@@ -62,6 +63,30 @@ class OmniTest: XCTestCase {
     }
 
     wait(for: [connectedReader], timeout: 10.0)
+  }
+
+  func testThrowsReaderConnectionError() {
+    let errorThrown = XCTestExpectation(description: "Connected the mobile reader")
+    omni.mobileReaderDriverRepository.driver.shouldConnect = false
+
+    omni.getAvailableReaders(completion: { availableReaders in
+      let chosenReader = availableReaders.first!
+      self.omni.connect(reader: chosenReader, completion: { _ in
+        XCTFail("Connected reader, but was expecting error")
+      }, error: { exception in
+
+        if case ConnectMobileReaderException.couldNotConnectMobileReader(reader: let _) = exception {
+          errorThrown.fulfill()
+        } else {
+          XCTFail("Threw an error, but not the one we were expecting")
+        }
+
+      })
+    }) { (error) in
+      XCTFail("Could not get available readers")
+    }
+
+    wait(for: [errorThrown], timeout: 10.0)
   }
 
   func testCanGetConnectedMobileReader() {
@@ -107,14 +132,15 @@ class OmniTest: XCTestCase {
   }
 
   func testCanDisconnectMobileReader() {
-    let reader = MobileReader(name: "Reader")
+    let reader = MobileReader(name: "Reader", serialNumber: "1234")
     omni.mobileReaderDriverRepository.driver.reader = reader
+    omni.mobileReaderDriverRepository.driver.familiarSerialNumbers.append(reader.serialNumber!)
 
     let expectation = XCTestExpectation(description: "Mobile reader is no longer connected")
     omni.disconnect(reader: reader, completion: { disconnected in
       XCTAssert(disconnected)
       expectation.fulfill()
-    }) { _ in
+    }) { error in
       XCTFail()
     }
 

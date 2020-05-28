@@ -12,9 +12,10 @@ import XCTest
 class DisconnectMobileReaderTests: XCTestCase {
 
   func testCanDisconnectMobileReader() {
-    let reader = MobileReader(name: "Mock Reader")
+    let reader = MobileReader(name: "Mock Reader", serialNumber: "1234")
     let driverRepo = MobileReaderDriverRepository()
     driverRepo.driver.reader = reader
+    driverRepo.driver.familiarSerialNumbers.append(reader.serialNumber!)
 
     let expectation = XCTestExpectation(description: "Mobile Reader was disconnected")
     DisconnectMobileReader(mobileReaderDriverRepository: driverRepo, mobileReader: reader).start(completion: { success in

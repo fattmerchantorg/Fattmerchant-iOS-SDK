@@ -105,7 +105,7 @@ class TakeMobileReaderPayment {
     }
   }
 
-  fileprivate func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
+  internal func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
     guard let paymentMethodId = paymentMethod.id else {
@@ -158,6 +158,8 @@ class TakeMobileReaderPayment {
     transactionToCreate.customerId = customerId
     transactionToCreate.invoiceId = invoiceId
     transactionToCreate.response = gatewayResponseJson
+    transactionToCreate.token = result.externalId
+
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
   }
 
