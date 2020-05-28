@@ -241,40 +241,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
   }
 
-  fileprivate func refund2(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-
-    let request = TransactionRequest(amount: Amount(dollars: transaction.total!))
-
-    let requestParams = CCParameters(transactionRequest: request)
-    requestParams[CCParamTransactionType] = CCValueRefund
-    requestParams[CCParamSaleReference] = extractUserReference(from: transaction)!
-
-    chipDnaTransactionListener.detachFromChipDna()
-
-    chipDnaTransactionListener.onFinished = { result in
-
-      let success = result[CCParamTransactionResult] == CCValueApproved
-
-      var transactionResult = TransactionResult()
-      transactionResult.request = request
-      transactionResult.success = success
-      transactionResult.maskedPan = result[CCParamMaskedPan]
-      transactionResult.cardHolderFirstName = result[CCParamCardHolderFirstName]
-      transactionResult.cardHolderLastName = result[CCParamCardHolderLastName]
-      transactionResult.authCode = result[CCParamAuthCode]
-      transactionResult.cardType = result[CCParamCardSchemeId]?.lowercased()
-      transactionResult.userReference = result[CCParamUserReference]
-      transactionResult.transactionType = "refund"
-
-      completion(transactionResult)
-      return
-    }
-
-    chipDnaTransactionListener.bindToChipDna()
-
-    ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
-  }
-
   fileprivate func extractCardEaseReference(from transaction: Transaction) -> String? {
     return transaction.meta?["cardEaseReference"]
   }
