@@ -56,6 +56,7 @@ class ViewController: UIViewController {
   fileprivate func initializeOmni() {
     // instantiate Omni and store somewhere
     omni = Omni()
+    omni?.signatureProvider = SignatureViewController()
 
     log("Attempting initalization...")
 

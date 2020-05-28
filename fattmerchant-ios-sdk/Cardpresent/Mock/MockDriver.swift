@@ -16,19 +16,6 @@ class MockDriver: MobileReaderDriver {
                             model: "FakeModel",
                             serialNumber: "FakeSerialNumber")
 
-  struct Stub {
-    enum Response {
-      case success(_ value: Any)
-      case failure(_ value: OmniException)
-    }
-
-    let selector: Selector
-    let params: [Any]
-    let completionResponse: Response
-  }
-
-  fileprivate var stubs: [Stub] = []
-
   /// Set this to false to simulate a busy mobile reader
   var readyToTakePayment = true
 
@@ -75,7 +62,7 @@ class MockDriver: MobileReaderDriver {
     completion(reader)
   }
 
-  func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void) {
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, completion: @escaping (TransactionResult) -> Void) {
     let transactionResult = TransactionResult(
       request: request,
       success: true,

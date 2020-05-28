@@ -83,6 +83,9 @@ public class Omni: NSObject {
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
 
+  /// Responsible for providing signatures for transactions, when required
+  public var signatureProvider: SignatureProviding?
+
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
     /// An id for your application
@@ -173,6 +176,10 @@ public class Omni: NSObject {
   }
 
   /// Captures a mobile reader transaction
+  ///
+  /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called. This
+  /// object is responsible for providing a signature, in case one is required to complete the transaction
+  ///
   /// - Parameters:
   ///   - request: A request for a Transaction
   ///   - completion: Called when the operation is complete successfully. Receives a Transaction
@@ -188,7 +195,8 @@ public class Omni: NSObject {
       customerRepository: customerRepository,
       paymentMethodRepository: paymentMethodRepository,
       transactionRepository: transactionRepository,
-      request: request
+      request: request,
+      signatureProvider: signatureProvider
     )
 
     job.start(completion: completion, failure: error)

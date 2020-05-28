@@ -44,7 +44,6 @@ extension CCParameters {
 
       return value(forKey: key)
     }
-
     set {
       setValue(newValue, forKey: key)
     }

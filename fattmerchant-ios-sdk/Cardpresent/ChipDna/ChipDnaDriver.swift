@@ -9,7 +9,7 @@
 import Foundation
 
 #if targetEnvironment(simulator)
-  
+
 #else
 class ChipDnaDriver: NSObject, MobileReaderDriver {
 
@@ -156,12 +156,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     if !ChipDnaMobile.isInitialized() {
       error(OmniGeneralException.uninitialized)
     }
-    
+
     ChipDnaMobile.dispose(nil)
     completion(true)
   }
 
-  func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void) {
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, completion: @escaping (TransactionResult) -> Void) {
     let requestParams = CCParameters(transactionRequest: request)
 
     chipDnaTransactionListener.detachFromChipDna()
@@ -190,7 +190,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       return
     }
 
-    chipDnaTransactionListener.bindToChipDna()
+    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider)
 
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }

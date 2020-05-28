@@ -49,49 +49,10 @@ class TokenizePaymentMethod {
 
     let path = "/webpayment/\(webpaymentsToken)/tokenize"
 
-    omniApi.request(method: "post", urlString: path, body: data, completion: completion) { (error) in
+    omniApi.request(method: "post", urlString: path, body: data, completion: completion) { _ in
       failure(.couldNotParsePaymentMethodError)
     }
 
-//    Networking(baseUrl).post(path, body: paymentData) { (success, obj) in
-//
-//    if let data = obj as? Data {
-//      do {
-//        let decoder = JSONDecoder()
-//        decoder.keyDecodingStrategy = .convertFromSnakeCase
-//        let paymentMethod = try decoder.decode(PaymentMethod.self, from: data)
-//        completion(paymentMethod)
-//      } catch {
-//        var error: Error = FattmerchantApi.Error.unknownError
-//
-//        // When the API is unable to tokenize a payment method because of an error in the json
-//        // content, e.g. invalid payment method type, it returns json in the following structure
-//        // {
-//        //  "method": [
-//        //    "The selected method is invalid."
-//        //  ]
-//        // }
-//        if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
-//
-//          switch json {
-//          case let map as [String: [String]]:
-//            let errorStrings = map.values.flatMap {$0}
-//            error = FattmerchantApi.Error.tokenizationError(errorStrings)
-//
-//          case let arr as [String]:
-//            error = FattmerchantApi.Error.tokenizationError(arr)
-//
-//          default: break
-//          }
-//
-//        }
-//
-//        failure(.tokenizationError)
-//      }
-//
-//    }
-//
-//    }
   }
 
   internal func encode<T: Codable>(codablePaymentMethod: T) -> Data? {
