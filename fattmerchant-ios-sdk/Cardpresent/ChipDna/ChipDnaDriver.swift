@@ -27,6 +27,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   /// A block to run after self receives the connect and configure callback from ChipDna
   fileprivate var didConnectAndConfigure: ((Bool) -> Void)?
 
+  /// A key used to communicate with TransactionGateway
+  fileprivate var securityKey: String = ""
+
   /// Attempts to initialize the ChipDNA SDK
   ///
   /// - Parameters:
@@ -41,6 +44,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
         completion(false)
         return
     }
+
+    // Store the apiKey for later use
+    securityKey = apiKey
 
     // Initialize
     let parameters = CCParameters()
@@ -186,8 +192,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
         transactionResult.paymentToken = "nmi_\(token)"
       }
 
-      completion(transactionResult)
-      return
+      // Get more details about the transaction since ChipDna doesn't get everything
+      TransactionGateway.getTransactionCcExpiration(securityKey: self.securityKey,
+                                                    transactionId: result[CCParamTransactionId] ?? "") { ccExpiration in
+        transactionResult.cardExpiration = ccExpiration
+        completion(transactionResult)
+      }
     }
 
     chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider)
