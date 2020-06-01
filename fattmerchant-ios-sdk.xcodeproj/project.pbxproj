@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */; };
+		597BEA4B2480C4C9009319D6 /* TransactionGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */; };
+		597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */; };
+		597BEA4E2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */; };
+		597BEA5124851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA5024851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift */; };
+		597BEA5324851BA9009319D6 /* ChipDnaTransctionXMLResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA5224851BA9009319D6 /* ChipDnaTransctionXMLResponse.swift */; };
 		5993C25A2076BD16004DDA9F /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2592076BD16004DDA9F /* Networking.swift */; };
 		5993C25C2076BD68004DDA9F /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25B2076BD68004DDA9F /* PaymentMethod.swift */; };
 		5993C25E2076BD73004DDA9F /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25D2076BD73004DDA9F /* CreditCard.swift */; };
@@ -198,6 +203,10 @@
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FattmerchantIosTests.swift; sourceTree = "<group>"; };
 		591C20A3206EB26700C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionGateway.swift; sourceTree = "<group>"; };
+		597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaXMLTransactionParser.swift; sourceTree = "<group>"; };
+		597BEA5024851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaXMLTransactionParserTests.swift; sourceTree = "<group>"; };
+		597BEA5224851BA9009319D6 /* ChipDnaTransctionXMLResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaTransctionXMLResponse.swift; sourceTree = "<group>"; };
 		5984E3F5207E872E002A6F73 /* Tokenization.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Tokenization.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		5993C2592076BD16004DDA9F /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		5993C25B2076BD68004DDA9F /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
@@ -397,6 +406,15 @@
 				D7692F1823E4B00500CB0954 /* OmniTest.swift */,
 			);
 			path = fattmerchant_ios_sdkTests;
+			sourceTree = "<group>";
+		};
+		597BEA4F24851B68009319D6 /* ChipDna */ = {
+			isa = PBXGroup;
+			children = (
+				597BEA5024851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift */,
+				597BEA5224851BA9009319D6 /* ChipDnaTransctionXMLResponse.swift */,
+			);
+			path = ChipDna;
 			sourceTree = "<group>";
 		};
 		5993C2F6207D0402004DDA9F /* Models */ = {
@@ -604,6 +622,8 @@
 				D79308CA23D229420066FCA2 /* ChipDnaUtils.swift */,
 				D79308CF23D22D900066FCA2 /* ChipDnaTransactionListener.swift */,
 				D79308D123D22F480066FCA2 /* ChipDnaTransactionUserReference.swift */,
+				597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */,
+				597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */,
 			);
 			path = ChipDna;
 			sourceTree = "<group>";
@@ -627,6 +647,7 @@
 		D7B7110123D35F9000EF98DB /* Cardpresent */ = {
 			isa = PBXGroup;
 			children = (
+				597BEA4F24851B68009319D6 /* ChipDna */,
 				D7692F2323E4B6BA00CB0954 /* MockMobileReaderDriverRepository.swift */,
 				D7D2C51C23F203CF001733A2 /* RefundMobileReaderTransactionTests.swift */,
 			);
@@ -831,6 +852,7 @@
 				D765D47C23CCBB0500656040 /* ModelRepository.swift in Sources */,
 				5993C2642077A687004DDA9F /* BankAccount.swift in Sources */,
 				D7A28D642436278600FC8872 /* TokenizePaymentMethod.swift in Sources */,
+				597BEA4B2480C4C9009319D6 /* TransactionGateway.swift in Sources */,
 				D783DAC02449E905007C0A17 /* ChargeRequest.swift in Sources */,
 				D765D46923CC467100656040 /* Model.swift in Sources */,
 				D7801BF4241F26E200A93001 /* ModelRepository+DefaultImpl.swift in Sources */,
@@ -852,6 +874,7 @@
 				D79308AA23D0A9FB0066FCA2 /* TransactionRequest.swift in Sources */,
 				5993C2622076BD9B004DDA9F /* FattmerchantConfiguration.swift in Sources */,
 				D79308B823D0AC3A0066FCA2 /* ConnectMobileReader.swift in Sources */,
+				597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */,
 				D781037F23D9F85100256F2F /* PaginatedData.swift in Sources */,
 				D765D46623CC465800656040 /* Customer.swift in Sources */,
 				D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */,
@@ -893,6 +916,7 @@
 				D78FA933240EF48B00398D81 /* SignatureProviding.swift in Sources */,
 				D7801BF2241F264400A93001 /* MockModelRepository.swift in Sources */,
 				D783DAC12449E905007C0A17 /* ChargeRequest.swift in Sources */,
+				597BEA5124851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift in Sources */,
 				59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */,
 				D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */,
 				D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */,
@@ -903,6 +927,7 @@
 				D783DAC6244CB409007C0A17 /* TokenizePaymentMethodTests.swift in Sources */,
 				D765D46A23CC467100656040 /* Model.swift in Sources */,
 				D7C17B2623E4BA200031D9BB /* RefundMobileReaderTransaction.swift in Sources */,
+				597BEA4E2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */,
 				D7720E47241760720064DBDC /* FattmerchantApi.swift in Sources */,
 				D7C17B2223E4BA200031D9BB /* ConnectMobileReader.swift in Sources */,
 				D702B7CF23C8F80200B8AB79 /* BankHolderType.swift in Sources */,
@@ -924,6 +949,7 @@
 				D7801BFF241F303600A93001 /* MockPaymentMethodRepository.swift in Sources */,
 				591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */,
 				D7692F2423E4B6BA00CB0954 /* MockMobileReaderDriverRepository.swift in Sources */,
+				597BEA5324851BA9009319D6 /* ChipDnaTransctionXMLResponse.swift in Sources */,
 				D7D2C51E23F203F8001733A2 /* RefundMobileReaderTransactionTests.swift in Sources */,
 				D79308A023D0A1B50066FCA2 /* AmountTests.swift in Sources */,
 				D7692F1A23E4B03200CB0954 /* Omni.swift in Sources */,
