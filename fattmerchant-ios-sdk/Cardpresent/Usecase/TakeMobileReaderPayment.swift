@@ -259,9 +259,6 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
-
-    // Insert the matching logic
-
     let customerToCreate = Customer()
     customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
     customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
