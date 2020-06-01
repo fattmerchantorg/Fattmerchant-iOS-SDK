@@ -239,6 +239,7 @@ class TakeMobileReaderPayment {
       return
     }
 
+    paymentMethodToCreate.cardExp = result.cardExpiration
     paymentMethodToCreate.customerId = customerId
     paymentMethodToCreate.method = PaymentMethodType.card
     paymentMethodToCreate.cardLastFour = lastFour

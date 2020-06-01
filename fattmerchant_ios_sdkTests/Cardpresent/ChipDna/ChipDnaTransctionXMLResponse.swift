@@ -1,0 +1,221 @@
+//
+//  ChipDnaTransctionXML.swift
+//  FattmerchantTests
+//
+//  Created by Tulio Troncoso on 6/1/20.
+//  Copyright © 2020 Fattmerchant. All rights reserved.
+//
+
+import Foundation
+
+/// A sample transaction xml response from ChipDna
+class ChipDnaTransactionXmlResponse {
+
+  /// The id of the transaction within the XML
+  static let transactionId: String = "5393522748"
+
+  /// The expiration date of the credit card used for the transaction
+  static let ccExpiration: String = "0324"
+
+  /// The XML response string
+  static let xml =
+  """
+  <nm_response>
+    <transaction>
+      <transaction_id>5393522748</transaction_id>
+      <partial_payment_id></partial_payment_id>
+      <partial_payment_balance></partial_payment_balance>
+      <platform_id>db44f918-27a1-ea11-80c0-0050568f0f14</platform_id>
+      <transaction_type>cc</transaction_type>
+      <condition>pendingsettlement</condition>
+      <order_id>CDM-05/28/20, 17:06:30</order_id>
+      <authorization_code>210714</authorization_code>
+      <ponumber></ponumber>
+      <order_description></order_description>
+      <first_name>A GIFT FOR</first_name>
+      <last_name>YOU</last_name>
+      <address_1></address_1>
+      <address_2></address_2>
+      <company></company>
+      <city></city>
+      <state></state>
+      <postal_code></postal_code>
+      <country></country>
+      <email></email>
+      <phone></phone>
+      <fax></fax>
+      <cell_phone></cell_phone>
+      <customertaxid></customertaxid>
+      <customerid>1436656942</customerid>
+      <website></website>
+      <shipping_first_name></shipping_first_name>
+      <shipping_last_name></shipping_last_name>
+      <shipping_address_1></shipping_address_1>
+      <shipping_address_2></shipping_address_2>
+      <shipping_company></shipping_company>
+      <shipping_city></shipping_city>
+      <shipping_state></shipping_state>
+      <shipping_postal_code></shipping_postal_code>
+      <shipping_country></shipping_country>
+      <shipping_email></shipping_email>
+      <shipping_carrier></shipping_carrier>
+      <tracking_number></tracking_number>
+      <shipping_date></shipping_date>
+      <shipping>0.00</shipping>
+      <shipping_phone></shipping_phone>
+      <cc_number>5xxxxxxxxxxx1860</cc_number>
+      <cc_hash>d58953a56ffa0d28cf15a0821124617d</cc_hash>
+      <cc_exp>0324</cc_exp>
+      <cavv></cavv>
+      <cavv_result></cavv_result>
+      <xid></xid>
+      <eci></eci>
+      <directory_server_id></directory_server_id>
+      <three_ds_version></three_ds_version>
+      <avs_response></avs_response>
+      <csc_response></csc_response>
+      <cardholder_auth></cardholder_auth>
+      <cc_start_date></cc_start_date>
+      <cc_issue_number></cc_issue_number>
+      <check_account></check_account>
+      <check_hash></check_hash>
+      <check_aba></check_aba>
+      <check_name></check_name>
+      <account_holder_type></account_holder_type>
+      <account_type></account_type>
+      <sec_code></sec_code>
+      <drivers_license_number></drivers_license_number>
+      <drivers_license_state></drivers_license_state>
+      <drivers_license_dob></drivers_license_dob>
+      <social_security_number></social_security_number>
+      <processor_id>pftestmiura</processor_id>
+      <tax>0.00</tax>
+      <currency>USD</currency>
+      <surcharge></surcharge>
+      <tip></tip>
+      <card_balance></card_balance>
+      <card_available_balance></card_available_balance>
+      <entry_mode>Swiped</entry_mode>
+      <cc_bin>516488</cc_bin>
+      <cc_type>Mastercard</cc_type>
+      <signature_image></signature_image>
+      <action>
+        <amount>0.01</amount>
+        <action_type>sale</action_type>
+        <date>20200528210637</date>
+        <success>1</success>
+        <ip_address>97.71.146.67</ip_address>
+        <source>api</source>
+        <api_method></api_method>
+        <username>pftest</username>
+        <response_text></response_text>
+        <batch_id>0</batch_id>
+        <processor_batch_id></processor_batch_id>
+        <response_code>0</response_code>
+        <processor_response_text></processor_response_text>
+        <processor_response_code></processor_response_code>
+        <device_license_number></device_license_number>
+        <device_nickname></device_nickname>
+      </action>
+    </transaction>
+    <transaction>
+      <transaction_id>5393534406</transaction_id>
+      <partial_payment_id></partial_payment_id>
+      <partial_payment_balance></partial_payment_balance>
+      <platform_id>c928f7e4-27a1-ea11-80c0-0050568f0f14</platform_id>
+      <transaction_type>cc</transaction_type>
+      <condition>pendingsettlement</condition>
+      <order_id></order_id>
+      <authorization_code>042196</authorization_code>
+      <ponumber></ponumber>
+      <order_description></order_description>
+      <first_name>A GIFT FOR</first_name>
+      <last_name>YOU</last_name>
+      <address_1></address_1>
+      <address_2></address_2>
+      <company></company>
+      <city></city>
+      <state></state>
+      <postal_code></postal_code>
+      <country></country>
+      <email></email>
+      <phone></phone>
+      <fax></fax>
+      <cell_phone></cell_phone>
+      <customertaxid></customertaxid>
+      <customerid></customerid>
+      <website></website>
+      <shipping_first_name></shipping_first_name>
+      <shipping_last_name></shipping_last_name>
+      <shipping_address_1></shipping_address_1>
+      <shipping_address_2></shipping_address_2>
+      <shipping_company></shipping_company>
+      <shipping_city></shipping_city>
+      <shipping_state></shipping_state>
+      <shipping_postal_code></shipping_postal_code>
+      <shipping_country></shipping_country>
+      <shipping_email></shipping_email>
+      <shipping_carrier></shipping_carrier>
+      <tracking_number></tracking_number>
+      <shipping_date></shipping_date>
+      <shipping>0.00</shipping>
+      <shipping_phone></shipping_phone>
+      <cc_number>5xxxxxxxxxxx1860</cc_number>
+      <cc_hash>d58953a56ffa0d28cf15a0821124617d</cc_hash>
+      <cc_exp>0324</cc_exp>
+      <cavv></cavv>
+      <cavv_result></cavv_result>
+      <xid></xid>
+      <eci></eci>
+      <directory_server_id></directory_server_id>
+      <three_ds_version></three_ds_version>
+      <avs_response></avs_response>
+      <csc_response></csc_response>
+      <cardholder_auth></cardholder_auth>
+      <cc_start_date></cc_start_date>
+      <cc_issue_number></cc_issue_number>
+      <check_account></check_account>
+      <check_hash></check_hash>
+      <check_aba></check_aba>
+      <check_name></check_name>
+      <account_holder_type></account_holder_type>
+      <account_type></account_type>
+      <sec_code></sec_code>
+      <drivers_license_number></drivers_license_number>
+      <drivers_license_state></drivers_license_state>
+      <drivers_license_dob></drivers_license_dob>
+      <social_security_number></social_security_number>
+      <processor_id>pftestmiura</processor_id>
+      <tax>0.00</tax>
+      <currency>USD</currency>
+      <surcharge></surcharge>
+      <tip></tip>
+      <card_balance></card_balance>
+      <card_available_balance></card_available_balance>
+      <entry_mode>Keyed</entry_mode>
+      <original_transaction_id>5393522748</original_transaction_id>
+      <cc_bin>516488</cc_bin>
+      <cc_type>Mastercard</cc_type>
+      <signature_image></signature_image>
+      <action>
+        <amount>-0.01</amount>
+        <action_type>refund</action_type>
+        <date>20200528211211</date>
+        <success>1</success>
+        <ip_address>97.71.146.67</ip_address>
+        <source>api</source>
+        <api_method></api_method>
+        <username>pftest</username>
+        <response_text></response_text>
+        <batch_id>0</batch_id>
+        <processor_batch_id></processor_batch_id>
+        <response_code>0</response_code>
+        <processor_response_text></processor_response_text>
+        <processor_response_code></processor_response_code>
+        <device_license_number></device_license_number>
+        <device_nickname></device_nickname>
+      </action>
+    </transaction>
+  </nm_response>
+  """
+}
