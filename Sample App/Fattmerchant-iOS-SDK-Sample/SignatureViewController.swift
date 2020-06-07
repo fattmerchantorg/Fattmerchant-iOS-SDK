@@ -14,7 +14,7 @@ class SignatureViewController: SignatureProviding {
 
   func signatureRequired(completion: @escaping (String) -> Void) {
     DispatchQueue.main.async {
-      sleep(60)
+      sleep(3)
       completion("signaturedata")
     }
   }

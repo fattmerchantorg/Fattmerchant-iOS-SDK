@@ -9,7 +9,7 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, TransactionUpdateDelegate {
 
   var omni: Omni?
 
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
     self.getReaderInfo()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1ODkxNjk1OTEsImV4cCI6MTU4OTI1NTk5MSwibmJmIjoxNTg5MTY5NTkxLCJqdGkiOiJ6ZHFpVFNSY2xIdDZQNTlKIn0.ohNKDwACnlf58ZiYjt9D5VJUMGHwG0FF_l50m8gYjG0"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnb2RVc2VyIjpmYWxzZSwibWVyY2hhbnQiOiJlYjQ4ZWY5OS1hYTc4LTQ5NmUtOWIwMS00MjFmOGRhZjczMjMiLCJzdWIiOiJmMTI4YWQwNS0xYzhlLTQ3MmEtOWFlNi04MmE1MjdjMWFlNmMiLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsImlzcyI6Imh0dHA6Ly9hcGlkZXYuZmF0dGxhYnMuY29tL2VwaGVtZXJhbCIsImlhdCI6MTU5MTU1NzQxMywiZXhwIjoxNTkxNjQzODEzLCJuYmYiOjE1OTE1NTc0MTMsImp0aSI6Ing5SGRZb3R1aXhwU25sOXMiLCJhc3N1bWluZyI6ZmFsc2V9.YhtfGsRgJ82PDLA3BBaxCsmTDLVJWs1TZz-Zn9kl1Ok"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -57,6 +57,7 @@ class ViewController: UIViewController {
     // instantiate Omni and store somewhere
     omni = Omni()
     omni?.signatureProvider = SignatureViewController()
+    omni?.transactionUpdateDelegate = self
 
     log("Attempting initalization...")
 
@@ -87,6 +88,14 @@ class ViewController: UIViewController {
     }, error: { error in
       self.log(error)
     })
+  }
+
+  fileprivate func log(_ transactionUpdate: TransactionUpdate) {
+    var message = "[\(transactionUpdate.value)]"
+    if let userFriendlyMessage = transactionUpdate.userFriendlyMessage {
+      message += " | \(userFriendlyMessage)"
+    }
+    self.log(message)
   }
 
   fileprivate func log(_ error: OmniException) {
@@ -235,6 +244,9 @@ class ViewController: UIViewController {
     return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
   }
 
+  func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
+    self.log(transactionUpdate)
+  }
 }
 
 extension UIViewController: UITextFieldDelegate {
