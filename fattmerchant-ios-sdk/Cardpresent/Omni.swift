@@ -86,6 +86,9 @@ public class Omni: NSObject {
   /// Responsible for providing signatures for transactions, when required
   public var signatureProvider: SignatureProviding?
 
+  /// Receives notifications about transaction events such as when a card is swiped
+  public var transactionUpdateDelegate: TransactionUpdateDelegate?
+
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
     /// An id for your application
@@ -196,7 +199,8 @@ public class Omni: NSObject {
       paymentMethodRepository: paymentMethodRepository,
       transactionRepository: transactionRepository,
       request: request,
-      signatureProvider: signatureProvider
+      signatureProvider: signatureProvider,
+      transactionUpdateDelegate: transactionUpdateDelegate
     )
 
     job.start(completion: completion, failure: error)

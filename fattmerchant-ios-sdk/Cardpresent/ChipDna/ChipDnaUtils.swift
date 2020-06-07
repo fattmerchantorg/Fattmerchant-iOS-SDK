@@ -26,6 +26,51 @@ extension MobileReader {
   }
 }
 
+extension TransactionUpdate {
+
+  /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
+  init?(chipDnaTransactionUpdate: String) {
+    switch chipDnaTransactionUpdate {
+
+    case TransactionUpdateCardEntryPrompted:
+      guard
+        let reader = ChipDnaDriver.connectedReader(),
+        let makeString = reader.make,
+        let make = ChipDnaDriver.PinPadManufacturer(rawValue: makeString) else {
+          return nil
+      }
+
+      switch make {
+      case .Miura:
+        self = .PromptInsertSwipeCard
+      default:
+        self = .PromptSwipeCard
+      }
+
+    case TransactionUpdateCardSwiped:
+      self = .CardSwiped
+
+    case TransactionUpdateSmartcardInserted:
+      self = .CardInserted
+
+    case TransactionUpdateCardSwipeError:
+      self = .CardSwipeError
+
+    case TransactionUpdateSmartcardRemovePrompted:
+      self = .PromptRemoveCard
+
+    case TransactionUpdateSmartcardRemoved:
+      self = .CardRemoved
+
+    case TransactionUpdateOnlineAuthorisation:
+      self = .Authorizing
+
+    default:
+      return nil
+    }
+  }
+}
+
 extension CCParameters {
 
   /// The param value to make NMI add a customer to the customer vault

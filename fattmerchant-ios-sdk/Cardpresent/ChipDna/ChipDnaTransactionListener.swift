@@ -19,8 +19,12 @@ class ChipDnaTransactionListener: NSObject {
   /// Provides a signature
   var signatureProvider: SignatureProviding?
 
+  /// Gets notified of transaction events
+  weak var transactionUpdateDelegate: TransactionUpdateDelegate?
+
   /// Makes this listener bind to the transaction events ChipDna emits
-  func bindToChipDna(signatureProvider: SignatureProviding? = nil) {
+  func bindToChipDna(signatureProvider: SignatureProviding? = nil,
+                     transactionUpdateDelegate: TransactionUpdateDelegate? = nil) {
     ChipDnaMobile.addTransactionUpdateTarget(self, action: #selector(onTransactionUpdate(parameters:)))
     ChipDnaMobile.addTransactionFinishedTarget(self, action: #selector(onTransactionFinished(parameters:)))
     ChipDnaMobile.addDeferredAuthorizationTarget(self, action: #selector(onDeferredAuthorization(parameters:)))
@@ -29,6 +33,8 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.addPartialApprovalTarget(self, action: #selector(onPartialApprove(parameters:)))
     ChipDnaMobile.addForcedAcceptanceTarget(self, action: #selector(onForcedAcceptance(parameters:)))
     ChipDnaMobile.addIdVerificationTarget(self, action: #selector(onIdVerification(parameters:)))
+    ChipDnaMobile.addUserNotificationTarget(self, action: #selector(onUserNotification(parameters:)))
+    self.transactionUpdateDelegate = transactionUpdateDelegate
     self.signatureProvider = signatureProvider
   }
 
@@ -45,6 +51,17 @@ class ChipDnaTransactionListener: NSObject {
   }
 
   @objc fileprivate func onTransactionUpdate(parameters: CCParameters) {
+    guard
+      let delegate = transactionUpdateDelegate,
+      let transactionUpdateString = parameters[CCParamTransactionUpdate],
+      let update = TransactionUpdate(chipDnaTransactionUpdate: transactionUpdateString) else {
+      return
+    }
+
+    delegate.onTransactionUpdate(transactionUpdate: update)
+  }
+
+  @objc fileprivate func onUserNotification(parameters: CCParameters) {
 
   }
 
@@ -64,7 +81,9 @@ class ChipDnaTransactionListener: NSObject {
       return
     }
 
+    transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: TransactionUpdate.PromptProvideSignature)
     signatureProvider.signatureRequired(completion: { (signature) in
+      self.transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: TransactionUpdate.SignatureProvided)
       let approveSignatureParams = CCParameters()
       approveSignatureParams.setValue(CCValueTrue, forKey: CCParamResult)
       approveSignatureParams.setValue(signature, forKey: CCParamSignatureData)

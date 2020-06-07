@@ -57,6 +57,7 @@ class TakeMobileReaderPayment {
   var transactionRepository: TransactionRepository
   var request: TransactionRequest
   var signatureProvider: SignatureProviding?
+  weak var transactionUpdateDelegate: TransactionUpdateDelegate?
 
   init(
     mobileReaderDriverRepository: MobileReaderDriverRepository,
@@ -65,7 +66,8 @@ class TakeMobileReaderPayment {
     paymentMethodRepository: PaymentMethodRepository,
     transactionRepository: TransactionRepository,
     request: TransactionRequest,
-    signatureProvider: SignatureProviding?) {
+    signatureProvider: SignatureProviding?,
+    transactionUpdateDelegate: TransactionUpdateDelegate?) {
 
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
     self.invoiceRepository = invoiceRepository
@@ -74,6 +76,7 @@ class TakeMobileReaderPayment {
     self.transactionRepository = transactionRepository
     self.request = request
     self.signatureProvider = signatureProvider
+    self.transactionUpdateDelegate = transactionUpdateDelegate
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
@@ -81,7 +84,10 @@ class TakeMobileReaderPayment {
 
       self.createInvoice(failure) { (createdInvoice) in
 
-        self.takeMobileReaderPayment(with: driver, signatureProvider: self.signatureProvider, failure) { (mobileReaderPaymentResult) in
+        self.takeMobileReaderPayment(with: driver,
+                                     signatureProvider: self.signatureProvider,
+                                     transactionUpdateDelegate: self.transactionUpdateDelegate,
+                                     failure) { (mobileReaderPaymentResult) in
 
           self.createCustomer(mobileReaderPaymentResult, failure) { (createdCustomer) in
 
@@ -264,8 +270,12 @@ class TakeMobileReaderPayment {
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
   }
 
-  fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver, signatureProvider: SignatureProviding?, _ failure: (OmniException) -> Void, _ completion: @escaping (TransactionResult) -> Void) {
-    driver.performTransaction(with: self.request, signatureProvider: signatureProvider, completion: completion)
+  fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver,
+                                           signatureProvider: SignatureProviding?,
+                                           transactionUpdateDelegate: TransactionUpdateDelegate?,
+                                           _ failure: (OmniException) -> Void,
+                                           _ completion: @escaping (TransactionResult) -> Void) {
+    driver.performTransaction(with: self.request, signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate, completion: completion)
   }
 
   fileprivate func createInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
