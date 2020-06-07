@@ -18,6 +18,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     var connectionType: String
   }
 
+  enum PinPadManufacturer: String {
+    case Miura, BBPOS
+  }
+
   /// Listens to the transaction events of ChipDna
   fileprivate var chipDnaTransactionListener = ChipDnaTransactionListener()
 
@@ -102,6 +106,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
   /// Searches for available mobile readers
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
+
     // Set the connection type to BT
     let params = CCParameters()
     params[CCParamPinPadConnectionType] = CCValueBluetooth
@@ -140,16 +145,22 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       error(OmniGeneralException.uninitialized)
     }
 
+    completion(ChipDnaDriver.connectedReader())
+  }
+
+  /// Gets the connected MobileReader
+  /// - Note: This is blocking, and will fail silently if no reader is found
+  /// - Returns: The connected mobile reader, if any
+  internal static func connectedReader() -> MobileReader? {
     guard
       let status = ChipDnaMobile.sharedInstance()?.getStatus(nil),
       let deviceStatusXml = status[CCParamDeviceStatus],
       let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
       deviceStatus.deviceStatus == DeviceStatusEnum.connected else {
-      completion(nil)
-      return
+      return nil
     }
 
-    completion(MobileReader.from(deviceStatus: deviceStatus))
+    return MobileReader.from(deviceStatus: deviceStatus)
   }
 
   /// Attempts to disconnect a connected MobileReader
@@ -167,7 +178,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     completion(true)
   }
 
-  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, completion: @escaping (TransactionResult) -> Void) {
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
     let requestParams = CCParameters(transactionRequest: request)
 
     chipDnaTransactionListener.detachFromChipDna()
@@ -200,7 +211,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       }
     }
 
-    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider)
+    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate)
 
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }
