@@ -34,6 +34,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   /// A key used to communicate with TransactionGateway
   fileprivate var securityKey: String = ""
 
+  /// This is the data that we will need in order to initialize ChipDna again if something happens at runtime.
+  ///
+  /// For example, if the user wants to disconnect a reader, we have to use the ChipDnaMobile.dispose() method. This
+  /// method uninitializes the SDK and we have to initialize again if we want to reconnect a reader. When we want to
+  /// reconnect, we use these args
+  fileprivate var initArgs: [String: Any] = [:]
+
   /// Attempts to initialize the ChipDNA SDK
   ///
   /// - Parameters:
@@ -49,8 +56,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
         return
     }
 
-    // Store the apiKey for later use
+    // Store the apiKey and the init args for later use
     securityKey = apiKey
+    initArgs = args
 
     // Initialize
     let parameters = CCParameters()
@@ -175,7 +183,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
 
     ChipDnaMobile.dispose(nil)
-    completion(true)
+    initialize(args: initArgs, completion: completion)
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
