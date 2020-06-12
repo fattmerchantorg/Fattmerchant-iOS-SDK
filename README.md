@@ -10,7 +10,7 @@ The Fattmerchant iOS SDK provides a simple way to accept a payment on your iOS a
 
 ![Tokenization Info](https://raw.githubusercontent.com/fattmerchantorg/Fattmerchant-iOS-SDK/master/assets/images/tokenization-info.png)
 
-## Try it out! Please!
+## Try it out!
 The Fattmerchant iOS SDK comes with a Swift Playground. All you need to get started is your `web payments token`, provided to you by your trusty Fattmerchant Account Manager. You can find the playground, called `Tokenization.Playground` in the project root 🤓
 
 ## <a name="requirements">Requirements</a>
