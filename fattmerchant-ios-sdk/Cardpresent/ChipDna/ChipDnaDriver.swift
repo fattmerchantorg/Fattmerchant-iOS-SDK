@@ -224,6 +224,18 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }
 
+  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    if let result = ChipDnaMobile.sharedInstance()?.terminateTransaction(nil) {
+      if let success = result[CCParamResult], success == CCValueTrue {
+        completion(true)
+      } else {
+        completion(false)
+      }
+    } else {
+      fatalError()
+    }
+  }
+
   /// Attempts a refund in ChipDna
   ///
   /// This will attempt to refund the full amount for the Transaction.

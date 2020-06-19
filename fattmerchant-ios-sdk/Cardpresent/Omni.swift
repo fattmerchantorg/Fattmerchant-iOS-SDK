@@ -206,6 +206,21 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
 
+  /// Cancels the current mobile reader transaction
+  ///
+  /// - Parameters:
+  ///   - completion: called when the operation is complete. Receives true when the transaction was cancelled. False
+  ///   otherwise
+  ///   - error: receives any errors that happened while attempting the operation
+  public func cancelMobileReaderTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
+    let job = CancelCurrentTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository)
+    job.start(completion: completion, error: error)
+  }
+
   /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
   /// - Parameters:
   ///   - transaction: the transaction to refund
