@@ -79,6 +79,10 @@ class MockDriver: MobileReaderDriver {
     completion(transactionResult)
   }
 
+  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    completion(true)
+  }
+
   func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
     refund(transaction: transaction, refundAmount: nil, completion: completion, error: error)
   }
