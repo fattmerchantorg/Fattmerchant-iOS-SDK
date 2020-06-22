@@ -18,17 +18,22 @@ class ConnectMobileReader {
 
   var mobileReaderDriverRepository: MobileReaderDriverRepository
   var mobileReader: MobileReader
+  weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
 
-  init(mobileReaderDriverRepository: MobileReaderDriverRepository, mobileReader: MobileReader) {
+  init(mobileReaderDriverRepository: MobileReaderDriverRepository,
+       mobileReader: MobileReader,
+       mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate? = nil) {
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
     self.mobileReader = mobileReader
+    self.mobileReaderConnectionStatusDelegate = mobileReaderConnectionStatusDelegate
   }
 
   func start(onConnected: @escaping (MobileReader) -> Void, onFailed: @escaping(OmniException) -> Void) {
 
     // First, try to see if the MobileReaderDriverRepo knows which Driver this MobileReader belongs to
     mobileReaderDriverRepository.getDriverFor(mobileReader: mobileReader) { (driver) in
-      if let driver = driver {
+      if var driver = driver {
+        driver.mobileReaderConnectionStatusDelegate = self.mobileReaderConnectionStatusDelegate
         driver.connect(reader: self.mobileReader, completion: { connected in
           if connected {
             onConnected(self.mobileReader)
@@ -49,7 +54,7 @@ class ConnectMobileReader {
             if callbackExecuted {
               return
             }
-
+            driver.mobileReaderConnectionStatusDelegate = self.mobileReaderConnectionStatusDelegate
             driver.connect(reader: self.mobileReader) { connected in
               if connected {
                 onConnected(self.mobileReader)

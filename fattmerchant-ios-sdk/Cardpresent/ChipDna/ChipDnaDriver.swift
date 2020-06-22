@@ -22,6 +22,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     case Miura, BBPOS
   }
 
+  weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
+
   /// Listens to the transaction events of ChipDna
   fileprivate var chipDnaTransactionListener = ChipDnaTransactionListener()
 
@@ -139,6 +141,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     requestParams[CCParamPinPadConnectionType] = CCValueBluetooth
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
+    ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
+    ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
     didConnectAndConfigure = completion
     ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
   }
@@ -331,6 +335,23 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   @objc func onConnectAndConfigure(parameters: CCParameters) {
     ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
     didConnectAndConfigure?(parameters[CCParamResult] == CCValueTrue)
+  }
+
+  @objc func onConfigurationUpdate(parameters: CCParameters) {
+    if
+      let str = parameters[CCParamConfigurationUpdate],
+      let status = MobileReaderConnectionStatus(chipDnaConfigurationUpdate: str) {
+      mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: status)
+    }
+  }
+
+  @objc func onDeviceUpdate(parameters: CCParameters) {
+    if
+      let deviceStatusXml = parameters[CCParamDeviceStatusUpdate],
+      let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
+      let status = MobileReaderConnectionStatus(chipDnaDeviceStatus: deviceStatus) {
+      mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: status)
+    }
   }
 
 }
