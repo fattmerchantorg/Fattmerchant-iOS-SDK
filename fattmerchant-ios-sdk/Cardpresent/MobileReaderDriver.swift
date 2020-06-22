@@ -24,6 +24,8 @@ enum MobileReaderDriverException: OmniException {
 
 protocol MobileReaderDriver {
 
+  var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate? { get set }
+
   func isReadyToTakePayment(completion: (Bool) -> Void)
 
   func initialize(args: [String: Any], completion: (Bool) -> Void)

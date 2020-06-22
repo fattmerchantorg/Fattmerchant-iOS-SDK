@@ -87,7 +87,10 @@ public class Omni: NSObject {
   public var signatureProvider: SignatureProviding?
 
   /// Receives notifications about transaction events such as when a card is swiped
-  public var transactionUpdateDelegate: TransactionUpdateDelegate?
+  public weak var transactionUpdateDelegate: TransactionUpdateDelegate?
+
+  /// Receives notifications about reader connection events
+  public weak var mobileReaderConnectionUpdateDelegate: MobileReaderConnectionStatusDelegate?
 
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
@@ -292,7 +295,9 @@ public class Omni: NSObject {
       return error()
     }
 
-    let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
+    let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository,
+                                   mobileReader: reader,
+                                   mobileReaderConnectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
     task.start(onConnected: { connectedReader in
       completion(connectedReader)
     }, onFailed: { _ in
@@ -311,7 +316,9 @@ public class Omni: NSObject {
       return error(OmniGeneralException.uninitialized)
     }
 
-    let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
+    let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository,
+                                   mobileReader: reader,
+                                   mobileReaderConnectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
     task.start(onConnected: { connectedReader in
       self.preferredQueue.async {
         completion(connectedReader)
