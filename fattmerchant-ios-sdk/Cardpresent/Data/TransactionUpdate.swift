@@ -59,4 +59,8 @@ public struct TransactionUpdate {
   /// Signature provided
   public static let SignatureProvided = TransactionUpdate("Signature Provided")
 
+  /// Prompt user to confirm transaction amount on reader
+  ///
+  /// This `TransactionUpdate` is only emitted when the mobile reader supports on-device amount confirmation, like the Miura M010
+  public static let PromptConfirmAmountOnReader = TransactionUpdate("Prompt Confirm Amount On Reader", "Please confirm amount on reader")
 }

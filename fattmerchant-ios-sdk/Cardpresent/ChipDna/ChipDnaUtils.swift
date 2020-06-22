@@ -65,6 +65,9 @@ extension TransactionUpdate {
     case TransactionUpdateOnlineAuthorisation:
       self = .Authorizing
 
+    case TransactionUpdateAmountConfirmationStarted:
+      self = .PromptConfirmAmountOnReader
+
     default:
       return nil
     }
