@@ -11,6 +11,7 @@ import Foundation
 enum TakeMobileReaderPaymentException: OmniException {
   case mobileReaderDriverNotFound
   case mobileReaderNotReady
+  case invoiceNotFound
   case couldNotCreateInvoice(detail: String?)
   case couldNotCreateCustomer(detail: String?)
   case couldNotCreatePaymentMethod(detail: String?)
@@ -26,6 +27,9 @@ enum TakeMobileReaderPaymentException: OmniException {
 
     case .mobileReaderNotReady:
       return "Mobile reader not ready to take payment"
+
+    case .invoiceNotFound:
+      return "Invoice with given id not found"
 
     case .couldNotCreateInvoice(let d):
       return d ?? "Could not create invoice"
@@ -82,7 +86,7 @@ class TakeMobileReaderPayment {
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
     availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
 
-      self.createInvoice(failure) { (createdInvoice) in
+      self.getOrCreateInvoice(failure) { (createdInvoice) in
 
         self.takeMobileReaderPayment(with: driver,
                                      signatureProvider: self.signatureProvider,
@@ -279,21 +283,29 @@ class TakeMobileReaderPayment {
     driver.performTransaction(with: self.request, signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate, completion: completion)
   }
 
-  fileprivate func createInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
-    let invoiceToCreate = Invoice()
-    invoiceToCreate.total = request.amount.dollars()
-    invoiceToCreate.url = "https://fattpay.com/#/bill"
-    let invoiceMeta = [
-      "subtotal": self.request.amount.dollarsString()
-    ]
+  /// Gets the invoice with the id in the transaction request or creates a new one
+  internal func getOrCreateInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
+    // If an invoiceId was given in the transaction request, we should verify that an invoice with that id exists
+    if let invoiceId = request.invoiceId {
+      invoiceRepository.getById(id: invoiceId, completion: completion) { (error) in
+        failure(TakeMobileReaderPaymentException.invoiceNotFound)
+      }
+    } else {
+      let invoiceToCreate = Invoice()
+      invoiceToCreate.total = request.amount.dollars()
+      invoiceToCreate.url = "https://fattpay.com/#/bill"
+      let invoiceMeta = [
+        "subtotal": self.request.amount.dollarsString()
+      ]
 
-    guard let invoiceMetaJson = invoiceMeta.jsonValue() else {
-      failure(Exception.couldNotCreateInvoice(detail: "Error generating json for meta"))
-      return
+      guard let invoiceMetaJson = invoiceMeta.jsonValue() else {
+        failure(Exception.couldNotCreateInvoice(detail: "Error generating json for meta"))
+        return
+      }
+
+      invoiceToCreate.meta = invoiceMetaJson
+      invoiceRepository.create(model: invoiceToCreate, completion: completion, error: failure)
     }
-
-    invoiceToCreate.meta = invoiceMetaJson
-    invoiceRepository.create(model: invoiceToCreate, completion: completion, error: failure)
   }
 
   fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {

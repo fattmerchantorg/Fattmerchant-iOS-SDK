@@ -41,7 +41,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate {
     self.getReaderInfo()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnb2RVc2VyIjpmYWxzZSwibWVyY2hhbnQiOiJlYjQ4ZWY5OS1hYTc4LTQ5NmUtOWIwMS00MjFmOGRhZjczMjMiLCJzdWIiOiJmMTI4YWQwNS0xYzhlLTQ3MmEtOWFlNi04MmE1MjdjMWFlNmMiLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsImlzcyI6Imh0dHA6Ly9hcGlkZXYuZmF0dGxhYnMuY29tL2VwaGVtZXJhbCIsImlhdCI6MTU5MTU1NzQxMywiZXhwIjoxNTkxNjQzODEzLCJuYmYiOjE1OTE1NTc0MTMsImp0aSI6Ing5SGRZb3R1aXhwU25sOXMiLCJhc3N1bWluZyI6ZmFsc2V9.YhtfGsRgJ82PDLA3BBaxCsmTDLVJWs1TZz-Zn9kl1Ok"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1OTI4MDI3OTgsImV4cCI6MTU5Mjg4OTE5OCwibmJmIjoxNTkyODAyNzk4LCJqdGkiOiJDb3JIOU9lTHU3UjF6Smg3In0.UwkYOII_djnFCSqY7DNLEmggHbRzbERjryBR4SWlCAs"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -147,7 +147,8 @@ class ViewController: UIViewController, TransactionUpdateDelegate {
   }
 
   fileprivate func createTransactionRequest() -> TransactionRequest {
-    let request = TransactionRequest(amount: getAmount())
+    var request = TransactionRequest(amount: getAmount())
+    request.invoiceId = "2bbe0ec0-f2d5-4fff-b6b3-0db8550cea77"
     return request
   }
 
