@@ -31,6 +31,9 @@ import Foundation
 /// let card = CreditCard(personName: "Joan Parsnip", cardNumber: "4111111111111111", cardExp: "1230", addressZip: "32822")
 /// let request = TransactionRequest(amount: amount, card: card)
 /// ```
+/// ## Paying a specific invoice
+/// If you want to associate the transaction with a specific invoice, include the id of the invoice in the
+/// `invoiceId` field
 public struct TransactionRequest {
 
   /// The `Amount` to be collected during the transaction
@@ -45,6 +48,11 @@ public struct TransactionRequest {
   ///
   /// Set this to false if you do not want the payment method stored
   public var tokenize: Bool = true
+
+  /// The id of the invoice that this payment should be applied to
+  ///
+  /// If nil, then a new invoice will be created
+  public var invoiceId: String?
 
   /// Initializes a TransactionRequest with the given amount.
   ///
@@ -81,5 +89,17 @@ public struct TransactionRequest {
     self.amount = amount
     self.tokenize = tokenize
     self.card = card
+  }
+
+  /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - tokenize: A value that dictates whether or not the payment method used in the transaction
+  ///   should be tokenized. Defaults to `true`
+  ///   - invoiceId: The invoice to associate this payment with. If nil, a new invoice is created. Defaults to nil.
+  public init(amount: Amount, tokenize: Bool = true, invoiceId: String? = nil) {
+    self.amount = amount
+    self.tokenize = tokenize
+    self.invoiceId = invoiceId
   }
 }
