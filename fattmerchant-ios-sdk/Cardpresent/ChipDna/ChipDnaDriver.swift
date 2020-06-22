@@ -147,7 +147,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///   - reader: a MobileReader to connect
   ///   - completion: a block to run once the MobileReader is connected. If successfully connected, the block will receive true. Otherwise, it will receive false
   func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
-    let requestParams = CCParameters()r
+    let requestParams = CCParameters()
     requestParams[CCParamPinPadName] = reader.name
     requestParams[CCParamPinPadConnectionType] = CCValueBluetooth
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
