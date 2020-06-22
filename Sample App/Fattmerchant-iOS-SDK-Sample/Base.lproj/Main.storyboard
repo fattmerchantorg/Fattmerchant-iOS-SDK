@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -25,7 +25,7 @@
                                 <rect key="frame" x="20" y="130" width="374" height="732"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="KoI-Tz-bhx">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="594"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="636"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Su6-lv-kN3">
                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="300"/>
@@ -76,8 +76,15 @@
                                                     <action selector="onTakePaymentButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zvd-HY-rKY"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eOl-2C-891">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SdI-bW-DBU">
                                                 <rect key="frame" x="0.0" y="564" width="374" height="30"/>
+                                                <state key="normal" title="Cancel transaction"/>
+                                                <connections>
+                                                    <action selector="onCancelTransactionButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="R6b-SB-YAh"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eOl-2C-891">
+                                                <rect key="frame" x="0.0" y="606" width="374" height="30"/>
                                                 <state key="normal" title="Take Payment with Card"/>
                                                 <connections>
                                                     <action selector="payWithCard" destination="BYZ-38-t0r" eventType="touchUpInside" id="O7V-Lw-anM"/>

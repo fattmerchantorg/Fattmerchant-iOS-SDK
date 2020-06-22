@@ -9,7 +9,7 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController, TransactionUpdateDelegate {
+class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate {
 
   var omni: Omni?
 
@@ -41,7 +41,11 @@ class ViewController: UIViewController, TransactionUpdateDelegate {
     self.getReaderInfo()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1OTI4MDI3OTgsImV4cCI6MTU5Mjg4OTE5OCwibmJmIjoxNTkyODAyNzk4LCJqdGkiOiJDb3JIOU9lTHU3UjF6Smg3In0.UwkYOII_djnFCSqY7DNLEmggHbRzbERjryBR4SWlCAs"
+  @IBAction func onCancelTransactionButtonPress(_ sender: UIButton) {
+    self.cancelTransaction()
+  }
+
+  let apiKey = ""
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -58,6 +62,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate {
     omni = Omni()
     omni?.signatureProvider = SignatureViewController()
     omni?.transactionUpdateDelegate = self
+    omni?.mobileReaderConnectionUpdateDelegate = self
 
     log("Attempting initalization...")
 
@@ -119,6 +124,14 @@ class ViewController: UIViewController, TransactionUpdateDelegate {
   fileprivate func takePayment() {
     omni?.takeMobileReaderTransaction(request: createTransactionRequest(), completion: { _ in
       self.log("Finished transaction successfully")
+    }, error: { error in
+      self.log(error)
+    })
+  }
+
+  fileprivate func cancelTransaction() {
+    omni?.cancelMobileReaderTransaction(completion: { success in
+      self.log("Transaction cancelled")
     }, error: { error in
       self.log(error)
     })
@@ -186,6 +199,10 @@ class ViewController: UIViewController, TransactionUpdateDelegate {
     omni?.connect(reader: reader, completion: completion) {
       self.log("Couldn't connect to \(reader)")
     }
+  }
+
+  func mobileReaderConnectionStatusUpdate(status: MobileReaderConnectionStatus) {
+    self.log("Mobile reader \(status.rawValue)")
   }
 
   fileprivate func disconnectReader() {

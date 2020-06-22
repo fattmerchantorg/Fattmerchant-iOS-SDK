@@ -25,6 +25,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     case Miura, BBPOS
   }
 
+  weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
+
   /// Listens to the transaction events of ChipDna
   fileprivate var chipDnaTransactionListener = ChipDnaTransactionListener()
 
@@ -145,7 +147,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///   - reader: a MobileReader to connect
   ///   - completion: a block to run once the MobileReader is connected. If successfully connected, the block will receive true. Otherwise, it will receive false
   func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
-    let requestParams = CCParameters()
+    let requestParams = CCParameters()r
     requestParams[CCParamPinPadName] = reader.name
     requestParams[CCParamPinPadConnectionType] = CCValueBluetooth
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
@@ -156,6 +158,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       }
       completion(connected)
     }
+    ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
+    ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
     ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
   }
 
@@ -349,6 +353,23 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   @objc func onConnectAndConfigure(parameters: CCParameters) {
     ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
     didConnectAndConfigure?(parameters[CCParamResult] == CCValueTrue)
+  }
+
+  @objc func onConfigurationUpdate(parameters: CCParameters) {
+    if
+      let str = parameters[CCParamConfigurationUpdate],
+      let status = MobileReaderConnectionStatus(chipDnaConfigurationUpdate: str) {
+      mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: status)
+    }
+  }
+
+  @objc func onDeviceUpdate(parameters: CCParameters) {
+    if
+      let deviceStatusXml = parameters[CCParamDeviceStatusUpdate],
+      let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
+      let status = MobileReaderConnectionStatus(chipDnaDeviceStatus: deviceStatus) {
+      mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: status)
+    }
   }
 
 }

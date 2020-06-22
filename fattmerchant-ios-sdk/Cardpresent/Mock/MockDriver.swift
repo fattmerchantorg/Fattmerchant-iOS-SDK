@@ -10,6 +10,8 @@ import Foundation
 
 class MockDriver: MobileReaderDriver {
 
+  weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
+
   var reader: MobileReader? = MobileReader(name: "Reader",
                             firmwareVersion: "FakeFirmwareVersion",
                             make: "FakeMake",

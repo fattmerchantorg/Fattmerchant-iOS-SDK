@@ -18,6 +18,10 @@
 		59696401245FEF8000D0612F /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 596963FB245FECBE00D0612F /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		594466AB249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */; };
 		594466AC249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */; };
+		594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */; };
+		594466AF249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */; };
+		594466B1249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */; };
+		594466B2249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */; };
 		594466B324A09D4C00C6CFD8 /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */; };
 		594466B424A09E4200C6CFD8 /* TransactionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59561817248C3FBD00E622B6 /* TransactionUpdate.swift */; };
 		59561818248C3FBD00E622B6 /* TransactionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59561817248C3FBD00E622B6 /* TransactionUpdate.swift */; };
@@ -223,6 +227,8 @@
 		596963FB245FECBE00D0612F /* AnyPay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnyPay.framework; path = "Vendored Frameworks/AnyPay/AnyPay.framework"; sourceTree = "<group>"; };
 		596963FE245FED1000D0612F /* AWCDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWCDriver.swift; sourceTree = "<group>"; };
 		594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransaction.swift; sourceTree = "<group>"; };
+		594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatusDelegate.swift; sourceTree = "<group>"; };
+		594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatus.swift; sourceTree = "<group>"; };
 		59561817248C3FBD00E622B6 /* TransactionUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUpdate.swift; sourceTree = "<group>"; };
 		597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUpdateDelegate.swift; sourceTree = "<group>"; };
 		597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionGateway.swift; sourceTree = "<group>"; };
@@ -535,6 +541,7 @@
 				D79308C623D1045C0066FCA2 /* Omni.swift */,
 				D78FA931240EF48B00398D81 /* SignatureProviding.swift */,
 				597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */,
+				594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */,
 			);
 			path = Cardpresent;
 			sourceTree = "<group>";
@@ -628,6 +635,7 @@
 				D79308A923D0A9FB0066FCA2 /* TransactionRequest.swift */,
 				D79308AC23D0AA230066FCA2 /* TransactionResult.swift */,
 				59561817248C3FBD00E622B6 /* TransactionUpdate.swift */,
+				594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -903,6 +911,7 @@
 				D79308BE23D0AF3D0066FCA2 /* TakeMobileReaderPayment.swift in Sources */,
 				594466AB249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */,
 				D79308A723D0A9050066FCA2 /* MobileReaderDriver.swift in Sources */,
+				594466B1249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift in Sources */,
 				D79308D023D22D900066FCA2 /* ChipDnaTransactionListener.swift in Sources */,
 				D765D49923CFC22600656040 /* PaymentMethodRepository.swift in Sources */,
 				D78FA932240EF48B00398D81 /* SignatureProviding.swift in Sources */,
@@ -938,6 +947,7 @@
 				593A7FB02460118400D78874 /* AWCUtils.swift in Sources */,
 				D765D46623CC465800656040 /* Customer.swift in Sources */,
 				D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */,
+				594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
 				5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */,
 				D765D49C23CFC32200656040 /* TransactionRepository.swift in Sources */,
 				5993C2602076BD7D004DDA9F /* FattmerchantApi.swift in Sources */,
@@ -954,11 +964,13 @@
 				D760D82A23D884680075057C /* CustomerJson.swift in Sources */,
 				D765D4A023CFCA1400656040 /* Amount.swift in Sources */,
 				D783DAC42449F35E007C0A17 /* TakePaymentTests.swift in Sources */,
+				594466AF249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
 				D7C17B2523E4BA200031D9BB /* SearchForReaders.swift in Sources */,
 				D73BBCF7244D805C0052B525 /* DisconnectMobileReaderTests.swift in Sources */,
 				D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */,
 				D7A28D622433E2CA00FC8872 /* TakePayment.swift in Sources */,
 				D7801C00241F355300A93001 /* OmniApi.swift in Sources */,
+				594466B2249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift in Sources */,
 				D765D47023CC488000656040 /* Merchant.swift in Sources */,
 				D765D47A23CC4B1100656040 /* CustomerRepository.swift in Sources */,
 				D7A28D652436278600FC8872 /* TokenizePaymentMethod.swift in Sources */,

@@ -29,6 +29,8 @@ protocol MobileReaderDriver {
   /// A list of serial numbers that this driver has previously connected to
   var familiarSerialNumbers: [String] { get set }
 
+  var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate? { get set }
+
   func isReadyToTakePayment(completion: (Bool) -> Void)
 
   func initialize(args: [String: Any], completion: @escaping (Bool) -> Void)
