@@ -44,6 +44,20 @@ omni?.initialize(params: initParams, completion: {
 }
 ```
 
+## Pairing the Reader
+**Miura M010**
+
+1. Turn the Miura M010 mobile reader on and wait until the display shows "MIURA SYSTEMS" along with a bluetooth indicator.
+2. Press and hold the bluetooth indicator button until it flashes rapidly (this lets you know it is in discovery mode)
+3. Find the Miura on your iOS device's list of bluetooth devices and pair it
+
+**BBPOS Chipper 2XBT**
+
+The BBPOS must not be paired prior to the connect step. All you have to do here is turn it on. 
+
+> Pairing the BBPOS with the iOS Device will prevent the SDK from being able to connect to it
+
+
 ## Connect a Mobile Reader
 > Before connecting to a Miura reader, the reader must be paired to the iOS device within the Settings app
 
@@ -93,6 +107,49 @@ omni.takeMobileReaderTransaction(request, { completedTransaction in
 }) {
     // Error
 }
+```
+
+## Subcribing to Transaction Updates
+To receive Transaction updates, register a `TransactionUpdateDelegate` on the Omni object. This object will receive transaction updates such as:
+
+- `PromptSwipeCard` - The mobile reader is waiting for a card to be swiped
+- `CardSwiped` - A card was swiped on the mobile reader
+- `Authorizing` - The payment is being authorized
+- `PromptProvideSignature` - The payment requires a signature
+
+These will be instances of `TransactionUpdate`, and will each have a `value` and a `userFriendlyMessage`. The `value` is a key you can use to identify the event, and the `userFriendlyMessage` is a string that can be shown to an end user, should you choose to.
+
+```swift
+// Register to listen to the transaction events
+omni.transactionUpdateDelegate = self
+
+func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
+	print(transactionUpdate.userFriendlyMessage)
+}
+
+// Begin the transaction
+omni.takeMobileReaderTransaction(...) 
+```
+
+## Providing a Signature
+Should a transaction require a signature, one can be provided by registering a `SignatureProviding` on the Omni object. This object will be required to implement a method called 
+
+```swift
+/// Called when a transaction requires a signature
+/// - Parameter completion: a block to run once the signature is complete. This should be given the signature
+func signatureRequired(completion: @escaping (String) -> Void)
+```
+
+You can then pass a base64 encoded string representation of the signature and pass it to the completion block.
+
+```swift
+omni.signatureProvider = self
+
+override func signatureRequired(completion: @escaping (String) -> Void) {
+   var base64EncodedSignature = // ...
+   completion(base64EncodedSignature)
+}
+
 ```
 
 

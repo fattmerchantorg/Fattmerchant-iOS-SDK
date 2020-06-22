@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D7720E1F2412F53A0064DBDC /* SignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7720E1E2412F53A0064DBDC /* SignatureViewController.swift */; };
 		D781037D23D959FA00256F2F /* TransactionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */; };
 		D781038223DA472400256F2F /* MobileReaderPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D781038123DA472400256F2F /* MobileReaderPickerController.swift */; };
 		D7B7111A23D58C4A00EF98DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7111923D58C4A00EF98DB /* AppDelegate.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D7720E1E2412F53A0064DBDC /* SignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureViewController.swift; sourceTree = "<group>"; };
 		D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPickerViewController.swift; sourceTree = "<group>"; };
 		D781038123DA472400256F2F /* MobileReaderPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderPickerController.swift; sourceTree = "<group>"; };
 		D7B7111623D58C4A00EF98DB /* Fattmerchant-iOS-SDK-Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fattmerchant-iOS-SDK-Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +87,7 @@
 				D7B7112523D58C4B00EF98DB /* Info.plist */,
 				D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */,
 				D781038123DA472400256F2F /* MobileReaderPickerController.swift */,
+				D7720E1E2412F53A0064DBDC /* SignatureViewController.swift */,
 			);
 			path = "Fattmerchant-iOS-SDK-Sample";
 			sourceTree = "<group>";
@@ -162,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D781037D23D959FA00256F2F /* TransactionPickerViewController.swift in Sources */,
+				D7720E1F2412F53A0064DBDC /* SignatureViewController.swift in Sources */,
 				D7B7111C23D58C4A00EF98DB /* ViewController.swift in Sources */,
 				D781038223DA472400256F2F /* MobileReaderPickerController.swift in Sources */,
 				D7B7111A23D58C4A00EF98DB /* AppDelegate.swift in Sources */,

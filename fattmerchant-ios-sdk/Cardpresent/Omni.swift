@@ -83,6 +83,12 @@ public class Omni: NSObject {
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
 
+  /// Responsible for providing signatures for transactions, when required
+  public var signatureProvider: SignatureProviding?
+
+  /// Receives notifications about transaction events such as when a card is swiped
+  public var transactionUpdateDelegate: TransactionUpdateDelegate?
+
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
     /// An id for your application
@@ -173,6 +179,10 @@ public class Omni: NSObject {
   }
 
   /// Captures a mobile reader transaction
+  ///
+  /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called. This
+  /// object is responsible for providing a signature, in case one is required to complete the transaction
+  ///
   /// - Parameters:
   ///   - request: A request for a Transaction
   ///   - completion: Called when the operation is complete successfully. Receives a Transaction
@@ -188,10 +198,27 @@ public class Omni: NSObject {
       customerRepository: customerRepository,
       paymentMethodRepository: paymentMethodRepository,
       transactionRepository: transactionRepository,
-      request: request
+      request: request,
+      signatureProvider: signatureProvider,
+      transactionUpdateDelegate: transactionUpdateDelegate
     )
 
     job.start(completion: completion, failure: error)
+  }
+
+  /// Cancels the current mobile reader transaction
+  ///
+  /// - Parameters:
+  ///   - completion: called when the operation is complete. Receives true when the transaction was cancelled. False
+  ///   otherwise
+  ///   - error: receives any errors that happened while attempting the operation
+  public func cancelMobileReaderTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    guard initialized else {
+      return error(OmniGeneralException.uninitialized)
+    }
+
+    let job = CancelCurrentTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository)
+    job.start(completion: completion, error: error)
   }
 
   /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni

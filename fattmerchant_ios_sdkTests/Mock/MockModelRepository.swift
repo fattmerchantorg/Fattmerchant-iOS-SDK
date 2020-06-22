@@ -8,26 +8,42 @@
 
 import Foundation
 
+internal var modelStore: [String: Model] = [:]
+
 extension ModelRepository {
+
+  func uniqueId() -> String {
+    return UUID().uuidString
+  }
 
   func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
     var m = model
-    m.id = "generated_id_123"
+    let id = uniqueId()
+    m.id = id
+    modelStore[id] = m
     completion(m)
   }
 
   func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
     var m = model
-    m.id = "generated_id_123"
+    m.id = id
+    modelStore[id] = m
     completion(m)
   }
 
   func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {
+    if let id = model.id {
+      modelStore.removeValue(forKey: id)
+    }
     completion()
   }
 
   func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
-    fatalError("Need to implement this")
+    if let model = modelStore[id] as? Self.OmniModel {
+      completion(model)
+    } else {
+      error(OmniApi.OmniNetworkingException.unknown("Model not found"))
+    }
   }
 
   func getList(completion: @escaping (PaginatedData<OmniModel>) -> Void, error: @escaping ErrorHandler) {

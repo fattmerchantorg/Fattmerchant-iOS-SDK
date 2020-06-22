@@ -9,7 +9,7 @@
 import Foundation
 
 #if targetEnvironment(simulator)
-  
+
 #else
 class ChipDnaDriver: NSObject, MobileReaderDriver {
 
@@ -21,6 +21,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   /// The place where the transactions take place
   static var source: String = "NMI"
 
+  enum PinPadManufacturer: String {
+    case Miura, BBPOS
+  }
+
   /// Listens to the transaction events of ChipDna
   fileprivate var chipDnaTransactionListener = ChipDnaTransactionListener()
 
@@ -30,7 +34,18 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   /// A block to run after self receives the connect and configure callback from ChipDna
   fileprivate var didConnectAndConfigure: ((Bool) -> Void)?
 
+
   var familiarSerialNumbers: [String] = []
+
+  /// A key used to communicate with TransactionGateway
+  fileprivate var securityKey: String = ""
+
+  /// This is the data that we will need in order to initialize ChipDna again if something happens at runtime.
+  ///
+  /// For example, if the user wants to disconnect a reader, we have to use the ChipDnaMobile.dispose() method. This
+  /// method uninitializes the SDK and we have to initialize again if we want to reconnect a reader. When we want to
+  /// reconnect, we use these args
+  fileprivate var initArgs: [String: Any] = [:]
 
   /// Attempts to initialize the ChipDNA SDK
   ///
@@ -47,6 +62,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
         completion(false)
         return
     }
+
+    // Store the apiKey and the init args for later use
+    securityKey = apiKey
+    initArgs = args
 
     // Initialize
     let parameters = CCParameters()
@@ -106,6 +125,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
   /// Searches for available mobile readers
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
+
     // Set the connection type to BT
     let params = CCParameters()
     params[CCParamPinPadConnectionType] = CCValueBluetooth
@@ -149,16 +169,22 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       error(OmniGeneralException.uninitialized)
     }
 
+    completion(ChipDnaDriver.connectedReader())
+  }
+
+  /// Gets the connected MobileReader
+  /// - Note: This is blocking, and will fail silently if no reader is found
+  /// - Returns: The connected mobile reader, if any
+  internal static func connectedReader() -> MobileReader? {
     guard
       let status = ChipDnaMobile.sharedInstance()?.getStatus(nil),
       let deviceStatusXml = status[CCParamDeviceStatus],
       let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
       deviceStatus.deviceStatus == DeviceStatusEnum.connected else {
-      completion(nil)
-      return
+      return nil
     }
 
-    completion(MobileReader.from(deviceStatus: deviceStatus))
+    return MobileReader.from(deviceStatus: deviceStatus)
   }
 
   /// Attempts to disconnect a connected MobileReader
@@ -171,12 +197,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     if !ChipDnaMobile.isInitialized() {
       error(OmniGeneralException.uninitialized)
     }
-    
+
     ChipDnaMobile.dispose(nil)
-    completion(true)
+    initialize(args: initArgs, completion: completion)
   }
 
-  func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void) {
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
     let requestParams = CCParameters(transactionRequest: request)
 
     chipDnaTransactionListener.detachFromChipDna()
@@ -202,13 +228,29 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
         transactionResult.paymentToken = "nmi_\(token)"
       }
 
-      completion(transactionResult)
-      return
+      // Get more details about the transaction since ChipDna doesn't get everything
+      TransactionGateway.getTransactionCcExpiration(securityKey: self.securityKey,
+                                                    transactionId: result[CCParamTransactionId] ?? "") { ccExpiration in
+        transactionResult.cardExpiration = ccExpiration
+        completion(transactionResult)
+      }
     }
 
-    chipDnaTransactionListener.bindToChipDna()
+    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate)
 
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
+  }
+
+  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    if let result = ChipDnaMobile.sharedInstance()?.terminateTransaction(nil) {
+      if let success = result[CCParamResult], success == CCValueTrue {
+        completion(true)
+      } else {
+        completion(false)
+      }
+    } else {
+      fatalError()
+    }
   }
 
   /// Attempts a refund in ChipDna
@@ -256,41 +298,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.amount = refundAmount
       completion(transactionResult)
     }
-  }
-
-  fileprivate func refund2(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-
-    let request = TransactionRequest(amount: Amount(dollars: transaction.total!))
-
-    let requestParams = CCParameters(transactionRequest: request)
-    requestParams[CCParamTransactionType] = CCValueRefund
-    requestParams[CCParamSaleReference] = extractUserReference(from: transaction)!
-
-    chipDnaTransactionListener.detachFromChipDna()
-
-    chipDnaTransactionListener.onFinished = { result in
-
-      let success = result[CCParamTransactionResult] == CCValueApproved
-
-      var transactionResult = TransactionResult()
-      transactionResult.source = Self.source
-      transactionResult.request = request
-      transactionResult.success = success
-      transactionResult.maskedPan = result[CCParamMaskedPan]
-      transactionResult.cardHolderFirstName = result[CCParamCardHolderFirstName]
-      transactionResult.cardHolderLastName = result[CCParamCardHolderLastName]
-      transactionResult.authCode = result[CCParamAuthCode]
-      transactionResult.cardType = result[CCParamCardSchemeId]?.lowercased()
-      transactionResult.userReference = result[CCParamUserReference]
-      transactionResult.transactionType = "refund"
-
-      completion(transactionResult)
-      return
-    }
-
-    chipDnaTransactionListener.bindToChipDna()
-
-    ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }
 
   fileprivate func extractCardEaseReference(from transaction: Transaction) -> String? {

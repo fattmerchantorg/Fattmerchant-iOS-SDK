@@ -9,7 +9,7 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, TransactionUpdateDelegate {
 
   var omni: Omni?
 
@@ -41,16 +41,23 @@ class ViewController: UIViewController {
     self.getReaderInfo()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1ODczNTgwODUsImV4cCI6MTU4NzQ0NDQ4NSwibmJmIjoxNTg3MzU4MDg1LCJqdGkiOiJHVFprSThFeGdBeWNFY0RuIn0.q8wg7DjlidsU32d6B8qY8gKGp8n0QvRbbcPTBfatLC0"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1OTI4MDI3OTgsImV4cCI6MTU5Mjg4OTE5OCwibmJmIjoxNTkyODAyNzk4LCJqdGkiOiJDb3JIOU9lTHU3UjF6Smg3In0.UwkYOII_djnFCSqY7DNLEmggHbRzbERjryBR4SWlCAs"
 
   override func viewDidLoad() {
     super.viewDidLoad()
     initializeOmni()
+    totalTextInput.delegate = self
+
+    let tap = UITapGestureRecognizer(target: self.totalTextInput, action: #selector(UIView.endEditing(_:)))
+    tap.cancelsTouchesInView = false
+    self.view.addGestureRecognizer(tap)
   }
 
   fileprivate func initializeOmni() {
     // instantiate Omni and store somewhere
     omni = Omni()
+    omni?.signatureProvider = SignatureViewController()
+    omni?.transactionUpdateDelegate = self
 
     log("Attempting initalization...")
 
@@ -83,6 +90,14 @@ class ViewController: UIViewController {
     })
   }
 
+  fileprivate func log(_ transactionUpdate: TransactionUpdate) {
+    var message = "[\(transactionUpdate.value)]"
+    if let userFriendlyMessage = transactionUpdate.userFriendlyMessage {
+      message += " | \(userFriendlyMessage)"
+    }
+    self.log(message)
+  }
+
   fileprivate func log(_ error: OmniException) {
     var errorMessage = error.message
     if let detail = error.detail {
@@ -109,13 +124,36 @@ class ViewController: UIViewController {
     })
   }
 
+  fileprivate func getAmount() -> Amount {
+    guard
+      let text = totalTextInput.text ?? totalTextInput.placeholder,
+      let number = numberFormatter().number(from: text)
+      else {
+        return Amount(cents: 1)
+    }
+
+    return Amount(dollars: number.doubleValue)
+  }
+
+  @IBAction fileprivate func payWithCard() {
+    self.log("Attempting CNP Transaction")
+    let card = CreditCard(personName: "Test Payment", cardNumber: "4111111111111111", cardExp: "0224", addressZip: "32812")
+    let transactionRequest = TransactionRequest(amount: getAmount(), card: card)
+    omni?.pay(transactionRequest: transactionRequest, completion: { completedTransaction in
+      self.log("Finished transaction successfully")
+    }, error: { error in
+      self.log(error)
+    })
+  }
+
   fileprivate func createTransactionRequest() -> TransactionRequest {
-    let request = TransactionRequest(amount: Amount(cents: 10))
+    var request = TransactionRequest(amount: getAmount())
+    request.invoiceId = "2bbe0ec0-f2d5-4fff-b6b3-0db8550cea77"
     return request
   }
 
   fileprivate func refund(_ transaction: Transaction) {
-    omni?.refundMobileReaderTransaction(transaction: transaction, refundAmount: Amount(cents: 2), completion: { _ in
+    omni?.refundMobileReaderTransaction(transaction: transaction, refundAmount: getAmount(), completion: { _ in
       self.log("Refunded transaction successfully")
     }, error: { error in
       self.log(error)
@@ -205,6 +243,30 @@ class ViewController: UIViewController {
 
   fileprivate func initParams() -> Omni.InitParams {
     return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
+  }
+
+  func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
+    self.log(transactionUpdate)
+  }
+}
+
+extension UIViewController: UITextFieldDelegate {
+
+  fileprivate func numberFormatter() -> NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .currency
+    formatter.locale = .current
+    return formatter
+  }
+
+  public func textFieldDidEndEditing(_ textField: UITextField) {
+    guard let text = textField.text else {
+      return
+    }
+
+    let numberString = text.filter { $0 != "$" }
+    let number = Double(numberString)
+    textField.text = numberFormatter().string(for: number)
   }
 
 }

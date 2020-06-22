@@ -11,6 +11,7 @@ import Foundation
 enum TakeMobileReaderPaymentException: OmniException {
   case mobileReaderDriverNotFound
   case mobileReaderNotReady
+  case invoiceNotFound
   case couldNotCreateInvoice(detail: String?)
   case couldNotCreateCustomer(detail: String?)
   case couldNotCreatePaymentMethod(detail: String?)
@@ -26,6 +27,9 @@ enum TakeMobileReaderPaymentException: OmniException {
 
     case .mobileReaderNotReady:
       return "Mobile reader not ready to take payment"
+
+    case .invoiceNotFound:
+      return "Invoice with given id not found"
 
     case .couldNotCreateInvoice(let d):
       return d ?? "Could not create invoice"
@@ -56,6 +60,8 @@ class TakeMobileReaderPayment {
   var paymentMethodRepository: PaymentMethodRepository
   var transactionRepository: TransactionRepository
   var request: TransactionRequest
+  var signatureProvider: SignatureProviding?
+  weak var transactionUpdateDelegate: TransactionUpdateDelegate?
 
   init(
     mobileReaderDriverRepository: MobileReaderDriverRepository,
@@ -63,7 +69,9 @@ class TakeMobileReaderPayment {
     customerRepository: CustomerRepository,
     paymentMethodRepository: PaymentMethodRepository,
     transactionRepository: TransactionRepository,
-    request: TransactionRequest) {
+    request: TransactionRequest,
+    signatureProvider: SignatureProviding?,
+    transactionUpdateDelegate: TransactionUpdateDelegate?) {
 
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
     self.invoiceRepository = invoiceRepository
@@ -71,14 +79,19 @@ class TakeMobileReaderPayment {
     self.paymentMethodRepository = paymentMethodRepository
     self.transactionRepository = transactionRepository
     self.request = request
+    self.signatureProvider = signatureProvider
+    self.transactionUpdateDelegate = transactionUpdateDelegate
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
     availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
 
-      self.createInvoice(failure) { (createdInvoice) in
+      self.getOrCreateInvoice(failure) { (createdInvoice) in
 
-        self.takeMobileReaderPayment(with: driver, failure) { (mobileReaderPaymentResult) in
+        self.takeMobileReaderPayment(with: driver,
+                                     signatureProvider: self.signatureProvider,
+                                     transactionUpdateDelegate: self.transactionUpdateDelegate,
+                                     failure) { (mobileReaderPaymentResult) in
 
           self.createCustomer(mobileReaderPaymentResult, failure) { (createdCustomer) in
 
@@ -102,7 +115,7 @@ class TakeMobileReaderPayment {
     }
   }
 
-  fileprivate func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
+  internal func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
     guard let paymentMethodId = paymentMethod.id else {
@@ -155,6 +168,8 @@ class TakeMobileReaderPayment {
     transactionToCreate.customerId = customerId
     transactionToCreate.invoiceId = invoiceId
     transactionToCreate.response = gatewayResponseJson
+    transactionToCreate.token = result.externalId
+
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
   }
 
@@ -247,6 +262,7 @@ class TakeMobileReaderPayment {
       return
     }
 
+    paymentMethodToCreate.cardExp = result.cardExpiration
     paymentMethodToCreate.customerId = customerId
     paymentMethodToCreate.method = PaymentMethodType.card
     paymentMethodToCreate.cardLastFour = lastFour
@@ -272,25 +288,37 @@ class TakeMobileReaderPayment {
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
   }
 
-  fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver, _ failure: (OmniException) -> Void, _ completion: @escaping (TransactionResult) -> Void) {
-    driver.performTransaction(with: self.request, completion: completion)
+  fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver,
+                                           signatureProvider: SignatureProviding?,
+                                           transactionUpdateDelegate: TransactionUpdateDelegate?,
+                                           _ failure: (OmniException) -> Void,
+                                           _ completion: @escaping (TransactionResult) -> Void) {
+    driver.performTransaction(with: self.request, signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate, completion: completion)
   }
 
-  fileprivate func createInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
-    let invoiceToCreate = Invoice()
-    invoiceToCreate.total = request.amount.dollars()
-    invoiceToCreate.url = "https://fattpay.com/#/bill"
-    let invoiceMeta = [
-      "subtotal": self.request.amount.dollarsString()
-    ]
+  /// Gets the invoice with the id in the transaction request or creates a new one
+  internal func getOrCreateInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
+    // If an invoiceId was given in the transaction request, we should verify that an invoice with that id exists
+    if let invoiceId = request.invoiceId {
+      invoiceRepository.getById(id: invoiceId, completion: completion) { (error) in
+        failure(TakeMobileReaderPaymentException.invoiceNotFound)
+      }
+    } else {
+      let invoiceToCreate = Invoice()
+      invoiceToCreate.total = request.amount.dollars()
+      invoiceToCreate.url = "https://fattpay.com/#/bill"
+      let invoiceMeta = [
+        "subtotal": self.request.amount.dollarsString()
+      ]
 
-    guard let invoiceMetaJson = invoiceMeta.jsonValue() else {
-      failure(Exception.couldNotCreateInvoice(detail: "Error generating json for meta"))
-      return
+      guard let invoiceMetaJson = invoiceMeta.jsonValue() else {
+        failure(Exception.couldNotCreateInvoice(detail: "Error generating json for meta"))
+        return
+      }
+
+      invoiceToCreate.meta = invoiceMetaJson
+      invoiceRepository.create(model: invoiceToCreate, completion: completion, error: failure)
     }
-
-    invoiceToCreate.meta = invoiceMetaJson
-    invoiceRepository.create(model: invoiceToCreate, completion: completion, error: failure)
   }
 
   fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {

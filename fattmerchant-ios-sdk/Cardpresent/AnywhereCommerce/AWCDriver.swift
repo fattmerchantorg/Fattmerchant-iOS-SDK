@@ -123,7 +123,14 @@ class AWCDriver: MobileReaderDriver {
     fatalError("Not implemented")
   }
 
-  func performTransaction(with request: TransactionRequest, completion: @escaping (TransactionResult) -> Void) {
+  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    fatalError("Not implemented")
+  }
+
+  func performTransaction(with request: TransactionRequest,
+                          signatureProvider: SignatureProviding?,
+                          transactionUpdateDelegate: TransactionUpdateDelegate?,
+                          completion: @escaping (TransactionResult) -> Void) {
     // Create AnyPay Transaction
     let transaction = AnyPayTransaction(type: .SALE)
     transaction?.currency = "USD"
