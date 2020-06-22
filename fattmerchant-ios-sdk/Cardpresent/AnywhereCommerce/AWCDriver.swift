@@ -120,7 +120,8 @@ class AWCDriver: MobileReaderDriver {
   }
 
   func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    fatalError("Not implemented")
+    ANPCardReaderController.shared().disconnectReader()
+    completion(true)
   }
 
   func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
