@@ -14,6 +14,8 @@
 		594466AF249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */; };
 		594466B1249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */; };
 		594466B2249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */; };
+		594466B324A09D4C00C6CFD8 /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */; };
+		594466B424A09E4200C6CFD8 /* TransactionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59561817248C3FBD00E622B6 /* TransactionUpdate.swift */; };
 		59561818248C3FBD00E622B6 /* TransactionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59561817248C3FBD00E622B6 /* TransactionUpdate.swift */; };
 		597BEA48247FE205009319D6 /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */; };
 		597BEA4B2480C4C9009319D6 /* TransactionGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */; };
@@ -928,6 +930,7 @@
 				D7A28D652436278600FC8872 /* TokenizePaymentMethod.swift in Sources */,
 				D765D47623CC4A1400656040 /* Transaction.swift in Sources */,
 				D79308A823D0A9050066FCA2 /* MobileReaderDriver.swift in Sources */,
+				594466B324A09D4C00C6CFD8 /* TransactionUpdateDelegate.swift in Sources */,
 				D7C17B2423E4BA200031D9BB /* TakeMobileReaderPayment.swift in Sources */,
 				D79308AE23D0AA230066FCA2 /* TransactionResult.swift in Sources */,
 				D765D49723CFC1A000656040 /* InvoiceRepository.swift in Sources */,
@@ -941,6 +944,7 @@
 				D78FA933240EF48B00398D81 /* SignatureProviding.swift in Sources */,
 				D7801BF2241F264400A93001 /* MockModelRepository.swift in Sources */,
 				D783DAC12449E905007C0A17 /* ChargeRequest.swift in Sources */,
+				594466B424A09E4200C6CFD8 /* TransactionUpdate.swift in Sources */,
 				597BEA5124851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift in Sources */,
 				59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */,
 				D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */,

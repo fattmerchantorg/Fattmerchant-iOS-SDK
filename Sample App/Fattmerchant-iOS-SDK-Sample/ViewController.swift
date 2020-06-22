@@ -160,7 +160,8 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   fileprivate func createTransactionRequest() -> TransactionRequest {
-    let request = TransactionRequest(amount: getAmount())
+    var request = TransactionRequest(amount: getAmount())
+    request.invoiceId = "2bbe0ec0-f2d5-4fff-b6b3-0db8550cea77"
     return request
   }
 
