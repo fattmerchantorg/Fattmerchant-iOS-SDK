@@ -22,7 +22,7 @@ class GetConnectedMobileReader {
   }
 
   func start(completion: @escaping (MobileReader?) -> Void, failure: @escaping (OmniException) -> Void) {
-    mobileReaderDriverRepository.getDrivers { drivers in
+    mobileReaderDriverRepository.getInitializedDrivers { drivers in
       guard let driver = drivers.first else {
         failure(GetConnectedMobileReaderException.noReaderAvailable)
         return
