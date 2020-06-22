@@ -37,7 +37,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       paymentMethodRepository: paymentMethodRepo,
       transactionRepository: transactionRepo,
       request: transactionRequest,
-      signatureProvider: nil
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil
     ).start(completion: { completedTransaction in
       transactionCompleted.fulfill()
     }) { exception in
@@ -56,7 +57,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       paymentMethodRepository: paymentMethodRepo,
       transactionRepository: transactionRepo,
       request: transactionRequest,
-      signatureProvider: nil
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil
     )
 
     // Verify that the externalId is put in the transaction
@@ -86,6 +88,70 @@ class TakeMobileReaderPaymentTests: XCTestCase {
                           })
 
     wait(for: [transactionHasExternalId], timeout: 10.0)
+  }
+
+  func testTransactionRequestWithInvalidIdFails() {
+    let badInvoiceId = "notreal"
+    let transactionRequest = TransactionRequest(amount: Amount(cents: 1), tokenize: true, invoiceId: badInvoiceId)
+    let job = TakeMobileReaderPayment(
+      mobileReaderDriverRepository: mobileReaderDriverRepo,
+      invoiceRepository: invoiceRepo,
+      customerRepository: customerRepo,
+      paymentMethodRepository: paymentMethodRepo,
+      transactionRepository: transactionRepo,
+      request: transactionRequest,
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil
+    )
+
+    let expectedError = TakeMobileReaderPaymentException.invoiceNotFound
+    let expectation = XCTestExpectation(description: "Transaction fails")
+
+    job.start(completion: { _ in
+      XCTFail("Transaction didn't fail")
+    }) { error in
+      XCTAssertEqual(error.message, expectedError.message)
+      if case TakeMobileReaderPaymentException.invoiceNotFound = error {
+        expectation.fulfill()
+      } else {
+        XCTFail("Wrong error thrown")
+      }
+    }
+
+    wait(for: [expectation], timeout: 10.0)
+  }
+
+  func testTransactionRequestWithIdDoesNotCreateNewInvoice() {
+    // Add one single invoice to the modelStore
+    let invoiceId = UUID().uuidString
+    let invoice = Invoice()
+    invoice.id = invoiceId
+
+    modelStore = [invoiceId: invoice]
+
+    let transactionRequest = TransactionRequest(amount: Amount(cents: 1), tokenize: true, invoiceId: invoiceId)
+    let job = TakeMobileReaderPayment(
+      mobileReaderDriverRepository: mobileReaderDriverRepo,
+      invoiceRepository: invoiceRepo,
+      customerRepository: customerRepo,
+      paymentMethodRepository: paymentMethodRepo,
+      transactionRepository: transactionRepo,
+      request: transactionRequest,
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil
+    )
+    
+    let expectation = XCTestExpectation(description: "No other invoices are in the modelStore")
+
+    job.start(completion: { transaction in
+      XCTAssertEqual(modelStore.values.filter { $0 is Invoice }.count, 1)
+      XCTAssertEqual(transaction.invoiceId, invoiceId)
+      expectation.fulfill()
+    }) { error in
+      XCTFail("Transaction failed")
+    }
+
+    wait(for: [expectation], timeout: 10.0)
   }
 
 }
