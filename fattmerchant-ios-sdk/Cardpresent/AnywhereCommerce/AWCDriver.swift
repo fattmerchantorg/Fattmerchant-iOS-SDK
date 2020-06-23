@@ -9,6 +9,10 @@
 import Foundation
 import AnyPay
 
+#if targetEnvironment(simulator)
+
+#else
+
 /// A `MobileReaderDriver` that controls AnywhereCommerce mobile readers
 class AWCDriver: MobileReaderDriver {
 
@@ -22,6 +26,8 @@ class AWCDriver: MobileReaderDriver {
 
   /// The transaction currently underway
   fileprivate var currentTransaction: AnyPayTransaction?
+
+  weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
 
   /// The place where the transactions take place
   static var source: String = "AWC"
@@ -175,3 +181,5 @@ class AWCDriver: MobileReaderDriver {
   }
 
 }
+
+#endif

@@ -9,6 +9,10 @@
 import Foundation
 import AnyPay
 
+#if targetEnvironment(simulator)
+
+#else
+
 extension MobileReader {
 
   static func from(btDevice: ANPBluetoothDevice) -> MobileReader {
@@ -67,3 +71,5 @@ extension Transaction {
     return meta?["awcTransactionId"]
   }
 }
+
+#endif
