@@ -20,7 +20,27 @@ class CancelCurrentTransaction {
   }
 
   func start(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    mobileReaderDriverRepository.driver.cancelCurrentTransaction(completion: completion, error: error)
+    mobileReaderDriverRepository.getInitializedDrivers { drivers in
+      let semaphore = DispatchSemaphore(value: 1)
+      var success = true
+
+      DispatchQueue.global(qos: .userInitiated).async {
+        for driver in drivers {
+          semaphore.wait()
+
+          driver.cancelCurrentTransaction(completion: { cancelled in
+            success = success && cancelled
+          }) { _ in
+            success = false
+          }
+
+          semaphore.signal()
+        }
+
+        semaphore.wait()
+        completion(success)
+      }
+    }
   }
 
 }

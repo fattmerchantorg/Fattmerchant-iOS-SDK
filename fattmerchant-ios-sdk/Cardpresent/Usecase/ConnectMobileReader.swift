@@ -42,36 +42,38 @@ class ConnectMobileReader {
           }
         })
       } else {
-        // Try to connect the reader with each driver
-        let drivers = [self.mobileReaderDriverRepository.driver]
-        var callbackExecuted = false
-        let semaphore = DispatchSemaphore(value: 1)
+        // Try to connect the reader with each initialized driver
+        self.mobileReaderDriverRepository.getInitializedDrivers { drivers in
+          var callbackExecuted = false
+          let semaphore = DispatchSemaphore(value: 1)
 
-        DispatchQueue.global(qos: .userInitiated).async {
-          for driver in drivers {
-            semaphore.wait()
+          DispatchQueue.global(qos: .userInitiated).async {
+            for driver in drivers {
+              semaphore.wait()
 
-            if callbackExecuted {
-              return
-            }
-            driver.mobileReaderConnectionStatusDelegate = self.mobileReaderConnectionStatusDelegate
-            driver.connect(reader: self.mobileReader) { connected in
-              if connected {
-                onConnected(self.mobileReader)
-                callbackExecuted = true
-              } else {
-                onFailed(ConnectMobileReaderException.couldNotConnectMobileReader(reader: self.mobileReader))
+              if callbackExecuted {
+                return
               }
 
-              semaphore.signal()
-              return
-            }
+              driver.connect(reader: self.mobileReader) { connected in
+                if connected {
+                  onConnected(self.mobileReader)
+                  callbackExecuted = true
+                } else {
+                  onFailed(ConnectMobileReaderException.couldNotConnectMobileReader(reader: self.mobileReader))
+                }
 
+                semaphore.signal()
+                return
+              }
+
+            }
           }
         }
       }
 
     }
+
   }
 
 }

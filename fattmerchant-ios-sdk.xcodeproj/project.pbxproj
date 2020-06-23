@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */; };
+		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
+		593A7FB02460118400D78874 /* AWCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FAF2460118400D78874 /* AWCUtils.swift */; };
+		593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
+		593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
+		593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FDA2468956000D78874 /* AsyncFilterTests.swift */; };
+		596963FF245FED1000D0612F /* AWCDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596963FE245FED1000D0612F /* AWCDriver.swift */; };
+		59696400245FEF8000D0612F /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 596963FB245FECBE00D0612F /* AnyPay.framework */; };
+		59696401245FEF8000D0612F /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 596963FB245FECBE00D0612F /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		594466AB249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */; };
 		594466AC249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */; };
 		594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */; };
@@ -181,7 +189,6 @@
 		D7A28D652436278600FC8872 /* TokenizePaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A28D632436278600FC8872 /* TokenizePaymentMethod.swift */; };
 		D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793090523D255430066FCA2 /* AudioToolbox.framework */; };
 		D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091523D2568D0066FCA2 /* MediaPlayer.framework */; };
-		D7B7110823D5891100EF98DB /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
 		D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7113A23D63B0D00EF98DB /* Environment.swift */; };
 		D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B7113A23D63B0D00EF98DB /* Environment.swift */; };
 		D7C17B2223E4BA200031D9BB /* ConnectMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79308B723D0AC3A0066FCA2 /* ConnectMobileReader.swift */; };
@@ -201,6 +208,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				59696401245FEF8000D0612F /* AnyPay.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +221,11 @@
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FattmerchantIosTests.swift; sourceTree = "<group>"; };
 		591C20A3206EB26700C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		593A7FAF2460118400D78874 /* AWCUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWCUtils.swift; sourceTree = "<group>"; };
+		593A7FD6246878B700D78874 /* AsyncFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilter.swift; sourceTree = "<group>"; };
+		593A7FDA2468956000D78874 /* AsyncFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilterTests.swift; sourceTree = "<group>"; };
+		596963FB245FECBE00D0612F /* AnyPay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnyPay.framework; path = "Vendored Frameworks/AnyPay/AnyPay.framework"; sourceTree = "<group>"; };
+		596963FE245FED1000D0612F /* AWCDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWCDriver.swift; sourceTree = "<group>"; };
 		594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransaction.swift; sourceTree = "<group>"; };
 		594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatusDelegate.swift; sourceTree = "<group>"; };
 		594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatus.swift; sourceTree = "<group>"; };
@@ -344,11 +357,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				D77918052404859B007ED070 /* libCardEaseXml.a in Frameworks */,
 				D77918032404859B007ED070 /* libChipDnaMobileAPI.a in Frameworks */,
 				D77918062404859B007ED070 /* libLumberjack.a in Frameworks */,
+				59696400245FEF8000D0612F /* AnyPay.framework in Frameworks */,
 				D77918042404859B007ED070 /* libsqlcipher-4.0.1.a in Frameworks */,
-				D7B7110823D5891100EF98DB /* CoreBluetooth.framework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
@@ -394,6 +408,7 @@
 		591C2092206EB12F00C848DA /* fattmerchant-ios-sdk */ = {
 			isa = PBXGroup;
 			children = (
+				593A7FD52468788000D78874 /* Utils */,
 				D71B6F8F239E9702007FB7C4 /* Cardpresent */,
 				5993C2F6207D0402004DDA9F /* Models */,
 				591C2094206EB12F00C848DA /* Info.plist */,
@@ -410,6 +425,7 @@
 		591C20A0206EB26700C848DA /* fattmerchant_ios_sdkTests */ = {
 			isa = PBXGroup;
 			children = (
+				593A7FD92468955300D78874 /* Utils */,
 				D783DAC22449F34A007C0A17 /* Usecase */,
 				D7720E4A241997570064DBDC /* Mock */,
 				D760D82D23D885120075057C /* Raw Json */,
@@ -423,6 +439,31 @@
 			path = fattmerchant_ios_sdkTests;
 			sourceTree = "<group>";
 		};
+		593A7FD52468788000D78874 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				593A7FD6246878B700D78874 /* AsyncFilter.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		593A7FD92468955300D78874 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				593A7FDA2468956000D78874 /* AsyncFilterTests.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		596963FD245FECEA00D0612F /* AnywhereCommerce */ = {
+			isa = PBXGroup;
+			children = (
+				596963FE245FED1000D0612F /* AWCDriver.swift */,
+				593A7FAF2460118400D78874 /* AWCUtils.swift */,
+			);
+			path = AnywhereCommerce;
+      sourceTree = "<group>";
+    };
 		597BEA4F24851B68009319D6 /* ChipDna */ = {
 			isa = PBXGroup;
 			children = (
@@ -467,6 +508,7 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				596963FB245FECBE00D0612F /* AnyPay.framework */,
 				D793091523D2568D0066FCA2 /* MediaPlayer.framework */,
 				D793091123D256690066FCA2 /* CoreBluetooth.framework */,
 				D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */,
@@ -492,6 +534,7 @@
 				D765D47723CC4AFF00656040 /* Repository */,
 				D765D48223CE419700656040 /* JSON */,
 				D765D48123CD00C800656040 /* Data */,
+				596963FD245FECEA00D0612F /* AnywhereCommerce */,
 				D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */,
 				D79308A623D0A9050066FCA2 /* MobileReaderDriver.swift */,
 				D79308AF23D0AA9A0066FCA2 /* TransactionType.swift */,
@@ -860,6 +903,7 @@
 				D765D47923CC4B1100656040 /* CustomerRepository.swift in Sources */,
 				D79308AD23D0AA230066FCA2 /* TransactionResult.swift in Sources */,
 				D79308A423D0A8B10066FCA2 /* MobileReader.swift in Sources */,
+				593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */,
 				D765D47523CC4A1400656040 /* Transaction.swift in Sources */,
 				D7A28D612433E2CA00FC8872 /* TakePayment.swift in Sources */,
 				D79308C723D1045C0066FCA2 /* Omni.swift in Sources */,
@@ -883,6 +927,7 @@
 				D79308D223D22F480066FCA2 /* ChipDnaTransactionUserReference.swift in Sources */,
 				D79308C123D0E0B40066FCA2 /* SearchForReaders.swift in Sources */,
 				D79308B023D0AA9A0066FCA2 /* TransactionType.swift in Sources */,
+				596963FF245FED1000D0612F /* AWCDriver.swift in Sources */,
 				D765D48423CE41A500656040 /* JSONValue.swift in Sources */,
 				D765D49F23CFCA1400656040 /* Amount.swift in Sources */,
 				D765D49623CFC1A000656040 /* InvoiceRepository.swift in Sources */,
@@ -899,6 +944,7 @@
 				D79308B823D0AC3A0066FCA2 /* ConnectMobileReader.swift in Sources */,
 				597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */,
 				D781037F23D9F85100256F2F /* PaginatedData.swift in Sources */,
+				593A7FB02460118400D78874 /* AWCUtils.swift in Sources */,
 				D765D46623CC465800656040 /* Customer.swift in Sources */,
 				D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */,
 				594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
@@ -964,8 +1010,10 @@
 				D702B7D023C8F80200B8AB79 /* PaymentMethodType.swift in Sources */,
 				D765D47323CC49C800656040 /* Self.swift in Sources */,
 				D73BBCF9244D81210052B525 /* DisconnectMobileReader.swift in Sources */,
+				593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */,
 				D760D82F23D885250075057C /* TransactionJson.swift in Sources */,
 				D765D46D23CC478000656040 /* Invoice.swift in Sources */,
+				593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */,
 				D765D48023CCBBFD00656040 /* OmniException.swift in Sources */,
 				D702B7D123C8F80200B8AB79 /* Networking.swift in Sources */,
 				D79308AB23D0A9FB0066FCA2 /* TransactionRequest.swift in Sources */,
@@ -1125,6 +1173,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
+					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1158,6 +1208,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
+					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

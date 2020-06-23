@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum TransactionType {
+enum TransactionType: String {
   case sale
   case refund
 }

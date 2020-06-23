@@ -164,7 +164,7 @@ class TakeMobileReaderPayment {
     transactionToCreate.meta = transactionMetaJson
     transactionToCreate.type = "charge"
     transactionToCreate.method = "card"
-    transactionToCreate.source = "iOS|CPSDK|NMI"
+    transactionToCreate.source = "iOS|CPSDK|\(result.source)"
     transactionToCreate.customerId = customerId
     transactionToCreate.invoiceId = invoiceId
     transactionToCreate.response = gatewayResponseJson
@@ -178,16 +178,29 @@ class TakeMobileReaderPayment {
   fileprivate func createTransactionMetaJson(from transactionResult: TransactionResult) -> JSONValue? {
     var dict: [String: String] = [:]
 
-    if let userRef = transactionResult.userReference {
-      dict["nmiUserRef"] = userRef
-    }
+    //TODO: Move this somewhere outside the UseCase
+    #if !targetEnvironment(simulator)
+    if transactionResult.source.contains(ChipDnaDriver.source) {
+      if let userRef = transactionResult.userReference {
+        dict["nmiUserRef"] = userRef
+      }
 
-    if let localId = transactionResult.localId {
-      dict["cardEaseReference"] = localId
-    }
+      if let localId = transactionResult.localId {
+        dict["cardEaseReference"] = localId
+      }
 
-    if let externalId = transactionResult.externalId {
-      dict["nmiTransactionId"] = externalId
+      if let externalId = transactionResult.externalId {
+        dict["nmiTransactionId"] = externalId
+      }
+    } else if transactionResult.source.contains(AWCDriver.source) {
+      if let externalId = transactionResult.externalId {
+        dict["awcTransactionId"] = externalId
+      }
+    }
+    #endif
+
+    if let gatewayResponse = transactionResult.gatewayResponse {
+      dict["gatewayResponse"] = gatewayResponse
     }
 
     return dict.jsonValue()
@@ -309,19 +322,16 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
-    repo.getDrivers { (drivers) in
-      guard let driver = drivers.first else {
-        failure(TakeMobileReaderPaymentException.mobileReaderDriverNotFound)
-        return
-      }
-
-      driver.isReadyToTakePayment(completion: { (ready) in
-        if ready {
-          completion(driver)
-        } else {
-          failure(TakeMobileReaderPaymentException.mobileReaderNotReady)
+    repo.getInitializedDrivers { initializedDrivers in
+      // Get drivers that are ready for payment
+      filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }) { driversReadyForPayment in
+        guard let driver = driversReadyForPayment.first else {
+          failure(TakeMobileReaderPaymentException.mobileReaderDriverNotFound)
+          return
         }
-      })
+
+        completion(driver)
+      }
     }
   }
 

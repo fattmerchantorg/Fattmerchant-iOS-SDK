@@ -22,13 +22,28 @@ class Merchant: Model, Codable {
   /// Inside options, there is
   internal var options: JSONValue?
 
-  /// Gets the 'emvPassword' option rom the Merchant
+  /// Gets the 'emvPassword' option from the Merchant
   ///
   /// The 'emvPassword' is used for authenticating with a third-party provider of mobile reader
-  ///
   /// - Returns: The 'emvPassword', if any. Nil if none found
   func emvPassword() -> String? {
     return getOptionString("emv_password")
+  }
+
+  /// Gets the 'emvTerminalSecret' option from the Merchant
+  ///
+  /// The 'emvTerminalSecret' is used for authenticating with a third-party provider of mobile reader
+  /// - Returns: The 'emvTerminalSecret', if any. Nil if none found
+  func emvTerminalSecret() -> String? {
+    return getOptionString("emv_terminal_secret")
+  }
+
+  /// Gets the 'emvTerminalId' option from the Merchant
+  ///
+  /// The 'emvTerminalId' is used for authenticating with a third-party provider of mobile reader
+  /// - Returns: The 'emvTerminalId', if any. Nil if none found
+  func emvTerminalId() -> String? {
+    return getOptionString("emv_terminal_id")
   }
 
   /// Gets an 'option' as a String from the `options` object.

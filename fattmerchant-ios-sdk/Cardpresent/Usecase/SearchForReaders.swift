@@ -23,14 +23,27 @@ class SearchForReaders {
     self.args = args
   }
 
-  func start(completion: @escaping ([MobileReader]) -> Void, failure: (OmniException) -> Void) {
-    mobileReaderDriverRepository.getDrivers { (drivers) in
-      guard let driver = drivers.first else {
+  func start(completion: @escaping ([MobileReader]) -> Void, failure: @escaping (OmniException) -> Void) {
+    mobileReaderDriverRepository.getInitializedDrivers { (drivers) in
+      guard !drivers.isEmpty else {
         failure(SearchForReadersException.noMobileReaderAvailable)
         return
       }
 
-      driver.searchForReaders(args: args, completion: completion)
+      let dispatchGroup = DispatchGroup()
+      var allReaders: [MobileReader] = []
+
+      drivers.forEach { driver in
+        dispatchGroup.enter()
+        driver.searchForReaders(args: self.args) { readers in
+          allReaders.append(contentsOf: readers)
+          dispatchGroup.leave()
+        }
+      }
+
+      dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+        completion(allReaders)
+      }
     }
   }
 }
