@@ -18,7 +18,7 @@ import CoreBluetooth
 class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
 
   /// Manages the search of BT devices
-  fileprivate var btCentralManager: CBCentralManager!
+  fileprivate var btCentralManager: CBCentralManager?
 
   /// Holds an array of the bluetooth devices that have been discovered for the purpose of BT connection
   ///
@@ -123,7 +123,9 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
 
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
     // Start searching
-    startBtDeviceSearch()
+    guard startBtDeviceSearch() else {
+      return completion([])
+    }
 
     // After some time, stop searching and report the results
     let deadline = DispatchTime.now() + DispatchTimeInterval.seconds(3)
@@ -306,14 +308,20 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
   ///
   /// The serial numbers of the BT devices will be inserted into `discoveredBluetoothDeviceSerailNumbers` as they
   /// are found.
-  func startBtDeviceSearch() {
+  ///
+  /// - Returns: True if started searching. False otherwise
+  func startBtDeviceSearch() -> Bool {
+    guard let centralManager = btCentralManager else {
+      return false
+    }
     discoveredBluetoothDeviceSerialNumbers = []
-    btCentralManager.scanForPeripherals(withServices: nil, options: nil)
+    centralManager.scanForPeripherals(withServices: nil, options: nil)
+    return true
   }
 
   /// Stops searching for AWC BT Devices
   func stopBtDeviceSearch() {
-    btCentralManager.stopScan()
+    btCentralManager?.stopScan()
   }
 
   func centralManagerDidUpdateState(_ central: CBCentralManager) {
