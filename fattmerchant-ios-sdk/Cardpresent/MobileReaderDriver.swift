@@ -41,7 +41,11 @@ protocol MobileReaderDriver {
 
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void)
 
-  func connect(reader: MobileReader, completion: @escaping (Bool) -> Void)
+  /// Connects the given MobileReader
+  /// - Parameters:
+  ///   - reader: The `MobileReader` to connect
+  ///   - completion: A block to call once finished. Receives the connected `MobileReader` if connected. Otherwise, nil
+  func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void)
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void)
 

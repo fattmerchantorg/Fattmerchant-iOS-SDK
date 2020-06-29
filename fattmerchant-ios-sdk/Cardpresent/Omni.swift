@@ -221,7 +221,15 @@ public class Omni: NSObject {
     }
 
     let job = CancelCurrentTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository)
-    job.start(completion: completion, error: error)
+    job.start(completion: { success in
+      self.preferredQueue.async {
+        completion(success)
+      }
+    }, error: { err in
+      self.preferredQueue.async {
+        error(err)
+      }
+    })
   }
 
   /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni

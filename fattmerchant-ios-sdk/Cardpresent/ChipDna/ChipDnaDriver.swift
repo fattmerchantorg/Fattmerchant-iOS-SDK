@@ -34,8 +34,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   fileprivate var didFindAvailablePinPads: (([SelectablePinPad]) -> Void)?
 
   /// A block to run after self receives the connect and configure callback from ChipDna
-  fileprivate var didConnectAndConfigure: ((Bool) -> Void)?
-
+  fileprivate var didConnectAndConfigure: ((MobileReader?) -> Void)?
 
   var familiarSerialNumbers: [String] = []
 
@@ -145,18 +144,19 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///
   /// - Parameters:
   ///   - reader: a MobileReader to connect
-  ///   - completion: a block to run once the MobileReader is connected. If successfully connected, the block will receive true. Otherwise, it will receive false
-  func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
+  ///   - completion: a block to run once the MobileReader is connected. If successfully connected, the block will
+  ///   receive the `MobileReader`. Otherwise, it will receive nil
+  func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
     let requestParams = CCParameters()
     requestParams[CCParamPinPadName] = reader.name
     requestParams[CCParamPinPadConnectionType] = CCValueBluetooth
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
-    didConnectAndConfigure = { connected in
-      if connected, let serial = reader.serialNumber {
+    didConnectAndConfigure = { connectedReader in
+      if connectedReader != nil, let serial = reader.serialNumber {
         self.familiarSerialNumbers.append(serial)
       }
-      completion(connected)
+      completion(connectedReader)
     }
     ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
     ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
@@ -352,7 +352,19 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
   @objc func onConnectAndConfigure(parameters: CCParameters) {
     ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
-    didConnectAndConfigure?(parameters[CCParamResult] == CCValueTrue)
+
+    // Make sure someone is listening to the callback
+    guard let didConnectAndConfigure = didConnectAndConfigure else {
+      return
+    }
+
+    // If no reader was connected, pass nil
+    if (parameters[CCParamResult] != CCValueTrue) {
+      didConnectAndConfigure(nil)
+    }
+
+    // Figure out the reader details and pass them along
+    didConnectAndConfigure(ChipDnaDriver.connectedReader())
   }
 
   @objc func onConfigurationUpdate(parameters: CCParameters) {

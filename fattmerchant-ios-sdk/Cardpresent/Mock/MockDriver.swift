@@ -44,16 +44,16 @@ class MockDriver: MobileReaderDriver {
     completion([reader!])
   }
 
-  func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
+  func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
     guard shouldConnect else {
-      return completion(false)
+      return completion(nil)
     }
 
     if let serial = reader.serialNumber {
       familiarSerialNumbers.append(serial)
     }
 
-    completion(true)
+    completion(reader)
   }
 
   func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {

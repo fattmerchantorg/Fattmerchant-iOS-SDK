@@ -34,9 +34,9 @@ class ConnectMobileReader {
     mobileReaderDriverRepository.getDriverFor(mobileReader: mobileReader) { (driver) in
       if var driver = driver {
         driver.mobileReaderConnectionStatusDelegate = self.mobileReaderConnectionStatusDelegate
-        driver.connect(reader: self.mobileReader, completion: { connected in
-          if connected {
-            onConnected(self.mobileReader)
+        driver.connect(reader: self.mobileReader, completion: { connectedReader in
+          if let connectedReader = connectedReader {
+            onConnected(connectedReader)
           } else {
             onFailed(ConnectMobileReaderException.couldNotConnectMobileReader(reader: self.mobileReader))
           }
@@ -48,16 +48,17 @@ class ConnectMobileReader {
           let semaphore = DispatchSemaphore(value: 1)
 
           DispatchQueue.global(qos: .userInitiated).async {
-            for driver in drivers {
+            for var driver in drivers {
+              driver.mobileReaderConnectionStatusDelegate = self.mobileReaderConnectionStatusDelegate
               semaphore.wait()
 
               if callbackExecuted {
                 return
               }
 
-              driver.connect(reader: self.mobileReader) { connected in
-                if connected {
-                  onConnected(self.mobileReader)
+              driver.connect(reader: self.mobileReader) { connectedReader in
+                if let connectedReader = connectedReader {
+                  onConnected(connectedReader)
                   callbackExecuted = true
                 } else {
                   onFailed(ConnectMobileReaderException.couldNotConnectMobileReader(reader: self.mobileReader))

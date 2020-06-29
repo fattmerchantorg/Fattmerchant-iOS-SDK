@@ -135,7 +135,7 @@ class TakeMobileReaderPayment {
 
     var gatewayResponseJson: JSONValue?
 
-    if let authCode = result.authCode {
+    if let authCode = result.authCode, result.source.lowercased() == "nmi" {
       let gatewayResponse = [
         "gateway_specific_response_fields": [
           "nmi": [
@@ -169,6 +169,7 @@ class TakeMobileReaderPayment {
     transactionToCreate.invoiceId = invoiceId
     transactionToCreate.response = gatewayResponseJson
     transactionToCreate.token = result.externalId
+    transactionToCreate.message = result.message
 
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
   }

@@ -30,19 +30,20 @@ class SearchForReaders {
         return
       }
 
-      let dispatchGroup = DispatchGroup()
+      var dispatchGroup: DispatchGroup? = DispatchGroup()
       var allReaders: [MobileReader] = []
 
       drivers.forEach { driver in
-        dispatchGroup.enter()
+        dispatchGroup?.enter()
         driver.searchForReaders(args: self.args) { readers in
           allReaders.append(contentsOf: readers)
-          dispatchGroup.leave()
+          dispatchGroup?.leave()
         }
       }
 
-      dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+      dispatchGroup?.notify(queue: .global(qos: .userInitiated)) {
         completion(allReaders)
+        dispatchGroup = nil
       }
     }
   }

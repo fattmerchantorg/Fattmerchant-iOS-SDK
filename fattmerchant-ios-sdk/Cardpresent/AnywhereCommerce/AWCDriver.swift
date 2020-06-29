@@ -8,17 +8,33 @@
 
 import Foundation
 import AnyPay
+import CoreBluetooth
 
 #if targetEnvironment(simulator)
 
 #else
 
 /// A `MobileReaderDriver` that controls AnywhereCommerce mobile readers
-class AWCDriver: MobileReaderDriver {
+class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
 
+  /// Manages the search of BT devices
+  fileprivate var btCentralManager: CBCentralManager!
+
+  /// Holds an array of the bluetooth devices that have been discovered for the purpose of BT connection
+  ///
+  /// - Note: This array is cleared every time a new BT search is conducted
+  fileprivate var discoveredBluetoothDeviceSerialNumbers: [String] = []
+
+  /// A test endpoint for AWC
   fileprivate var testGatewayUrl = "https://testpayments.anywherecommerce.com/merchant"
+
+  /// The live endpoint for AWC
   fileprivate var gatewayUrl = "https://payments.anywherecommerce.com/merchant"
+
+  /// A test terminalId for AWC
   fileprivate var testTerminalId = "2994002"
+
+  /// A test TerminalKey for AWC
   fileprivate var testTerminalKey = "password"
 
   /// Allows us to interact with AnywhereCommerce
@@ -27,6 +43,10 @@ class AWCDriver: MobileReaderDriver {
   /// The transaction currently underway
   fileprivate var currentTransaction: AnyPayTransaction?
 
+  /// Listens to transaction update events
+  weak var transactionUpdateDelegate: TransactionUpdateDelegate?
+
+  /// Listens to mobile reader status update events
   weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
 
   /// The place where the transactions take place
@@ -65,6 +85,11 @@ class AWCDriver: MobileReaderDriver {
       // If we were unable to authenticate with AWC, then clear out the anyPay instance
       if authenticated == false {
         self.anyPay = nil
+      } else {
+        self.startBtService()
+        self.onCardReaderDisconnected = {
+          self.mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: .disconnected)
+        }
       }
 
       completion(authenticated)
@@ -95,33 +120,49 @@ class AWCDriver: MobileReaderDriver {
   }
 
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
+    // Start searching
+    startBtDeviceSearch()
 
-    ANPCardReaderController.shared().subscribe { (cardReader: AnyPayCardReader?) in
-      if let serial = cardReader?.serialNumber {
-        self.familiarSerialNumbers.append(serial)
+    // After some time, stop searching and report the results
+    let deadline = DispatchTime.now() + DispatchTimeInterval.seconds(3)
+    DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: deadline) {
+      self.stopBtDeviceSearch()
+      let readers = self.discoveredBluetoothDeviceSerialNumbers.map {
+        MobileReader(name: $0, serialNumber: $0)
       }
-
-      completion([MobileReader.from(anyPayCardReader: cardReader!)])
-    }
-
-    ANPCardReaderController.shared().connectBluetoothReader { (devices: [ANPBluetoothDevice]?) in
-      var d = devices
-
+      completion(readers)
     }
   }
 
-  func connect(reader: MobileReader, completion: @escaping (Bool) -> Void) {
-    if ANPCardReaderController.shared().isReaderConnected() &&
-      ANPCardReaderController.shared().connectedReader?.serialNumber == reader.serialNumber {
-      completion(true)
+  func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
+    // If the reader we want to connect is already connect it, just return it
+    if let connectedReader = connectedReader(), connectedReader.serialNumber == reader.serialNumber {
+      completion(connectedReader)
       return
     }
 
+    // Can't connect to a reader without a serial number
     guard let serialNumber = reader.serialNumber else {
-      completion(false)
+      completion(nil)
       return
     }
 
+    // Subscribe to events
+    onCardReaderConnected = { reader in
+      if let reader = reader {
+        self.familiarSerialNumbers.append(serialNumber)
+        completion(MobileReader.from(anyPayCardReader: reader))
+      } else {
+        completion(nil)
+      }
+    }
+
+    onCardReaderConnectionFailed = { _ in
+      completion(nil)
+    }
+
+    // Request that AWC connect the reader
+    mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: .connecting)
     ANPCardReaderController.shared().connectToBluetoothReader(withSerial: serialNumber)
   }
 
@@ -131,7 +172,11 @@ class AWCDriver: MobileReaderDriver {
   }
 
   func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    fatalError("Not implemented")
+    guard let transaction = currentTransaction else {
+      return completion(true)
+    }
+    transaction.cancel()
+    completion(transaction.isCancelled())
   }
 
   func performTransaction(with request: TransactionRequest,
@@ -143,20 +188,42 @@ class AWCDriver: MobileReaderDriver {
     transaction?.currency = "USD"
     transaction?.totalAmount = ANPAmount(string: request.amount.dollarsString())
 
+    // Register block for capturing signature
     transaction?.onSignatureRequired = {
-      print("Creating dummy signature")
-      transaction?.signature = ANPSignature()
-      transaction?.proceed()
+      transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: .PromptProvideSignature)
+
+      if let signatureProvider = signatureProvider {
+        signatureProvider.signatureRequired(completion: { signature in
+          transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: .SignatureProvided)
+          do {
+            let anpSignature = try ANPSignature(data: signature.data(using: .utf8))
+            transaction?.signature = anpSignature
+          } catch {
+            transaction?.signature = ANPSignature()
+          }
+          transaction?.proceed()
+        })
+      } else {
+        transaction?.signature = ANPSignature()
+        transaction?.proceed()
+      }
     }
 
+    currentTransaction = transaction
     transaction?.execute({ (transactionStatus, error) in
-      print(transactionStatus)
+      self.currentTransaction = nil
       let result = TransactionResult(transaction!)
       completion(result)
     }, cardReaderEvent: { message in
-      print(message?.message)
+      guard let message = message else {
+        return
+      }
+      print(message.message)
+      if let transactionUpdate = TransactionUpdate(anpMeaningfulMessage: message) {
+        transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: transactionUpdate)
+      }
     })
-    
+
   }
 
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
@@ -168,8 +235,6 @@ class AWCDriver: MobileReaderDriver {
       print(transactionStatus)
       let result = TransactionResult(refund!)
       completion(result)
-    }, cardReaderEvent: { message in
-      print(message?.message)
     })
   }
 
@@ -179,6 +244,101 @@ class AWCDriver: MobileReaderDriver {
     }
     completion(MobileReader.from(anyPayCardReader: reader))
   }
+
+  /// Gets the connected MobileReader
+  /// - Note: This is blocking, and will fail silently if no reader is found
+  /// - Returns: The connected mobile reader, if any
+  internal func connectedReader() -> MobileReader? {
+    guard let reader = ANPCardReaderController.shared().connectedReader else {
+      return nil
+    }
+
+    return MobileReader.from(anyPayCardReader: reader)
+  }
+
+  // MARK: AWC Events
+  var onCardReaderConnected: ((AnyPayCardReader?) -> Void)? {
+    willSet(newValue) {
+      if let onCardReaderConnected = onCardReaderConnected {
+        ANPCardReaderController.shared().unsubscribe(onCardReaderConnected: onCardReaderConnected)
+      }
+
+      if let newValue = newValue {
+        ANPCardReaderController.shared().subscribe(onCardReaderConnected: newValue)
+      }
+    }
+  }
+
+  var onCardReaderDisconnected: (() -> Void)? {
+    willSet(newValue) {
+      if let onCardReaderDisconnected = onCardReaderDisconnected {
+        ANPCardReaderController.shared().unsubscribe(onCardReaderDisConnected: onCardReaderDisconnected)
+      }
+
+      if let newValue = newValue {
+        ANPCardReaderController.shared().subscribe(onCardReaderDisConnected: newValue)
+      }
+    }
+  }
+
+  var onCardReaderConnectionFailed: ((ANPMeaningfulError?) -> Void)? {
+    willSet(newValue) {
+      if let onCardReaderConnectionFailed = onCardReaderConnectionFailed {
+        ANPCardReaderController.shared().unsubscribe(onCardReaderConnectionFailed: onCardReaderConnectionFailed)
+      }
+
+      if let newValue = newValue {
+        ANPCardReaderController.shared().subscribe(onCardReaderConnectionFailed: newValue)
+      }
+    }
+  }
+
+  // MARK: CoreBluetooth Central Manager Delegate
+
+  /// Does the necessary steps to start search of BT devices
+  func startBtService() {
+    btCentralManager = CBCentralManager(delegate: self, queue: nil)
+  }
+
+  /// Begins searching for AWC BT Devices
+  ///
+  /// The serial numbers of the BT devices will be inserted into `discoveredBluetoothDeviceSerailNumbers` as they
+  /// are found.
+  func startBtDeviceSearch() {
+    discoveredBluetoothDeviceSerialNumbers = []
+    btCentralManager.scanForPeripherals(withServices: nil, options: nil)
+  }
+
+  /// Stops searching for AWC BT Devices
+  func stopBtDeviceSearch() {
+    btCentralManager.stopScan()
+  }
+
+  func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    switch central.state {
+    case .unknown:
+      print("central.state is .unknown")
+    case .resetting:
+      print("central.state is .resetting")
+    case .unsupported:
+      print("central.state is .unsupported")
+    case .unauthorized:
+      print("central.state is .unauthorized")
+    case .poweredOff:
+      print("central.state is .poweredOff")
+    case .poweredOn:
+      print("central.state is .poweredOn")
+    }
+  }
+
+  func centralManager(_ central: CBCentralManager,
+                      didDiscover peripheral: CBPeripheral,
+                      advertisementData: [String : Any],
+                      rssi RSSI: NSNumber) {
+    guard let serial = peripheral.name, serial.contains("CHB") == true else { return }
+    self.discoveredBluetoothDeviceSerialNumbers.append(serial)
+  }
+
 
 }
 
