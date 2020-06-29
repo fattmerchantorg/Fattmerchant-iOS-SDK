@@ -246,7 +246,8 @@ public class Omni: NSObject {
     let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository,
                                             transactionRepository: transactionRepository,
                                             transaction: transaction,
-                                            refundAmount: refundAmount)
+                                            refundAmount: refundAmount,
+                                            omniApi: omniApi)
     job.start(completion: completion, failure: error)
   }
 

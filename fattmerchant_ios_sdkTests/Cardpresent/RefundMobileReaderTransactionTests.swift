@@ -11,6 +11,22 @@ import XCTest
 
 class RefundMobileReaderTransactionTests: XCTestCase {
 
+  var mockOmniApi: MockOmniApi = MockOmniApi()
+  var mobileReaderDriverRepo: MobileReaderDriverRepository!
+  var invoiceRepo: InvoiceRepository!
+  var customerRepo: CustomerRepository!
+  var paymentMethodRepo: PaymentMethodRepository!
+  var transactionRepo: TransactionRepository!
+
+  override func setUp() {
+    invoiceRepo = InvoiceRepository(omniApi: mockOmniApi)
+    customerRepo = CustomerRepository(omniApi: mockOmniApi)
+    paymentMethodRepo = PaymentMethodRepository(omniApi: mockOmniApi)
+    transactionRepo = TransactionRepository(omniApi: mockOmniApi)
+    mobileReaderDriverRepo = MobileReaderDriverRepository()
+  }
+
+
   func testCanRefundPreviouslyRefundedTransaction() {
     XCTAssertNil(getRefundValidationError(total: 0.04, totalRefunded: 0.02, refundAmount: Amount(cents: 2)))
   }
@@ -37,6 +53,43 @@ XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundA
 
   func testCantRefundZero() {
     XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundAmount: Amount(dollars: 0.00)))
+  }
+
+  func testShouldRefundUsingOmniIfDriverSupportsIt() {
+    MockDriver.omniRefundsSupported = true
+
+    let transactionToRefund = Transaction()
+    let transactionId = UUID().uuidString
+    transactionToRefund.source = "iOS|CPSDK|\(MockDriver.source)"
+    transactionToRefund.id = transactionId
+    modelStore = [transactionId: transactionToRefund]
+
+    let expectation = XCTestExpectation(description: "Request to omni is build properly")
+    let expectedMethod = "post"
+    let expectedUrlString = "/transaction/\(transactionId)/void-or-refunds"
+    let expectedBody: Data? = nil
+
+    // We want mock omni api to be called witha void-or-refund
+    mockOmniApi.expectRequest(method: expectedMethod,
+                              urlString: expectedUrlString,
+                              body: expectedBody) { () -> Bool in
+      expectation.fulfill()
+      return false
+    }
+
+    // Start the refund job
+    RefundMobileReaderTransaction(
+      mobileReaderDriverRepository: mobileReaderDriverRepo,
+      transactionRepository: transactionRepo,
+      transaction: transactionToRefund,
+      omniApi: mockOmniApi
+    ).start(completion: { _ in
+      XCTFail()
+    }) { _ in
+      XCTFail()
+    }
+
+    wait(for: [expectation], timeout: 2.0)
   }
 
   func testCantRefundVoidedTransaction() {

@@ -28,6 +28,8 @@ class MockDriver: MobileReaderDriver {
 
   static var source: String = "MOCKSOURCE"
 
+  static var omniRefundsSupported: Bool = false
+
   func isReadyToTakePayment(completion: (Bool) -> Void) {
     completion(readyToTakePayment)
   }

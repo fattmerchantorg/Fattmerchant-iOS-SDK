@@ -26,6 +26,19 @@ protocol MobileReaderDriver {
 
   static var source: String { get }
 
+  /// True when the Omni API can perfrom the refund
+  ///
+  /// Some `MobileReaderDriver`s, like NMI, support a deeper integration with Omni, such that Omni can facilitate the
+  /// void/refund. This allows the SDK to relieve itself of the responsibility of having to perform the refund directly
+  /// with the vendor (NMI), via the vendored SDK (ChipDNA).
+  ///
+  /// Other `MobileReaderDriver`s, like AWC, do not support this integration. For that reason, the SDK must perform
+  /// the void/refund directly with AWC via the AWC sdk.
+  ///
+  /// - Returns: True when Omni should handle the void/refund logic. False when the driver itself should handle the
+  /// refund directly with the vendor.
+  static var omniRefundsSupported: Bool { get }
+
   /// A list of serial numbers that this driver has previously connected to
   var familiarSerialNumbers: [String] { get set }
 

@@ -21,6 +21,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   /// The place where the transactions take place
   static var source: String = "NMI"
 
+  static var omniRefundsSupported: Bool = true
+
   enum PinPadManufacturer: String {
     case Miura, BBPOS
   }

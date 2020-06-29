@@ -56,6 +56,27 @@ class OmniApi {
     request(method: "get", urlString: "/self", completion: completion, failure: failure)
   }
 
+  /// Posts a void-or-refund to Omni
+  /// - Parameters:
+  ///   - transactionId: the id of the transaction to void or refund
+  ///   - total: the amount, in dollars, to void or refund
+  ///   - completion: a block to call once finished. Receives the refund or void transaction
+  ///   - error: a block to call if an error is thrown
+  func postVoidOrRefund(transactionId: String,
+                        total: String? = nil,
+                        completion: @escaping (Transaction) -> Void,
+                        error: @escaping (OmniException) -> Void) {
+    var body: Data? = nil
+    if let total = total {
+      body = try? jsonEncoder().encode(["total": total])
+    }
+    request(method: "post",
+            urlString: "/transaction/\(transactionId)/void-or-refund",
+            body: body,
+            completion: completion,
+            failure: error)
+  }
+
   var environment: Environment = .DEV
   var apiKey: String?
 

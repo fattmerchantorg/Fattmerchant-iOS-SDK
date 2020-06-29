@@ -52,6 +52,8 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
   /// The place where the transactions take place
   static var source: String = "AWC"
 
+  static var omniRefundsSupported: Bool = false
+
   var familiarSerialNumbers: [String] = []
 
   /// Attempts to initialize the AnyPay SDK

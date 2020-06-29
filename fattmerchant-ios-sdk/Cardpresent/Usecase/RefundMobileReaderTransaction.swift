@@ -10,6 +10,7 @@ import Foundation
 
 enum RefundException: OmniException {
   case transactionNotRefundable(details: String?)
+  case missingTransactionId
   case couldNotFindMobileReaderForRefund
   case errorRefunding(details: String?)
 
@@ -25,6 +26,9 @@ enum RefundException: OmniException {
 
     case .errorRefunding(let d):
       return d ?? "Error while performing refund"
+
+    case .missingTransactionId:
+      return "Transaction id not provided"
     }
   }
 }
@@ -35,10 +39,16 @@ class RefundMobileReaderTransaction {
 
   var mobileReaderDriverRepository: MobileReaderDriverRepository
   var transactionRepository: TransactionRepository
+  var omniApi: OmniApi
   var transaction: Transaction
   var refundAmount: Amount?
 
-  init(mobileReaderDriverRepository: MobileReaderDriverRepository, transactionRepository: TransactionRepository, transaction: Transaction, refundAmount: Amount? = nil) {
+  init(mobileReaderDriverRepository: MobileReaderDriverRepository,
+       transactionRepository: TransactionRepository,
+       transaction: Transaction,
+       refundAmount: Amount? = nil,
+       omniApi: OmniApi) {
+
     // Get the amount to refund
     var amount: Amount?
     if let amt = refundAmount {
@@ -51,22 +61,42 @@ class RefundMobileReaderTransaction {
     self.transactionRepository = transactionRepository
     self.transaction = transaction
     self.refundAmount = amount
+    self.omniApi = omniApi
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void ) {
-    if let error = RefundMobileReaderTransaction.validateRefund(transaction: transaction, refundAmount: refundAmount) {
-      failure(error)
-      return
+    // Make sure the transaction has an id
+    guard let transactionId = transaction.id else {
+      return failure(RefundException.missingTransactionId)
     }
 
-    // Do the 3rd-party refund
-    refund(transaction: transaction, refundAmount: refundAmount, failure: failure) { result in
-      self.submitRefundToOmni(with: result, failure: failure, completion: completion)
-    }
+    // Get the driver
+    mobileReaderDriverRepository.getDriverFor(transaction: transaction) { driver in
+      guard let driver = driver else {
+        return failure(Exception.couldNotFindMobileReaderForRefund)
+      }
 
+      // If omni can do the refund, then we should call out to Omni to do it
+      if type(of: driver).omniRefundsSupported {
+        self.omniApi.request(method: "post",
+                        urlString: "/transaction/\(transactionId)/void-or-refund", body: nil,
+                        completion: completion, failure: failure)
+      } else {
+        // Omni can *not* do the refund, so we have to do it
+        if let error = RefundMobileReaderTransaction.validateRefund(transaction: transaction, refundAmount: refundAmount) {
+          failure(error)
+          return
+        }
+
+        // Do the 3rd-party refund
+        driver.refund(transaction: transaction, refundAmount: refundAmount, completion: { result in
+          self.postRefundedTransaction(with: result, failure: failure, completion: completion)
+        }, error: failure)
+      }
+    }
   }
 
-  fileprivate func submitRefundToOmni(with result: TransactionResult, failure: @escaping (OmniException) -> Void, completion: @escaping (Transaction) -> Void) {
+  fileprivate func postRefundedTransaction(with result: TransactionResult, failure: @escaping (OmniException) -> Void, completion: @escaping (Transaction) -> Void) {
     let refundedTransaction = Transaction()
     refundedTransaction.total = result.amount?.dollars()
     refundedTransaction.paymentMethodId = transaction.paymentMethodId
@@ -79,16 +109,6 @@ class RefundMobileReaderTransaction {
     refundedTransaction.customerId = transaction.customerId
     refundedTransaction.invoiceId = transaction.invoiceId
     transactionRepository.create(model: refundedTransaction, completion: completion, error: failure)
-  }
-
-  fileprivate func refund(transaction: Transaction, refundAmount: Amount?, failure: @escaping (OmniException) -> Void, completion: @escaping (TransactionResult) -> Void) {
-    mobileReaderDriverRepository.getDriverFor(transaction: transaction) { driver in
-      if let driver = driver {
-        driver.refund(transaction: transaction, refundAmount: refundAmount, completion: completion, error: failure)
-      } else {
-        failure(Exception.couldNotFindMobileReaderForRefund)
-      }
-    }
   }
 
   /// Verifies that the refund about to happen is acceptable

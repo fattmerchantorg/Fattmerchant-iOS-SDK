@@ -32,17 +32,18 @@ class MockOmniApi: OmniApi {
   /// with which params
   ///
   /// Return true in the block if you want the request to proceed, false otherwise.
-  typealias Spy = (_ method: String, _ urlString: String, _ body: Data?) -> Bool
+  typealias Spy = (request: (method: String, urlString: String, body: Data?), shouldProceed: () -> Bool)
 
   fileprivate var stubs: [Stub] = []
-  fileprivate var spies: [Spy] = []
+  fileprivate var expectedRequests: [Spy] = []
 
   func stub(_ method: String, _ url: String, body: Data?, response: Stub.Response) {
     stubs.append(Stub(method: method, url: url, body: body, completionResponse: response))
   }
 
-  func spy(_ spy: @escaping Spy) {
-    spies.append(spy)
+  func expectRequest(method: String, urlString: String, body: Data? = nil, shouldProceed: @escaping () -> Bool) {
+    let spy = ((method, urlString, body), shouldProceed)
+    expectedRequests.append(spy)
   }
 
   override func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
@@ -56,9 +57,11 @@ class MockOmniApi: OmniApi {
   override func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (OmniException) -> Void) where T : Decodable, T : Encodable {
 
     // See if any of the spies want to prevent further execution
-    for spy in spies {
-      if spy(method, urlString, body) == true {
-        return
+    for request in expectedRequests {
+      if request.request.method == method && request.request.urlString == urlString && request.request.body == body {
+        if request.shouldProceed() == false {
+          return
+        }
       }
     }
 
