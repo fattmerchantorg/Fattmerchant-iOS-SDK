@@ -11,6 +11,8 @@ import Foundation
 /// A Transaction in the Omni Platform
 public class Transaction: Model {
 
+  public init() {}
+
   /// The id of the transaction in Omni
   public var id: String?
 
