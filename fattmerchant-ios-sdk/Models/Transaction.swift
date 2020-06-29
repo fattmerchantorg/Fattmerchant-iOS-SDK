@@ -82,6 +82,8 @@ public class Transaction: Model {
   /// create a transaction, but we will likely never receive it.
   internal var token: String?
 
+  public var source: String?
+
   var authId: String?
   var gateway: String?
   var gatewayId: String?
@@ -96,7 +98,6 @@ public class Transaction: Model {
   var receiptSmsAt: String?
   var referenceId: String?
   var settledAt: String?
-  var source: String?
   var sourceIp: String?
   var response: JSONValue?
   var updatedAt: String?
