@@ -155,7 +155,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
     didConnectAndConfigure = { connectedReader in
-      if connectedReader != nil, let serial = connectedReader.serialNumber {
+      if let connectedReader = connectedReader, let serial = connectedReader.serialNumber {
         self.familiarSerialNumbers.append(serial)
       }
       completion(connectedReader)
