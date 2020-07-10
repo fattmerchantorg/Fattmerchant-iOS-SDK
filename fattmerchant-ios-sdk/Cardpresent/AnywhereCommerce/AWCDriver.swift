@@ -20,10 +20,10 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
   /// Manages the search of BT devices
   fileprivate var btCentralManager: CBCentralManager?
 
-  /// Holds an array of the bluetooth devices that have been discovered for the purpose of BT connection
+  /// Holds a set of the bluetooth devices that have been discovered for the purpose of BT connection
   ///
-  /// - Note: This array is cleared every time a new BT search is conducted
-  fileprivate var discoveredBluetoothDeviceSerialNumbers: [String] = []
+  /// - Note: This set is cleared every time a new BT search is conducted
+  fileprivate var discoveredBluetoothDeviceSerialNumbers: Set<String> = []
 
   /// A test endpoint for AWC
   fileprivate var testGatewayUrl = "https://testpayments.anywherecommerce.com/merchant"
@@ -346,7 +346,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
                       advertisementData: [String : Any],
                       rssi RSSI: NSNumber) {
     guard let serial = peripheral.name, serial.contains("CHB") == true else { return }
-    self.discoveredBluetoothDeviceSerialNumbers.append(serial)
+    self.discoveredBluetoothDeviceSerialNumbers.insert(serial)
   }
 
 
