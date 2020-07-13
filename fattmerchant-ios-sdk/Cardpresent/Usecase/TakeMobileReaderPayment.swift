@@ -9,7 +9,7 @@
 import Foundation
 
 enum TakeMobileReaderPaymentException: OmniException {
-  case mobileReaderDriverNotFound
+  case mobileReaderNotFound
   case mobileReaderNotReady
   case invoiceNotFound
   case couldNotCreateInvoice(detail: String?)
@@ -22,8 +22,8 @@ enum TakeMobileReaderPaymentException: OmniException {
 
   var detail: String? {
     switch self {
-    case .mobileReaderDriverNotFound:
-      return "Mobile reader driver not found"
+    case .mobileReaderNotFound:
+      return "Mobile reader not found"
 
     case .mobileReaderNotReady:
       return "Mobile reader not ready to take payment"
@@ -327,7 +327,7 @@ class TakeMobileReaderPayment {
       // Get drivers that are ready for payment
       filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }) { driversReadyForPayment in
         guard let driver = driversReadyForPayment.first else {
-          failure(TakeMobileReaderPaymentException.mobileReaderDriverNotFound)
+          failure(TakeMobileReaderPaymentException.mobileReaderNotFound)
           return
         }
 
