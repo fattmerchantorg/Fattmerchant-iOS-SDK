@@ -177,7 +177,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
 
   func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
     guard let transaction = currentTransaction else {
-      return completion(true)
+      return error(CancelCurrentTransactionException.noTransactionToCancel)
     }
     transaction.cancel()
     completion(transaction.isCancelled())

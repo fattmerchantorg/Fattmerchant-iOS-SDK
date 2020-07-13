@@ -252,7 +252,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       if let success = result[CCParamResult], success == CCValueTrue {
         completion(true)
       } else {
-        completion(false)
+        error(CancelCurrentTransactionException.unknown)
       }
     } else {
       fatalError()
