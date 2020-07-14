@@ -9,7 +9,20 @@
 import Foundation
 
 enum CancelCurrentTransactionException: OmniException {
-static var mess: String = "Could not cancel current transaction"
+  static var mess: String = "Could not cancel current transaction"
+
+  case noTransactionToCancel
+  case unknown
+
+  var detail: String? {
+    switch self {
+    case .noTransactionToCancel:
+      return "There is no transaction to cancel"
+
+    case .unknown:
+      return "Unkown error"
+    }
+  }
 }
 
 class CancelCurrentTransaction {
@@ -23,6 +36,7 @@ class CancelCurrentTransaction {
     mobileReaderDriverRepository.getInitializedDrivers { drivers in
       var semaphore: DispatchSemaphore? = DispatchSemaphore(value: 1)
       var success = true
+      var omniException: OmniException?
 
       DispatchQueue.global(qos: .userInitiated).async {
         for driver in drivers {
@@ -31,13 +45,18 @@ class CancelCurrentTransaction {
           driver.cancelCurrentTransaction(completion: { cancelled in
             success = success && cancelled
             semaphore?.signal()
-          }) { _ in
+          }) { err in
+            omniException = err
             success = false
             semaphore?.signal()
           }
         }
 
-        completion(success)
+        if let exception = omniException {
+          error(exception)
+        } else {
+          completion(success)
+        }
       }
     }
   }
