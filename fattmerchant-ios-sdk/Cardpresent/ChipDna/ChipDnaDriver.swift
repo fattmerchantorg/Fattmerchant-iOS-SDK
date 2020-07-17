@@ -252,7 +252,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       if let success = result[CCParamResult], success == CCValueTrue {
         completion(true)
       } else {
-        error(CancelCurrentTransactionException.unknown)
+
+        // Check if ChipDna is IDLE. If it is, there is no transaction to cancel
+        if let status = ChipDnaMobile.sharedInstance()?.getStatus(nil), status[CCParamChipDnaStatus] == "IDLE" {
+          error(CancelCurrentTransactionException.noTransactionToCancel)
+        } else {
+          error(CancelCurrentTransactionException.unknown)
+        }
       }
     } else {
       fatalError()
