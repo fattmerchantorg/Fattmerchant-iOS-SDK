@@ -62,9 +62,9 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
   ///   - completion: a block to run once initialization is complete. The block will receive the value 'true' if initialization was successful, false otherwise
   func initialize(args: [String: Any], completion: @escaping (Bool) -> Void) {
     guard
-      let merchant = args["merchant"] as? Merchant,
-      let worldnetSecret = merchant.emvTerminalSecret(),
-      let worldnetTerminalId = merchant.emvTerminalId()
+      let awcDetails = args["awc"] as? AWCDetails,
+      let worldnetSecret = awcDetails.terminal_secret,
+      let worldnetTerminalId = awcDetails.terminal_id
       else {
         completion(false)
         return

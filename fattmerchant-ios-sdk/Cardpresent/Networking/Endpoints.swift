@@ -41,3 +41,9 @@ extension PaymentMethod: OmniEndpoint {
     return "/payment-method"
   }
 }
+
+extension MobileReaderDetails: OmniEndpoint {
+    static func resourceEndpoint() -> String {
+        return "/team/gateway/hardware/mobile"
+    }
+}

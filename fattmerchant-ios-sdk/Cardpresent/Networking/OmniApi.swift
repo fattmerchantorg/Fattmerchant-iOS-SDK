@@ -55,6 +55,10 @@ class OmniApi {
   func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
     request(method: "get", urlString: "/self", completion: completion, failure: failure)
   }
+    
+  func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (OmniException) -> Void) {
+    request(method: "get", urlString: MobileReaderDetails.resourceEndpoint(), completion: completion, failure: failure)
+  }
 
   /// Posts a void-or-refund to Omni
   /// - Parameters:
