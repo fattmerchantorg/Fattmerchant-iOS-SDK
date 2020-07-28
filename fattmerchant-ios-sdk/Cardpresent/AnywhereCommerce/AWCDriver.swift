@@ -68,8 +68,8 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
         return
     }
     
-    let worldnetSecret = awcDetails.terminal_secret
-    let worldnetTerminalId = awcDetails.terminal_id
+    let worldnetSecret = awcDetails.terminalSecret
+    let worldnetTerminalId = awcDetails.terminalId
 
     // Initialize the AnyPay object. This will allow us to interact with AnyPay later on
     let anyPay = AnyPay.initialise()
