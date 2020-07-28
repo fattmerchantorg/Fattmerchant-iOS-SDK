@@ -156,26 +156,20 @@ public class Omni: NSObject {
       // Assign merchant to self
       self.merchant = merchant
     }, failure: error)
-    
     omniApi.getMobileReaderSettings(completion: { mrDetails in
-        
         var args: [String: Any] = [
-          "appId": appId,
+          "appId": appId
         ]
-        
         if let awcDetails = mrDetails.anywhereCommerce {
             args.updateValue(awcDetails, forKey: "awc")
         }
-        
         if let nmiDetails = mrDetails.nmi {
             args.updateValue(nmiDetails, forKey: "nmi")
         }
-        
-        if(args["awc"] == nil && args["nmi"] == nil) {
+        if args["awc"] == nil && args["nmi"] == nil {
             error(OmniNetworkingException.couldNotGetMobileReaderDetails)
             return
         }
-        
         InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
           self.initialized = true
           self.preferredQueue.async(execute: completion)

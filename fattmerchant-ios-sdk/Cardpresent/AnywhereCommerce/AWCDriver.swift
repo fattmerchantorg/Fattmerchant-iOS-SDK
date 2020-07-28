@@ -67,7 +67,6 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
         completion(false)
         return
     }
-    
     let worldnetSecret = awcDetails.terminalSecret
     let worldnetTerminalId = awcDetails.terminalId
 
@@ -349,7 +348,6 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
     guard let serial = peripheral.name, serial.contains("CHB") == true else { return }
     self.discoveredBluetoothDeviceSerialNumbers.insert(serial)
   }
-
 
 }
 

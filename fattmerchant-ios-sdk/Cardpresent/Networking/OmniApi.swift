@@ -55,7 +55,6 @@ class OmniApi {
   func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
     request(method: "get", urlString: "/self", completion: completion, failure: failure)
   }
-    
   func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (OmniException) -> Void) {
     request(method: "get", urlString: MobileReaderDetails.resourceEndpoint(), completion: completion, failure: failure)
   }
@@ -70,7 +69,7 @@ class OmniApi {
                         total: String? = nil,
                         completion: @escaping (Transaction) -> Void,
                         error: @escaping (OmniException) -> Void) {
-    var body: Data? = nil
+    var body: Data?
     if let total = total {
       body = try? jsonEncoder().encode(["total": total])
     }
