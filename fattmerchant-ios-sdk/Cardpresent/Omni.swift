@@ -163,7 +163,7 @@ public class Omni: NSObject {
           "appId": appId,
         ]
         
-        if let awcDetails = mrDetails.anywhere_commerce {
+        if let awcDetails = mrDetails.anywhereCommerce {
             args.updateValue(awcDetails, forKey: "awc")
         }
         

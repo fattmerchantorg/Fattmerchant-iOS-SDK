@@ -62,13 +62,14 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
   ///   - completion: a block to run once initialization is complete. The block will receive the value 'true' if initialization was successful, false otherwise
   func initialize(args: [String: Any], completion: @escaping (Bool) -> Void) {
     guard
-      let awcDetails = args["awc"] as? AWCDetails,
-      let worldnetSecret = awcDetails.terminal_secret,
-      let worldnetTerminalId = awcDetails.terminal_id
+      let awcDetails = args["awc"] as? AWCDetails
       else {
         completion(false)
         return
     }
+    
+    let worldnetSecret = awcDetails.terminal_secret
+    let worldnetTerminalId = awcDetails.terminal_id
 
     // Initialize the AnyPay object. This will allow us to interact with AnyPay later on
     let anyPay = AnyPay.initialise()

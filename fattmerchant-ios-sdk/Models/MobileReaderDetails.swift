@@ -13,7 +13,7 @@ class MobileReaderDetails: Model, Codable {
     public var id: String?
     
     /// Holds details for AnywhereCommerce settings set in the mobile reader tab
-    internal var anywhere_commerce: AWCDetails?
+    internal var anywhereCommerce: AWCDetails?
     
     /// Holds details for NMI settings set in the mobile reader tab
     internal var nmi: NMIDetails?
@@ -23,13 +23,13 @@ class MobileReaderDetails: Model, Codable {
 /// Details for AnywhereCommerce settings set in the mobile reader tab
 internal struct AWCDetails: Codable {
     /// AnywhereCommerce terminal id
-    var terminal_id: String
+    var terminalId: String
     /// AnywhereCommerce secret
-    var terminal_secret: String
+    var terminalSecret: String
 }
 
 /// Details for NMI (ChipDNA) settings set in the mobile reader tab
 internal struct NMIDetails: Codable {
     /// NMI (ChipDNA) security key
-    var security_key: String
+    var securityKey: String
 }

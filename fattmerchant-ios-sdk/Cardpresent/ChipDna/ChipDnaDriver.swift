@@ -59,12 +59,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     guard
       let appId = args["appId"] as? String,
       let nmiDetails = args["nmi"] as? NMIDetails,
-      let apiKey = nmiDetails.security_key,
       !apiKey.isEmpty
       else {
         completion(false)
         return
     }
+    
+    let apiKey = nmiDetails.security_key
 
     // Store the apiKey and the init args for later use
     securityKey = apiKey
