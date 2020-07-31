@@ -58,13 +58,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
     guard
       let appId = args["appId"] as? String,
-      let merchant = args["merchant"] as? Merchant,
-      let apiKey = merchant.emvPassword(),
-      !apiKey.isEmpty
+      let nmiDetails = args["nmi"] as? NMIDetails
       else {
         completion(false)
         return
     }
+    let apiKey = nmiDetails.securityKey
 
     // Store the apiKey and the init args for later use
     securityKey = apiKey

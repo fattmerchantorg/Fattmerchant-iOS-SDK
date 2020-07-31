@@ -10,6 +10,7 @@ import Foundation
 
 enum OmniNetworkingException: OmniException {
   case couldNotGetMerchantDetails
+  case couldNotGetMobileReaderDetails
   case couldNotGetPaginatedTransactions
 
   static var mess: String = "Omni Networking Exception"
@@ -21,6 +22,8 @@ enum OmniNetworkingException: OmniException {
 
     case .couldNotGetPaginatedTransactions:
       return "Could not get paginated transactions"
+    case .couldNotGetMobileReaderDetails:
+      return "Could not get mobile reader details from Omni"
     }
   }
 }
@@ -152,16 +155,25 @@ public class Omni: NSObject {
 
       // Assign merchant to self
       self.merchant = merchant
-
-      let args: [String: Any] = [
-        "appId": appId,
-        "merchant": merchant
-      ]
-
-      InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
-        self.initialized = true
-        self.preferredQueue.async(execute: completion)
-      }, failure: error)
+    }, failure: error)
+    omniApi.getMobileReaderSettings(completion: { mrDetails in
+        var args: [String: Any] = [
+          "appId": appId
+        ]
+        if let awcDetails = mrDetails.anywhereCommerce {
+            args.updateValue(awcDetails, forKey: "awc")
+        }
+        if let nmiDetails = mrDetails.nmi {
+            args.updateValue(nmiDetails, forKey: "nmi")
+        }
+        if args["awc"] == nil && args["nmi"] == nil {
+            error(OmniNetworkingException.couldNotGetMobileReaderDetails)
+            return
+        }
+        InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
+          self.initialized = true
+          self.preferredQueue.async(execute: completion)
+        }, failure: error)
     }, failure: error)
 
   }
