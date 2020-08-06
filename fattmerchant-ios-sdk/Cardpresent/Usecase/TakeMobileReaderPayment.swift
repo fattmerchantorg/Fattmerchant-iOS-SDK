@@ -203,6 +203,14 @@ class TakeMobileReaderPayment {
     if let gatewayResponse = transactionResult.gatewayResponse {
       dict["gatewayResponse"] = gatewayResponse
     }
+    let encoder = JSONEncoder()
+    if let lineItemResponse = transactionResult.request?.lineItems {
+      do {
+        dict["lineItems"] = String(data: try encoder.encode(lineItemResponse), encoding: .utf8)
+      } catch {
+        /// If this fails we don't care
+      }
+    }
 
     return dict.jsonValue()
   }
