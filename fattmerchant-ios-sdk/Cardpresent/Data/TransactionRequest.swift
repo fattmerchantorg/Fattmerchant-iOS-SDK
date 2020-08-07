@@ -100,7 +100,7 @@ public struct TransactionRequest {
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
   ///   - lineItems: A list of  `LineItem` that are attached to the transaction
-  public init(amount: Amount, lineItems: [CatalogItem]) {
+  public init(amount: Amount, lineItems: [CatalogItem]?) {
     self.amount = amount
     self.lineItems = lineItems
   }
@@ -109,7 +109,7 @@ public struct TransactionRequest {
   ///   - amount: The `Amount` to be collected during the transaction
   ///   - card: A `CreditCard` to charge
   ///   - lineItems: A list of  `LineItem` that are attached to the transaction
-  public init(amount: Amount, card: CreditCard, lineItems: [CatalogItem]) {
+  public init(amount: Amount, card: CreditCard, lineItems: [CatalogItem]?) {
     self.amount = amount
     self.card = card
     self.lineItems = lineItems
@@ -121,7 +121,7 @@ public struct TransactionRequest {
   ///   should be tokenized.
   ///   - card: A `CreditCard` to charge
   ///   - lineItems: A list of  `LineItem` that are attached to the transaction
-  public init(amount: Amount, tokenize: Bool, card: CreditCard, lineItems: [CatalogItem]) {
+  public init(amount: Amount, tokenize: Bool, card: CreditCard, lineItems: [CatalogItem]?) {
     self.amount = amount
     self.tokenize = tokenize
     self.card = card
