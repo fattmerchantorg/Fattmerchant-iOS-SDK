@@ -155,11 +155,26 @@ public class Omni: NSObject {
 
       // Assign merchant to self
       self.merchant = merchant
-    }, failure: error)
-    omniApi.getMobileReaderSettings(completion: { mrDetails in
-        var args: [String: Any] = [
-          "appId": appId
-        ]
+
+      // A dict that contains the initialization details for the drivers
+      var args: [String: Any] = [ "appId": appId ]
+
+      // Eagerly try to fill out the mobile reader settings from the merchant options.
+      // The getMobileReaderSettings step will override these if successful, but if that step fails to grab the
+      // settings from the gateways, then at least we have these as a fallback.
+
+      // AWC
+      if let emvTerminalSecret = merchant.emvTerminalSecret(), let emvTerminalId = merchant.emvTerminalId() {
+        args["awc"] = AWCDetails(terminalId: emvTerminalId, terminalSecret: emvTerminalSecret)
+      }
+
+      // NMI
+      if let emvPassword = merchant.emvPassword() {
+        args["nmi"] = NMIDetails(securityKey: emvPassword)
+      }
+
+      // Try to get the details from the merchant gateways. This *should* rewrite the args dict
+      self.omniApi.getMobileReaderSettings(completion: { mrDetails in
         if let awcDetails = mrDetails.anywhereCommerce {
             args.updateValue(awcDetails, forKey: "awc")
         }
@@ -174,8 +189,9 @@ public class Omni: NSObject {
           self.initialized = true
           self.preferredQueue.async(execute: completion)
         }, failure: error)
-    }, failure: error)
+      }, failure: error)
 
+    }, failure: error)
   }
 
   /// Captures a transaction without a mobile reader
