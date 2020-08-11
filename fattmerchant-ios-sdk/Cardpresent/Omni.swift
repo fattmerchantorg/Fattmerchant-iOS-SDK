@@ -10,7 +10,6 @@ import Foundation
 
 enum OmniNetworkingException: OmniException {
   case couldNotGetMerchantDetails
-  case couldNotGetMobileReaderDetails
   case couldNotGetPaginatedTransactions
 
   static var mess: String = "Omni Networking Exception"
@@ -22,14 +21,13 @@ enum OmniNetworkingException: OmniException {
 
     case .couldNotGetPaginatedTransactions:
       return "Could not get paginated transactions"
-    case .couldNotGetMobileReaderDetails:
-      return "Could not get mobile reader details from Omni"
     }
   }
 }
 
 enum OmniInitializeException: OmniException {
   case missingInitializationDetails
+  case mobileReaderPaymentsNotConfigured
 
   static var mess: String = "Omni Initialization Exception"
 
@@ -37,6 +35,9 @@ enum OmniInitializeException: OmniException {
     switch self {
     case .missingInitializationDetails:
       return "Missing initialization details"
+
+    case .mobileReaderPaymentsNotConfigured:
+      return "Your account is not configured to accept mobile reader payments"
     }
   }
 }
@@ -182,7 +183,7 @@ public class Omni: NSObject {
             args.updateValue(nmiDetails, forKey: "nmi")
         }
         if args["awc"] == nil && args["nmi"] == nil {
-            error(OmniNetworkingException.couldNotGetMobileReaderDetails)
+            error(OmniInitializeException.mobileReaderPaymentsNotConfigured)
             return
         }
         InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
