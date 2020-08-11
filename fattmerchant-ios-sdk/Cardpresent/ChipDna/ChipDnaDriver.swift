@@ -58,7 +58,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
     guard
       let appId = args["appId"] as? String,
-      let nmiDetails = args["nmi"] as? NMIDetails
+      let nmiDetails = args["nmi"] as? NMIDetails,
+      !nmiDetails.securityKey.isEmpty
       else {
         completion(false)
         return
@@ -74,6 +75,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     parameters.setValue("password", forKey: CCParamPassword)
     parameters.setValue(CCValueTrue, forKey: CCParamAutoConfirm)
     if ChipDnaMobile.initialize(parameters)?[CCParamResult] != CCValueTrue {
+      ChipDnaMobile.dispose(nil)
       completion(false)
       return
     }
@@ -85,6 +87,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     properties.setValue(CCValueEnvironmentLive, forKey: CCParamEnvironment)
     let setPropertiesResult = ChipDnaMobile.sharedInstance()?.setProperties(properties)
     if setPropertiesResult?[CCParamResult] != CCValueTrue {
+      ChipDnaMobile.dispose(nil)
       completion(false)
       return
     }
