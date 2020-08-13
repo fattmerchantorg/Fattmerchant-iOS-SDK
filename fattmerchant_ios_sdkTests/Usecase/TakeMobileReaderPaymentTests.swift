@@ -181,19 +181,11 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     let expectation = XCTestExpectation(description: "Result of transaction has catalog items that match the requested catalog items")
     
     job.start(completion: { transaction in
-      if case let JSONValue.object(catalogItems) = transaction.meta! {
-        if case let JSONValue.array(array) = catalogItems["lineItems"]!! {
-          XCTAssertTrue(array.allSatisfy({ item in
-            requestedItems.contains { storeItem in
-              if case let JSONValue.array(catalogItemArray) = item[storeItem.id!]! as JSONValue {
-                if case let JSONValue.object(idObj) = catalogItemArray[0] {
-                  let idJsonValue: JSONValue = idObj["id"]!!
-                  if case let JSONValue.string(id) = idJsonValue {
-                    return id == storeItem.id
-                  }
-                }
-              }
-              return true
+      if let meta = transaction.meta {
+        if let lineItems = meta.lineItems {
+          XCTAssertTrue(lineItems.allSatisfy({ item in
+            requestedItems.contains { requestedItem in
+              item.id == requestedItem.id
             }
           }))
         } else {

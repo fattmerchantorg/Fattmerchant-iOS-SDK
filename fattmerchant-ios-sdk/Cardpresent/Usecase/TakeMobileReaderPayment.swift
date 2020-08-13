@@ -128,7 +128,7 @@ class TakeMobileReaderPayment {
         return
     }
 
-    guard let transactionMetaJson = createTransactionMetaJson(from: result) else {
+    guard let transactionMeta = createTransactionMeta(from: result) else {
       failure(Exception.couldNotCreateTransaction(detail: "Could not generate transaction meta json"))
       return
     }
@@ -161,7 +161,7 @@ class TakeMobileReaderPayment {
     transactionToCreate.total = request.amount.dollars()
     transactionToCreate.success = result.success ?? false
     transactionToCreate.lastFour = lastFour
-    transactionToCreate.meta = transactionMetaJson
+    transactionToCreate.meta = transactionMeta
     transactionToCreate.type = "charge"
     transactionToCreate.method = "card"
     transactionToCreate.source = "iOS|CPSDK|\(result.source)"
@@ -176,51 +176,40 @@ class TakeMobileReaderPayment {
 
   /// Creates a JSONValue object that from the transactionResult, including only the items that make up the TransactionMeta
   /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
-  fileprivate func createTransactionMetaJson(from transactionResult: TransactionResult) -> JSONValue? {
-    var dict: [String: JSONValue] = [:]
+  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> Transaction.Meta? {
 
+    var meta = Transaction.Meta()
+    
     //TODO: Move this somewhere outside the UseCase
     #if !targetEnvironment(simulator)
     if transactionResult.source.contains(ChipDnaDriver.source) {
       if let userRef = transactionResult.userReference {
-        dict["nmiUserRef"] = JSONValue(userRef)
+        meta.nmiUserRef = userRef
       }
 
       if let localId = transactionResult.localId {
-        dict["cardEaseReference"] = JSONValue(localId)
+        meta.cardEaseReference = localId
       }
 
       if let externalId = transactionResult.externalId {
-        dict["nmiTransactionId"] = JSONValue(externalId)
+        meta.nmiTransactionId = externalId
       }
     } else if transactionResult.source.contains(AWCDriver.source) {
       if let externalId = transactionResult.externalId {
-        dict["awcTransactionId"] = JSONValue(externalId)
+        meta.awcTransactionId = externalId
       }
     }
     #endif
 
     if let gatewayResponse = transactionResult.gatewayResponse {
-      dict["gatewayResponse"] = JSONValue(gatewayResponse)
+      meta.gatewayResponse = gatewayResponse
     }
     
-    var itemDict: [String: JSONValue] = [:]
-    var lineItemsArray: [JSONValue?] = [JSONValue?]()
     if let lineItemResponse = transactionResult.request?.lineItems {
-      for item in lineItemResponse {
-        var itemArray: [JSONValue?] = [JSONValue?]()
-        itemArray.append(JSONValue(["id": JSONValue(item.id)]))
-        itemArray.append(JSONValue(["item": JSONValue(item.item)]))
-        itemArray.append(JSONValue(["details": JSONValue(item.details)]))
-        itemArray.append(JSONValue(["price": JSONValue(item.price)]))
-        itemArray.append(JSONValue(["quantity": JSONValue(item.quantity)]))
-        itemDict[item.id!] = JSONValue(itemArray)
-        lineItemsArray.append(JSONValue(itemDict))
-      }
-      dict["lineItems"] = JSONValue(lineItemsArray)
+      meta.lineItems = lineItemResponse
     }
 
-    return dict.jsonValue()
+    return meta
   }
 
   fileprivate func updateInvoice(_ invoice: Invoice,
