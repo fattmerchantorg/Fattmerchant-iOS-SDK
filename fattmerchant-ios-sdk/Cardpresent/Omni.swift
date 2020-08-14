@@ -190,7 +190,18 @@ public class Omni: NSObject {
           self.initialized = true
           self.preferredQueue.async(execute: completion)
         }, failure: error)
-      }, failure: error)
+      }, failure: { _ in
+
+        // If the call to merchant gateways fails, try to init with the merchant options anyways
+        if args["awc"] == nil && args["nmi"] == nil {
+            error(OmniInitializeException.mobileReaderPaymentsNotConfigured)
+            return
+        }
+        InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
+          self.initialized = true
+          self.preferredQueue.async(execute: completion)
+        }, failure: error)
+      })
 
     }, failure: error)
   }
