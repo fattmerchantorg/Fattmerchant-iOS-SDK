@@ -25,13 +25,13 @@ enum OmniNetworkingException: OmniException {
   }
 }
 
-enum OmniInitializeException: OmniException {
+public enum OmniInitializeException: OmniException {
   case missingInitializationDetails
   case mobileReaderPaymentsNotConfigured
 
-  static var mess: String = "Omni Initialization Exception"
+  public static var mess: String = "Omni Initialization Exception"
 
-  var detail: String? {
+  public var detail: String? {
     switch self {
     case .missingInitializationDetails:
       return "Missing initialization details"
@@ -42,12 +42,12 @@ enum OmniInitializeException: OmniException {
   }
 }
 
-enum OmniGeneralException: OmniException {
+public enum OmniGeneralException: OmniException {
   case uninitialized
 
-  static var mess: String = "Omni General Error"
+  public static var mess: String = "Omni General Error"
 
-  var detail: String? {
+  public var detail: String? {
     switch self {
     case .uninitialized:
       return "Omni has not been initialized yet"
