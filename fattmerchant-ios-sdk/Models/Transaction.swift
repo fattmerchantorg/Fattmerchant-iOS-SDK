@@ -9,7 +9,7 @@
 import Foundation
 
 /// A Transaction in the Omni Platform
-public class Transaction: Model {
+public class Transaction: Model, Codable {
 
   public init() {}
 
@@ -69,7 +69,7 @@ public class Transaction: Model {
   public var createdAt: String?
 
   /// Metadata that is associated with this Transaction
-  public var meta: JSONValue?
+  public var meta: Meta?
 
   /// The method used in this Transaction.
   ///
@@ -101,4 +101,17 @@ public class Transaction: Model {
   var sourceIp: String?
   var response: JSONValue?
   var updatedAt: String?
+  
+  public struct Meta: Codable {
+    public var nmiUserRef: String?
+    public var cardEaseReference: String?
+    public var nmiTransactionId: String?
+    public var awcTransactionId: String?
+    public var gatewayResponse: String?
+    public var lineItems: [CatalogItem]?
+    
+    enum CodingKeys: String, CodingKey {
+      case nmiUserRef, cardEaseReference, nmiTransactionId, awcTransactionId, gatewayResponse, lineItems
+    }
+  }
 }
