@@ -30,12 +30,18 @@ class MockDriver: MobileReaderDriver {
 
   static var omniRefundsSupported: Bool = false
 
-  func isReadyToTakePayment(completion: (Bool) -> Void) {
-    completion(readyToTakePayment)
+  func isReadyToTakePayment(completion: (Bool, OmniException?) -> Void) {
+    completion(readyToTakePayment, nil)
   }
 
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
-    completion(true)
+    if let nmiArgs = args["nmi"] as? NMIDetails {
+      return completion(!nmiArgs.securityKey.isEmpty)
+    } else if let awcArgs = args["awc"] as? AWCDetails {
+      return completion(!awcArgs.terminalId.isEmpty && !awcArgs.terminalSecret.isEmpty)
+    } else {
+      return completion(false)
+    }
   }
 
   func isInitialized(completion: @escaping (Bool) -> Void) {
