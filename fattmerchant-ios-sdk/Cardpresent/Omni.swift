@@ -10,7 +10,6 @@ import Foundation
 
 enum OmniNetworkingException: OmniException {
   case couldNotGetMerchantDetails
-  case couldNotGetMobileReaderDetails
   case couldNotGetPaginatedTransactions
 
   static var mess: String = "Omni Networking Exception"
@@ -22,31 +21,33 @@ enum OmniNetworkingException: OmniException {
 
     case .couldNotGetPaginatedTransactions:
       return "Could not get paginated transactions"
-    case .couldNotGetMobileReaderDetails:
-      return "Could not get mobile reader details from Omni"
     }
   }
 }
 
-enum OmniInitializeException: OmniException {
+public enum OmniInitializeException: OmniException {
   case missingInitializationDetails
+  case mobileReaderPaymentsNotConfigured
 
-  static var mess: String = "Omni Initialization Exception"
+  public static var mess: String = "Omni Initialization Exception"
 
-  var detail: String? {
+  public var detail: String? {
     switch self {
     case .missingInitializationDetails:
       return "Missing initialization details"
+
+    case .mobileReaderPaymentsNotConfigured:
+      return "Your account is not configured to accept mobile reader payments"
     }
   }
 }
 
-enum OmniGeneralException: OmniException {
+public enum OmniGeneralException: OmniException {
   case uninitialized
 
-  static var mess: String = "Omni General Error"
+  public static var mess: String = "Omni General Error"
 
-  var detail: String? {
+  public var detail: String? {
     switch self {
     case .uninitialized:
       return "Omni has not been initialized yet"
@@ -155,11 +156,26 @@ public class Omni: NSObject {
 
       // Assign merchant to self
       self.merchant = merchant
-    }, failure: error)
-    omniApi.getMobileReaderSettings(completion: { mrDetails in
-        var args: [String: Any] = [
-          "appId": appId
-        ]
+
+      // A dict that contains the initialization details for the drivers
+      var args: [String: Any] = [ "appId": appId ]
+
+      // Eagerly try to fill out the mobile reader settings from the merchant options.
+      // The getMobileReaderSettings step will override these if successful, but if that step fails to grab the
+      // settings from the gateways, then at least we have these as a fallback.
+
+      // AWC
+      if let emvTerminalSecret = merchant.emvTerminalSecret(), let emvTerminalId = merchant.emvTerminalId() {
+        args["awc"] = AWCDetails(terminalId: emvTerminalId, terminalSecret: emvTerminalSecret)
+      }
+
+      // NMI
+      if let emvPassword = merchant.emvPassword() {
+        args["nmi"] = NMIDetails(securityKey: emvPassword)
+      }
+
+      // Try to get the details from the merchant gateways. This *should* rewrite the args dict
+      self.omniApi.getMobileReaderSettings(completion: { mrDetails in
         if let awcDetails = mrDetails.anywhereCommerce {
             args.updateValue(awcDetails, forKey: "awc")
         }
@@ -167,15 +183,16 @@ public class Omni: NSObject {
             args.updateValue(nmiDetails, forKey: "nmi")
         }
         if args["awc"] == nil && args["nmi"] == nil {
-            error(OmniNetworkingException.couldNotGetMobileReaderDetails)
+            error(OmniInitializeException.mobileReaderPaymentsNotConfigured)
             return
         }
         InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
           self.initialized = true
           self.preferredQueue.async(execute: completion)
         }, failure: error)
-    }, failure: error)
+      }, failure: error)
 
+    }, failure: error)
   }
 
   /// Captures a transaction without a mobile reader

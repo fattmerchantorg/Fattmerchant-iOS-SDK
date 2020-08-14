@@ -35,7 +35,13 @@ class MockDriver: MobileReaderDriver {
   }
 
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
-    completion(true)
+    if let nmiArgs = args["nmi"] as? NMIDetails {
+      return completion(!nmiArgs.securityKey.isEmpty)
+    } else if let awcArgs = args["awc"] as? AWCDetails {
+      return completion(!awcArgs.terminalId.isEmpty && !awcArgs.terminalSecret.isEmpty)
+    } else {
+      return completion(false)
+    }
   }
 
   func isInitialized(completion: @escaping (Bool) -> Void) {

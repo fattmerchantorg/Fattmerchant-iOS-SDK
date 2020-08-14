@@ -12,11 +12,15 @@ enum InitializeDriversException: OmniException {
   static var mess: String = "Could not initialize driver"
 
   case noMobileReadersFound
+  case incorrectMobileReaderSettings
 
   var detail: String? {
     switch self {
     case .noMobileReadersFound:
       return "Couldn't find any mobile readers"
+
+    case .incorrectMobileReaderSettings:
+      return "The mobile reader settings in your account are incorrect"
     }
   }
 }
@@ -31,7 +35,7 @@ class InitializeDrivers {
     self.args = args
   }
 
-  func start(completion: @escaping (Bool) -> Void, failure: (OmniException) -> Void) {
+  func start(completion: @escaping (Bool) -> Void, failure: @escaping (OmniException) -> Void) {
     mobileReaderDriverRepository.getDrivers { (drivers) in
 
       // Make sure we have at least one available driver
@@ -68,6 +72,7 @@ class InitializeDrivers {
         driver.initialize(args: args) { success in
           semaphore.wait()
           completionBlocksExecuted += 1
+          guard completionBlocksExecuted <= drivers.count else { return }
 
           if success {
             driversInitialized += 1
@@ -75,6 +80,11 @@ class InitializeDrivers {
 
           // If we've finished initializing them all, then call the completion block
           if completionBlocksExecuted == drivers.count {
+            guard driversInitialized != 0 else {
+              semaphore.signal()
+              return failure(InitializeDriversException.incorrectMobileReaderSettings)
+            }
+
             completion(driversInitialized > 0)
             semaphore.signal()
             return
