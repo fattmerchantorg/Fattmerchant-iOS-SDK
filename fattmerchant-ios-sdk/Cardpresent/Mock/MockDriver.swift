@@ -30,8 +30,8 @@ class MockDriver: MobileReaderDriver {
 
   static var omniRefundsSupported: Bool = false
 
-  func isReadyToTakePayment(completion: (Bool, OmniException?) -> Void) {
-    completion(readyToTakePayment, nil)
+  func isReadyToTakePayment(completion: (Bool) -> Void) {
+    completion(readyToTakePayment)
   }
 
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
