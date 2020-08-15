@@ -16,7 +16,7 @@ public protocol OmniException: Error {
 }
 
 extension OmniException {
-  var message: String {
+  public var message: String {
     return Self.mess
   }
 
