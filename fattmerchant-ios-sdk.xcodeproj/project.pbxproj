@@ -11,8 +11,6 @@
 		46231C5C24DAF4A500A06E1B /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46231C5A24DAF4A500A06E1B /* CatalogItem.swift */; };
 		46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
-		466BBA5624E9E6B600EAEBBB /* SingleOrArrayEncoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466BBA5524E9E6B600EAEBBB /* SingleOrArrayEncoded.swift */; };
-		466BBA5724E9E6B600EAEBBB /* SingleOrArrayEncoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466BBA5524E9E6B600EAEBBB /* SingleOrArrayEncoded.swift */; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
@@ -224,7 +222,6 @@
 
 /* Begin PBXFileReference section */
 		46231C5A24DAF4A500A06E1B /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
-		466BBA5524E9E6B600EAEBBB /* SingleOrArrayEncoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleOrArrayEncoded.swift; sourceTree = "<group>"; };
 		46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDetails.swift; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C2094206EB12F00C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -656,7 +653,6 @@
 			isa = PBXGroup;
 			children = (
 				D765D48323CE41A500656040 /* JSONValue.swift */,
-				466BBA5524E9E6B600EAEBBB /* SingleOrArrayEncoded.swift */,
 			);
 			path = JSON;
 			sourceTree = "<group>";
@@ -914,7 +910,6 @@
 				D765D46F23CC488000656040 /* Merchant.swift in Sources */,
 				D79308BB23D0ADEF0066FCA2 /* InitializeDrivers.swift in Sources */,
 				D765D47923CC4B1100656040 /* CustomerRepository.swift in Sources */,
-				466BBA5624E9E6B600EAEBBB /* SingleOrArrayEncoded.swift in Sources */,
 				D79308AD23D0AA230066FCA2 /* TransactionResult.swift in Sources */,
 				D79308A423D0A8B10066FCA2 /* MobileReader.swift in Sources */,
 				593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */,
@@ -1013,7 +1008,6 @@
 				59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */,
 				D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */,
 				D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */,
-				466BBA5724E9E6B600EAEBBB /* SingleOrArrayEncoded.swift in Sources */,
 				D765D49A23CFC22600656040 /* PaymentMethodRepository.swift in Sources */,
 				D765D47D23CCBB0500656040 /* ModelRepository.swift in Sources */,
 				D702B7CE23C8F80200B8AB79 /* BankAccount.swift in Sources */,
