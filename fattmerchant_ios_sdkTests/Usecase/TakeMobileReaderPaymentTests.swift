@@ -179,7 +179,7 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     )
     
     let expectation = XCTestExpectation(description: "Result of transaction has catalog items that match the requested catalog items")
-    
+  
     job.start(completion: { transaction in
       if let meta = transaction.meta {
         if let lineItems = meta.lineItems {

@@ -10,6 +10,7 @@
 		46231C5B24DAF4A500A06E1B /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46231C5A24DAF4A500A06E1B /* CatalogItem.swift */; };
 		46231C5C24DAF4A500A06E1B /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46231C5A24DAF4A500A06E1B /* CatalogItem.swift */; };
 		46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
+		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
@@ -975,6 +976,7 @@
 				D765D4A023CFCA1400656040 /* Amount.swift in Sources */,
 				D783DAC42449F35E007C0A17 /* TakePaymentTests.swift in Sources */,
 				594466AF249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
+				466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */,
 				D7C17B2523E4BA200031D9BB /* SearchForReaders.swift in Sources */,
 				D73BBCF7244D805C0052B525 /* DisconnectMobileReaderTests.swift in Sources */,
 				D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */,
