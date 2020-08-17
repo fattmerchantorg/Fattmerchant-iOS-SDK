@@ -179,10 +179,10 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     )
     
     let expectation = XCTestExpectation(description: "Result of transaction has catalog items that match the requested catalog items")
-    
+  
     job.start(completion: { transaction in
       if let meta = transaction.meta {
-        if let lineItems = meta.lineItems {
+        if let lineItems = meta.meta.first?.lineItems {
           XCTAssertTrue(lineItems.allSatisfy({ item in
             requestedItems.contains { requestedItem in
               item.id == requestedItem.id

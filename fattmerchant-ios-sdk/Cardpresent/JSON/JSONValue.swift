@@ -101,14 +101,7 @@ public enum JSONValue: Codable, Equatable {
     } else if let value = from as? [String: Codable] {
       let jsonDictionary = value.mapValues({ JSONValue($0) })
       jsonValue = .object(jsonDictionary)
-    } else if let value = from as? JSONValue {
-      if case let JSONValue.array(from) = from {
-        jsonValue = .array(from as [JSONValue])
-      } else {
-        jsonValue = value
-      }
     }
-
     if jsonValue != nil {
       self = jsonValue!
     } else {
@@ -119,13 +112,6 @@ public enum JSONValue: Codable, Equatable {
   subscript(key: String) -> JSONValue? {
     if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
       return dict[key] ?? nil
-    }
-    return nil
-  }
-  
-  subscript(key: String) -> [JSONValue]? {
-    if case let JSONValue.array(array) = self, array.count > 0 {
-      return array
     }
     return nil
   }

@@ -176,10 +176,9 @@ class TakeMobileReaderPayment {
 
   /// Creates a JSONValue object that from the transactionResult, including only the items that make up the TransactionMeta
   /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
-  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> Transaction.Meta? {
+  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> Meta<TransactionMeta>? {
 
-    var meta = Transaction.Meta()
-    
+    var metaData = TransactionMeta()
     //TODO: Move this somewhere outside the UseCase
     #if !targetEnvironment(simulator)
     if transactionResult.source.contains(ChipDnaDriver.source) {
@@ -202,14 +201,12 @@ class TakeMobileReaderPayment {
     #endif
 
     if let gatewayResponse = transactionResult.gatewayResponse {
-      meta.gatewayResponse = gatewayResponse
+      metaData.gatewayResponse = gatewayResponse
     }
-    
     if let lineItemResponse = transactionResult.request?.lineItems {
-      meta.lineItems = lineItemResponse
+      metaData.lineItems = lineItemResponse
     }
-
-    return meta
+    return Meta(meta: [metaData])
   }
 
   fileprivate func updateInvoice(_ invoice: Invoice,
