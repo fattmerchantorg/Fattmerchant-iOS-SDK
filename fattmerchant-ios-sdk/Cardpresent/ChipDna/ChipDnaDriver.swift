@@ -312,11 +312,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
   fileprivate func extractCardEaseReference(from transaction: Transaction) -> String? {
-    return transaction.meta?.meta.first?.cardEaseReference
+    return transaction.meta?.cardEaseReference
   }
 
   fileprivate func extractUserReference(from transaction: Transaction) -> String? {
-    return transaction.meta?.meta.first?.nmiUserRef
+    return transaction.meta?.nmiUserRef
   }
 
   fileprivate func deserializeAvailablePinPads(pinPadsXml: String) -> [SelectablePinPad]? {

@@ -176,8 +176,7 @@ class TakeMobileReaderPayment {
 
   /// Creates a JSONValue object that from the transactionResult, including only the items that make up the TransactionMeta
   /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
-  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> Meta<TransactionMeta>? {
-
+  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> TransactionMeta? {
     var meta = TransactionMeta()
     //TODO: Move this somewhere outside the UseCase
     #if !targetEnvironment(simulator)
@@ -206,7 +205,7 @@ class TakeMobileReaderPayment {
     if let lineItemResponse = transactionResult.request?.lineItems {
       meta.lineItems = lineItemResponse
     }
-    return Meta(meta: [meta])
+    return meta
   }
 
   fileprivate func updateInvoice(_ invoice: Invoice,

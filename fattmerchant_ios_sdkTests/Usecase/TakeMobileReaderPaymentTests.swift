@@ -182,7 +182,7 @@ class TakeMobileReaderPaymentTests: XCTestCase {
   
     job.start(completion: { transaction in
       if let meta = transaction.meta {
-        if let lineItems = meta.meta.first?.lineItems {
+        if let lineItems = meta.lineItems {
           XCTAssertTrue(lineItems.allSatisfy({ item in
             requestedItems.contains { requestedItem in
               item.id == requestedItem.id

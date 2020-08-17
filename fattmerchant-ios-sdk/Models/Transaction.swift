@@ -50,7 +50,7 @@ public class Transaction: Model, Codable {
   /// - Note: This is in the format:  "2019-12-25 06:00:00"
   public var createdAt: String?
   /// Metadata that is associated with this Transaction
-  public var meta: Meta<TransactionMeta>?
+  public var meta: TransactionMeta?
   /// The method used in this Transaction.
   ///
   /// Typically "card" or "bank"
@@ -78,4 +78,38 @@ public class Transaction: Model, Codable {
   var sourceIp: String?
   var response: JSONValue?
   var updatedAt: String?
+}
+
+public struct TransactionMeta: Codable {
+  public var nmiUserRef: String?
+  public var cardEaseReference: String?
+  public var nmiTransactionId: String?
+  public var awcTransactionId: String?
+  public var gatewayResponse: String?
+  public var lineItems: [CatalogItem]?
+  public enum CodingKeys: CodingKey {
+    case nmiUserRef, cardEaseReference, nmiTransactionId, awcTransactionId, gatewayResponse, lineItems
+  }
+}
+
+extension TransactionMeta {
+  public init(from decoder: Decoder) throws {
+    do {
+      if let container = try? decoder.container(keyedBy: CodingKeys.self) {
+        lineItems = try container.decodeIfPresent([CatalogItem].self, forKey: .lineItems)
+        nmiUserRef = try container.decodeIfPresent(String.self, forKey: .nmiUserRef)
+        cardEaseReference = try container.decodeIfPresent(String.self, forKey: .cardEaseReference)
+        nmiTransactionId = try container.decodeIfPresent(String.self, forKey: .nmiTransactionId)
+        awcTransactionId = try container.decodeIfPresent(String.self, forKey: .awcTransactionId)
+        gatewayResponse = try container.decodeIfPresent(String.self, forKey: .gatewayResponse)
+      }
+    } catch {
+      lineItems = nil
+      nmiUserRef = nil
+      cardEaseReference = nil
+      nmiTransactionId = nil
+      awcTransactionId = nil
+      gatewayResponse = nil
+    }
+  }
 }
