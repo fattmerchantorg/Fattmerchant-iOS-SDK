@@ -19,7 +19,7 @@ public struct CatalogItem: Model, Codable {
   public var quantity: Int
   /// The price of the item in dollars
   public var price: Double
-  
+
   public init(id: String?, item: String?, details: String?, quantity: Int, price: Double) {
      self.id = id
      self.item = item
