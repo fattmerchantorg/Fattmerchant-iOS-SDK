@@ -95,14 +95,14 @@ class TakeMobileReaderPayment {
                                                              with: createdPaymentMethod,
                                                              and: createdCustomer,
                                                              failure) { (updatedInvoice) in
-                                            self.createTransaction(
-                                              result: mobileReaderPaymentResult,
-                                              paymentMethod: createdPaymentMethod,
-                                              customer: createdCustomer,
-                                              invoice: updatedInvoice,
-                                              failure,
-                                              completion
-                                            )
+                                                              self.createTransaction(
+                                                                result: mobileReaderPaymentResult,
+                                                                paymentMethod: createdPaymentMethod,
+                                                                customer: createdCustomer,
+                                                                invoice: updatedInvoice,
+                                                                failure,
+                                                                completion
+                                                              )
                                           }
                                         }
                                       }
