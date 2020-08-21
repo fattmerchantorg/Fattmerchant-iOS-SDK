@@ -47,7 +47,6 @@ enum TakeMobileReaderPaymentException: OmniException {
       return d ?? "Could not create transaction"
     }
   }
-
 }
 
 class TakeMobileReaderPayment {
@@ -85,31 +84,28 @@ class TakeMobileReaderPayment {
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
     availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
-
       self.getOrCreateInvoice(failure) { (createdInvoice) in
-
         self.takeMobileReaderPayment(with: driver,
                                      signatureProvider: self.signatureProvider,
                                      transactionUpdateDelegate: self.transactionUpdateDelegate,
                                      failure) { (mobileReaderPaymentResult) in
-
-          self.createCustomer(mobileReaderPaymentResult, failure) { (createdCustomer) in
-
-            self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, failure) { (createdPaymentMethod) in
-
-              self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: createdCustomer, failure) { (updatedInvoice) in
-
-                self.createTransaction(
-                  result: mobileReaderPaymentResult,
-                  paymentMethod: createdPaymentMethod,
-                  customer: createdCustomer,
-                  invoice: updatedInvoice,
-                  failure,
-                  completion
-                )
-              }
-            }
-          }
+                                      self.createCustomer(mobileReaderPaymentResult, failure) { (createdCustomer) in
+                                        self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, failure) { (createdPaymentMethod) in
+                                          self.updateInvoice(createdInvoice,
+                                                             with: createdPaymentMethod,
+                                                             and: createdCustomer,
+                                                             failure) { (updatedInvoice) in
+                                                              self.createTransaction(
+                                                                result: mobileReaderPaymentResult,
+                                                                paymentMethod: createdPaymentMethod,
+                                                                customer: createdCustomer,
+                                                                invoice: updatedInvoice,
+                                                                failure,
+                                                                completion
+                                                              )
+                                          }
+                                        }
+                                      }
         }
       }
     }
@@ -124,8 +120,8 @@ class TakeMobileReaderPayment {
     }
 
     guard let lastFour = getLastFour(for: result.maskedPan) else {
-        failure(Exception.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan"))
-        return
+      failure(Exception.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan"))
+      return
     }
 
     guard let transactionMetaJson = createTransactionMetaJson(from: result) else {
@@ -302,7 +298,10 @@ class TakeMobileReaderPayment {
                                            transactionUpdateDelegate: TransactionUpdateDelegate?,
                                            _ failure: (OmniException) -> Void,
                                            _ completion: @escaping (TransactionResult) -> Void) {
-    driver.performTransaction(with: self.request, signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate, completion: completion)
+    driver.performTransaction(with: self.request,
+                              signatureProvider: signatureProvider,
+                              transactionUpdateDelegate: transactionUpdateDelegate,
+                              completion: completion)
   }
 
   /// Gets the invoice with the id in the transaction request or creates a new one
@@ -343,5 +342,4 @@ class TakeMobileReaderPayment {
       }
     }
   }
-
 }

@@ -47,6 +47,8 @@ extension TransactionUpdate {
       self = .Authorizing
     } else if message == "Remove Card" {
       self = .PromptRemoveCard
+    } else if message == "Insert Card" {
+      self = .PromptInsertCard
     } else {
       return nil
     }
