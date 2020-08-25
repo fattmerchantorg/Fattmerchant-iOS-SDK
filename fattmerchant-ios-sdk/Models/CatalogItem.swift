@@ -19,6 +19,7 @@ public struct CatalogItem: Model, Codable {
   public var quantity: Int
   /// The price of the item in dollars
   public var price: Double
+
   public enum CodingKeys: CodingKey {
     case id, item, details, quantity, price
   }

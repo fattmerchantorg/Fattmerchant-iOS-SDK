@@ -34,6 +34,7 @@ public struct TransactionUpdate {
 
   public static let PromptInsertSwipeTap = TransactionUpdate("Prompt Insert Swipe Tap Card",
                                                              "Please insert, tap, or swipe card")
+  public static let PromptInsertCard = TransactionUpdate("Prompt Insert Card", "Please insert card")
 
   /// Request card be swiped
   public static let PromptSwipeCard = TransactionUpdate("Prompt Swipe Card", "Please swipe card")
