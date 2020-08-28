@@ -204,7 +204,8 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
     currentTransaction = transaction
     transaction?.execute({ (_, _) in
       self.currentTransaction = nil
-       let result = TransactionResult(transaction!)
+      var result = TransactionResult(transaction!)
+      result.request = request
       completion(result)
     }, cardReaderEvent: { message in
       guard let message = message else {
