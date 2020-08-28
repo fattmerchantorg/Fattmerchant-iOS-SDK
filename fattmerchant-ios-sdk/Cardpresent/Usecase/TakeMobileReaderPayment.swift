@@ -172,36 +172,36 @@ class TakeMobileReaderPayment {
 
   /// Creates a JSONValue object that from the transactionResult, including only the items that make up the TransactionMeta
   /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
-  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> TransactionMeta? {
-    var meta = TransactionMeta()
+  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> JSONValue? {
+    var dict = [String: JSONValue?]()
     //TODO: Move this somewhere outside the UseCase
     #if !targetEnvironment(simulator)
     if transactionResult.source.contains(ChipDnaDriver.source) {
       if let userRef = transactionResult.userReference {
-        meta.nmiUserRef = userRef
+        dict["nmiUserRef"] = JSONValue(userRef)
       }
 
       if let localId = transactionResult.localId {
-        meta.cardEaseReference = localId
+        dict["cardEaseReference"] = JSONValue(localId)
       }
 
       if let externalId = transactionResult.externalId {
-        meta.nmiTransactionId = externalId
+        dict["nmiTransactionId"] = JSONValue(externalId)
       }
     } else if transactionResult.source.contains(AWCDriver.source) {
       if let externalId = transactionResult.externalId {
-        meta.awcTransactionId = externalId
+        dict["awcTransactionId"] = JSONValue(externalId)
       }
     }
     #endif
 
     if let gatewayResponse = transactionResult.gatewayResponse {
-      meta.gatewayResponse = gatewayResponse
+      dict["gatewayResponse"] = JSONValue(gatewayResponse)
     }
     if let lineItemResponse = transactionResult.request?.lineItems {
-      meta.lineItems = lineItemResponse
+      dict["lineItems"] = JSONValue(lineItemResponse)
     }
-    return meta
+    return dict.jsonValue()
   }
 
   fileprivate func updateInvoice(_ invoice: Invoice,

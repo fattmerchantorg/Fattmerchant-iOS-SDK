@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CatalogItem: Model, Codable {
+public struct CatalogItem: Model, Codable, Equatable {
   /// The omni id of the item
   public var id: String?
   /// The name of the item
