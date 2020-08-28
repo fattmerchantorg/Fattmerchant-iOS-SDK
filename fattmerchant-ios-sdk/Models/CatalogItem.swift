@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CatalogItem: Model, Codable {
+public struct CatalogItem: Model, Codable, Equatable {
   /// The omni id of the item
   public var id: String?
   /// The name of the item
@@ -19,6 +19,10 @@ public struct CatalogItem: Model, Codable {
   public var quantity: Int
   /// The price of the item in dollars
   public var price: Double
+
+  public enum CodingKeys: CodingKey {
+    case id, item, details, quantity, price
+  }
 
   public init(id: String?, item: String?, details: String?, quantity: Int, price: Double) {
      self.id = id

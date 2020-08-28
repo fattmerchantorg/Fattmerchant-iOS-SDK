@@ -156,19 +156,17 @@ class TakeMobileReaderPaymentTests: XCTestCase {
   
   func testTransactionRequestWithCatalogItems() {
     // Create a list of catalog items
-    var catalogItems = [CatalogItem]()
+    var requestedItems = [CatalogItem]()
     
     let testItem1 = CatalogItem(id: "fakeid1", item: "TestItem1", details: "Test item number one", quantity: 1, price: 0.1)
     let testItem2 = CatalogItem(id: "fakeid2", item: "TestItem2", details: "Test item number two", quantity: 1, price: 0.5)
     let testItem3 = CatalogItem(id: "fakeid3", item: "TestItem2", details: "Test item number three", quantity: 3, price: 0.2)
     
-    modelStore = [testItem1.id!: testItem1, testItem2.id!: testItem2, testItem3.id!: testItem3]
+    requestedItems.append(testItem1)
+    requestedItems.append(testItem2)
+    requestedItems.append(testItem3)
     
-    catalogItems.append(testItem1)
-    catalogItems.append(testItem2)
-    catalogItems.append(testItem3)
-    
-    let transactionRequest = TransactionRequest(amount: Amount(cents: 8), lineItems: catalogItems)
+    let transactionRequest = TransactionRequest(amount: Amount(cents: 8), lineItems: requestedItems)
     let job = TakeMobileReaderPayment(
       mobileReaderDriverRepository: mobileReaderDriverRepo,
       invoiceRepository: invoiceRepo,
@@ -180,20 +178,17 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionUpdateDelegate: nil
     )
     
-    let expectation = XCTestExpectation(description: "Result of transaction has catalog items that match the modelStore")
-    
+    let expectation = XCTestExpectation(description: "Result of transaction has catalog items that match the requested catalog items")
+  
     job.start(completion: { transaction in
-      let meta: String? = transaction.meta!["lineItems"]
-      let metaData = meta?.data(using: .utf8)
-      do {
-        let catalogItems = try JSONDecoder().decode([CatalogItem].self, from: metaData!)
-        XCTAssertTrue(catalogItems.allSatisfy({ item in
-          modelStore.contains { storeItem in
-            item.id == storeItem.value.id
-          }
-        }))
-      } catch {
-        XCTFail("Unable to retrieve catalog items from meta data")
+      if let lineItems = transaction.getLineItems() {
+          XCTAssertTrue(lineItems.allSatisfy({ item in
+            requestedItems.contains { requestedItem in
+              item.id == requestedItem.id
+            }
+          }))
+      } else {
+        XCTFail("Failed to get catalog items")
       }
       expectation.fulfill()
     }) { error in
