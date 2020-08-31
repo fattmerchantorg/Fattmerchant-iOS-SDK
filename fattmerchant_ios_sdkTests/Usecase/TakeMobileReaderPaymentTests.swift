@@ -198,4 +198,39 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     wait(for: [expectation], timeout: 10.0)
   }
 
+  func testTransactionRequestWithExtraMeta() {
+    var transactionRequest = TransactionRequest(amount: Amount(cents: 1))
+    transactionRequest.subtotal = 0.01
+    transactionRequest.tax = 0
+    transactionRequest.tip = 0
+    transactionRequest.memo = "This transaction is so great!"
+    transactionRequest.reference = "1478"
+
+    let job = TakeMobileReaderPayment(
+      mobileReaderDriverRepository: mobileReaderDriverRepo,
+      invoiceRepository: invoiceRepo,
+      customerRepository: customerRepo,
+      paymentMethodRepository: paymentMethodRepo,
+      transactionRepository: transactionRepo,
+      request: transactionRequest,
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil
+    )
+
+    let expectation = XCTestExpectation(description: "Result of transaction has the expected meta data")
+
+      job.start(completion: { transaction in
+        XCTAssertEqual(transaction.meta?["subtotal"] as Double?, 0.01)
+        XCTAssertEqual(transaction.meta?["tax"] as Double?, 0)
+        XCTAssertEqual(transaction.meta?["tip"] as Double?, 0)
+        XCTAssertEqual(transaction.meta?["memo"] as String?, "This transaction is so great!")
+        XCTAssertEqual(transaction.meta?["reference"] as String?, "1478")
+        expectation.fulfill()
+      }) { error in
+        XCTFail("Transaction failed")
+      }
+
+      wait(for: [expectation], timeout: 10.0)
+  }
+
 }
