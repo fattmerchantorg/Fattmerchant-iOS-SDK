@@ -38,26 +38,47 @@ public struct TransactionRequest {
 
   /// The `Amount` to be collected during the transaction
   public var amount: Amount
+
   /// The `CreditCard` to charge
   public var card: CreditCard?
+
   /// The `LineItem`s being passed to the transaction
   public var lineItems: [CatalogItem]?
+
+  /// The subtotal of the transaction
+  public var subtotal: Double?
+
+  /// The tax applied to the transaction
+  public var tax: Double?
+
+  /// The tip amount applied to the transaction
+  public var tip: Double?
+
+  /// A memo for the transaction
+  public var memo: String?
+
+  /// A reference for the transaction
+  public var reference: String?
+
   /// The option to tokenize the payment method for later usage
   ///
   /// - Note: Defaults to true
   ///
   /// Set this to false if you do not want the payment method stored
   public var tokenize: Bool = true
+
   /// The id of the invoice that this payment should be applied to
   ///
   /// If nil, then a new invoice will be created
   public var invoiceId: String?
+
   /// Initializes a TransactionRequest with the given amount.
   ///
   /// - Parameter amount: The  `Amount` to be collected during the transaction
   public init(amount: Amount) {
     self.amount = amount
   }
+
   /// Initializes a TransactionRequest with the given amount.
   ///
   /// - Parameter amount: The  `Amount` to be collected during the transaction
@@ -65,6 +86,7 @@ public struct TransactionRequest {
     self.amount = amount
     self.card = card
   }
+
   /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
@@ -74,6 +96,7 @@ public struct TransactionRequest {
     self.amount = amount
     self.tokenize = tokenize
   }
+
   /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
@@ -85,6 +108,7 @@ public struct TransactionRequest {
     self.tokenize = tokenize
     self.card = card
   }
+
   /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
@@ -96,6 +120,7 @@ public struct TransactionRequest {
     self.tokenize = tokenize
     self.invoiceId = invoiceId
   }
+
   /// Initializes a TransactionRequest with the given amount and a list of line items
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
@@ -104,6 +129,7 @@ public struct TransactionRequest {
     self.amount = amount
     self.lineItems = lineItems
   }
+
   /// Initializes a TransactionRequest with the given amount and a list of line items
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
@@ -114,6 +140,7 @@ public struct TransactionRequest {
     self.card = card
     self.lineItems = lineItems
   }
+
   /// Initializes a TransactionRequest with the given amount, explicitly sets the tokenize value and a contains a list of line items
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction

@@ -141,6 +141,20 @@ public enum JSONValue: Codable, Equatable {
     return nil
   }
 
+  subscript(key: String) -> Double? {
+    if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
+      guard
+        let val = dict[key],
+        val != nil,
+        case let JSONValue.double(i) = val!
+        else {
+          return nil
+      }
+      return i
+    }
+    return nil;
+  }
+
   subscript(key: String) -> String? {
     if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
       guard

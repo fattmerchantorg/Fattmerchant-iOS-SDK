@@ -198,9 +198,31 @@ class TakeMobileReaderPayment {
     if let gatewayResponse = transactionResult.gatewayResponse {
       dict["gatewayResponse"] = JSONValue(gatewayResponse)
     }
+
     if let lineItemResponse = transactionResult.request?.lineItems {
       dict["lineItems"] = JSONValue(lineItemResponse)
     }
+
+    if let subtotal = transactionResult.request?.subtotal {
+      dict["subtotal"] = JSONValue(subtotal)
+    }
+
+    if let tax = transactionResult.request?.tax {
+      dict["tax"] = JSONValue(tax)
+    }
+
+    if let memo = transactionResult.request?.memo {
+      dict["memo"] = JSONValue(memo)
+    }
+
+    if let reference = transactionResult.request?.reference {
+      dict["reference"] = JSONValue(reference)
+    }
+
+    if let tip = transactionResult.request?.tip {
+      dict["tip"] = JSONValue(tip)
+    }
+
     return dict.jsonValue()
   }
 
