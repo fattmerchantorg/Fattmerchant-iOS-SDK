@@ -21,6 +21,7 @@ extern CCParameterValue const CCValueFalse; /**< @memberof CCParameters Paramete
 
 extern CCParameterValue const CCValueBluetooth; /**< @memberof CCParameters Parameter value representation of BLUETOOTH connection type. */
 extern CCParameterValue const CCValueTcpIp; /**< @memberof CCParameters Parameter value representation of TCP IP connection type..*/
+extern CCParameterValue const CCValueBLE; /**< @memberof CCParameters Parameter value representation of Bluetooth Low Energy (BLE) connection type. */
 
 extern CCParameterValue const CCValueEnvironmentLive; /**< @memberof CCParameters Parameter value representation of LIVE environment. */
 extern CCParameterValue const CCValueEnvironmentTest; /**< @memberof CCParameters Parameter value representation of STAGING/TEST environment. */
@@ -45,6 +46,7 @@ extern CCParameterValue const CCValueRefund; /**< @memberof CCParameters Paramet
 extern CCParameterValue const CCValueCash; /**< @memberof CCParameters Parameter value indicating that the transaction will be processed as a cash transaction. */
 extern CCParameterValue const CCValueCheque; /**< @memeberof CCParameters Parameter value indicating that the transaction will be processed as cheque transaction. */
 extern CCParameterValue const CCValueCard; /**< @memberof CCParameters Parameter value indicating that the transaction will be processed with a card. */
+extern CCParameterValue const CCValueAccountVerification; /**< @memberof CCParameters Parameter value indicating that the transaction is Account Verification. */
 extern CCParameterValue const CCValueAmountTypeActual; /**< @memberof CCParameters Parameter value indicating that {@link CCParameters#CCParamAmount} is the actual amount. */
 extern CCParameterValue const CCValueAmountTypeEstimate; /**< @memberof CCParameters Parameter value indicating that {@link CCParameters#CCParamAmount} is the estimated amount. */
 
@@ -61,9 +63,9 @@ extern CCParameterValue const CCValuePartiallyCommitted; /** @memberof CCParamet
 extern CCParameterValue const CCValueOfflineFailed; /**< @memeberof CCParameters Parameter value to indicate that there is an offline request which has failed to send. */
 extern CCParameterValue const CCValueOfflinePending; /**< @memeberof CCParameters Parameter value to indicate that there is an offline request pending for the transaction. */
 
-extern CCParameterValue const CCValueDeferredAuthReasonConnectionFailed; /**< @memberof CCParameters Parameter value to indicate that a deferred authorization is being offered because of a connection failure.*/
-extern CCParameterValue const CCValueDeferredAuthReasonCommunicationFailed; /**< @memberof CCParameters Parameter value to indicate that a deferred authorization is being offered because of a communication error during request processing. */
-extern CCParameterValue const CCValueDeferredAuthReasonProcessingFailed; /**< @memberof CCParameters Parameter value to indicate that a deferred authorization is being offered because the platform failed to connect to the processor. */
+extern CCParameterValue const CCValueDeferredAuthorizationReasonConnectionFailed; /**< @memberof CCParameters Parameter value to indicate that a deferred authorization is being offered because of a connection failure.*/
+extern CCParameterValue const CCValueDeferredAuthorizationReasonCommunicationFailed; /**< @memberof CCParameters Parameter value to indicate that a deferred authorization is being offered because of a communication error during request processing. */
+extern CCParameterValue const CCValueDeferredAuthorizationReasonProcessingFailed; /**< @memberof CCParameters Parameter value to indicate that a deferred authorization is being offered because the platform failed to connect to the processor. */
 
 extern CCParameterValue const CCValueOfflineCompletionStateProcessed; /**< @memberof CCParameters Parameter value indicating that the offline request was successfully completed and sent online. */
 extern CCParameterValue const CCValueOfflineCompletionStateDeleted; /**< @memberof CCParameters Parameter value indicating that the offline request was deleted (and not sent online). */
@@ -82,7 +84,7 @@ extern CCParameterValue const CCValueOfflineCompletionStateDeleted; /**< @member
  */
 typedef NSString* CCParameterKey;
 extern CCParameterKey const CCParamResult; /**< @memberof CCParameters Parameter key for the result value. */
-extern CCParameterKey const CCParamError; /**< @memberof CCParameters Parameter key used when returning error codes.  Multiple error codes may be returned in a comma separated list. */
+extern CCParameterKey const CCParamErrors; /**< @memberof CCParameters Parameter key used when returning error codes.  Multiple error codes may be returned in a comma separated list. */
 extern CCParameterKey const CCParamErrorDescription; /**< @memberof CCParameters Parameter key for returning text description of an error. */
 
 extern CCParameterKey const CCParamPassword; /**< @memberof CCParameters Parameter key for attempting a password during initialization. */
@@ -136,7 +138,7 @@ extern CCParameterKey const CCParamDeviceStatusUpdate; /** @memberof CCParameter
 extern CCParameterKey const CCParamAutomaticReboot; /**< @memberof CCParameters Parameter key indicating if the PIN pad reboot is automatic or manual. Values can be {@link CCParameters#CCValueTrue TRUE} for automatic or {@link CCParameters#CCValueFalse False} for manual. */
 
 extern CCParameterKey const CCParamAmount; /**< @memberof CCParameter Parameters key for the transaction amount. */
-extern CCParameterKey const CCParamTransactionType; /**< @memberof CCParameters Parameter key for the transaction type. Can be a value of {@link CCParameter#CCValueSale SALE} or {@link CCParameter#CCValueRefund REFUND}. */
+extern CCParameterKey const CCParamTransactionType; /**< @memberof CCParameters Parameter key for the transaction type. Can be a value of {@link CCParameter#CCValueSale SALE}, {@link CCParameter#CCValueRefund REFUND} or {@link CCParameter#CCValueAccountVerification ACCOUNT_VERIFICATION}.. */
 extern CCParameterKey const CCParamAmountType; /**< @memberof CCParameters Parameter key for the amount type. Can be a value of {@link CCParameter#CCValueAmountTypeActual ACTUAL} or {@link CCParameter#CCValueAmountTypeEstimate ESTIMATE}. */
 extern CCParameterKey const CCParamUserReference; /**< @memeberof CCParameters Parameter key for the user reference. User reference must be unique per transaction. */
 extern CCParameterKey const CCParamCurrency; /**< @memberof CCParameters Parameter key for the currency for a transaction. If only one currency is available ChipDNA Mobile will default to that currency. */
@@ -186,16 +188,17 @@ extern CCParameterKey const CCParamAuthCode; /**< @memberof CCParameters Paramet
 extern CCParameterKey const CCParamCardEaseReference; /**< @memberof CCParameters Parameter key for CardEase reference of a transaction. */
 extern CCParameterKey const CCParamTransactionId; /**< @memberof CCParameters Parameter key for transaction identifier of a transaction. */
 extern CCParameterKey const CCParamMaskedPan; /**< @memeberof CCParameters Parameter key for a masked PAN. */
+extern CCParameterKey const CCParamPar; /**< @memeberof CCParameters Parameter key for a PAR. */
 extern CCParameterKey const CCParamAmountOnlineAuthorized; /**< @memberof CCParameters Parameter key for the amount of a transaction authorized online. */
 extern CCParameterKey const CCParamTransactionDateTime; /**< @memberof CCParameters Parameter key for a transactions local date and time. */
 extern CCParameterKey const CCParamTransactionDateTimeUtc; /**< @memberof CCParameters Parameter key for a transactions UTC date time. */
 extern CCParameterKey const CCParamReceiptData; /**< @memberof CCParameters Parameter key for the transactions receipt data in XML format. Which can be converted to an array of {@link ReceiptField ReceiptFields} using {@link ChipDnaMobileSerializer#deserializeReceiptData:} method. */
-extern CCParameterKey const CCParamCardHash; /**< @memeberof CCParameters Parameter key for the card hash in XML format. Value can be converted to a {@link CCCardHash} object using {@link ChipDnaMobileSerializer#deserializeCardHash:}.*/
+extern CCParameterKey const CCParamCardHashCollection; /**< @memeberof CCParameters Parameter key for the card hash in XML format. Value can be converted to a {@link CCCardHash} object using {@link ChipDnaMobileSerializer#deserializeCardHash:}.*/
 extern CCParameterKey const CCParamCardReference; /**< @memberof CCParameters Parameter key for the card reference.*/
 extern CCParameterKey const CCParamCardSchemeId; /**< @memberof CCParameters Parameter key for the card scheme ID. */
 extern CCParameterKey const CCParamCardHolderFirstName; /**< @memberof CCParameters Parameter key for the card holder first name. */
 extern CCParameterKey const CCParamCardHolderLastName; /**< @memberof CCParameters Parameter key for the card holder last name. */
-extern CCParameterKey const CCParamAquirerResponseCode; /**< @memeberof CCParameters Parameter key for the acquirer response code. */
+extern CCParameterKey const CCParamAcquirerResponseCode; /**< @memeberof CCParameters Parameter key for the acquirer response code. */
 extern CCParameterKey const CCParamDateTimeFormat; /**< @memebreof CCParameters Parameter key for the format of the date/times returned. */
 extern CCParameterKey const CCParamPreformattedMerchantReceipt; /**< @memberof CCParameters Parameter key for the preformatted merchant receipt text. */
 extern CCParameterKey const CCParamPreformattedCustomerReceipt; /**< @memberof CCParameters Parameter key for the preformatted customer receipt text. */
@@ -243,7 +246,7 @@ extern CCParameterKey const CCParamLinkedRefundReferences; /**< @memberof CCPara
 
 extern CCParameterKey const CCParamAvailableCurrencies; /**< @memberof CCParameters Parameter key for the currencies available XML for the terminal. The data converted using {@link ChipDnaMobileSerializer#deserializedAvailableCurrencies:}*/
 
-extern CCParameterKey const CCParamDeferredAuthReason; /**< @memberof CCParameters Parameter key indicating the reason a deferred authorization is being offered. */
+extern CCParameterKey const CCParamDeferredAuthorizationReason; /**< @memberof CCParameters Parameter key indicating the reason a deferred authorization is being offered. */
 
 extern CCParameterKey const CCParamClearIdleMessage; /**< @memberof CCParameters Parameter key to clear the current status message and return display to default. */
 
@@ -259,6 +262,11 @@ extern CCParameterKey const CCParamSelectedCardApplication; /**< @memberof CCPar
 extern CCParameterKey const CCParamPANKeyEntry; /**< @memberof CCParameter Parameter key for PAN key entry. Value can be either {@link CCParameters#CCValueTrue TRUE} or {@link CCParameters#CCValueFalse FALSE}. */
 extern CCParameterKey const CCParamAutoConfirm; /**< @memberof CCParameter Parameter key to trigger auto confirmation of a transaction. Value can be either {@link CCParameters#CCValueTrue TRUE} or {@link CCParameters#CCValueFalse FALSE}.*/
 
+extern CCParameterKey const CCParamMerchantData; /**< @memberof CCParameter Parameter key for the merchant data.*/
+extern CCParameterKey const CCParamMerchantDisplayName; /**< @memberof CCParameter Parameter key for configured merchant display name. The default name displayed on the PIN pad when it is idle. */
+extern CCParameterKey const CCParamMerchantName; /**< @memberof CCParameter Parameter key for the merchant name*/
+
+extern CCParameterKey const CCParamBLEScanTime; /**< @memberof CCParameter Parameter key for configuring the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not passed into {@link availablePinPadsRequest} and {@link connectAndConfigure}.*/
 /**
  * @}
  */

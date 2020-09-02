@@ -139,7 +139,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       completion(pinPads.map({ MobileReader.from(pinPad: $0) }))
     }
 
-    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(nil)
+    params[CCParamBLEScanTime] = "10"
+    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(params)
+//    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(nil)
   }
 
   /// Connects the mobile reader and prepares it for use
@@ -300,7 +302,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
 
     // Check status
-    if result[CCParamError] != nil {
+    if result[CCParamErrors] != nil {
       error(RefundException.errorRefunding(details: "Error while performing refund"))
     } else {
       var transactionResult = TransactionResult()

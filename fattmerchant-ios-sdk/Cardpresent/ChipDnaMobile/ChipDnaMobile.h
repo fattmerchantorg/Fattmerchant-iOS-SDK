@@ -3,13 +3,11 @@
  *The ChipDNA Mobile API contains the classes necessary to process Card Present sale and refund transactions on a mobile platform. Processing Card Present transactions requires one of the following PIN pads:
  *
  * <ul>
- * <li>BBPOS WisePad2 or WisePad2 Plus</li>
- * <li>BBPOS WisePad2 Plus</li>
- * <li>Datecs Bluepad50</li>
- * <li>Miura M006, M007, or M010</li>
+ * <li>BBPOS Chipper CHB20 or CHB22
+ * <li>Datecs Bluepad50 Contact or Contactless</li>
+ * <li>Miura M007, M010 or M020</li>
  * </ul>
  *
- * All external devices should be paired with the mobile device so that Bluetooth connections can be opened as required. Most transactions will require online authorisation, therefore the mobile device should have access to a wireless or mobile data network.
  * The ChipDNA Mobile API uses an encrypted database and needs to be initialised with a password before the API functionality can be used. {@link ChipDnaMobile#initialize: initialize} method is used to start the initialisation process. Once initialized an instance of the {@link ChipDnaMobile} class obtained using the static {@link ChipDnaMobile#sharedInstance sharedInstance} method.
  *
  *  Use {@link ChipDnaMobile#setProperties: setProperties} to set the required properties such as Application Identifier, PIN pad name, Target platform (Live or Test), Terminal ID and Transaction Key.
@@ -111,12 +109,12 @@ extern NSString * const CCInitialisationException;
  *
  * Only the following PIN pads are supported:
  * <ul>
- * <li>BBPOS WisePad2 or WisePad2 Plus</li>
- * <li>Datecs Bluepad50</li>
- * <li>Miura M006, M007, or M010</li>
+ * <li>BBPOS Chipper CHB20 or CHB22
+ * <li>Datecs Bluepad50 Contact or Contactless</li>
+ * <li>Miura M007, M010 or M020</li>
  * </ul>
  *
- * @param request with parameter collection. Currently not used.
+ * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not available. </p>
  * @return parameter collection containing {@link CCParameters#CCParamResult CCParamResult} and if applicable {@link CCParameters#CCParamErrors CCParamErrors}.
  **/
 - (CCParameters *)getAvailablePinPads:(CCParameters *)request;
@@ -187,6 +185,7 @@ extern NSString * const CCInitialisationException;
  * @param request Parameter collection which can contain the following:
  * <p>{@link CCParameters#CCParamForceTmsUpdate}</p> Force connectAndConfigure to perform a TMS update whether one is required or not.</p>
  * <p>{@link CCParameters#CCParamFullTmsUpdate} Force a full TMS update whether one is required or not. All configuration will be re-downloaded regardless of whether it's required.
+ * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not available. </p>
  *
  * @return parameter collection containing {@link CCParameters#CCParamResult CCParamResult} and if applicable {@link CCParameters#CCParamErrors CCParamErrors}.
  */
@@ -217,16 +216,42 @@ extern NSString * const CCInitialisationException;
  * <p>{@link CCParameters#CCParamSmsReceiptSupported CCParamSmsReceiptSupported} - When present with the value {@link CCValueTrue TRUE} indicates that centralized SMS receipting is supported with the currently configure terminal.</p>
  * <p>{@link CCParameters#CCParamTippingSupported CCParamTippingSupported} - If present indicates the type of tipping supported with the currently configured terminal. Values can be: {@link CCParameters#CCValueEndOfDayTipping CCValueEndOfDayTipping}, {@link CCParameters#CCValueOnDeviceTipping CCValueOnDeviceTipping}, or {@link CCParameters#CCValueBothTipping CCValueBothTipping}</p>
  * <p>{@link CCParameters#CCParamApplicationIdentifier CCParamApplicationIdentifier} - A string representing the current indentifier for the application.</p>
+ * <p>{@link CCParameters#CCParamMerchantDisplayName CCParamMerchantDisplayName} - If present indicates the currently configured merchant display name.</p>
  */
 -(CCParameters *)getStatus:(CCParameters *)request;
 
 /**
- * Start a transaction. Objects wishing to know the outcomes of transactions should observe for the {@link ChipDnaMobile#addTransactionFinishedTarget:action: transactionFinished} event. Objects can also register to receive updates about on going transactions by observing for {@link ChipDnaMobile#addTransactionUpdateTarget:action: transactionUpdates}.
+ * Get all merchant data in a single call.
  *
- * @param request A parameter collection defining the behaviour of the transaction. It can contain the following parameters:
+ * @param request {@link Parameters} currently not used, can be set to nil.
+ *
+ * @return Parameter collection containing the following:
+ * <p>{@link CCParameters#CCParamResult CCParamResult} defining if the call to getMerchantData was successful using the values {@link CCParameters#CCValueTrue TRUE} and {@link CCParameters#CCValuesFalse FALSE}.</p>
+ * <p>{@link CCParameters#CCParamMerchantData CCParamMerchantData} An XML representation of the {@link MerchantData}. {@link ChipDnaMobileSerializer#deserializeMerchantData:} can be used to retrieve an object.
+ */
+-(CCParameters *)getMerchantData:(CCParameters *)request;
+
+/**
+* Start a transaction. Observe {@link ChipDnaMobile#addTransactionFinishedTarget:action: transactionFinished} to get the transaction results. To receive updates during a transaction observe {@link ChipDnaMobile#addTransactionUpdateTarget:action: transactionUpdates}.
+ *
+ * Before calling {@link ChipDnaMobile#startTransaction:} add an observer and action for
+ * <ul>
+ * <li>(@link ChipDnaMobile#addDeferredAuthorizationTarget)</li>
+ * <li>(@link ChipDnaMobile#addForcedAcceptanceTarget)</li>
+ * <li>(@link ChipDnaMobile#addPartialApprovalTarget)</li>
+ * <li>(@link ChipDnaMobile#addSignatureVerificationTarget)</li>
+ * <li>(@link ChipDnaMobile#addTransactionFinishedTarget)</li>
+ * <li>(@link ChipDnaMobile#addTransactionUpdateTarget)</li>
+ * <li>(@link ChipDnaMobile#addIdVerificationTarget)</li>
+ * <li>(@link ChipDnaMobile#addVoiceReferralTarget)</li>
+ * <li>(@link ChipDnaMobile#addUserNotificationTarget) - recommended for BBPOS Chipper 2X BT</li>
+ * <li>(@link ChipDnaMobile#addCardApplicationSelectionTarget) - required for BBPOS Chipper 2X BT</li>
+ * </ul>
+ *
+ * @param requestParameters {@link CCParameters} collection which can contain:
  * <p>{@link CCParameters#CCParamAmount CCParamAmount} The amount to be used in the transaction.</p>
  * <p>{@link CCParameters#CCParamUserReferrence CCParamUserReference} A unique reference for this transaction.
- * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} The transaction type for this transaction. Values can be {@link CCParameters#CCValueSale CCValueSale} or {@link CCParameters#CCValueRefund CCValueRefund}.
+ * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} The transaction type for this transaction. Values can be {@link CCParameters#CCValueSale CCValueSale}, {@link CCParameters#CCValueRefund CCValueRefund} or {@link CCParameter#CCValueAccountVerification CCValueAccountVerification}.
  * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} Set the currency for this transaction. Only required when {@link ChipDnaMobile#getAvailableCurrencies:} returns more than one currency. If only a single currency is supported, it will be used by default.</p>
  * <p>@link CCParameters#CCParamPANKeyEntry CCParamPANKeyEntry} Requests a PAN key entry transaction is started for a card not present transaction. Value can be either {@link CCParameters#CCValueTrue TRUE} or {@link CCParameters#CCValueFalse FALSE}.</p>
  *
@@ -397,6 +422,21 @@ extern NSString * const CCInitialisationException;
  * <p>{@link CCParameters#CCParamReceiptData CCParamReceiptData} only returned when transaction result is approved. An array of {@ReceiptField} objects serialized in XML format. Can be serialized into an object using {@link ChipDnaMobileSerializer#deserializeReceiptData:}.</p>
  * <p>{@link CCParameters#CCParamPreformattedMerchantReceipt CCParamPreformattedMerchantReceipt} A preformatted merchant receipt string. Only returned on approval.</p>
  * <p>{@link CCParameters#CCParamPreformattedCustomerReceipt CCParamPreformattedCustomerReceipt} A preformatted customer receipt string. Only retured on approval.</p>
+ * <p>{@link CCParameters#CCParamAmount CCParamAmount} The amount refunded in minor units e.g. "123" for GBP1.23.</p>
+ * <p>{@link CCParameters#CCParamUserReference CCParamUserReference} The unique user reference for the linked refund.</p>
+ * <p>{@link CCParameters#CCParamTransactionDateTimeUtc CCParamTransactionDateTimeUtc} The UTC date and time of the refund transaction.</p>
+ * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} The 3-char currency code used during the transaction. </p>
+ * <p>{@link CCParameters#CCParamMaskedPan CCParamMaskedPan} The masked primary account number of the original sale transaction, showing only the first 6 (if available) and last 4 digits.</p>
+ * <p>{@link CCParameters#CCParamDateTimeFormat CCParamDateTimeFormat} The format of the date and time in {@link CCParameters#CCParamTransactionDateTime CCParamTransactionDateTime} parameter.</p>
+ * <p>{@link CCParameters#CCParamCardSchemeId CCParamCardSchemeId} The {@link CCParameters#CCParamCardSchemeId} of the original sale transaction.</p>
+ * <p>{@link CCParameters#CCParamCardEaseReference CCParamCardEaseReference} The CardEase reference for the original sale transaction - a unique GUID generated for a transaction if the authorization was submitted online to the Creditcall payment platform.. </p>
+ * <p>{@link CCParameters#CCParamAuthCode CCParamAuthCode} The alpha numeric authorization code, up to 12 characters.</p>
+ * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} The transaction type will be {@link CCParameters#CCValueRefund}.</p>
+ * <p>{@link CCParameters#CCParamCardReference CCParamCardReference} The unique reference generated by the Creditcall payment gateway that can be used to identify a card without using the PAN<./p>
+ * <p>{@link CCParameters#CCParamTransactionDateTime CCParamTransactionDateTime} The local date and time the refund transaction was performed. </p>
+ * <p>{@link CCParameters#CCParamCardHashCollection} list of tokens generated by Creditcall payment gateway and or payment device that can be used to identify a card with out the PAN.
+ *    Value in XML format representing List of {@link CCCardHash}, deserialize into object using {@link ChipDnaMobileSerializer#deserializeCardHashes:}.</p>
+ * <p>{@link CCParameters#CCParamPar} Payment Account Reference, alpha numeric reference that is 29 characters in length.</p>
  */
 -(CCParameters *)linkedRefundTransaction:(CCParameters *)request;
 
@@ -427,13 +467,17 @@ extern NSString * const CCInitialisationException;
  * <p>{@link CCParameters#CCParamEnvironment CCParamEnvironment} The payment environment which the transaction applies to.</p>
  * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} The currency used during the transaction. Value is the 3 character code passed in during the call to {@link ChipDnaMobile#startTransaction:}.</p>
  * <p>{@link CCParameters#CCParamTransactionState CCParamTransactionState} The current state of the transaction.</p>
- * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} Indicating if the transaction was a {@link CCParameters#CCValueSale Sale} or a {@link CCParameters#CCValueRefund Refund}.</p>
+ * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} Indicating if the transaction was a {@link CCParameters#CCValueSale Sale}, {@link CCParameters#CCValueRefund Refund} or {@link CCParameter#CCValueAccountVerification AccountVerification}.</p>
  * <p>{@link CCParameters#CCParamTransactionResult CCParamTransactionResult} The current result of the transaction.</p>
  * <p>{@link CCParameters#CCParamOfflineStatus CCParamOfflineStatus} If returned indicates the status of the transaction in the offline queue.</p>
  * <p>{@link CCParameters#CCParamLinkedRefundReferences CCParamLinkedRefundReferences} Comma separated string of user references for linked refunds linked to this transaction.</p>
+ * <p>{@link CCParameters#CCParamCardHashCollection} list of tokens generated by Creditcall payment gateway and or payment device that can be used to identify a card with out the PAN.
+ *    Value in XML format representing List of {@link CCCardHash}, deserialize into object using {@link ChipDnaMobileSerializer#deserializeCardHashes:}.</p>
+  * <p>{@link CCParameters#CCParamCardReference CCParamCardReference} The unique reference generated by the Creditcall payment gateway that can be used to identify a card without using the PAN<./p>
  * <p>{@link CCParameters#CCParamTransactionDateTime CCParamTransactionDateTime} The date and time the transaction was performed. </p>
- * <p>{@link CCParameters#CCParamDateTimeFormat CCParamDateTimeFormate} The format of the {@link CCParameters#CCParamTransactionDateTime CCParamTransactionDateTime} parameter.</p>
+ * <p>{@link CCParameters#CCParamDateTimeFormat CCParamDateTimeFormat} The format of the {@link CCParameters#CCParamTransactionDateTime CCParamTransactionDateTime} parameter.</p>
  * <p>{@link CCParameters#CCParamTransactionId CCParamTransactionId} The identifier for transactions using the gateway.</p>
+ * <p>{@link CCParameters#CCParamPar} Payment Account Reference, alpha numeric reference that is 29 characters in length.</p>
  */
 -(CCParameters *)getTransactionInformation:(CCParameters *)request;
 
@@ -564,7 +608,7 @@ extern NSString * const CCInitialisationException;
  * When updates are no longer required by an observer a call should be made to {@link ChipDnaMobile#removeTransactionFinishedTarget: removeTransactionFinishedTarget}.
  *
  * Observer are returned a {@link CCParameters} collection which will contain:
- * <p>{@link CCParameters#CCParamAquirerResponseCode} The acquirer response code</p>
+ * <p>{@link CCParameters#CCParamAcquirerResponseCode} The acquirer response code</p>
  * <p>{@link CCParameters#CCParamAmount} Amount in minor units e.g. "123" for GBP1.23</p>
  * <p>{@link CCParameters#CCParamAmountOnlineAuthorized} The amount authorized online, in minor units e.g. "123" for GBP1.23</p>
  * <p>{@link CCParameters#CCParamAuthCode} Alpha numeric authorization code, up to 12 characters.</p>
@@ -584,11 +628,14 @@ extern NSString * const CCInitialisationException;
  *  Can be {@link CCParameters#CCValueApproved}, {@link CCParameters#CCValuePartiallyApproved} or {@link CCParameters#CCValueDeclined}.</p>
  * <p>{@link CCParameters#CCParamTransactionState} Transaction state.
  *   Value can be {@link CCParameters#CCValueUncommitted}, {@link CCParameters#CCValueVoided} or , {@link CCParameters#CCValueUncommittedVoid}</p>
- * <p>{@link CCParameters#CCParamTransactionType} The transaction type. {@link CCParameters#CCValueSale} or {@link CCParameters#CCValueRefund}</p>
+ * <p>{@link CCParameters#CCParamTransactionType} The transaction type. {@link CCParameters#CCValueSale}, {@link CCParameters#CCValueRefund} or {@link CCParameter#CCValueAccountVerification}.</p>
  * <p>{@link CCParameters#CCParamMerchantName} Merchant name is returned for Cash and Cheque transactions </p>
  * <p>{@link CCParameters#CCParamCustomerVaultId} The identifier for the customer's vault.</p>
  * <p>{@link CCParameters#CCParamTransactionId} The identifier for transaction using the gateway.</p>
  * <p>{@link CCParameters#CCParamError} Comma separated errors encountered during transaction processing</p>
+ * <p>{@link CCParameters#CCParamCardHashCollection} list of tokens generated by Creditcall payment gateway and or payment device that can be used to identify a card with out the PAN.
+ *    Value in XML format representing List of {@link CCCardHash}, deserialize into object using {@link ChipDnaMobileSerializer#deserializeCardHashes:}.</p>
+ * <p>{@link CCParameters#CCParamPar} Payment Account Reference, alpha numeric reference that is 29 characters in length.</p>
  * @param target Target wishing to receive transaction finished results.
  * @param action Selector to be call on observing target.
  */
@@ -619,7 +666,7 @@ extern NSString * const CCInitialisationException;
 +(void)removeTransactionUpdateTarget:(id)target;
 
 /**
- * Add an observer and action to receive updates on notifications which need to be known to the user after a call to {@link ChipDnaMobile#startTransaction: startTransaction}.
+ * Add an observer and action to receive updates on notifications which need to be shown to the customer after a call to {@link ChipDnaMobile#startTransaction: startTransaction}.
  *
  * When updates are no longer required by an observer a call should be made to {@link ChipDnaMobile#removeUserNotificationTarget: removeUserNotificationTarget}.
  *
