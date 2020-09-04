@@ -22,8 +22,6 @@ class ChipDnaTransactionListener: NSObject {
   /// Gets notified of transaction events
   weak var transactionUpdateDelegate: TransactionUpdateDelegate?
 
-
-
   /// Makes this listener bind to the transaction events ChipDna emits
   func bindToChipDna(signatureProvider: SignatureProviding? = nil,
                      transactionUpdateDelegate: TransactionUpdateDelegate? = nil) {
