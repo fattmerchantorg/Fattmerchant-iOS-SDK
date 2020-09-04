@@ -66,7 +66,7 @@ XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundA
 
     let expectation = XCTestExpectation(description: "Request to omni is build properly")
     let expectedMethod = "post"
-    let expectedUrlString = "/transaction/\(transactionId)/void-or-refunds"
+    let expectedUrlString = "/transaction/\(transactionId)/void-or-refund"
     let expectedBody: Data? = nil
 
     // We want mock omni api to be called witha void-or-refund
