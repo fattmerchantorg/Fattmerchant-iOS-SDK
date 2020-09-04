@@ -35,19 +35,7 @@ extension TransactionUpdate {
     switch chipDnaTransactionUpdate {
 
     case TransactionUpdateCardEntryPrompted:
-      guard
-        let reader = ChipDnaDriver.connectedReader(),
-        let makeString = reader.make,
-        let make = ChipDnaDriver.PinPadManufacturer(rawValue: makeString) else {
-          return nil
-      }
-
-      switch make {
-      case .Miura:
-        self = .PromptInsertSwipeCard
-      default:
-        self = .PromptSwipeCard
-      }
+      self = .PromptInsertSwipeCard
 
     case TransactionUpdateCardSwiped:
       self = .CardSwiped
