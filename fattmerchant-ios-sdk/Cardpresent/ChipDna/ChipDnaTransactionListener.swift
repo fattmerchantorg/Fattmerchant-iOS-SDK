@@ -22,6 +22,8 @@ class ChipDnaTransactionListener: NSObject {
   /// Gets notified of transaction events
   weak var transactionUpdateDelegate: TransactionUpdateDelegate?
 
+
+
   /// Makes this listener bind to the transaction events ChipDna emits
   func bindToChipDna(signatureProvider: SignatureProviding? = nil,
                      transactionUpdateDelegate: TransactionUpdateDelegate? = nil) {
@@ -34,6 +36,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.addForcedAcceptanceTarget(self, action: #selector(onForcedAcceptance(parameters:)))
     ChipDnaMobile.addIdVerificationTarget(self, action: #selector(onIdVerification(parameters:)))
     ChipDnaMobile.addUserNotificationTarget(self, action: #selector(onUserNotification(parameters:)))
+    ChipDnaMobile.addCardApplicationSelectionTarget(self, action: #selector(onApplicationSelection(parameters:)))
     self.transactionUpdateDelegate = transactionUpdateDelegate
     self.signatureProvider = signatureProvider
   }
@@ -48,6 +51,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.removePartialApprovalTarget(self)
     ChipDnaMobile.removeForcedAcceptanceTarget(self)
     ChipDnaMobile.removeIdVerificationTarget(self)
+    ChipDnaMobile.removeCardApplicationSelectionTarget(self)
   }
 
   @objc fileprivate func onTransactionUpdate(parameters: CCParameters) {
@@ -107,5 +111,11 @@ class ChipDnaTransactionListener: NSObject {
 
   }
 
+  @objc fileprivate func onApplicationSelection(parameters: CCParameters) {
+    var a = parameters
+    print(a)
+    var result = ChipDnaMobile.sharedInstance()?.continueCardApplicationSelection(nil)
+    print(result)
+  }
 }
 #endif

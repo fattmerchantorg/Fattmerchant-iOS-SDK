@@ -14,7 +14,9 @@ import Foundation
 
 extension MobileReader {
   static func from(pinPad: ChipDnaDriver.SelectablePinPad) -> MobileReader {
-    return MobileReader(name: pinPad.name)
+    let reader = MobileReader(name: pinPad.name)
+    reader.connectionType = pinPad.connectionType
+    return reader
   }
 
   static func from(deviceStatus: DeviceStatus) -> MobileReader {
