@@ -112,10 +112,7 @@ class ChipDnaTransactionListener: NSObject {
   }
 
   @objc fileprivate func onApplicationSelection(parameters: CCParameters) {
-    var a = parameters
-    print(a)
-    var result = ChipDnaMobile.sharedInstance()?.continueCardApplicationSelection(nil)
-    print(result)
+    ChipDnaMobile.sharedInstance()?.continueCardApplicationSelection(nil)
   }
 }
 #endif
