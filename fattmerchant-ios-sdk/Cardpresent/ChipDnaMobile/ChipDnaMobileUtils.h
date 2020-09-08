@@ -81,4 +81,15 @@
  */
 + (UIImage *)processSignature:(UIImage *)signatureImage error:(NSString **)error;
 
+/**
+ * Pad a string on the left to a desired length with a character of choice.
+ *
+ * @param originalString The original string to be padded.
+ * @param paddingCharacter The character the string is to be padded with.
+ * @param desiredLength The desired legth of the new, padded string.
+ *
+ * @return The padded string.
+ */
++ (NSString *)padLeft:(NSString *)originalString paddingCharacter:(char)paddingCharacter desiredLength:(int)desiredLength;
+
 @end

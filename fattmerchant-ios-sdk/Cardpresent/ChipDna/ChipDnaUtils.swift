@@ -14,7 +14,9 @@ import Foundation
 
 extension MobileReader {
   static func from(pinPad: ChipDnaDriver.SelectablePinPad) -> MobileReader {
-    return MobileReader(name: pinPad.name)
+    let reader = MobileReader(name: pinPad.name)
+    reader.connectionType = pinPad.connectionType
+    return reader
   }
 
   static func from(deviceStatus: DeviceStatus) -> MobileReader {
@@ -33,19 +35,7 @@ extension TransactionUpdate {
     switch chipDnaTransactionUpdate {
 
     case TransactionUpdateCardEntryPrompted:
-      guard
-        let reader = ChipDnaDriver.connectedReader(),
-        let makeString = reader.make,
-        let make = ChipDnaDriver.PinPadManufacturer(rawValue: makeString) else {
-          return nil
-      }
-
-      switch make {
-      case .Miura:
-        self = .PromptInsertSwipeCard
-      default:
-        self = .PromptSwipeCard
-      }
+      self = .PromptInsertSwipeCard
 
     case TransactionUpdateCardSwiped:
       self = .CardSwiped
