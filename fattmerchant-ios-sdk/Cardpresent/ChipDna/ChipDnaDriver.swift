@@ -132,6 +132,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     // Set the connection type to BT
     let params = CCParameters()
     params[CCParamPinPadConnectionType] = CCValueBluetooth
+    params[CCParamBLEScanTime] = "5"
 
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
     ChipDnaMobile.addAvailablePinPadsTarget(self, action: #selector(onAvailablePinPads(parameters:)))
@@ -139,7 +140,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       completion(pinPads.map({ MobileReader.from(pinPad: $0) }))
     }
 
-    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(nil)
+    ChipDnaMobile.sharedInstance()?.getAvailablePinPads(params)
   }
 
   /// Connects the mobile reader and prepares it for use
@@ -151,7 +152,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
     let requestParams = CCParameters()
     requestParams[CCParamPinPadName] = reader.name
-    requestParams[CCParamPinPadConnectionType] = CCValueBluetooth
+    requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBluetooth
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
     didConnectAndConfigure = { connectedReader in
@@ -300,7 +301,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
 
     // Check status
-    if result[CCParamError] != nil {
+    if result[CCParamErrors] != nil {
       error(RefundException.errorRefunding(details: "Error while performing refund"))
     } else {
       var transactionResult = TransactionResult()
@@ -324,14 +325,24 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     var availablePinPadsList: [SelectablePinPad]?
 
     guard
-      let availablePinPadsDict = ChipDnaMobileSerializer.deserializeAvailablePinPadsString(pinPadsXml) as? [String: Any],
-      let btPinPads = availablePinPadsDict[CCValueBluetooth] as? [String] else {
+      let availablePinPadsDict = ChipDnaMobileSerializer.deserializeAvailablePinPadsString(pinPadsXml) as? [String: Any] else {
       return nil
     }
 
-    availablePinPadsList = btPinPads.map { pinPadName in
+    // Create empty list of pinpads
+    availablePinPadsList = []
+
+    // Add Bluetooth Low Energy devices
+    let bleDevices = (availablePinPadsDict[CCValueBLE] as? [String])?.map { pinPadName in
+      SelectablePinPad(name: pinPadName, connectionType: CCValueBLE)
+    }
+    availablePinPadsList?.append(contentsOf: bleDevices ?? [])
+
+    // Add Bluetooth devices
+    let btDevices = (availablePinPadsDict[CCValueBluetooth] as? [String])?.map { pinPadName in
       SelectablePinPad(name: pinPadName, connectionType: CCValueBluetooth)
     }
+    availablePinPadsList?.append(contentsOf: btDevices ?? [])
 
     return availablePinPadsList
   }

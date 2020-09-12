@@ -15,6 +15,7 @@
 #import "PaymentPlatformStatus.h"
 #import "ReceiptField.h"
 #import "CCCardHash.h"
+#import "MerchantData.h"
 
 @interface ChipDnaMobileSerializer : NSObject
 /**
@@ -192,4 +193,21 @@
  * @return Dictionary of {@link CardApplication} objects.
  */
 +(NSArray *)deserializedAvailableCardApplications:(NSString *)availableCardApplications;
+
+/**
+ * Serialize {@link MerchantData} object into XML representation.
+ *
+ * @param merchantData MerchantData object to be serialized.
+ * @return XML respresentation of merchant data.
+ */
++(NSString *)serializeMerchantData:(MerchantData *)merchantData;
+
+/**
+ * Deserialize XML representation of {@link MerchantData} returned from {@link ChipDnaMobile#getMerchantData: getMerchantData} into an object.
+ *
+ * @param merchantData xml representation of {@link MerchantData}.
+ * @return {@link MerchantData} object.
+ */
++(MerchantData *)deserializeMerchantData:(NSString *)merchantData;
+
 @end
