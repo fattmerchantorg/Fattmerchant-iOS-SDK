@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.frameworks = 'UIKit', 'AVFoundation', 'MediaPlayer', 'CoreAudio', 'ExternalAccessory', 'CoreBluetooth', 'AudioToolbox'
 
-  s.vendored_libraries = 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libChipDnaMobileAPI.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher/libsqlcipher-4.0.1.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libCardEaseXml.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libLumberjack.a' 
+  s.vendored_libraries = 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libChipDnaMobileAPI.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libsqlcipher-4.0.1.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libCardEaseXml.a', 'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libLumberjack.a' 
 
   s.vendored_frameworks = 'Vendored-Frameworks/AnyPay/AnyPay.framework'
  
