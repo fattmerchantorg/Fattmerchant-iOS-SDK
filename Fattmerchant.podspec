@@ -18,7 +18,8 @@ Pod::Spec.new do |s|
   s.vendored_frameworks = 'Vendored-Frameworks/AnyPay/AnyPay.framework'
  
   s.pod_target_xcconfig = { 
-    'ENABLE_BITCODE' => 'NO' 
+    'ENABLE_BITCODE' => 'NO',
+    'OTHER_LDFLAGS' => '-lz'
   }
 
 end
