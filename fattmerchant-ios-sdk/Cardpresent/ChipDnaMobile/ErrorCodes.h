@@ -64,7 +64,7 @@ extern NSString * const InvalidOperatorPin;        /**< Operator pin entered was
 extern NSString * const InvalidPaymentMethod;      /**< Invalid payment method parameter value. */
 extern NSString * const TransactionTypeMissing;    /**< Transaction type parameter method missing. */
 extern NSString * const InvalidTransactionType;    /**< Invalid transaction type parameter value. */
-extern NSString * const InvalidTippingType;        /**< Invalid tipping type parameter value. */
+extern NSString * const TippingTypeInvalid;        /**< Invalid tipping type parameter value. */
 extern NSString * const InvalidAuthCode;           /**< Invalid authorization code parameter value. */
 extern NSString * const AuthCodeMissing;           /**< Authorization code parameter missing. */
 extern NSString * const PhoneNumberMissing;        /**< Phone number parameter is missing. */
@@ -116,6 +116,7 @@ extern NSString * const LogOnLocked;                   /**< Log on is locked. */
 extern NSString * const InvalidLoginPlatform;          /**< The invalid login platform is used. */
 extern NSString * const DataNotAvailable;              /**< The request did not return any results. This might be because there are no results for the given data range or because the provided data does not generate any results (for example, incorrect guid for retrieving transaction details). */
 extern NSString * const UnexpectedChipDnaError;        /**< ChipDNA encountered an unexpected error.*/
+extern NSString * const BLEScanTimeValueInvalid; /**< BLEScanTime is invalid. */
 
 /**
  * @defgroup ConfigurationError
@@ -142,6 +143,7 @@ extern NSString * const GratuityNotSupported;                      /**< Gratuity
 extern NSString * const CurrencyNotFound;                          /**< Currency not found in configuration data. */
 extern NSString * const CurrencyNotSet;                            /**< Currency is not set. */
 extern NSString * const CurrencyNotSupportedForPaymentMethod;      /**< Currency is not supported for payment method. */
+extern NSString * const ConfigurationCurrencyNotSet;               /**< Configuration currency is not set. */
 extern NSString * const EndOfDayTippingNotSupported;               /**< End of Day Tipping is not supported */
 extern NSString * const OnDeviceTippingNotSupported;               /**< On Device Tipping is not supported */
 extern NSString * const PinPadCheckRequired;                       /**< A PIN pad check is required. */
@@ -195,6 +197,16 @@ extern NSString * const FailedToRetrieveFirmwareUpdateSessionKeys;  /**< The ses
 extern NSString * const FirmwareUpdateSessionKeyInvalid;            /**< The session key for the firmware update is invalid. */
 extern NSString * const FirmwareFileParsingFailed;                  /**< Failed to parse firmware file. */
 extern NSString * const FirmwareFileDataMissing;                    /**< The firmware file is missing data required for the firmware update. */
+
+extern NSString * const TransactionFinishedObserverRequired;        /**< Method required at least one observer for transaction finished events. @see ChipDnaMobile#addTransactionFinishedTarget:action:*/
+extern NSString * const SignatureVerificationObserverRequired;      /**< Method required at least one observer for signature verfication events. @see ChipDnaMobile#addSignatureVerificationTarget:action:*/
+extern NSString * const VoiceReferralObserverRequired;              /**< Method required at least one observer for voice referral events. @see ChipDnaMobile#addVoiceReferralTarget:action:*/
+extern NSString * const UserNotificationObserverRequired;           /**< Method required at least one observer for user notification events. @see ChipDnaMobile#addUserNotificationTarget:action:*/
+extern NSString * const ApplicationSelectionObserverRequired;       /**< Method required at least one observer for application selection events. @see ChipDnaMobile#addCardApplicationSelectionTarget:action:*/
+extern NSString * const DeferredAuthorizationObserverRequired;      /**< Method required at least one observer for deferred authorization events. @see ChipDnaMobile#addDeferredAuthorizationTarget:action:*/
+extern NSString * const ForcedAcceptanceObserverRequired;           /**< Method required at least one observer for forced acceptance events. @see ChipDnaMobile#addForcedAcceptanceTarget:action:*/
+extern NSString * const SignatureCaptureObserverRequired;           /**< Method required at least one observer for signature capture events. @see ChipDnaMobile#addSignatureCaptureTarget:action:*/
+extern NSString * const PartialApprovalObserverRequired;            /**< Method required at least one observer for partial approval events. @see ChipDnaMobile#addPartialApprovalTarget:action:*/
 
 extern NSString * const TerminalRiskManagementDataFormatError;               /**< There is a format error with the Terminal Risk Management Data. */
 extern NSString * const CountryCodeFormatError;                              /**< There is a format error with the Country Code. */
@@ -270,6 +282,9 @@ extern NSString * const RefundSignatureCheckRequiredFormatError;             /**
 extern NSString * const OperatorPinRequiredForVerificationFormatError;       /**< There is a format error with the Operator Pin Required For Verification. */
 extern NSString * const OperatorPinRequiredForRefundsFormatError;            /**< There is a format error with the Operator Pin Required For Refunds. */
 extern NSString * const CashSupportedFormatError;                            /**< There is a format error with the Cash Supported. */
+extern NSString * const AccountVerificationRequiredCvmFormatError;           /**< There is a format error with the Account Verification CVM Required. */
+extern NSString * const AccountVerificationSignatureCheckRequiredFormatError;/**< There is a format error with the Account Verification Signature Check Required. */
+extern NSString * const AccountVerificationSupportedFormatError;             /**< There is a format error with the Account Verification Supported. */
 extern NSString * const ChequeSupportedFormatError;                          /**< There is a format error with the Cheque Supported. */
 extern NSString * const SOAPUsernameFormatError;                             /**< There is a format error with the SOAP Username. */
 extern NSString * const SOAPPasswordFormatError;                             /**< There is a format error with the SOAP Password. */
@@ -316,6 +331,7 @@ extern NSString * const ManualCardDataInputCapabilityFormatError;            /**
 extern NSString * const PanKeyEntrySupportedFormatError;                     /**< There is a format error with PanKeyEntrySupported. */
 extern NSString * const LogFileStoreCountLimitFormatError;                   /**< There is a format error with LogFileStoreCountLimit. */
 extern NSString * const AutoConfirmSupportedFormatError;                     /**< There is a format error with AutoConfirmSupported. */
+extern NSString * const ConfigFileGenerationFailed;                          /**< There is a format error with ConfigFileGeneration. */
 /**
  * @}
  */
@@ -458,6 +474,7 @@ extern NSString * const TransactionAlreadyVoided;                   /**< The tra
 extern NSString * const TransactionKeyIncorrect;                    /**< The transaction key is incorrect. */
 extern NSString * const TransactionKeyInvalid;                      /**< The transaction key is invalid. */
 extern NSString * const TransactionKeyMissing;                      /**< The transaction key is missing. */
+extern NSString * const TransactionNotSale;                         /**< The specified transaction is not of type Sale. */
 extern NSString * const TransactionNotFound;                        /**< The transaction has not been found. */
 extern NSString * const TransactionOriginallyDeclined;              /**< The transaction was originally declined. */
 extern NSString * const TransactionNotCommitted;                    /**< The transaction was approved but not committed. */
@@ -488,7 +505,7 @@ extern NSString * const EposTransactionTerminated;                  /**< (EPOS) 
 extern NSString * const ChipNoAnswerToReset;                        /**< (Chip) No Answer to Reset. */
 extern NSString * const SwipeReadFailure;                           /**< (Swipe) Read Failure. */
 extern NSString * const ChipCardRemoved;                            /**< (Chip) Card Removed. */
-extern NSString * const PinpadUserCancelled;                        /**< (PIN pad) User Cancelled. */
+extern NSString * const PinPadUserCancelled;                        /**< (PIN pad) User Cancelled. */
 extern NSString * const ChipNoSupportedApplications;                /**< (Chip) No Supported Applications. */
 extern NSString * const ChipCardBlocked;                            /**< (Chip) Card Blocked. */
 extern NSString * const ChipReadFailure;                            /**< (Chip) Read Failure. */
@@ -527,9 +544,9 @@ extern NSString * const EMVInterfaceNotEnabledContactlessFallbackNotPossible;   
 extern NSString * const OnlinePINInternalError1;                    /**< Online PIN internal error 1. */
 extern NSString * const OnlinePINInternalError2;                    /**< Online PIN internal error 2. */
 extern NSString * const OnlinePINInternalError3;                    /**< Online PIN internal error 3. */
-extern NSString * const OnlinePINKeyMissingForMagstripeDebit;       /**< Online PIN key is missing, magstripe debit transaction cannot be carried out. */
-extern NSString * const MerchantTerminateTransaction;               /**< Merchant Terminated Transaction. */
-extern NSString * const TransactionAlreadyCommitted;                /**< Transaction has already been committed */
+extern NSString * const OnlinePINKeyMissing;                        /**< Online PIN key is missing, transaction requiring Online PIN cannot be carried out. */
+extern NSString * const MerchantTerminatedTransaction;               /**< Merchant Terminated Transaction. */
+extern NSString * const TransactionAlreadyConfirmed;                /**< Transaction has already been confirmed */
 extern NSString * const TippingNotAllowed;                          /**< Tipping is not allowed for this transaction. */
 extern NSString * const AmountModificationNotAllowed;               /**< Amount modification is not allowed for this transaction. */
 extern NSString * const EndOfDayTippingNotEnabled;                  /**< End of day tipping is not enabled for this transaction. */
@@ -583,11 +600,17 @@ extern NSString * const PANKeyEntryTransactionsNotSupported;        /**< PAN key
 extern NSString * const PANKeyEntryTippingNotAllowed;               /**< PAN key entry with tipping is not allowed. */
 extern NSString * const PANKeyEntryWithoutCardNotAllowed;           /**< PAN key entry without payment type card is not allowed. */
 extern NSString * const PANKeyEntryOfflineNotAllowed;               /**< PAN key entry transactions cannot be authorized offline. */
+extern NSString * const AccountVerificationOfflineNotAllowed;       /**< Transaction type Account Verification cannot be authorized offline. */
+extern NSString * const ConfirmAccountVerificationNotAllowed;       /**< Transaction type Account Verification cannot be confirmed. */
+extern NSString * const VoidAccountVerificationNotAllowed;          /**< Transaction type Account Verification cannot be voided. */
+extern NSString * const AccountVerificationNotSupported;            /**< Transaction type Account Verification not supported. */
+extern NSString * const RefundAccountVerificationNotAllowed;        /**< Transaction type Account Verification cannot be refunded. */
 extern NSString * const VoiceReferralResponseNotExpected;           /**< Unexpected Voice Referral response. */
 extern NSString * const AutoConfirmNotSupported;                    /**< Auto confirmation of transaction is not supported.*/
 extern NSString * const VoidRequestFailed;                          /**< Confirmation request failed to go online and wasn't able to be stored offline. Confirmation requests can be retried using {@link ChipDnaMobile#confirmTransaction:}.*/
 extern NSString * const ConfirmRequestFailed;                       /**< Void request failed to go online and wasn't able to be stored offline. Void requests can be retried using {@link ChipDnaMobile#voidTransaction:}. */
 extern NSString * const AmbiguousReference;                         /**< Ambiguous reference parameters supplied. Multiple identifiers for a transaction are not supported. */
+extern NSString * const RefundAccountVerificationNotAllowed;        /** <Transaction type AccountVerification cannot be refunded. */
 
 /**
  * @}

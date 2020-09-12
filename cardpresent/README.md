@@ -15,7 +15,7 @@ In order to build and run with the Cardpresent functionality, you must include t
 
 * **NSBluetoothAlwaysUsageDescription**: Provide a value here to let your users know why Bluetooth access is required
 * **UISupportedExternalAccessoryProtocols**: Include and array of the following items here. These are the MobileReaders that the Omni Cardpresent SDK supports
-	* com.bbpost.bt.wisepad
+	* com.bbpos.bt.wisepad
 	* com.miura.shuttle
 	* com.datecs.pinpad
 

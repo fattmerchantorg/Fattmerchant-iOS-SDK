@@ -9,6 +9,13 @@
 
 @interface Currency : NSObject
 /**
+ * Gets the numeric code for the currency.
+ *
+ * @return The currency numeric code.
+ */
+@property (nonatomic, readonly)NSString *numericCode;
+
+/**
  * Gets the symbol for the currency.
  *
  * @return The currency symbol.

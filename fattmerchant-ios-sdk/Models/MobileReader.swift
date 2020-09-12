@@ -27,6 +27,9 @@ public class MobileReader: CustomStringConvertible {
   /// The serail number of the mobile reader
   public var serialNumber: String?
 
+  /// The way that the iOS device connects to the reader. Bluetooth, BLE, etc
+  internal var connectionType: String? = nil
+
   /// Initialize a MobileReader by name
   ///
   /// This name must match the real name of the mobile reader, or mobile reader operations will not work

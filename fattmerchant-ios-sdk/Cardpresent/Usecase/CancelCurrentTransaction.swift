@@ -34,7 +34,7 @@ class CancelCurrentTransaction {
 
   func start(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
     mobileReaderDriverRepository.getInitializedDrivers { drivers in
-      var semaphore: DispatchSemaphore? = DispatchSemaphore(value: 1)
+      let semaphore: DispatchSemaphore? = DispatchSemaphore(value: 1)
       var success = true
       var omniException: OmniException?
 

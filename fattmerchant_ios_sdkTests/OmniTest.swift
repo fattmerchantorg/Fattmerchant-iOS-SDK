@@ -55,9 +55,9 @@ class OmniTest: XCTestCase {
       let chosenReader = availableReaders.first!
       self.omni.connect(reader: chosenReader, completion: { reader in
         connectedReader.fulfill()
-      }) {
+      }, error: { _ in
         XCTFail("Could not connect reader")
-      }
+      })
     }) { (error) in
       XCTFail("Could not get available readers")
     }
@@ -75,7 +75,7 @@ class OmniTest: XCTestCase {
         XCTFail("Connected reader, but was expecting error")
       }, error: { exception in
 
-        if case ConnectMobileReaderException.couldNotConnectMobileReader(reader: let _) = exception {
+        if case ConnectMobileReaderException.couldNotConnectMobileReader(reader: _) = exception {
           errorThrown.fulfill()
         } else {
           XCTFail("Threw an error, but not the one we were expecting")
@@ -371,7 +371,7 @@ class OmniTest: XCTestCase {
     let connectReaderFails = XCTestExpectation(description: "Omni throws an uninitialized error")
     omni.connect(reader: MobileReader(name: "reader"), completion: { _ in
       XCTFail("Omni expected to throw an uninitialized exception, but didn't")
-    }, error: {
+    }, error: { _ in
       connectReaderFails.fulfill()
     })
 

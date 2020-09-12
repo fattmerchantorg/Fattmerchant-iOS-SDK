@@ -34,6 +34,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.addForcedAcceptanceTarget(self, action: #selector(onForcedAcceptance(parameters:)))
     ChipDnaMobile.addIdVerificationTarget(self, action: #selector(onIdVerification(parameters:)))
     ChipDnaMobile.addUserNotificationTarget(self, action: #selector(onUserNotification(parameters:)))
+    ChipDnaMobile.addCardApplicationSelectionTarget(self, action: #selector(onApplicationSelection(parameters:)))
     self.transactionUpdateDelegate = transactionUpdateDelegate
     self.signatureProvider = signatureProvider
   }
@@ -48,6 +49,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.removePartialApprovalTarget(self)
     ChipDnaMobile.removeForcedAcceptanceTarget(self)
     ChipDnaMobile.removeIdVerificationTarget(self)
+    ChipDnaMobile.removeCardApplicationSelectionTarget(self)
   }
 
   @objc fileprivate func onTransactionUpdate(parameters: CCParameters) {
@@ -107,5 +109,8 @@ class ChipDnaTransactionListener: NSObject {
 
   }
 
+  @objc fileprivate func onApplicationSelection(parameters: CCParameters) {
+    ChipDnaMobile.sharedInstance()?.continueCardApplicationSelection(nil)
+  }
 }
 #endif
