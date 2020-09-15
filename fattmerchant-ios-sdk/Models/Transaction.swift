@@ -99,6 +99,7 @@ public class Transaction: Model, Codable {
   var sourceIp: String?
   var response: JSONValue?
   var updatedAt: String?
+  var channel: String = "ios"
 
   public func getLineItems() -> [CatalogItem]? {
     if let dict = meta?.toDictionary() {

@@ -33,4 +33,5 @@ class Invoice: Model {
   public var url: String?
   public var userId: String?
   public var viewedAt: String?
+  var channel: String = "ios"
 }

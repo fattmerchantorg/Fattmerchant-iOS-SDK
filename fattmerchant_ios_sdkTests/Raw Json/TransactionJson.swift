@@ -16,6 +16,7 @@ let transactionjson =
     "auth_id": null,
     "type": "refund",
     "source": "Android|CPSDK|NMI",
+    "channel": "ios",
     "source_ip": "45.27.255.121",
     "is_merchant_present": true,
     "merchant_id": "a61d78cc-cde9-44ac-8a18-30c39be05879",
