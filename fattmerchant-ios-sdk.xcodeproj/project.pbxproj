@@ -11,7 +11,6 @@
 		46231C5C24DAF4A500A06E1B /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46231C5A24DAF4A500A06E1B /* CatalogItem.swift */; };
 		46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
-		46B3F5132513DD8D0049B819 /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B3F5112513DD8D0049B819 /* AnyPay.framework */; platformFilter = ios; };
 		46B3F5142513DD9F0049B819 /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B3F5112513DD8D0049B819 /* AnyPay.framework */; platformFilter = ios; };
 		46B3F5152513DD9F0049B819 /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B3F5112513DD8D0049B819 /* AnyPay.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
@@ -359,7 +358,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46B3F5132513DD8D0049B819 /* AnyPay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
