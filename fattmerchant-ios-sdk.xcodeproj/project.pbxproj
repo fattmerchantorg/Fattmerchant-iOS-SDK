@@ -11,6 +11,8 @@
 		46231C5C24DAF4A500A06E1B /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46231C5A24DAF4A500A06E1B /* CatalogItem.swift */; };
 		46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
+		46B3F5082513CA4E0049B819 /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B3F5072513CA4E0049B819 /* AnyPay.framework */; };
+		46B3F5092513CA4E0049B819 /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B3F5072513CA4E0049B819 /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
@@ -56,8 +58,6 @@
 		596654592500406C00A56943 /* libLumberjack.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966543825003B8700A56943 /* libLumberjack.a */; };
 		5966545B250040C600A56943 /* libsqlcipher-4.0.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966545A250040C400A56943 /* libsqlcipher-4.0.1.a */; };
 		596963FF245FED1000D0612F /* AWCDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596963FE245FED1000D0612F /* AWCDriver.swift */; };
-		5976FEA524A7B52000561A77 /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5976FEA324A68A0300561A77 /* AnyPay.framework */; };
-		5976FEA624A7B52000561A77 /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5976FEA324A68A0300561A77 /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		597BEA48247FE205009319D6 /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */; };
 		597BEA4B2480C4C9009319D6 /* TransactionGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */; };
 		597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */; };
@@ -187,13 +187,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D73247AB23C4E5AD003CF1C6 /* Embed Frameworks */ = {
+		46B3F50A2513CA4E0049B819 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5976FEA624A7B52000561A77 /* AnyPay.framework in Embed Frameworks */,
+				46B3F5092513CA4E0049B819 /* AnyPay.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,6 +202,8 @@
 
 /* Begin PBXFileReference section */
 		46231C5A24DAF4A500A06E1B /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
+		46B3F5022513CA1D0049B819 /* AnyPay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnyPay.framework; path = "../../../Downloads/AnyPay-iOS-0.99.7/Simulator-Only/AnyPay.framework"; sourceTree = "<group>"; };
+		46B3F5072513CA4E0049B819 /* AnyPay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnyPay.framework; path = "../../../Downloads/AnyPay-iOS-0.99.7/Universal/AnyPay.framework"; sourceTree = "<group>"; };
 		46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDetails.swift; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C2094206EB12F00C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -341,9 +343,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
-				5976FEA524A7B52000561A77 /* AnyPay.framework in Frameworks */,
 				5966545B250040C600A56943 /* libsqlcipher-4.0.1.a in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
+				46B3F5082513CA4E0049B819 /* AnyPay.framework in Frameworks */,
 				596654592500406C00A56943 /* libLumberjack.a in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
@@ -490,6 +492,8 @@
 			isa = PBXGroup;
 			children = (
 				5976FEA324A68A0300561A77 /* AnyPay.framework */,
+				46B3F5022513CA1D0049B819 /* AnyPay.framework */,
+				46B3F5072513CA4E0049B819 /* AnyPay.framework */,
 				D793091523D2568D0066FCA2 /* MediaPlayer.framework */,
 				D793091123D256690066FCA2 /* CoreBluetooth.framework */,
 				D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */,
@@ -724,7 +728,7 @@
 				591C208B206EB12F00C848DA /* Sources */,
 				591C208C206EB12F00C848DA /* Frameworks */,
 				591C208E206EB12F00C848DA /* Resources */,
-				D73247AB23C4E5AD003CF1C6 /* Embed Frameworks */,
+				46B3F50A2513CA4E0049B819 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
