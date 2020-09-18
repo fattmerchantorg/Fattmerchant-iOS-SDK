@@ -1,0 +1,178 @@
+{
+    "activationCode": "",
+    "cloudPOSURL" : "https://cloud-sandbox.payments.ac/",
+    "sessionKeyExpiry": "0001-01-01T00:00:00+00:00",
+    "secretKey": "",
+    "status": "ACTIVE",
+    "uuid": "",
+    "id": "",
+    "portfolio": "",
+    "dateCreated": "2018-12-13T05:31:13.2148953-06:00",
+    "dateModified": "2018-12-16T03:25:37.3500227-06:00",
+    "configuration": {
+        "endpoint": {
+            "provider": "",
+            "flavor": "prod",
+            "debug": false,
+            "gatewayUrl": "",
+            "serverDateFormat": "dd-MM-yyyy HH:mm:ss:SSS"
+        },
+        "defaultDateFormat": "dd-MM-yyyy HH:mm:ss:SSS",
+        "registerCardReaderWhenConnected": true,
+        "cloudSyncEnabled": true,
+        "allowDynamicTerminalCreation": true,
+        "terminalMode": "App",
+        "requireDigestAuthentication": "false",
+        "allowAnonymousUsers": true,
+        "allowClearTransactions": true,
+        "allowPartialAuthorizations": true,
+        "allowPartialRefunds": true,
+        "allowReferencedRefunds": true,
+        "allowUnreferencedRefunds": true,
+        "chequeColorFormat": "Color",
+        "chequeColorFormatEditable": true,
+        "chequeFileFormat": "PNG",
+        "chequeFileFormatEditable": true,
+        "customFieldsEnabled": false,
+        "customFieldsEnabledEditable": false,
+        "defaultCardReader": "Walker 2.0 BT",
+        "defaultCardReaderEditable": true,
+        "defaultCurrency": "USD",
+        "driversLicenseRequired": false,
+        "driversLicenseRequiredEditable": false,
+        "driversLicenseStateRequired": false,
+        "driversLicenseStateRequiredEditable": false,
+        "enableAvs": true,
+        "enableCvv": true,
+        "enableFirmwareUpdate": false,
+        "enableForgotPasswordUrl": false,
+        "enabledCurrency": "USD",
+        "enabledCurrencyEditable": false,
+        "enabledEntryModes": "SWIPE INSERT TAP PINPAD",
+        "enabledEntryModesEditable": false,
+        "enabledPaymentMethods": "CREDIT",
+        "enabledPaymentMethodsEditable": true,
+        "enabledReceiptOptions": "Default",
+        "enabledReceiptOptionsEditable": false,
+        "enforce": true,
+        "enforceFirmwareCompliance": false,
+        "forgotPasswordUrl": "",
+        "geofencingEnabled": false,
+        "geofencingEnabledEditable": false,
+        "geolocationEnabled": true,
+        "geolocationEnabledEditable": false,
+        "id": "default",
+        "requireAvs": false,
+        "requireCardPresentRefunds": false,
+        "requireCardPresentSales": false,
+        "requireCvv": false,
+        "requireTermsAndConditions": false,
+        "sessionTimeoutEnabled": false,
+        "sessionTimeoutEnabledEditable": true,
+        "sessionTimeoutInterval": "Never",
+        "supportedCurrencies": "ALL",
+        "supportedEntryModes": "SWIPE INSERT TAP PINPAD",
+        "supportedPaymentMethods": "CREDIT DEBIT CHEQUE",
+        "supportedReceiptOptions": "Default",
+        "surchargeEnabled": false,
+        "surchargeEnabledEditable": true,
+        "surchargeOptions": [
+            {
+                "calculationMethod": "PERCENTAGE_SUBTOTAL",
+                "displayName": "% of Subtotal",
+                "rate": {
+                    "decimalPlaces": 3,
+                    "isCurrency": false,
+                    "isPercentage": true,
+                    "value": 0
+                },
+                "name": "% of Subtotal",
+                "type": "fee"
+            },
+            {
+                "calculationMethod": "PERCENTAGE_TOTAL",
+                "displayName": "% of Total",
+                "rate": {
+                    "decimalPlaces": 3,
+                    "isCurrency": false,
+                    "isPercentage": true,
+                    "value": 0
+                },
+                "name": "% of Total",
+                "type": "fee"
+            },
+            {
+                "calculationMethod": "FLAT_RATE",
+                "displayName": "Fixed",
+                "rate": {
+                    "decimalPlaces": 2,
+                    "isCurrency": false,
+                    "isPercentage": false,
+                    "value": 0
+                },
+                "amount": {
+                    "decimalPlaces": 2,
+                    "isCurrency": false,
+                    "isPercentage": false,
+                    "value": 0
+                },
+                "name": "Fixed",
+                "type": "fee"
+            }
+        ],
+        "surchargeOptionsEditable": true,
+        "suspendAndResumeEnabled": false,
+        "suspendAndResumeEnabledEditable": false,
+        "suspendAndResumeSupportedEntryModes": "SWIPE PINPAD",
+        "suspendAndResumeSupportedPaymentMethods": "CREDIT",
+        "taxEnabled": true,
+        "taxEnabledEditable": true,
+        "taxRates": [
+        ],
+        "taxRatesEditable": true,
+        "terminalEnabled": true,
+        "termsAndConditionsUrl": "",
+        "timestamp": "2018-01-01",
+        "tipEnabled": true,
+        "tipEnabledEditable": true,
+        "tipOptions": [
+            {
+                "calculationMethod": "PERCENTAGE_SUBTOTAL",
+                "rate": "10%",
+                "type": "Percentage"
+            },
+            {
+                "calculationMethod": "PERCENTAGE_SUBTOTAL",
+                "rate": "15%",
+                "type": "Percentage"
+            },
+            {
+                "calculationMethod": "PERCENTAGE_SUBTOTAL",
+                "rate": "20%",
+                "type": "Percentage"
+            }
+        ],
+        "tipOptionsEditable": true,
+        "transactionReportingMode": "ALL_USERS",
+        "transactionReportingModeEditable": true,
+        "type": "",
+        "unreferencedRefundLimit": 99999,
+        "userAuthenticationMode": "DEFER_UNTIL_REQUIRED",
+        "verifyCardPresentForKeyedTransactions": false,
+        "version": "default",
+        "CLASS_META_KEY": "",
+        "dateModified": "13-12-2018 02:34:28:350",
+        "allowKeyedTransactions": true,
+        "allowKeyedTransactionsEditable": true,
+        "allowUnreferencedTransactions": true,
+        "allowTax": true,
+        "allowTip": true,
+        "cloudPOSURL" : "https://cloud.payments.ac/",
+        "scheduleVoidOnFailure" : true,
+        "logging" : {
+            "logLevel" : "ERROR",
+            "remoteLoggingEnabled" : false,
+            "logToFile" : false
+        }
+     }
+}
