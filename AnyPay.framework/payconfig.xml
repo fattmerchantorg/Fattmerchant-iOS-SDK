@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="anywhereCommerceUrl">https://payments.anywherecommerce.com/merchant</string>
+    <string name="anywhereCommerceDebugUrl">https://testpayments.anywherecommerce.com/merchant</string>
+    <string name="globaloneUrl">https://payments.globalone.me/merchant</string>
+    <string name="globaloneDebugUrl">https://testpayments.globalone.me/merchant</string>
+    <string name="scheme">anywhere://com.anywhere.login</string>
+    <string-array name="regionalDebitBinRanges">
+        <item>669001|NCB DEBIT</item>
+        <item>589968|LINX</item>
+        <item>453696|LINX</item>
+        <item>589898|LINX</item>
+        <item>601090|LINX</item>
+        <item>601810|LINX</item>
+        <item>601405|LINX</item>
+        <item>606322|LINX</item>
+        <item>602041|LINX</item>
+        <item>453690|JETS DEBIT</item>
+        <item>430390|JETS DEBIT</item>
+        <item>453785|JETS DEBIT</item>
+        <item>601802|JETS DEBIT</item>
+        <item>430321|JETS DEBIT</item>
+        <item>639546|JETS DEBIT</item>
+        <item>601343|JETS DEBIT</item>
+        <item>601494|JETS DEBIT</item>
+        <item>601376|JETS DEBIT</item>
+        <item>601508|JETS DEBIT</item>
+        <item>589383|JETS DEBIT</item>
+        <item>622015|JETS DEBIT</item>
+        <item>601026|JETS DEBIT</item>
+    </string-array>
+    <string name="logFileMaxLines">10000</string>
+</resources>

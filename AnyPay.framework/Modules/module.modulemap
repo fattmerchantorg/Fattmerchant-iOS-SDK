@@ -1,0 +1,6 @@
+framework module AnyPay {
+  umbrella header "AnyPay.h"
+
+  export *
+  module * { export * }
+}
