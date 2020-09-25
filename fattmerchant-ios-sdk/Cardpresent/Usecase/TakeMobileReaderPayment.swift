@@ -112,7 +112,13 @@ class TakeMobileReaderPayment {
     }
   }
 
-  internal func createTransaction(result: TransactionResult, driver: MobileReaderDriver, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
+  internal func createTransaction(result: TransactionResult,
+                                  driver: MobileReaderDriver,
+                                  paymentMethod: PaymentMethod,
+                                  customer: Customer,
+                                  invoice: Invoice,
+                                  _ failure: @escaping (OmniException) -> Void,
+                                  _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
     guard let paymentMethodId = paymentMethod.id else {
@@ -184,7 +190,7 @@ class TakeMobileReaderPayment {
   /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
   fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> JSONValue? {
     var dict = [String: JSONValue?]()
-    //TODO: Move this somewhere outside the UseCase
+
     #if !targetEnvironment(simulator)
     if transactionResult.source.contains(ChipDnaDriver.source) {
       if let userRef = transactionResult.userReference {
@@ -333,7 +339,7 @@ class TakeMobileReaderPayment {
   internal func getOrCreateInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
     // If an invoiceId was given in the transaction request, we should verify that an invoice with that id exists
     if let invoiceId = request.invoiceId {
-      invoiceRepository.getById(id: invoiceId, completion: completion) { (error) in
+      invoiceRepository.getById(id: invoiceId, completion: completion) { _ in
         failure(TakeMobileReaderPaymentException.invoiceNotFound)
       }
     } else {
@@ -357,14 +363,14 @@ class TakeMobileReaderPayment {
   fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
     repo.getInitializedDrivers { initializedDrivers in
       // Get drivers that are ready for payment
-      filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }) { driversReadyForPayment in
+      filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }, completion: { driversReadyForPayment in
         guard let driver = driversReadyForPayment.first else {
           failure(TakeMobileReaderPaymentException.mobileReaderNotFound)
           return
         }
 
         completion(driver)
-      }
+      })
     }
   }
 }

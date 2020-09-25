@@ -380,7 +380,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
 
     // If no reader was connected, pass nil
-    if (parameters[CCParamResult] != CCValueTrue) {
+    if parameters[CCParamResult] != CCValueTrue {
       didConnectAndConfigure(nil)
     }
 
