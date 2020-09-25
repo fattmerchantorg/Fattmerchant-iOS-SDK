@@ -97,6 +97,7 @@ class TakeMobileReaderPayment {
                                                              failure) { (updatedInvoice) in
                                                               self.createTransaction(
                                                                 result: mobileReaderPaymentResult,
+                                                                driver: driver,
                                                                 paymentMethod: createdPaymentMethod,
                                                                 customer: createdCustomer,
                                                                 invoice: updatedInvoice,
@@ -111,7 +112,7 @@ class TakeMobileReaderPayment {
     }
   }
 
-  internal func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
+  internal func createTransaction(result: TransactionResult, driver: MobileReaderDriver, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
     guard let paymentMethodId = paymentMethod.id else {
@@ -166,6 +167,15 @@ class TakeMobileReaderPayment {
     transactionToCreate.response = gatewayResponseJson
     transactionToCreate.token = result.externalId
     transactionToCreate.message = result.message
+
+    // Set the transaction to not refundable or voidable if the Omni backend cannot perform the refund
+    // This is extremely important because it prevents a user from attempting a refund via the VT or the Omni API that
+    // could never work. The reason it won't work is because Omni doesn't have a deep integration with all of our
+    // third party vendors, such as AnywhereCommerce.
+    if !type(of: driver).omniRefundsSupported {
+      transactionToCreate.isRefundable = false
+      transactionToCreate.isVoidable = false
+    }
 
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
   }

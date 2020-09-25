@@ -77,6 +77,7 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     result.maskedPan = "41111111111111111"
 
     job.createTransaction(result: result,
+                          driver: mobileReaderDriverRepo.driver,
                           paymentMethod: paymentMethod,
                           customer: customer,
                           invoice: invoice,
@@ -231,6 +232,66 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       }
 
       wait(for: [expectation], timeout: 10.0)
+  }
+
+  func testTransactionGetsSetToNotRefundableIfOmniCantPerformRefund() {
+    // Set the driver to understand that omni cannot perform the refund. This is the deciding factor in whether or not
+    // the transaction gets is_refundable and is_voidable set to false
+    MockDriver.omniRefundsSupported = false
+
+    let transactionRequest = TransactionRequest(amount: Amount(cents: 2))
+
+    let job = TakeMobileReaderPayment(
+      mobileReaderDriverRepository: mobileReaderDriverRepo,
+      invoiceRepository: invoiceRepo,
+      customerRepository: customerRepo,
+      paymentMethodRepository: paymentMethodRepo,
+      transactionRepository: transactionRepo,
+      request: transactionRequest,
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil
+    )
+
+    let expectation = XCTestExpectation(description: "Transaction is not refundable or voidable")
+    job.start(completion: { transaction in
+      XCTAssertEqual(transaction.isRefundable, false)
+      XCTAssertEqual(transaction.isRefundable, false)
+      expectation.fulfill()
+    }) { error in
+      XCTFail("Transaction failed")
+    }
+
+    wait(for: [expectation], timeout: 3.0)
+  }
+
+  func testTransactionDoesNotGetSetToNotRefundableIfOmniCanPerformRefund() {
+    // Set the driver to understand that omni cannot perform the refund. This is the deciding factor in whether or not
+    // the transaction gets is_refundable and is_voidable set to false
+    MockDriver.omniRefundsSupported = true
+
+    let transactionRequest = TransactionRequest(amount: Amount(cents: 2))
+
+    let job = TakeMobileReaderPayment(
+      mobileReaderDriverRepository: mobileReaderDriverRepo,
+      invoiceRepository: invoiceRepo,
+      customerRepository: customerRepo,
+      paymentMethodRepository: paymentMethodRepo,
+      transactionRepository: transactionRepo,
+      request: transactionRequest,
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil
+    )
+
+    let expectation = XCTestExpectation(description: "Transaction is not refundable or voidable")
+    job.start(completion: { transaction in
+      XCTAssertEqual(transaction.isRefundable, nil)
+      XCTAssertEqual(transaction.isRefundable, nil)
+      expectation.fulfill()
+    }) { error in
+      XCTFail("Transaction failed")
+    }
+
+    wait(for: [expectation], timeout: 3.0)
   }
 
 }
