@@ -29,4 +29,5 @@
         <item>622015|JETS DEBIT</item>
         <item>601026|JETS DEBIT</item>
     </string-array>
+    <string name="logFileMaxLines">10000</string>
 </resources>

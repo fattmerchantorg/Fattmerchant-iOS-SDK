@@ -18,7 +18,9 @@
 
 + (nonnull instancetype)sharedInstance;
 - (void)initializeWithTerminalID:(nonnull NSString *)terminalID accountNumber:(nonnull NSString *)accountNumber gatewayURL:(nullable NSString *)gatewayURL;
+- (void)validateConfiguration:(void (^)(BOOL, ANPMeaningfulError * _Nullable))completionHandler;
 
+- (void)setSessionToken:(NSString *)sessionToken;
 - (void)getSessionId:(void (^)(NSString *, ANPMeaningfulError * _Nullable))completionHandler;
 
 - (void)refreshSession:(void (^)(BOOL, ANPMeaningfulError * _Nullable))completionHandler;

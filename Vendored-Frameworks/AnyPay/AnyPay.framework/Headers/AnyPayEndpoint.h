@@ -16,7 +16,8 @@
 @property (nonatomic, copy) NSString * _Nullable flavor;
 @property (nonatomic) BOOL debug;
 @property (nonatomic, copy) NSString * _Nullable serverDateFormat;
+@property (nonatomic, strong) NSDictionary * _Nullable logging;
 
-- (instancetype)initWithGatewayURL:(NSString *)url;
+- (instancetype _Nonnull )initWithGatewayURL:(NSString *_Nonnull)url;
 
 @end

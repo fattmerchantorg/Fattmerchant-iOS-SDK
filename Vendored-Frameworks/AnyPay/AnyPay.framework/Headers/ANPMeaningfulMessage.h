@@ -19,4 +19,7 @@
 - (instancetype)initWithSource:(id)source message:(NSString *)message detail:(NSString *)detail;
 - (instancetype)initWithSource:(id)source message:(NSString *)message detail:(NSString *)detail title:(NSString *)title;
 
+- (NSString *)stringValue;
+- (NSDictionary *)toDictionary;
+
 @end

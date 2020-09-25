@@ -17,10 +17,12 @@
 @property (nonatomic, copy) NSString *password;
 @property (nonatomic, copy) NSString *pinCaptureCapability;
 @property (nonatomic, copy) NSString *deviceInputCapability;
+@property (nonatomic, copy) NSString *partialApprovalSupport;
 @property (nonatomic) BOOL enableJsonPassthru;
 
 + (nonnull instancetype)sharedInstance;
 - (void)initializeWithConsumerKey:(nonnull NSString *)consumerKey consumerSecret:(nonnull NSString *)consumerSecret merchantID:(nonnull NSString *)merchantID gatewayURL:(nullable NSString *)gatewayURL;
+- (void)validateConfiguration:(void (^)(BOOL, ANPMeaningfulError * _Nullable))completionHandler;
 
 - (void)cancelTransaction:(ANPTransaction *)transaction;
 

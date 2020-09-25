@@ -20,9 +20,9 @@
 
 @optional
 - (void)authenticateTerminal:(void (^_Nonnull)(BOOL authenticated, ANPMeaningfulError *_Nullable))completionHandler;
-- (void)submitTipAdjustment:(ANPTipLineItem *)tip forTransaction:(ANPTransaction *)transaction resultHandler:(void (^)(BOOL submitted, ANPMeaningfulError * _Nullable))resultHandler;
-- (void)submitSignature:(ANPSignature *)signature forTransaction:(ANPTransaction *)transaction resultHandler:(void (^)(BOOL submitted, ANPMeaningfulError * _Nullable))resultHandler;
-- (void)cancelTransaction:(ANPTransaction *)transaction;
-- (void)sendReceiptForTransaction:(ANPTransaction *)transaction toEmail:(NSString *)email phone:(NSString *)phone resultHandler:(void (^)(BOOL sent, ANPMeaningfulError * _Nullable))resultHandler;
+- (void)submitTipAdjustment:(ANPTipLineItem * _Nonnull)tip forTransaction:(ANPTransaction * _Nonnull)transaction resultHandler:(void (^_Nullable)(BOOL submitted, ANPMeaningfulError * _Nullable))resultHandler;
+- (void)submitSignature:(ANPSignature * _Nonnull)signature forTransaction:(ANPTransaction * _Nonnull)transaction resultHandler:(void (^_Nullable)(BOOL submitted, ANPMeaningfulError * _Nullable))resultHandler;
+- (void)cancelTransaction:(ANPTransaction * _Nonnull)transaction;
+- (void)sendReceiptForTransaction:(ANPTransaction * _Nonnull)transaction toEmail:(NSString * _Nullable)email phone:(NSString * _Nullable)phone resultHandler:(void (^ _Nullable)(BOOL sent, ANPMeaningfulError * _Nullable))resultHandler;
 
 @end

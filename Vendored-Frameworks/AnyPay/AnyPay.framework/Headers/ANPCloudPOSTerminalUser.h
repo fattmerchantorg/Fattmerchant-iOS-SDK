@@ -10,9 +10,9 @@
 
 @interface ANPCloudPOSTerminalUser : ANPCloudPOSEntity
 
-@property (nonatomic, copy) NSString<Optional> *username;
-@property (nonatomic, copy) NSString<Optional> *password;
-@property (nonatomic, copy) NSString<Optional> *status;
-@property (nonatomic, strong) NSString<Optional> *lastKnownActive;
+@property (nonatomic, copy) NSString *username;
+@property (nonatomic, copy) NSString *password;
+@property (nonatomic, copy) NSString *status;
+@property (nonatomic, strong) NSString *lastKnownActive;
 
 @end

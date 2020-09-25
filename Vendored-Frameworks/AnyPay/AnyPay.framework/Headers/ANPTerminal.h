@@ -13,11 +13,11 @@
 @class JSONModel;
 @protocol ANPTerminal <NSObject>
 
-@property (nonatomic, strong) AnyPayEndpoint<Ignore> * _Nonnull endpoint;
+@property (nonatomic, strong) AnyPayEndpoint * _Nonnull endpoint;
 
 @optional
-@property (nonatomic, strong) ANPUser<Ignore> * _Nullable user;
-@property (nonatomic, copy) NSDate<Ignore> * _Nullable authenticationExpiryDate;
+@property (nonatomic, strong) ANPUser * _Nullable user;
+@property (nonatomic, strong) NSDate * _Nullable authenticationExpiryDate;
 
 @required
 - (nullable instancetype)initWithEndpoint:(nonnull id <ANPEndpoint>)endpoint;

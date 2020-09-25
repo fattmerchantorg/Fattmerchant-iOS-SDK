@@ -19,11 +19,12 @@
 #import "ANPFeeLineItem.h"
 #import "AnyPayTransactionBase.h"
 #import "ANPBatchStatuses.h"
+#import "ANPTransmissionStatuses.h"
 
 @class ANPAmount;
 @interface ANPTransaction : AnyPayTransactionBase<IAnyPayTransaction>
 
-@property (nonatomic, strong) ANPTransactionWorkflow<Ignore> *transactionWorkflow;
+@property (nonatomic, strong) ANPTransactionWorkflow *transactionWorkflow;
 @property (nonatomic, copy) NSString *internalID;
 @property (nonatomic, copy) NSString *externalID;
 @property (nonatomic, copy) NSString *refTransactionID;
@@ -56,6 +57,8 @@
 @property (nonatomic, strong) ANPGatewayResponse *gatewayResponse;
 @property (nonatomic, getter=isApproved) BOOL approved;
 @property (nonatomic, strong, readonly) NSDictionary<NSString *, id> *customProperties;
+@property (nonatomic) ANPTransmissionStatus transmissionStatus;
+@property (nonatomic, strong, readonly) NSArray<NSString *> *warnings;
 
 - (instancetype)initWithType:(ANPTransactionType)type;
 
@@ -87,5 +90,8 @@
 - (void)persist;
 
 - (void)addCustomProperty:(NSString *)key value:(id)value;
+- (void)removeCustomProperty:(NSString *)key;
+
+- (void)addWarning:(NSString *)warning;
 
 @end

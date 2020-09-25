@@ -44,9 +44,15 @@ FOUNDATION_EXPORT const unsigned char AnyPayVersionString[];
 #import "ANPCloudPOSTerminalUser.h"
 #import "ANPShadowTransactionRequest.h"
 #import "ANPCloudPOSTerminalMessage.h"
+#import "ANPCloudPosTerminalMessageQueue.h"
+#import "ANPTerminalNotActivatedException.h"
+#import "ANPLogStream.h"
+#import "ANPLogger.h"
+#import "ANPLogConfigurationProperties.h"
+#import "ANPHousekeeper.h"
 
 //CloudPOS related
-#import "ANPCloudPOS.h"
+#import "ANPCloudAPI.h"
 
 //ProPay related
 #import "ANPProPayTerminal.h"
@@ -73,8 +79,10 @@ FOUNDATION_EXPORT const unsigned char AnyPayVersionString[];
 @property (nonnull, nonatomic, strong) id<ANPTerminal> terminal;
 
 + (nonnull instancetype)initialise;
-+ (nullable instancetype)initialiseWithConfiguration:(nonnull NSString *)terminalFilePath;
-+ (nullable instancetype)initializeWithTerminal:(nullable id<ANPTerminal>) terminal;
++ (nullable instancetype)initialiseWithConfiguration:(nonnull ANPConfiguration *)configuration;
++ (nullable instancetype)initialiseWithConfigurationFile:(nonnull NSString *)terminalFilePath;
+
++ (nullable instancetype)initializeWithTerminal:(nullable id<ANPTerminal>) terminal __deprecated;
 
 + (nullable instancetype)init NS_UNAVAILABLE;
 
@@ -84,12 +92,14 @@ FOUNDATION_EXPORT const unsigned char AnyPayVersionString[];
 + (BOOL)clearTerminalState;
 
 #pragma mark - Configuration
-+ (void)setDebugLogsEnabled:(BOOL)enabled;
++ (void)setDebugLogsEnabled:(BOOL)enabled __deprecated;
 
 #pragma mark - Information
 + (nonnull NSString *)currentVersion;
++ (NSString *)bbposVersion;
++ (BOOL)isNetworkAvailable;
 
-- (NSString *)getLogs;
-- (void)clearLogs;
+- (nullable NSString *)getLogs __deprecated;
+- (void)clearLogs __deprecated;
 
 @end

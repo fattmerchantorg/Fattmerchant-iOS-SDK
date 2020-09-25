@@ -10,13 +10,19 @@
 #import "ANPTerminal.h"
 #import "ANPCloudPOSTerminal.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class AnyPayTransaction, ANPCloudPOSTerminalMessage;
 @interface AnyPayTerminal : ANPCloudPOSTerminal<ANPTerminal>
 
 @property (nonatomic, copy) NSString *cloudPOSURL;
 
-+ (instancetype)sharedInstance;
-+ (instancetype)sharedInstanceWithConfiguration:(NSString *)terminalFilePath;
++ (instancetype)getInstance;
++ (instancetype)getInstanceWithConfigurationFile:(NSString *)terminalFilePath;
++ (instancetype)initialize:(AnyPayEndpoint *)endpoint;
++ (instancetype)initializeFromCloudWithActivationCode:(NSString *)activationCode activationKey:(NSString *)activationKey completionHandler:(void (^)(BOOL, ANPMeaningfulError * _Nullable error))completionHandler;
+
++ (AnyPayTerminal *)restoreState;
 
 - (void)saveState;
 + (BOOL)clearSavedState;
@@ -25,8 +31,12 @@
 - (BOOL)isActivated;
 + (BOOL)isActivated;
 
-- (nonnull instancetype)initWithEndpoint:(nonnull id <ANPEndpoint>)endpoint;
-//- (void)assignTerminalID:(nonnull NSString *)terminalID terminalKey:(nonnull NSString *)terminalKey gatewayURL:(nullable NSString *)gatewayURL;
+- (nonnull instancetype)initWithEndpoint:(nonnull id <ANPEndpoint>)endpoint __deprecated;
+
+#pragma mark Private Methods
+
++ (instancetype)sharedInstance;
++ (instancetype)sharedInstanceWithConfigurationFile:(NSString *)terminalFilePath;
 
 - (void)applyLoggingConfiguration;
 
@@ -40,4 +50,8 @@
 - (void)getQueuedMessageForReader:(NSString *)readerSerialNumber completionHandler:(void (^)(ANPCloudPOSTerminalMessage *message, ANPMeaningfulError * _Nullable error))completionHandler;
 - (void)getTransactionWithUUID:(NSString *)uuid completionHandler:(void (^)(AnyPayTransaction *transaction, ANPMeaningfulError * _Nullable error))completionHandler;
 
+- (void)logout;
+
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,7 +8,7 @@
 
 #import "AnyPayModel.h"
 
-@class ANPLoggingConfiguration;
+@class ANPLogConfigurationProperties;
 @interface ANPConfiguration : AnyPayModel
 
 @property (nonatomic, copy) NSString *defaultDateFormat;
@@ -104,12 +104,21 @@
 @property (nonatomic, strong) NSMutableArray<ANPFeeLineItem *> <ANPFeeLineItem> *surchargeOptions;
 
 @property (nonatomic, strong) AnyPayEndpoint *endpoint;
-@property (nonatomic, strong) ANPLoggingConfiguration *logging;
+@property (nonatomic, strong) ANPLogConfigurationProperties *logging;
+@property (nonatomic, strong) NSDictionary *cardReader;
+@property (nonatomic, copy) NSString *terminalMode;
+
+@property (nonatomic, strong) NSNumber *scheduleVoidOnFailure;
+@property (nonatomic, strong) NSNumber *signatureCaptureEnabled;
 
 - (void)addTaxRate:(ANPTaxLineItem *)tax;
 - (void)addTaxRates:(NSArray<ANPTaxLineItem *> *)taxesToAdd;
 
 - (void)addTipRate:(ANPTipLineItem *)tip;
 - (void)addTipRates:(NSArray<ANPTipLineItem *> *)tipsToAdd;
+
+- (void)setProperties:(NSDictionary *)properties;
+
+- (BOOL)getSignatureCaptureEnabled;
 
 @end
