@@ -152,7 +152,7 @@ public enum JSONValue: Codable, Equatable {
       }
       return i
     }
-    return nil;
+    return nil
   }
 
   subscript(key: String) -> String? {

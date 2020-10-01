@@ -45,11 +45,11 @@ class CancelCurrentTransaction {
           driver.cancelCurrentTransaction(completion: { cancelled in
             success = success && cancelled
             semaphore?.signal()
-          }) { err in
+          }, error: { err in
             omniException = err
             success = false
             semaphore?.signal()
-          }
+          })
         }
 
         if let exception = omniException {
