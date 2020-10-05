@@ -35,7 +35,7 @@ public struct CatalogItem: Model, Codable, Equatable {
   public var meta: JSONValue?
 
   public enum CodingKeys: CodingKey {
-    case id, item, details, quantity, price, isDiscount, isPercentage, isActive, isTaxable, isService, isDiscountable
+    case id, item, details, quantity, price, isDiscount, isPercentage, isActive, isTaxable, isService, isDiscountable, meta
   }
 
   public init(id: String?,
