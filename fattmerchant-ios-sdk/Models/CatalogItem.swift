@@ -32,6 +32,8 @@ public struct CatalogItem: Model, Codable, Equatable {
   /// Is the item discountable
   public var isDiscountable: Bool
 
+  public var meta: JSONValue?
+
   public enum CodingKeys: CodingKey {
     case id, item, details, quantity, price, isDiscount, isPercentage, isActive, isTaxable, isService, isDiscountable
   }
@@ -54,9 +56,13 @@ public struct CatalogItem: Model, Codable, Equatable {
     self.price = price
     self.isDiscount = isDiscount
     self.isPercentage = isPercentage
+    self.isDiscountable = isDiscountable
+    var dict = [String: JSONValue?]()
+    dict["is_percentage"] = JSONValue(self.isPercentage)
+    dict["is_discountable"] = JSONValue(self.isDiscountable)
+    self.meta = dict.jsonValue()
     self.isActive = isActive
     self.isTaxable = isTaxable
     self.isService = isService
-    self.isDiscountable = isDiscountable
   }
 }

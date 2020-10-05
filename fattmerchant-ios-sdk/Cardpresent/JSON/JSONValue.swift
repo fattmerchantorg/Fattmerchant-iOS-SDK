@@ -70,7 +70,7 @@ import Foundation
  ## Note
  It is best to avoid using JSONValue if you are certain of what the structure of the data you are decoding/encoding is
  */
-public enum JSONValue: Codable, Equatable {
+public indirect enum JSONValue: Codable, Equatable {
 
   public enum JSONValueError: Error {
     case InitializationError(message: String)

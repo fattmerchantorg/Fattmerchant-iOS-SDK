@@ -159,7 +159,7 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     // Create a list of catalog items
     var requestedItems = [CatalogItem]()
     
-    let testItem1 = CatalogItem(id: "fakeid1", item: "TestItem1", details: "Test item number one", quantity: 1, price: 0.1)
+    let testItem1 = CatalogItem(id: "fakeid1", item: "TestItem1", details: "Test item number one", quantity: 1, price: 0.1, isPercentage: true)
     let testItem2 = CatalogItem(id: "fakeid2", item: "TestItem2", details: "Test item number two", quantity: 1, price: 0.5)
     let testItem3 = CatalogItem(id: "fakeid3", item: "TestItem2", details: "Test item number three", quantity: 3, price: 0.2)
     
