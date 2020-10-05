@@ -36,7 +36,17 @@ public struct CatalogItem: Model, Codable, Equatable {
     case id, item, details, quantity, price, isDiscount, isPercentage, isActive, isTaxable, isService, isDiscountable
   }
 
-  public init(id: String?, item: String?, details: String?, quantity: Int, price: Double, isActive: Bool = true, isTaxable: Bool = true, isDiscountable: Bool = true, isService: Bool = false, isDiscount: Bool = false, isPercentage: Bool = false) {
+  public init(id: String?,
+              item: String?,
+              details: String?,
+              quantity: Int,
+              price: Double,
+              isActive: Bool = true,
+              isTaxable: Bool = true,
+              isDiscountable: Bool = true,
+              isService: Bool = false,
+              isDiscount: Bool = false,
+              isPercentage: Bool = false) {
     self.id = id
     self.item = item
     self.details = details
