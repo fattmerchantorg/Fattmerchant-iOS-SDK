@@ -193,11 +193,12 @@ class TakeMobileReaderPayment {
       if let externalId = transactionResult.externalId {
         dict["nmiTransactionId"] = externalId
       }
-    } else if transactionResult.source.contains(AWCDriver.source) {
-      if let externalId = transactionResult.externalId {
-        dict["awcTransactionId"] = externalId
-      }
     }
+//    else if transactionResult.source.contains(AWCDriver.source) {
+//      if let externalId = transactionResult.externalId {
+//        dict["awcTransactionId"] = externalId
+//      }
+//    }
     #endif
 
     if let gatewayResponse = transactionResult.gatewayResponse {
