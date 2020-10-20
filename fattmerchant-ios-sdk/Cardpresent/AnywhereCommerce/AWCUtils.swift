@@ -105,10 +105,15 @@ extension TransactionResult {
     if let approvalCode = anyPayTransaction.approvalCode {
       self.authCode = approvalCode
     }
-    if let cardHolderName = anyPayTransaction.cardHolderName {
+    if let cardHolderName = anyPayTransaction.cardHolderName{
       var name = cardHolderName.split(separator: " ")
-      self.cardHolderFirstName = String(name.removeFirst())
-      self.cardHolderLastName = name.joined(separator: " ")
+      if name.count > 0 {
+        self.cardHolderFirstName = String(name.removeFirst())
+
+        if name.count > 1 {
+          self.cardHolderLastName = name.joined(separator: " ")
+        }
+      }
     }
     self.success = anyPayTransaction.status == .APPROVED
     self.transactionType = TransactionType(anyPayTransaction.transactionType).rawValue
