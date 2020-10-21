@@ -88,7 +88,16 @@ extension TransactionResult {
     self.source = AWCDriver.source
 
     if let amount = anyPayTransaction.approvedAmount {
-      self.amount = Amount(amount)
+      // AWC seems to return a negative approvedAmount for REFUNDS, so we have to take the absolute value
+      // This is because this amount gets assigned to the "total_refunded" field in Omni sees the negative
+      // and that value is not negative
+      if anyPayTransaction.transactionType == .REFUND {
+        let amt = Amount(amount)
+        let correctedAmount = Amount(cents: abs(amt.cents))
+        self.amount = correctedAmount
+      } else {
+        self.amount = Amount(amount)
+      }
     }
     if let refTransactionId = anyPayTransaction.refTransactionID {
       self.externalId = refTransactionId
