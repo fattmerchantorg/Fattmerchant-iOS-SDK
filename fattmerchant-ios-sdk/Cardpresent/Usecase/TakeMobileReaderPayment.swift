@@ -242,6 +242,36 @@ class TakeMobileReaderPayment {
     return dict.jsonValue()
   }
 
+  fileprivate func createInvoiceMeta() -> JSONValue? {
+    var dict = [String: JSONValue?]()
+
+    if let subtotal = self.request.subtotal {
+      dict["subtotal"] = JSONValue(subtotal)
+    }
+
+    if let tax = self.request.tax {
+      dict["tax"] = JSONValue(tax)
+    }
+
+    if let memo = self.request.memo {
+      dict["memo"] = JSONValue(memo)
+    }
+
+    if let reference = self.request.reference {
+      dict["reference"] = JSONValue(reference)
+    }
+
+    if let tip = self.request.tip {
+      dict["tip"] = JSONValue(tip)
+    }
+
+    if let lineItems = self.request.lineItems {
+      dict["lineItems"] = JSONValue(lineItems)
+    }
+
+    return dict.jsonValue()
+  }
+
   fileprivate func updateInvoice(_ invoice: Invoice,
                                  with paymentMethod: PaymentMethod,
                                  and customer: Customer,
@@ -346,11 +376,8 @@ class TakeMobileReaderPayment {
       let invoiceToCreate = Invoice()
       invoiceToCreate.total = request.amount.dollars()
       invoiceToCreate.url = "https://fattpay.com/#/bill"
-      let invoiceMeta = [
-        "subtotal": self.request.amount.dollarsString()
-      ]
 
-      guard let invoiceMetaJson = invoiceMeta.jsonValue() else {
+      guard let invoiceMetaJson = createInvoiceMeta() else {
         failure(Exception.couldNotCreateInvoice(detail: "Error generating json for meta"))
         return
       }
