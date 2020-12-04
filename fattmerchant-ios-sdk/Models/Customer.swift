@@ -33,6 +33,8 @@ public class Customer: Model {
     return Customer.joinName(first: firstname ?? "", last: lastname ?? "")
   }
 
+  init() {}
+
   /// Initializes a Customer with the full name
   ///
   /// This takes the full name and splits it into first and last

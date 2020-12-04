@@ -63,6 +63,8 @@ public class PaymentMethod: Model {
   public var bankType: String?
   public var bankHolderType: BankHolderType?
 
+  init() {}
+
   init(card: CreditCard, customer: Customer) {
     self.customerId = customer.id
     personName = customer.fullName()
