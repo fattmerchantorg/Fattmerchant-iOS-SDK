@@ -221,6 +221,38 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
 
+  /// Creates a Fattmerchant PaymentMethod out of the given CreditCard
+  ///
+  /// - Parameters:
+  ///   - card: The CreditCard to be tokenized
+  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func tokenize(card: CreditCard, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    let job = TokenizePaymentMethod(
+      customerRepository: customerRepository,
+      paymentMethodRepository: paymentMethodRepository,
+      creditCard: card
+    )
+
+    job.start(completion: completion, failure: error)
+  }
+
+  /// Creates a Fattmerchant PaymentMethod out of the given BankAccount
+  ///
+  /// - Parameters:
+  ///   - bankAccount: The BankAccount to be tokenized
+  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func tokenize(bankAccount: BankAccount, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    let job = TokenizePaymentMethod(
+      customerRepository: customerRepository,
+      paymentMethodRepository: paymentMethodRepository,
+      bankAccount: bankAccount
+    )
+
+    job.start(completion: completion, failure: error)
+  }
+
   /// Captures a mobile reader transaction
   ///
   /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called. This

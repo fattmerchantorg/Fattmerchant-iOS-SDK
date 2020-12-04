@@ -22,27 +22,32 @@ class TokenizePaymentMethod {
 
   typealias Exception = TokenizePaymentMethodException
 
-  /// Responsible for communicating with Omni
-  var omniApi: OmniApi
-
-  /// The Merchant that will be associated with the tokenized payment method
-  var merchant: Merchant
-
   /// The card to tokenize. If supplied, bankAccount must be nil
-  var creditCard: CreditCard?
+  private var creditCard: CreditCard?
 
   /// The bank account to tokenize. If supplied, creditCard must be nil
-  var bankAccount: BankAccount?
+  private var bankAccount: BankAccount?
+  private var customerRepository: CustomerRepository
+  private var paymentMethodRepository: PaymentMethodRepository
 
-  var customerRepository: CustomerRepository
-  var paymentMethodRepository: PaymentMethodRepository
+  init(customerRepository: CustomerRepository,
+       paymentMethodRepository: PaymentMethodRepository,
+       creditCard: CreditCard
+  ) {
+    self.creditCard = creditCard
+    self.customerRepository = customerRepository
+    self.paymentMethodRepository = paymentMethodRepository
+    self.bankAccount = nil
+  }
 
-  /// Initializes a TokenizePaymentMethod instance with OmniApi and Merchant
-  init(omniApi: OmniApi, merchant: Merchant) {
-    self.omniApi = omniApi
-    self.merchant = merchant
-    customerRepository = CustomerRepository(omniApi: omniApi)
-    paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
+  init(customerRepository: CustomerRepository,
+       paymentMethodRepository: PaymentMethodRepository,
+       bankAccount: BankAccount
+  ) {
+    self.creditCard = nil
+    self.customerRepository = customerRepository
+    self.paymentMethodRepository = paymentMethodRepository
+    self.bankAccount = bankAccount
   }
 
   func start(completion: @escaping (PaymentMethod) -> Void, failure: @escaping (OmniException) -> Void) {
