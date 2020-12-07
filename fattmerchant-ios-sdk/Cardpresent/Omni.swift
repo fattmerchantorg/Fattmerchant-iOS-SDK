@@ -217,7 +217,7 @@ public class Omni: NSObject {
       return
     }
 
-    let job = TakePayment(request: transactionRequest, omniApi: omniApi, merchant: merchant)
+    let job = TakePayment(request: transactionRequest, customerRepository: customerRepository, paymentMethodRepository: paymentMethodRepository)
     job.start(completion: completion, failure: error)
   }
 
