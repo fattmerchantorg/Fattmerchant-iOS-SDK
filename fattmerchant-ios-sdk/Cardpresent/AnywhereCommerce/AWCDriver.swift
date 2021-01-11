@@ -65,6 +65,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
     guard
       let awcDetails = args["awc"] as? AWCDetails
       else {
+        anyPay = nil
         completion(false)
         return
     }

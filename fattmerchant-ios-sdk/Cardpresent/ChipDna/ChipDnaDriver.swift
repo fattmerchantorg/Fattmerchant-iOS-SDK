@@ -61,6 +61,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       let nmiDetails = args["nmi"] as? NMIDetails,
       !nmiDetails.securityKey.isEmpty
       else {
+        ChipDnaMobile.dispose(nil)
         completion(false)
         return
     }
