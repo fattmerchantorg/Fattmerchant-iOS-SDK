@@ -87,11 +87,14 @@ extension MobileReaderConnectionStatus {
   /// is obtained by grabbing the value of `CCParamConfigurationUpdate`
   init?(chipDnaConfigurationUpdate configUpdate: String) {
     switch configUpdate {
-    case CCValueConnecting:
+    case CCValueRegistering, CCValueConnecting:
       self = .connecting
 
-    case CCValueRegistering, CCValuePerformingTmsUpdate, CCValueUpdatingPinPadFirmware:
-      self = .updating
+    case CCValuePerformingTmsUpdate:
+      self = .updating_configuration
+
+    case CCValueUpdatingPinPadFirmware:
+      self = .updating_firmware
 
     case CCValueRebootingPinPad:
       self = .rebooting
