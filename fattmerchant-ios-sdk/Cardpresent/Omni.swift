@@ -93,6 +93,9 @@ public class Omni: NSObject {
   /// Receives notifications about transaction events such as when a card is swiped
   public weak var transactionUpdateDelegate: TransactionUpdateDelegate?
 
+  /// Receives notifications about user-facing transaction events such as when a user swipes a chip card
+  public weak var userNotificationDelegate: UserNotificationDelegate?
+
   /// Receives notifications about reader connection events
   public weak var mobileReaderConnectionUpdateDelegate: MobileReaderConnectionStatusDelegate?
 
@@ -235,7 +238,7 @@ public class Omni: NSObject {
       return error(OmniGeneralException.uninitialized)
     }
 
-    let job = TakeMobileReaderPayment(
+    let job: TakeMobileReaderPayment = TakeMobileReaderPayment(
       mobileReaderDriverRepository: mobileReaderDriverRepository,
       invoiceRepository: invoiceRepository,
       customerRepository: customerRepository,
@@ -243,7 +246,8 @@ public class Omni: NSObject {
       transactionRepository: transactionRepository,
       request: request,
       signatureProvider: signatureProvider,
-      transactionUpdateDelegate: transactionUpdateDelegate
+      transactionUpdateDelegate: transactionUpdateDelegate,
+      userNotificationDelegate: userNotificationDelegate
     )
 
     job.start(completion: completion, failure: error)

@@ -61,6 +61,7 @@ class TakeMobileReaderPayment {
   var request: TransactionRequest
   var signatureProvider: SignatureProviding?
   weak var transactionUpdateDelegate: TransactionUpdateDelegate?
+  weak var userNotificationDelegate: UserNotificationDelegate?
 
   init(
     mobileReaderDriverRepository: MobileReaderDriverRepository,
@@ -70,7 +71,8 @@ class TakeMobileReaderPayment {
     transactionRepository: TransactionRepository,
     request: TransactionRequest,
     signatureProvider: SignatureProviding?,
-    transactionUpdateDelegate: TransactionUpdateDelegate?) {
+    transactionUpdateDelegate: TransactionUpdateDelegate?,
+    userNotificationDelegate: UserNotificationDelegate?) {
 
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
     self.invoiceRepository = invoiceRepository
@@ -80,6 +82,7 @@ class TakeMobileReaderPayment {
     self.request = request
     self.signatureProvider = signatureProvider
     self.transactionUpdateDelegate = transactionUpdateDelegate
+    self.userNotificationDelegate = userNotificationDelegate
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
@@ -88,6 +91,7 @@ class TakeMobileReaderPayment {
         self.takeMobileReaderPayment(with: driver,
                                      signatureProvider: self.signatureProvider,
                                      transactionUpdateDelegate: self.transactionUpdateDelegate,
+                                     userNotificationDelegate: self.userNotificationDelegate,
                                      failure) { (mobileReaderPaymentResult) in
                                       self.createCustomer(mobileReaderPaymentResult, failure) { (createdCustomer) in
                                         self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, failure) { (createdPaymentMethod) in
@@ -357,11 +361,13 @@ class TakeMobileReaderPayment {
   fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver,
                                            signatureProvider: SignatureProviding?,
                                            transactionUpdateDelegate: TransactionUpdateDelegate?,
+                                           userNotificationDelegate: UserNotificationDelegate?,
                                            _ failure: (OmniException) -> Void,
                                            _ completion: @escaping (TransactionResult) -> Void) {
     driver.performTransaction(with: self.request,
                               signatureProvider: signatureProvider,
                               transactionUpdateDelegate: transactionUpdateDelegate,
+                              userNotificationDelegate: userNotificationDelegate,
                               completion: completion)
   }
 

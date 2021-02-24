@@ -22,9 +22,13 @@ class ChipDnaTransactionListener: NSObject {
   /// Gets notified of transaction events
   weak var transactionUpdateDelegate: TransactionUpdateDelegate?
 
+  /// Gets notified of user notification events
+  weak var userNotificationDelegate: UserNotificationDelegate?
+
   /// Makes this listener bind to the transaction events ChipDna emits
   func bindToChipDna(signatureProvider: SignatureProviding? = nil,
-                     transactionUpdateDelegate: TransactionUpdateDelegate? = nil) {
+                     transactionUpdateDelegate: TransactionUpdateDelegate? = nil,
+                     userNotificationDelegate: UserNotificationDelegate? = nil) {
     ChipDnaMobile.addTransactionUpdateTarget(self, action: #selector(onTransactionUpdate(parameters:)))
     ChipDnaMobile.addTransactionFinishedTarget(self, action: #selector(onTransactionFinished(parameters:)))
     ChipDnaMobile.addDeferredAuthorizationTarget(self, action: #selector(onDeferredAuthorization(parameters:)))
@@ -35,6 +39,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.addIdVerificationTarget(self, action: #selector(onIdVerification(parameters:)))
     ChipDnaMobile.addUserNotificationTarget(self, action: #selector(onUserNotification(parameters:)))
     ChipDnaMobile.addCardApplicationSelectionTarget(self, action: #selector(onApplicationSelection(parameters:)))
+    self.userNotificationDelegate = userNotificationDelegate
     self.transactionUpdateDelegate = transactionUpdateDelegate
     self.signatureProvider = signatureProvider
   }
@@ -64,7 +69,14 @@ class ChipDnaTransactionListener: NSObject {
   }
 
   @objc fileprivate func onUserNotification(parameters: CCParameters) {
+    guard
+      let delegate = userNotificationDelegate,
+      let userNotificationString = parameters.value(forKey: "USER_NOTIFICATION") ?? nil,
+      let update = UserNotification(chipDnaUserNotification: userNotificationString) else {
+      return
+    }
 
+    delegate.onUserNotification(userNotification: update)
   }
 
   @objc fileprivate func onTransactionFinished(parameters: CCParameters) {
