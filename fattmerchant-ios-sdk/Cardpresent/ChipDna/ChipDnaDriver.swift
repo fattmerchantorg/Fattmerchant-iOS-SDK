@@ -213,6 +213,18 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
+    performTransaction(with: request,
+                       signatureProvider: signatureProvider,
+                       transactionUpdateDelegate: transactionUpdateDelegate,
+                       userNotificationDelegate: nil,
+                       completion: completion)
+  }
+
+  func performTransaction(with request: TransactionRequest,
+                          signatureProvider: SignatureProviding?,
+                          transactionUpdateDelegate: TransactionUpdateDelegate?,
+                          userNotificationDelegate: UserNotificationDelegate?,
+                          completion: @escaping (TransactionResult) -> Void) {
     let requestParams = CCParameters(transactionRequest: request)
 
     chipDnaTransactionListener.detachFromChipDna()
@@ -246,7 +258,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       }
     }
 
-    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate)
+    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider,
+                                             transactionUpdateDelegate: transactionUpdateDelegate,
+                                             userNotificationDelegate: userNotificationDelegate)
 
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }

@@ -62,6 +62,8 @@ protocol MobileReaderDriver {
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void)
 
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, userNotificationDelegate: UserNotificationDelegate?, completion: @escaping (TransactionResult) -> Void)
+
   func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
 
   func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
@@ -69,4 +71,15 @@ protocol MobileReaderDriver {
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
 
   func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void)
+}
+
+extension MobileReaderDriver {
+  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
+    performTransaction(with: request,
+                       signatureProvider: signatureProvider,
+                       transactionUpdateDelegate: transactionUpdateDelegate,
+                       userNotificationDelegate: nil,
+                       completion: completion)
+  }
+
 }

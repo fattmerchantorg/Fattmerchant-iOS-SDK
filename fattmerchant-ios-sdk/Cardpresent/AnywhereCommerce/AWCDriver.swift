@@ -177,6 +177,18 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
                           signatureProvider: SignatureProviding?,
                           transactionUpdateDelegate: TransactionUpdateDelegate?,
                           completion: @escaping (TransactionResult) -> Void) {
+    performTransaction(with: request,
+                       signatureProvider: signatureProvider,
+                       transactionUpdateDelegate: transactionUpdateDelegate,
+                       userNotificationDelegate: nil,
+                       completion: completion)
+  }
+
+  func performTransaction(with request: TransactionRequest,
+                          signatureProvider: SignatureProviding?,
+                          transactionUpdateDelegate: TransactionUpdateDelegate?,
+                          userNotificationDelegate: UserNotificationDelegate?,
+                          completion: @escaping (TransactionResult) -> Void) {
     // Create AnyPay Transaction
     let transaction = AnyPayTransaction(type: .SALE)
     transaction?.currency = "USD"
