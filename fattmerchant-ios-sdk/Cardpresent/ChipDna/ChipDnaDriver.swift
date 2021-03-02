@@ -233,7 +233,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
       let success = result[CCParamTransactionResult] == CCValueApproved
 
-      var transactionResult = TransactionResult()
+      let transactionResult = TransactionResult()
       transactionResult.source = Self.source
       transactionResult.request = request
       transactionResult.success = success
@@ -322,7 +322,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     if result[CCParamErrors] != nil {
       error(RefundException.errorRefunding(details: "Error while performing refund"))
     } else {
-      var transactionResult = TransactionResult()
+      let transactionResult = TransactionResult()
       transactionResult.source = Self.source
       transactionResult.success = true
       transactionResult.transactionType = "refund"

@@ -77,7 +77,8 @@ extension TransactionType {
 }
 
 extension TransactionResult {
-  init(_ anyPayTransaction: AnyPayTransaction) {
+  convenience init(_ anyPayTransaction: AnyPayTransaction) {
+    self.init()
     if anyPayTransaction.status == .DECLINED {
       // Add the responseText, since this usually contains info about why the transaction was declined
       if let responseText = anyPayTransaction.responseText {

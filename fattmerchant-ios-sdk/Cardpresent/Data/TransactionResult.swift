@@ -12,7 +12,7 @@ import Foundation
 ///
 /// This object contains necessary data about the transaction that occured, such as how much money was
 /// collected and details about the payment method used
-struct TransactionResult {
+class TransactionResult {
 
   var request: TransactionRequest?
 
@@ -68,7 +68,7 @@ struct TransactionResult {
   var gatewayResponse: String?
 
   /// Is this transaction from a mobile device?
-  var isFromMobileDevice: Bool
+  var isFromMobileDevice: Bool?
 
   /// The token that represents this payment method
   internal var paymentToken: String?
