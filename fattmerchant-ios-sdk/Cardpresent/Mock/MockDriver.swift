@@ -77,7 +77,7 @@ class MockDriver: MobileReaderDriver {
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
-    let transactionResult = TransactionResult()
+    var transactionResult = TransactionResult()
     transactionResult.request = request
     transactionResult.success = true
     transactionResult.maskedPan = "411111111234"
@@ -101,7 +101,7 @@ class MockDriver: MobileReaderDriver {
   }
 
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-    let transactionResult = TransactionResult()
+    var transactionResult = TransactionResult()
     transactionResult.request = nil
     transactionResult.success = true
     transactionResult.maskedPan = "411111111234"
@@ -118,7 +118,7 @@ class MockDriver: MobileReaderDriver {
   }
 
   func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void) {
-    let transactionResult = TransactionResult()
+    var transactionResult = TransactionResult()
     transactionResult.request = nil
     transactionResult.success = true
     transactionResult.maskedPan = "411111111234"

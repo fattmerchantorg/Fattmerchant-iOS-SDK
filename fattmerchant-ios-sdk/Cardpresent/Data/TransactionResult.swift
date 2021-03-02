@@ -12,7 +12,7 @@ import Foundation
 ///
 /// This object contains necessary data about the transaction that occured, such as how much money was
 /// collected and details about the payment method used
-class TransactionResult {
+struct TransactionResult {
 
   var request: TransactionRequest?
 
