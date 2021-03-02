@@ -327,6 +327,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.success = true
       transactionResult.transactionType = "refund"
       transactionResult.amount = refundAmount
+      transactionResult.isFromMobileDevice = result[CCParamPar] != nil
       completion(transactionResult)
     }
   }
