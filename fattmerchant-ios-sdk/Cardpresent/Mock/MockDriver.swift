@@ -87,7 +87,8 @@ class MockDriver: MobileReaderDriver {
       transactionType: "charge",
       amount: request.amount,
       cardType: "visa",
-      userReference: "cdm-123123"
+      userReference: "cdm-123123",
+      isFromMobileDevice: false
     )
 
     completion(transactionResult)
@@ -112,7 +113,8 @@ class MockDriver: MobileReaderDriver {
       transactionType: "refund",
       amount: Amount(cents: 5),
       cardType: "visa",
-      userReference: "cdm-123123"
+      userReference: "cdm-123123",
+      isFromMobileDevice: false
     )
 
     completion(transactionResult)
@@ -129,7 +131,8 @@ class MockDriver: MobileReaderDriver {
       transactionType: "refund",
       amount: Amount(cents: 5),
       cardType: "visa",
-      userReference: "cdm-123123"
+      userReference: "cdm-123123",
+      isFromMobileDevice: false
     )
 
     completion(transactionResult)

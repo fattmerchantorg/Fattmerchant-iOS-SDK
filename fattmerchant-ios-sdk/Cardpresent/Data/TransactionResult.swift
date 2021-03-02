@@ -67,6 +67,9 @@ struct TransactionResult {
   /// The gateway response in its entirety
   var gatewayResponse: String?
 
+  /// Is this transaction from a mobile device?
+  var isFromMobileDevice: Bool
+
   /// The token that represents this payment method
   internal var paymentToken: String?
 
