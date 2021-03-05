@@ -124,7 +124,7 @@ extension TransactionResult {
     self.success = anyPayTransaction.status == .APPROVED
     self.transactionType = TransactionType(anyPayTransaction.transactionType).rawValue
 
-    self.isFromMobileDevice = false
+    self.transactionSource = nil
   }
 }
 

@@ -42,6 +42,9 @@ struct TransactionResult {
   /** Sale, Refund, etc */
   var transactionType: String?
 
+  /** Contactless, etc. */
+  var transactionSource: String?
+
   /** Amount of money that was exchanged */
   var amount: Amount?
 
@@ -66,9 +69,6 @@ struct TransactionResult {
 
   /// The gateway response in its entirety
   var gatewayResponse: String?
-
-  /// Is this transaction from a mobile device?
-  var isFromMobileDevice: Bool?
 
   /// The token that represents this payment method
   internal var paymentToken: String?

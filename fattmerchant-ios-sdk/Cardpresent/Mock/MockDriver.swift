@@ -112,7 +112,7 @@ class MockDriver: MobileReaderDriver {
     transactionResult.amount = Amount(cents: 5)
     transactionResult.cardType = "visa"
     transactionResult.userReference = "cdm-123123"
-    transactionResult.isFromMobileDevice = false
+    transactionResult.transactionSource = nil
 
     completion(transactionResult)
   }
@@ -129,7 +129,7 @@ class MockDriver: MobileReaderDriver {
     transactionResult.amount = Amount(cents: 5)
     transactionResult.cardType = "visa"
     transactionResult.userReference = "cdm-123123"
-    transactionResult.isFromMobileDevice = false
+    transactionResult.transactionSource = nil
 
     completion(transactionResult)
   }
