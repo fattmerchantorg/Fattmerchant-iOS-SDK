@@ -77,18 +77,17 @@ class MockDriver: MobileReaderDriver {
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
-    let transactionResult = TransactionResult(
-      request: request,
-      success: true,
-      maskedPan: "411111111234",
-      cardHolderFirstName: "William",
-      cardHolderLastName: "Holder",
-      authCode: "abc123",
-      transactionType: "charge",
-      amount: request.amount,
-      cardType: "visa",
-      userReference: "cdm-123123"
-    )
+    var transactionResult = TransactionResult()
+    transactionResult.request = request
+    transactionResult.success = true
+    transactionResult.maskedPan = "411111111234"
+    transactionResult.cardHolderFirstName = "William"
+    transactionResult.cardHolderLastName = "Holder"
+    transactionResult.authCode = "abc123"
+    transactionResult.transactionType = "charge"
+    transactionResult.amount = request.amount
+    transactionResult.cardType = "visa"
+    transactionResult.userReference = "cdm-123123"
 
     completion(transactionResult)
   }
@@ -102,35 +101,35 @@ class MockDriver: MobileReaderDriver {
   }
 
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-    let transactionResult = TransactionResult(
-      request: nil,
-      success: true,
-      maskedPan: "411111111234",
-      cardHolderFirstName: "William",
-      cardHolderLastName: "Holder",
-      authCode: "def456",
-      transactionType: "refund",
-      amount: Amount(cents: 5),
-      cardType: "visa",
-      userReference: "cdm-123123"
-    )
+    var transactionResult = TransactionResult()
+    transactionResult.request = nil
+    transactionResult.success = true
+    transactionResult.maskedPan = "411111111234"
+    transactionResult.cardHolderFirstName = "William"
+    transactionResult.cardHolderLastName = "Holder"
+    transactionResult.authCode = "def456"
+    transactionResult.transactionType = "refund"
+    transactionResult.amount = Amount(cents: 5)
+    transactionResult.cardType = "visa"
+    transactionResult.userReference = "cdm-123123"
+    transactionResult.transactionSource = nil
 
     completion(transactionResult)
   }
 
   func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void) {
-    let transactionResult = TransactionResult(
-      request: nil,
-      success: true,
-      maskedPan: "411111111234",
-      cardHolderFirstName: "William",
-      cardHolderLastName: "Holder",
-      authCode: "def456",
-      transactionType: "refund",
-      amount: Amount(cents: 5),
-      cardType: "visa",
-      userReference: "cdm-123123"
-    )
+    var transactionResult = TransactionResult()
+    transactionResult.request = nil
+    transactionResult.success = true
+    transactionResult.maskedPan = "411111111234"
+    transactionResult.cardHolderFirstName = "William"
+    transactionResult.cardHolderLastName = "Holder"
+    transactionResult.authCode = "def456"
+    transactionResult.transactionType = "refund"
+    transactionResult.amount = Amount(cents: 5)
+    transactionResult.cardType = "visa"
+    transactionResult.userReference = "cdm-123123"
+    transactionResult.transactionSource = nil
 
     completion(transactionResult)
   }

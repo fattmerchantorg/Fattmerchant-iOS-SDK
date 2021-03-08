@@ -232,6 +232,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     chipDnaTransactionListener.onFinished = { result in
 
       let success = result[CCParamTransactionResult] == CCValueApproved
+      let receiptData = ChipDnaMobileSerializer.deserializeReceiptData(result[CCParamReceiptData])
 
       var transactionResult = TransactionResult()
       transactionResult.source = Self.source
@@ -245,6 +246,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.userReference = result[CCParamUserReference]
       transactionResult.localId = result[CCParamCardEaseReference]
       transactionResult.externalId = result[CCParamTransactionId]
+      transactionResult.transactionSource = receiptData?["TRANSACTION_SOURCE"]?.value
 
       if let token = result[CCParamCustomerVaultId] {
         transactionResult.paymentToken = "nmi_\(token)"
@@ -317,6 +319,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       return
     }
 
+    let receiptData = ChipDnaMobileSerializer.deserializeReceiptData(result[CCParamReceiptData])
+
     // Check status
     if result[CCParamErrors] != nil {
       error(RefundException.errorRefunding(details: "Error while performing refund"))
@@ -326,6 +330,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.success = true
       transactionResult.transactionType = "refund"
       transactionResult.amount = refundAmount
+      transactionResult.transactionSource = receiptData?["TRANSACTION_SOURCE"]?.value
       completion(transactionResult)
     }
   }
