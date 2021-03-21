@@ -16,9 +16,13 @@ class TokenizePaymentMethodTests: XCTestCase {
   var mockOmniApi: MockOmniApi = MockOmniApi()
   var card = CreditCard.testCreditCard()
   var paymentMethod = PaymentMethod()
+  var customerRepo: CustomerRepository!
+  var paymentMethodRepo: PaymentMethodRepository!
 
   override func setUp() {
     merchant.hostedPaymentsToken = hostedPaymentsToken
+    customerRepo = CustomerRepository(omniApi: mockOmniApi)
+    paymentMethodRepo = PaymentMethodRepository(omniApi: mockOmniApi)
   }
 
   func testCanTokenize() {
@@ -31,8 +35,9 @@ class TokenizePaymentMethodTests: XCTestCase {
     let expectation = XCTestExpectation(description: "Card is tokenized")
 
     // Start the task
-    let job = TokenizePaymentMethod(omniApi: mockOmniApi, merchant: merchant)
-    job.start(codablePaymentMethod: card, completion: { (tokenizedPaymentMethod) in
+    let job = TokenizePaymentMethod(customerRepository: customerRepo,
+                                    paymentMethodRepository: paymentMethodRepo, creditCard: card)
+    job.start(completion: { (tokenizedPaymentMethod) in
       XCTAssertEqual(tokenizedPaymentMethod.id, self.paymentMethod.id)
       expectation.fulfill()
     }) { (error) in
@@ -51,29 +56,9 @@ class TokenizePaymentMethodTests: XCTestCase {
     let expectedError = TokenizePaymentMethodException.merchantMissingHostedPaymentsToken
 
     // Start the task
-    let job = TokenizePaymentMethod(omniApi: MockOmniApi(), merchant: merchant)
-    job.start(codablePaymentMethod: CreditCard.testCreditCard(), completion: { (tokenizedPaymentMethod) in
-      XCTFail("Tokenization succeeded, but should not have")
-    }) { (error) in
-      XCTAssertEqual(error as! TokenizePaymentMethodException, expectedError)
-      XCTAssertNotNil(error.detail)
-      expectation.fulfill()
-    }
-
-    wait(for: [expectation], timeout: 10.0)
-  }
-
-  func testFailsWhenTryingToDecodeBadObject() {
-    // This is obviously not a payment method. But TokenizePaymentMethod just takes a Codable, so it will accept this
-    let badPaymentMethod: [Double] = [Double.infinity]
-
-    // Setup the expectation
-    let expectation = XCTestExpectation(description: "Error is thrown")
-    let expectedError = TokenizePaymentMethodException.couldNotParsePaymentMethodError
-
-    // Start the task
-    let job = TokenizePaymentMethod(omniApi: MockOmniApi(), merchant: merchant)
-    job.start(codablePaymentMethod: badPaymentMethod, completion: { (tokenizedPaymentMethod) in
+    let job = TokenizePaymentMethod(customerRepository: customerRepo,
+                                    paymentMethodRepository: paymentMethodRepo, creditCard: card)
+    job.start(completion: { (tokenizedPaymentMethod) in
       XCTFail("Tokenization succeeded, but should not have")
     }) { (error) in
       XCTAssertEqual(error as! TokenizePaymentMethodException, expectedError)

@@ -1,3 +1,4 @@
+
 //
 //  PaymentMethod.swift
 //  fattmerchant-ios-sdk
@@ -45,6 +46,14 @@ public class PaymentMethod: Model {
   ///
   /// - Note: If this field is not `null`, then `tokenize` must be `false`
   internal var paymentToken: String?
+  internal var cardNumber: String?
+  internal var cardCvv: String?
+
+  /// The bank account number
+  internal var bankAccount: String?
+
+  /// The bank routing number
+  internal var bankRouting: String?
   public var nickname: String?
   public var personName: String?
   public var cardType: String?
@@ -53,5 +62,25 @@ public class PaymentMethod: Model {
   public var bankName: String?
   public var bankType: String?
   public var bankHolderType: BankHolderType?
+
+  init() {}
+
+  init(card: CreditCard, customer: Customer) {
+    self.customerId = customer.id
+    personName = customer.fullName()
+    method = .card
+    cardNumber = card.cardNumber
+    cardExp = card.cardExp
+  }
+
+  init(bank: BankAccount, customer: Customer) {
+    self.customerId = customer.id
+    personName = customer.fullName()
+    method = .bank
+    bankAccount = bank.bankAccount
+    bankRouting = bank.bankRouting
+    bankName = bank.bankName
+    bankType = bank.bankType
+  }
 
 }

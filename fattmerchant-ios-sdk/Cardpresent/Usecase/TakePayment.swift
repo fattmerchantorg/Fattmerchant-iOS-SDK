@@ -36,14 +36,16 @@ class TakePayment {
   /// Responsible for communicating with Omni
   var omniApi: OmniApi
 
-  /// The Merchant that will be associated with the Transaction
-  var merchant: Merchant
+  private var customerRepository: CustomerRepository
+  private var paymentMethodRepository: PaymentMethodRepository
 
-  /// Initializes a `TakePayment` with a `TransactionRequest`, an `OmniApi`, and a `Merchant`
-  init(request: TransactionRequest, omniApi: OmniApi, merchant: Merchant) {
+  init(request: TransactionRequest,
+       customerRepository: CustomerRepository,
+       paymentMethodRepository: PaymentMethodRepository) {
     self.request = request
-    self.merchant = merchant
-    self.omniApi = omniApi
+    self.customerRepository = customerRepository
+    self.paymentMethodRepository = paymentMethodRepository
+    self.omniApi = customerRepository.omniApi
   }
 
   /// Kicks off the process of taking the payment
@@ -58,8 +60,13 @@ class TakePayment {
     }
 
     // Tokenize the payment method first then pay using the Omni API and the tokenized Payment Method
-    let tokenizeJob = TokenizePaymentMethod(omniApi: omniApi, merchant: merchant)
-    tokenizeJob.start(codablePaymentMethod: card, completion: { (tokenizedPaymentMethod) in
+    let tokenizeJob = TokenizePaymentMethod(
+      customerRepository: customerRepository,
+      paymentMethodRepository: paymentMethodRepository,
+      creditCard: card
+    )
+
+    tokenizeJob.start(completion: { (tokenizedPaymentMethod) in
       // Ensure that the tokenized payment method has an ID
       guard let paymentMethodId = tokenizedPaymentMethod.id else {
         failure(Exception.couldNotTokenizePaymentMethod())

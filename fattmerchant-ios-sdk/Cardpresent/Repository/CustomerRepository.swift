@@ -9,14 +9,18 @@
 import Foundation
 
 enum CreateCustomerException: OmniException {
-  case Something(String)
+  case customerNameNotSupplied
+  case unknown
 
   static var mess = "Could not create customer"
 
   var detail: String? {
     switch self {
-    case .Something(let desc):
-      return desc
+    case .customerNameNotSupplied:
+      return "Customer name is required"
+
+    default:
+      return "Unknown error creating customer"
     }
   }
 
