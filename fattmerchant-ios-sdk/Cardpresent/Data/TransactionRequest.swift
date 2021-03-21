@@ -42,6 +42,9 @@ public struct TransactionRequest {
   /// The `CreditCard` to charge
   public var card: CreditCard?
 
+  /// The `BankAccount` to charge
+  public var bankAccount: BankAccount?
+
   /// The `LineItem`s being passed to the transaction
   public var lineItems: [CatalogItem]?
 
@@ -81,10 +84,22 @@ public struct TransactionRequest {
 
   /// Initializes a TransactionRequest with the given amount.
   ///
-  /// - Parameter amount: The  `Amount` to be collected during the transaction
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - card: The `card` to charge
   public init(amount: Amount, card: CreditCard) {
     self.amount = amount
     self.card = card
+  }
+
+  /// Initializes a TransactionRequest with the given amount.
+  ///
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - bank: The `bankAccount` to charge
+  public init(amount: Amount, bankAccount: BankAccount) {
+    self.amount = amount
+    self.bankAccount = bankAccount
   }
 
   /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
