@@ -21,8 +21,8 @@ public class Customer: Model {
   public var createdAt: String?
   public var deletedAt: String?
   public var email: String?
-  public var firstname: String?
-  public var lastname: String?
+  public var firstname: String
+  public var lastname: String
   public var merchantId: String?
   public var notes: String?
   public var phone: String?
@@ -30,10 +30,13 @@ public class Customer: Model {
   public var updatedAt: String?
 
   func fullName() -> String {
-    return Customer.joinName(first: firstname ?? "", last: lastname ?? "")
+    return Customer.joinName(first: firstname, last: lastname)
   }
 
-  init() {}
+  init(firstName: String, lastName: String) {
+    self.firstname = firstName
+    self.lastname = lastName
+  }
 
   /// Initializes a Customer with the full name
   ///

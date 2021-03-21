@@ -26,7 +26,7 @@ public class PaymentMethod: Model {
   public var id: String?
   public var method: PaymentMethodType?
   public var merchantId: String?
-  public var customerId: String?
+  public var customerId: String
 
   /// Whether or not Omni should tokenize this PaymentMethod
   ///
@@ -63,10 +63,12 @@ public class PaymentMethod: Model {
   public var bankType: String?
   public var bankHolderType: BankHolderType?
 
-  init() {}
+  init(customer: Customer) {
+    self.customerId = customer.id ?? ""
+  }
 
   init(card: CreditCard, customer: Customer) {
-    self.customerId = customer.id
+    self.customerId = customer.id ?? ""
     personName = customer.fullName()
     method = .card
     cardNumber = card.cardNumber
@@ -74,7 +76,7 @@ public class PaymentMethod: Model {
   }
 
   init(bank: BankAccount, customer: Customer) {
-    self.customerId = customer.id
+    self.customerId = customer.id ?? ""
     personName = customer.fullName()
     method = .bank
     bankAccount = bank.bankAccount

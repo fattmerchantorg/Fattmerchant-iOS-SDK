@@ -315,7 +315,7 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
-    let paymentMethodToCreate = PaymentMethod()
+    let paymentMethodToCreate = PaymentMethod(customer: customer)
 
     guard let customerId = customer.id else {
       failure(Exception.couldNotCreateCustomer(detail: "Customer id is required"))
@@ -352,9 +352,9 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
-    let customerToCreate = Customer()
-    customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
-    customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+    let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
+    let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+    let customerToCreate = Customer(firstName: firstname, lastName: lastname)
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
   }
 
