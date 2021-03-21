@@ -1,4 +1,3 @@
-
 //
 //  PaymentMethod.swift
 //  fattmerchant-ios-sdk

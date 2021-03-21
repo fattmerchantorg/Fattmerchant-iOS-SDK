@@ -50,6 +50,6 @@ public struct UserNotification {
   public static let FallforwardInsertSwipeCard = UserNotification("Prompt User Fallforward Insert Swipe Card", "Please insert or swipe your card.")
 
   /// Indicates that the card should be tried again
-  public static let TryCardAgain = UserNotification( "Prompt User Try Card Again","Please try your card again.")
+  public static let TryCardAgain = UserNotification( "Prompt User Try Card Again", "Please try your card again.")
 
 }

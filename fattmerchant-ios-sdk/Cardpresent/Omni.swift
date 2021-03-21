@@ -215,8 +215,6 @@ public class Omni: NSObject {
   ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
   ///   - error: Receives any errors that happened while attempting the operation
   public func tokenize(_ bankAccount: BankAccount, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
-    guard let merchant = self.merchant else { return error(OmniGeneralException.uninitialized) }
-
     TokenizePaymentMethod(customerRepository: customerRepository,
                           paymentMethodRepository: paymentMethodRepository,
                           bankAccount: bankAccount
@@ -229,8 +227,6 @@ public class Omni: NSObject {
   ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
   ///   - error: Receives any errors that happened while attempting the operation
   public func tokenize(_ creditCard: CreditCard, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
-    guard let merchant = self.merchant else { return error(OmniGeneralException.uninitialized)}
-
     TokenizePaymentMethod(customerRepository: customerRepository,
                           paymentMethodRepository: paymentMethodRepository,
                           creditCard: creditCard
@@ -243,11 +239,6 @@ public class Omni: NSObject {
   ///   - completion: Called when the operation is completed successfully. Receives a Transaction
   ///   - error: Receives any errors that happened while attempting the operation
   public func pay(transactionRequest: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
-    guard let merchant = self.merchant else {
-      error(OmniGeneralException.uninitialized)
-      return
-    }
-
     let job = TakePayment(request: transactionRequest, customerRepository: customerRepository, paymentMethodRepository: paymentMethodRepository)
     job.start(completion: completion, failure: error)
   }

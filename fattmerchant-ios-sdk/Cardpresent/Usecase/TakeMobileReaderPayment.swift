@@ -337,7 +337,7 @@ class TakeMobileReaderPayment {
     paymentMethodToCreate.method = PaymentMethodType.card
     paymentMethodToCreate.cardLastFour = lastFour
     paymentMethodToCreate.cardType = cardType
-    paymentMethodToCreate.personName = "\(customer.firstname ?? "") \(customer.lastname ?? "")"
+    paymentMethodToCreate.personName = "\(customer.firstname) \(customer.lastname)"
     paymentMethodToCreate.tokenize = false
     paymentMethodToCreate.paymentToken = result.paymentToken
 
