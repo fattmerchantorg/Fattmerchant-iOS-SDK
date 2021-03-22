@@ -42,6 +42,9 @@ struct TransactionResult {
   /** Sale, Refund, etc */
   var transactionType: String?
 
+  /** Contactless, etc. */
+  var transactionSource: String?
+
   /** Amount of money that was exchanged */
   var amount: Amount?
 

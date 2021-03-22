@@ -354,7 +354,21 @@ class TakeMobileReaderPayment {
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
     let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
     let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
-    let customerToCreate = Customer(firstName: firstname, lastName: lastname)
+    var customerToCreate = Customer(firstName: firstname, lastName: lastname)
+
+    if let transactionSource = transactionResult.transactionSource {
+      if transactionSource.caseInsensitiveCompare("contactless") == .orderedSame {
+        customerToCreate.firstname = "Contactless"
+        customerToCreate.lastname = "Customer"
+      } else {
+        customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
+        customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+      }
+    } else {
+      customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
+      customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+    }
+
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
   }
 
