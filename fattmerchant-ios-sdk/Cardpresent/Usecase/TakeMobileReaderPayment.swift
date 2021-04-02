@@ -315,7 +315,7 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
-    let paymentMethodToCreate = PaymentMethod()
+    let paymentMethodToCreate = PaymentMethod(customer: customer)
 
     guard let customerId = customer.id else {
       failure(Exception.couldNotCreateCustomer(detail: "Customer id is required"))
@@ -337,7 +337,7 @@ class TakeMobileReaderPayment {
     paymentMethodToCreate.method = PaymentMethodType.card
     paymentMethodToCreate.cardLastFour = lastFour
     paymentMethodToCreate.cardType = cardType
-    paymentMethodToCreate.personName = "\(customer.firstname ?? "") \(customer.lastname ?? "")"
+    paymentMethodToCreate.personName = "\(customer.firstname) \(customer.lastname)"
     paymentMethodToCreate.tokenize = false
     paymentMethodToCreate.paymentToken = result.paymentToken
 
@@ -352,7 +352,9 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
-    let customerToCreate = Customer()
+    let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
+    let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+    var customerToCreate = Customer(firstName: firstname, lastName: lastname)
 
     if let transactionSource = transactionResult.transactionSource {
       if transactionSource.caseInsensitiveCompare("contactless") == .orderedSame {

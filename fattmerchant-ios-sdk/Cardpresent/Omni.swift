@@ -209,18 +209,69 @@ public class Omni: NSObject {
     }, failure: error)
   }
 
+  /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
+  /// - Parameters:
+  ///   - creditCard: Contains the details of the payment method to tokenize
+  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func tokenize(_ bankAccount: BankAccount, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    TokenizePaymentMethod(customerRepository: customerRepository,
+                          paymentMethodRepository: paymentMethodRepository,
+                          bankAccount: bankAccount
+    ).start(completion: completion, failure: error)
+  }
+
+  /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
+  /// - Parameters:
+  ///   - creditCard: Contains the details of the payment method to tokenize
+  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func tokenize(_ creditCard: CreditCard, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    TokenizePaymentMethod(customerRepository: customerRepository,
+                          paymentMethodRepository: paymentMethodRepository,
+                          creditCard: creditCard
+    ).start(completion: completion, failure: error)
+  }
+
   /// Captures a transaction without a mobile reader
   /// - Parameters:
   ///   - transactionRequest: A request for a Transaction
   ///   - completion: Called when the operation is completed successfully. Receives a Transaction
   ///   - error: Receives any errors that happened while attempting the operation
   public func pay(transactionRequest: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
-    guard let merchant = self.merchant else {
-      error(OmniGeneralException.uninitialized)
-      return
-    }
+    let job = TakePayment(request: transactionRequest, customerRepository: customerRepository, paymentMethodRepository: paymentMethodRepository)
+    job.start(completion: completion, failure: error)
+  }
 
-    let job = TakePayment(request: transactionRequest, omniApi: omniApi, merchant: merchant)
+  /// Creates a Fattmerchant PaymentMethod out of the given CreditCard
+  ///
+  /// - Parameters:
+  ///   - card: The CreditCard to be tokenized
+  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func tokenize(card: CreditCard, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    let job = TokenizePaymentMethod(
+      customerRepository: customerRepository,
+      paymentMethodRepository: paymentMethodRepository,
+      creditCard: card
+    )
+
+    job.start(completion: completion, failure: error)
+  }
+
+  /// Creates a Fattmerchant PaymentMethod out of the given BankAccount
+  ///
+  /// - Parameters:
+  ///   - bankAccount: The BankAccount to be tokenized
+  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func tokenize(bankAccount: BankAccount, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    let job = TokenizePaymentMethod(
+      customerRepository: customerRepository,
+      paymentMethodRepository: paymentMethodRepository,
+      bankAccount: bankAccount
+    )
+
     job.start(completion: completion, failure: error)
   }
 

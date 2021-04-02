@@ -12,16 +12,21 @@ class TakePaymentTests: XCTestCase {
 
   var merchant = Merchant()
   var omniApi = MockOmniApi()
+  var customerRepo: CustomerRepository!
+  var paymentMethodRepo: PaymentMethodRepository!
+
 
   override func setUp() {
     merchant = Merchant()
     merchant.hostedPaymentsToken = "hostedpaymentstoken"
     omniApi = MockOmniApi()
+    customerRepo = CustomerRepository(omniApi: omniApi)
+    paymentMethodRepo = PaymentMethodRepository(omniApi: omniApi)
   }
 
   func testCanInitialize() {
     let req = TransactionRequest(amount: Amount(cents: 10))
-    let takePayment = TakePayment(request: req, omniApi: OmniApi(), merchant: Merchant())
+    let takePayment = TakePayment(request: req, customerRepository: customerRepo, paymentMethodRepository: paymentMethodRepo)
     XCTAssertNotNil(takePayment)
   }
 
@@ -40,20 +45,35 @@ class TakePaymentTests: XCTestCase {
   }
 
   func testCanTakePayment() {
-    let card = CreditCard.testCreditCard()
+    modelStore = [:]
+    var card = CreditCard.testCreditCard()
+    card.personName = "Bob Will"
     let amount = Amount(cents: 10)
     let transactionRequest = TransactionRequest(amount: amount, card: card)
     let transaction = Transaction()
     transaction.id = "transactionid"
 
+    // Stub out customer
+    let customer = Customer()
+    customer.firstname = "Bob"
+    customer.lastname = "Will"
+    customer.id = "customer_id_bobwill"
+    let createCustomerBody = try! omniApi.jsonEncoder().encode(customer)
+    omniApi.stub("post", "/customer", body: createCustomerBody, response: .success(customer))
+
     // Stub out payment method
-    let body = try! omniApi.jsonEncoder().encode(card)
     let paymentMethod = PaymentMethod()
-    paymentMethod.id = "123"
-    omniApi.stub("post", "/webpayment/hostedpaymentstoken/tokenize", body: body, response: .success(paymentMethod))
+    paymentMethod.customerId = "customer_id_bobwill"
+    paymentMethod.personName = "Bob Will"
+    paymentMethod.method = .card
+    paymentMethod.cardNumber = card.cardNumber
+    paymentMethod.cardExp = card.cardExp
+    let createPaymentMethodBody = try! omniApi.jsonEncoder().encode(paymentMethod)
+    paymentMethod.id = "payment_method_id_bob_will"
+    omniApi.stub("post", "/payment-method", body: createPaymentMethodBody, response: .success(paymentMethod))
 
     // Stub out charge
-    let chargeRequest = ChargeRequest(paymentMethodId: "123", total: "0.10", meta: [
+    let chargeRequest = ChargeRequest(paymentMethodId: "payment_method_id_bob_will", total: "0.10", meta: [
       "subtotal": "0.10"
     ])
     let chargeBody = Data(chargeRequest: chargeRequest)
@@ -61,7 +81,8 @@ class TakePaymentTests: XCTestCase {
 
     // Perform operation
     let paymentSuccessful = XCTestExpectation(description: "Successful payment")
-    TakePayment(request: transactionRequest, omniApi: omniApi, merchant: merchant).start(completion: { completedTrans in
+    TakePayment(request: transactionRequest, customerRepository: customerRepo, paymentMethodRepository: paymentMethodRepo)
+      .start(completion: { completedTrans in
       XCTAssertNotNil(completedTrans)
       XCTAssertEqual(transaction.id, completedTrans.id)
       paymentSuccessful.fulfill()
@@ -74,7 +95,7 @@ class TakePaymentTests: XCTestCase {
 
   func testFailsWhenNoPaymentMethodGiven() {
     let req = TransactionRequest(amount: Amount(cents: 10))
-    let takePayment = TakePayment(request: req, omniApi: MockOmniApi(), merchant: Merchant())
+    let takePayment = TakePayment(request: req, customerRepository: customerRepo, paymentMethodRepository: paymentMethodRepo)
 
     let exception = XCTestExpectation(description: "TakePayment fails because no card was provided")
 
@@ -96,7 +117,7 @@ class TakePaymentTests: XCTestCase {
     let badCard = CreditCard(personName: "", cardNumber: "", cardExp: "", addressZip: "")
     let amount = Amount(cents: 10)
     let transactionRequest = TransactionRequest(amount: amount, card: badCard)
-    let takePayment = TakePayment(request: transactionRequest, omniApi: omniApi, merchant: merchant)
+    let takePayment = TakePayment(request: transactionRequest, customerRepository: customerRepo, paymentMethodRepository: paymentMethodRepo)
     let expectedError = TokenizePaymentMethodException.couldNotParsePaymentMethodError
 
     // Stub out the tokenize call
@@ -120,7 +141,7 @@ class TakePaymentTests: XCTestCase {
     let badCard = CreditCard(personName: "Jane Tester", cardNumber: "4111111111111111", cardExp: "123", addressZip: "32823")
     let amount = Amount(cents: 10)
     let transactionRequest = TransactionRequest(amount: amount, card: badCard)
-    let takePayment = TakePayment(request: transactionRequest, omniApi: omniApi, merchant: merchant)
+    let takePayment = TakePayment(request: transactionRequest, customerRepository: customerRepo, paymentMethodRepository: paymentMethodRepo)
 
     // Create bad payment method
     let paymentMethodWithoutId = PaymentMethod()

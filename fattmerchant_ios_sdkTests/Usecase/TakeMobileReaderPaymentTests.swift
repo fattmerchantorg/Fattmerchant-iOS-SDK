@@ -38,7 +38,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     ).start(completion: { completedTransaction in
       transactionCompleted.fulfill()
     }) { exception in
@@ -58,7 +59,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     )
 
     // Verify that the externalId is put in the transaction
@@ -102,7 +104,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     )
 
     let expectedError = TakeMobileReaderPaymentException.invoiceNotFound
@@ -139,7 +142,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     )
     
     let expectation = XCTestExpectation(description: "No other invoices are in the modelStore")
@@ -176,7 +180,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     )
     
     let expectation = XCTestExpectation(description: "Result of transaction has catalog items that match the requested catalog items")
@@ -215,7 +220,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     )
 
     let expectation = XCTestExpectation(description: "Result of transaction has the expected meta data")
@@ -249,7 +255,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     )
 
     let expectation = XCTestExpectation(description: "Transaction is not refundable or voidable")
@@ -279,7 +286,8 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       transactionRepository: transactionRepo,
       request: transactionRequest,
       signatureProvider: nil,
-      transactionUpdateDelegate: nil
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
     )
 
     let expectation = XCTestExpectation(description: "Transaction is not refundable or voidable")

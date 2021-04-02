@@ -73,7 +73,10 @@ class MockDriver: MobileReaderDriver {
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, userNotificationDelegate: UserNotificationDelegate?, completion: @escaping (TransactionResult) -> Void) {
-    performTransaction(with: request, signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate, completion: completion)
+    performTransaction(with: request,
+                       signatureProvider: signatureProvider,
+                       transactionUpdateDelegate: transactionUpdateDelegate,
+                       completion: completion)
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
