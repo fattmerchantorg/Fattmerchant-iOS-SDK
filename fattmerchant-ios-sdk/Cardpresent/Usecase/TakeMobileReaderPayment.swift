@@ -251,6 +251,9 @@ class TakeMobileReaderPayment {
 
     if let subtotal = self.request.subtotal {
       dict["subtotal"] = JSONValue(subtotal)
+    } else {
+      // If the user does not specify a subtotal, we a
+      dict["subtotal"] = JSONValue(request.amount.dollars())
     }
 
     if let tax = self.request.tax {
