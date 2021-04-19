@@ -17,6 +17,7 @@ enum TakeMobileReaderPaymentException: OmniException {
   case couldNotCreatePaymentMethod(detail: String?)
   case couldNotUpdateInvoice(detail: String?)
   case couldNotCreateTransaction(detail: String?)
+  case couldNotCaptureTransaction
 
   static var mess: String = "Error taking mobile reader payment"
 
@@ -30,6 +31,9 @@ enum TakeMobileReaderPaymentException: OmniException {
 
     case .invoiceNotFound:
       return "Invoice with given id not found"
+
+    case .couldNotCaptureTransaction:
+      return "Could not capture transaction"
 
     case .couldNotCreateInvoice(let d):
       return d ?? "Could not create invoice"
@@ -93,20 +97,34 @@ class TakeMobileReaderPayment {
                                      transactionUpdateDelegate: self.transactionUpdateDelegate,
                                      failure) { (mobileReaderPaymentResult) in
 
-          self.createCustomer(mobileReaderPaymentResult, failure) { (createdCustomer) in
+          // This is a callback that voids the transaction and calls the fail block
+          let voidAndFail: (OmniException) -> Void = { exception in
+            driver.void(transactionResult: mobileReaderPaymentResult) { _ in
+              failure(exception)
+            }
+          }
 
-            self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, failure) { (createdPaymentMethod) in
+          self.createCustomer(mobileReaderPaymentResult, voidAndFail) { (createdCustomer) in
 
-              self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: createdCustomer, failure) { (updatedInvoice) in
+            self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, voidAndFail) { (createdPaymentMethod) in
+
+              self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: createdCustomer, voidAndFail) { (updatedInvoice) in
 
                 self.createTransaction(
                   result: mobileReaderPaymentResult,
                   paymentMethod: createdPaymentMethod,
                   customer: createdCustomer,
                   invoice: updatedInvoice,
-                  failure,
-                  completion
-                )
+                  voidAndFail) { completedTransaction in
+                    driver.capture(transaction: completedTransaction) { (success) in
+                      if success {
+                        completion(completedTransaction)
+                      } else {
+                        // Void omni transaction
+                        voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
+                      }
+                    }
+                  }
               }
             }
           }

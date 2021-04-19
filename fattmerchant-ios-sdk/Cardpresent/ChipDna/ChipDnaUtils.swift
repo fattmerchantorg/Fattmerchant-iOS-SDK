@@ -142,7 +142,7 @@ extension CCParameters {
     self[CCParamCurrency] = "USD"
     self[CCParamUserReference] = generateChipDnaTransactionUserReference()
     self[CCParamPaymentMethod] = CCValueCard
-    self[CCParamAutoConfirm] = CCValueTrue
+//    self[CCParamAutoConfirm] = CCValueTrue
     self[CCParamTransactionType] = CCValueSale
 
     if transactionRequest.tokenize {

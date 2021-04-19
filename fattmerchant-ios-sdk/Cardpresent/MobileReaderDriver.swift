@@ -62,11 +62,27 @@ protocol MobileReaderDriver {
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void)
 
+  func capture(transaction: Transaction, completion: @escaping (Bool) -> Void)
+
   func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
 
   func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
 
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
 
+  func void(transactionResult: TransactionResult, completion: @escaping (Bool) -> Void)
+
   func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void)
+}
+
+extension MobileReaderDriver {
+  func capture(transaction: Transaction, completion: @escaping (Bool) -> Void) {
+    print("MobileReaderDriver#capture not implemented")
+    completion(true)
+  }
+
+  func void(transactionResult: TransactionResult, completion: @escaping (Bool) -> Void) {
+    print("MobileReaderDriver#void not implemented")
+    completion(true)
+  }
 }
