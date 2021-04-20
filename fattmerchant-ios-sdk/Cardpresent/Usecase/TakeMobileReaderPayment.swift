@@ -135,13 +135,13 @@ class TakeMobileReaderPayment {
                       failedTransaction.message = "Error capturing the transaction"
 
                       // Fail the transaction in omni
-                      self.transactionRepository.update(model: failedTransaction, id: transactionId) { (updatedTransaction) in
+                      self.transactionRepository.update(model: failedTransaction, id: transactionId, completion: { _ in
                         voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
                         return
-                      } error: { (error) in
+                      }, error: { _ in
                         voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
                         return
-                      }
+                      })
                     }
                   }
                 }
