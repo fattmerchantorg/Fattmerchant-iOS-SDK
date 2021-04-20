@@ -116,15 +116,35 @@ class TakeMobileReaderPayment {
                   customer: createdCustomer,
                   invoice: updatedInvoice,
                   voidAndFail) { completedTransaction in
-                    driver.capture(transaction: completedTransaction) { (success) in
-                      if success {
-                        completion(completedTransaction)
-                      } else {
-                        // Void omni transaction
+
+                  // Make sure the transaction from Omni has an id. This should be true pretty much all the time
+                  guard let transactionId = completedTransaction.id else {
+                    voidAndFail(TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: nil))
+                    return
+                  }
+
+                  driver.capture(transaction: completedTransaction) { (success) in
+                    if success {
+                      completion(completedTransaction)
+                    } else {
+                      /* We couldn't capture the transaction. So void the NMI transaction and mark it failed on Omni */
+
+                      // Mark omni transaction failed
+                      let failedTransaction = completedTransaction
+                      failedTransaction.success = false
+                      failedTransaction.message = "Error capturing the transaction"
+
+                      // Fail the transaction in omni
+                      self.transactionRepository.update(model: failedTransaction, id: transactionId) { (updatedTransaction) in
                         voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
+                        return
+                      } error: { (error) in
+                        voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
+                        return
                       }
                     }
                   }
+                }
               }
             }
           }
