@@ -102,6 +102,10 @@ class TakeMobileReaderPayment {
 
           // This is a callback that voids the transaction and calls the fail block
           let voidAndFail: (OmniException) -> Void = { exception in
+
+            // By the time this is invoked, the NMI transaction went through fine but something happened while doing
+            // one of the calls to Omni. Since the transaction is pending confirmation, then we need to void it *before*
+            // invoking the failure block. That way the customer gets their money back
             driver.void(transactionResult: mobileReaderPaymentResult) { _ in
               failure(exception)
             }
