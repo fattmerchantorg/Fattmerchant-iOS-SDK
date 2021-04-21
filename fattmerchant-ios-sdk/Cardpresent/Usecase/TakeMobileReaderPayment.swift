@@ -18,6 +18,7 @@ enum TakeMobileReaderPaymentException: OmniException {
   case couldNotCreatePaymentMethod(detail: String?)
   case couldNotUpdateInvoice(detail: String?)
   case couldNotCreateTransaction(detail: String?)
+  case couldNotCaptureTransaction
 
   static var mess: String = "Error taking mobile reader payment"
 
@@ -31,6 +32,9 @@ enum TakeMobileReaderPaymentException: OmniException {
 
     case .invoiceNotFound:
       return "Invoice with given id not found"
+
+    case .couldNotCaptureTransaction:
+      return "Could not capture transaction"
 
     case .couldNotCreateInvoice(let d):
       return d ?? "Could not create invoice"
@@ -96,20 +100,58 @@ class TakeMobileReaderPayment {
                                      transactionUpdateDelegate: self.transactionUpdateDelegate,
                                      failure) { (mobileReaderPaymentResult) in
 
-          self.createCustomer(mobileReaderPaymentResult, failure) { (createdCustomer) in
+          // This is a callback that voids the transaction and calls the fail block
+          let voidAndFail: (OmniException) -> Void = { exception in
 
-            self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, failure) { (createdPaymentMethod) in
+            // By the time this is invoked, the NMI transaction went through fine but something happened while doing
+            // one of the calls to Omni. Since the transaction is pending confirmation, then we need to void it *before*
+            // invoking the failure block. That way the customer gets their money back
+            driver.void(transactionResult: mobileReaderPaymentResult) { _ in
+              failure(exception)
+            }
+          }
 
-              self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: createdCustomer, failure) { (updatedInvoice) in
+          self.createCustomer(mobileReaderPaymentResult, voidAndFail) { (createdCustomer) in
+
+            self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, voidAndFail) { (createdPaymentMethod) in
+
+              self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: createdCustomer, voidAndFail) { (updatedInvoice) in
 
                 self.createTransaction(
                   result: mobileReaderPaymentResult,
                   paymentMethod: createdPaymentMethod,
                   customer: createdCustomer,
                   invoice: updatedInvoice,
-                  failure,
-                  completion
-                )
+                  voidAndFail) { completedTransaction in
+
+                  // Make sure the transaction from Omni has an id. This should be true pretty much all the time
+                  guard let transactionId = completedTransaction.id else {
+                    voidAndFail(TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: nil))
+                    return
+                  }
+
+                  driver.capture(transaction: completedTransaction) { (success) in
+                    if success {
+                      completion(completedTransaction)
+                    } else {
+                      /* We couldn't capture the transaction. So void the NMI transaction and mark it failed on Omni */
+
+                      // Mark omni transaction failed
+                      let failedTransaction = completedTransaction
+                      failedTransaction.success = false
+                      failedTransaction.message = "Error capturing the transaction"
+
+                      // Fail the transaction in omni
+                      self.transactionRepository.update(model: failedTransaction, id: transactionId, completion: { _ in
+                        voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
+                        return
+                      }, error: { _ in
+                        voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
+                        return
+                      })
+                    }
+                  }
+                }
               }
             }
           }
@@ -328,7 +370,7 @@ class TakeMobileReaderPayment {
 
       invoiceToCreate.meta = invoiceMetaJson
       invoiceRepository.create(model: invoiceToCreate, completion: { createdInvoice in
-        guard createdInvoice.id == "" else {
+        guard createdInvoice.id?.isEmpty != true else {
           return failure(TakeMobileReaderPaymentException.couldNotCreateInvoice(detail: nil))
         }
         completion(createdInvoice)
