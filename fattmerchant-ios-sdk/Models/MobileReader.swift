@@ -28,7 +28,7 @@ public class MobileReader: CustomStringConvertible {
   public var serialNumber: String?
 
   /// The way that the iOS device connects to the reader. Bluetooth, BLE, etc
-  internal var connectionType: String? = nil
+  public var connectionType: String?
 
   /// Initialize a MobileReader by name
   ///
@@ -44,6 +44,24 @@ public class MobileReader: CustomStringConvertible {
     self.make = make
     self.model = model
     self.serialNumber = serialNumber
+  }
+
+  /// Initialize a MobileReader
+  ///
+  /// This name must match the real name of the mobile reader, or mobile reader operations will not work
+  /// - Parameter name: The name of the mobile reader
+  public init(name: String,
+              firmwareVersion: String? = nil,
+              make: String? = nil,
+              model: String? = nil,
+              serialNumber: String? = nil,
+              connectionType: String? = nil) {
+    self.name = name
+    self.firmwareVersion = firmwareVersion
+    self.make = make
+    self.model = model
+    self.serialNumber = serialNumber
+    self.connectionType = connectionType
   }
 
   public var description: String { return self.name }
