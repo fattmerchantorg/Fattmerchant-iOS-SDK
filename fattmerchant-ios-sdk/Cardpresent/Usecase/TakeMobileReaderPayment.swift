@@ -366,7 +366,7 @@ class TakeMobileReaderPayment {
 
       invoiceToCreate.meta = invoiceMetaJson
       invoiceRepository.create(model: invoiceToCreate, completion: { createdInvoice in
-        guard createdInvoice.id == "" else {
+        guard createdInvoice.id?.isEmpty != true else {
           return failure(TakeMobileReaderPaymentException.couldNotCreateInvoice(detail: nil))
         }
         completion(createdInvoice)
