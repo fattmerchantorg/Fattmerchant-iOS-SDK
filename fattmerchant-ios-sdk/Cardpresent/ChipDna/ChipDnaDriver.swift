@@ -248,6 +248,40 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }
 
+  func capture(transaction: Transaction, completion: @escaping (Bool) -> Void) {
+    guard let transactionMeta = transaction.meta, let userRef: String = transactionMeta["nmiUserRef"] else {
+      completion(false)
+      return
+    }
+
+    let params = CCParameters()
+    params[CCParamUserReference] = userRef
+    DispatchQueue.global(qos: .userInitiated).async {
+      guard let result = ChipDnaMobile.sharedInstance()?.confirmTransaction(params) else {
+        return completion(false)
+      }
+
+      completion(result[CCParamTransactionResult] == CCValueApproved)
+    }
+  }
+
+  func void(transactionResult: TransactionResult, completion: @escaping (Bool) -> Void) {
+    guard let userRef = transactionResult.userReference else {
+      completion(false)
+      return
+    }
+
+    let params = CCParameters()
+    params[CCParamUserReference] = userRef
+    DispatchQueue.global(qos: .userInitiated).async {
+      guard let result = ChipDnaMobile.sharedInstance()?.voidTransaction(params) else {
+        return completion(false)
+      }
+
+      completion(result[CCParamTransactionResult] == CCValueApproved)
+    }
+  }
+
   func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
     if let result = ChipDnaMobile.sharedInstance()?.terminateTransaction(nil) {
       if let success = result[CCParamResult], success == CCValueTrue {
