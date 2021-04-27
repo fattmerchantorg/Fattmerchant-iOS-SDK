@@ -407,7 +407,7 @@ class TakeMobileReaderPayment {
     var customerToCreate = Customer(firstName: firstname, lastName: lastname)
 
     if let transactionSource = transactionResult.transactionSource {
-      if transactionSource.caseInsensitiveCompare("contactless") == .orderedSame {
+      if transactionSource.lowercased().contains("contactless") {
         customerToCreate.firstname = "Contactless"
         customerToCreate.lastname = "Customer"
       } else {
