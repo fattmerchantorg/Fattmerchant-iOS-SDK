@@ -408,7 +408,7 @@ class TakeMobileReaderPayment {
 
     if let transactionSource = transactionResult.transactionSource {
       if transactionSource.lowercased().contains("contactless") {
-        customerToCreate.firstname = "Contactless"
+        customerToCreate.firstname = "Mobile Device"
         customerToCreate.lastname = "Customer"
       } else {
         customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
