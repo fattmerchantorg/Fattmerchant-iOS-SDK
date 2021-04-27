@@ -5,9 +5,8 @@
 //  Created by Tulio Troncoso on 5/4/20.
 //  Copyright © 2020 Fattmerchant. All rights reserved.
 //
-
-import Foundation
 import AnyPay
+import Foundation
 
 #if targetEnvironment(simulator)
 

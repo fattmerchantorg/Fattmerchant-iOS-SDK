@@ -12,6 +12,8 @@
 		46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
+		591B69E026388B000078787B /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 591B69DE26388AFB0078787B /* AnyPay.framework */; };
+		591B69E126388B000078787B /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 591B69DE26388AFB0078787B /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		591C20A2206EB26700C848DA /* FattmerchantIosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591C20A1206EB26700C848DA /* FattmerchantIosTests.swift */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
 		593A7FB02460118400D78874 /* AWCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FAF2460118400D78874 /* AWCUtils.swift */; };
@@ -72,8 +74,6 @@
 		5993C2642077A687004DDA9F /* BankAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2632077A687004DDA9F /* BankAccount.swift */; };
 		5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2652077B4EE004DDA9F /* BankHolderType.swift */; };
 		5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
-		59C5D58B251D9D6400775432 /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C5D589251D9D6000775432 /* AnyPay.framework */; };
-		59C5D58C251D9D6400775432 /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 59C5D589251D9D6000775432 /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */; };
 		D702B7BD23C8D0DD00B8AB79 /* OmniApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */; };
 		D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25B2076BD68004DDA9F /* PaymentMethod.swift */; };
@@ -187,13 +187,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		46B3F52625150A4C0049B819 /* Embed Frameworks */ = {
+		591B69D52638890A0078787B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				59C5D58C251D9D6400775432 /* AnyPay.framework in Embed Frameworks */,
+				591B69E126388B000078787B /* AnyPay.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -203,6 +203,7 @@
 /* Begin PBXFileReference section */
 		46231C5A24DAF4A500A06E1B /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
 		46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDetails.swift; sourceTree = "<group>"; };
+		591B69DE26388AFB0078787B /* AnyPay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnyPay.framework; path = "Vendored-Frameworks/AnyPay/AnyPay.framework"; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C2094206EB12F00C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,7 +258,6 @@
 		5993C2632077A687004DDA9F /* BankAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccount.swift; sourceTree = "<group>"; };
 		5993C2652077B4EE004DDA9F /* BankHolderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankHolderType.swift; sourceTree = "<group>"; };
 		5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodType.swift; sourceTree = "<group>"; };
-		59C5D589251D9D6000775432 /* AnyPay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnyPay.framework; path = "Vendored-Frameworks/AnyPay/AnyPay.framework"; sourceTree = "<group>"; };
 		59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentTests.swift; sourceTree = "<group>"; };
 		D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniApi.swift; sourceTree = "<group>"; };
 		D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaDriver.swift; sourceTree = "<group>"; };
@@ -342,7 +342,7 @@
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				5966545B250040C600A56943 /* libsqlcipher-4.0.1.a in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
-				59C5D58B251D9D6400775432 /* AnyPay.framework in Frameworks */,
+				591B69E026388B000078787B /* AnyPay.framework in Frameworks */,
 				596654592500406C00A56943 /* libLumberjack.a in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
@@ -485,7 +485,7 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				59C5D589251D9D6000775432 /* AnyPay.framework */,
+				591B69DE26388AFB0078787B /* AnyPay.framework */,
 				D793091523D2568D0066FCA2 /* MediaPlayer.framework */,
 				D793091123D256690066FCA2 /* CoreBluetooth.framework */,
 				D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */,
@@ -722,7 +722,7 @@
 				591C208B206EB12F00C848DA /* Sources */,
 				591C208C206EB12F00C848DA /* Frameworks */,
 				591C208E206EB12F00C848DA /* Resources */,
-				46B3F52625150A4C0049B819 /* Embed Frameworks */,
+				591B69D52638890A0078787B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1112,7 +1112,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 16;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1133,8 +1133,8 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
 				);
-				MARKETING_VERSION = 1.4.3;
-				ONLY_ACTIVE_ARCH = YES;
+				MARKETING_VERSION = 1.4.5;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1150,7 +1150,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 16;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1171,8 +1171,8 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
 				);
-				MARKETING_VERSION = 1.4.3;
-				ONLY_ACTIVE_ARCH = NO;
+				MARKETING_VERSION = 1.4.5;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
