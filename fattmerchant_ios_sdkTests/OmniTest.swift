@@ -154,7 +154,9 @@ class OmniTest: XCTestCase {
 
     let data = "{\"card_number\":\"4111111111111111\",\"method\":\"card\",\"person_name\":\"Joe Tester\",\"card_exp\":\"0230\",\"address_zip\":\"32812\"}".data(using: .utf8)
 
-    let paymentMethod = PaymentMethod()
+    let customer = Customer(firstName: "Joe", lastName: "Tester")
+    customer.id = "customerid"
+    let paymentMethod = PaymentMethod(customer: customer)
     paymentMethod.id = "12345"
     paymentMethod.customerId = "customerid"
     paymentMethod.merchantId = "merchantid"
@@ -168,23 +170,6 @@ class OmniTest: XCTestCase {
     }
 
     wait(for: [transactionWasCompleted], timeout: 10.0)
-  }
-
-  func testCanNotPayWithCreditCardWithoutMerchant() {
-    omni.merchant = nil
-    let creditCard = CreditCard(personName: "Joe Tester", cardNumber: "4111111111111111", cardExp: "0230", addressZip: "32812")
-    let transactionRequest = TransactionRequest(amount: Amount(cents: 10), tokenize: false, card: creditCard)
-    let transactionFailed = XCTestExpectation(description: "Transaction failed")
-    let expectedError = OmniGeneralException.uninitialized
-
-    omni.pay(transactionRequest: transactionRequest, completion: { _ in
-      XCTFail("Transaction succeeded but shouldnt have")
-    }) { error in
-      XCTAssertEqual(error as! OmniGeneralException, expectedError)
-      transactionFailed.fulfill()
-    }
-
-    wait(for: [transactionFailed], timeout: 10.0)
   }
 
   func testCanNoTakeTransactionIfMobileReaderNotReady() {

@@ -65,11 +65,12 @@ class TakeMobileReaderPaymentTests: XCTestCase {
 
     // Verify that the externalId is put in the transaction
     let transactionHasExternalId = expectation(description: "Transaction has external id")
-    let paymentMethod = PaymentMethod()
-    paymentMethod.id = "payment-method-id"
 
-    let customer = Customer()
+    let customer = Customer(fullName: "Some Guy")
     customer.id = "customer-id"
+
+    let paymentMethod = PaymentMethod(customer: customer)
+    paymentMethod.id = "payment-method-id"
 
     let invoice = Invoice()
     invoice.id = "invoice-id"
