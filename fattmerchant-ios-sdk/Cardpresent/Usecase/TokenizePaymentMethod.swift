@@ -85,11 +85,11 @@ class TokenizePaymentMethod {
 
   private func createCustomer(_ name: String, completion: @escaping (Customer?, OmniException?) -> Void) {
     let customerToCreate = Customer(fullName: name)
-    customerRepository.create(model: customerToCreate) { (createdCustomer) in
+    customerRepository.create(model: customerToCreate, completion: { (createdCustomer) in
       completion(createdCustomer, nil)
-    } error: { (error) in
+    }, error: { (error) in
       completion(nil, error)
-    }
+    })
   }
 
 }
