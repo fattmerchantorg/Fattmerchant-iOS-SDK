@@ -19,11 +19,10 @@ class MobileReaderDriverRepository {
 
   #else
   var chipDnaDriver = ChipDnaDriver()
-//  var awcDriver = AWCDriver()
+  var awcDriver = AWCDriver()
 
   func allDrivers() -> [MobileReaderDriver] {
-    return [chipDnaDriver]
-//    return [chipDnaDriver, awcDriver]
+    return [chipDnaDriver, awcDriver]
   }
   #endif
 
