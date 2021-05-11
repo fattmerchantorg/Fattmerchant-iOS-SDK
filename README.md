@@ -6,162 +6,147 @@ The Fattmerchant iOS SDK provides a simple way to accept a payment on your iOS a
 * [Installation](#installation)
 * [Getting Started](#getting-started)
 * [Testing](#testing)
-* [Taking a payment with a mobile reader](https://fattmerchantorg.github.io/Fattmerchant-iOS-SDK/cardpresent)
 
-![Tokenization Info](https://raw.githubusercontent.com/fattmerchantorg/Fattmerchant-iOS-SDK/master/assets/images/tokenization-info.png)
+# iOS Swiped Payments Guide
 
-## Try it out!
-The Fattmerchant iOS SDK comes with a Swift Playground. All you need to get started is your `web payments token`, provided to you by your trusty Fattmerchant Account Manager. You can find the playground, called `Tokenization.Playground` in the project root 🤓
+## Mobile Reader Payments
 
-## <a name="requirements">Requirements</a>
+Supercharge your mobile app by quickly adding mobile reader payments using the Omni Mobile SDK. These payments will create invoices, customers, and transaction objects in the Stax platform. You can also choose to have the payment method stored within Stax so you can use it from the Stax API.
 
-* Xcode 8
-* iOS 9
+### How it works
 
-## <a name="installation">Installation</a>
-Use CocoaPods  to install the Fattmerchant iOS SDK.
+1. You'll first need to create an ephemeral key to initialize the `Omni` object.
+2. Then you'll create a `TransactionRequest` that holds all necessary data to take a payment.
+3. Finally, you'll ask `Omni` to take the payment by calling the `takeMobileReaderPayment()` method, passing in the `TransactionRequest` and a block to run once the payment is complete.
 
-#### CocoaPods
-1. Install [CocoaPods](https://guides.cocoapods.org/using/getting-started.html)
+***
+
+## Requirements
+
+* Xcode 8+
+* iOS 9+
+* Ephemeral Stax API key
+
+***
+
+# Installation
+
+Use CocoaPods to install the Fattmerchant iOS SDK.
+
+1. Install [CocoaPods](https://guides.cocoapods.org/using/getting-started.html){:target="_blank" rel="noreferrer"}
 2. Add `pod 'Fattmerchant'` to your `Podfile`
 3. Run `pod install`
 
-## <a name="getting-started">Getting Started</a>
-To accept a payment, you'll need to collect information from the customer, tokenize it, and send the token to your server. Your server will then be responsible for using the Fattmerchant API to run the transaction.
+***
 
-#### Setup
+# Getting Started
 
-You'll first need to setup the `FattmerchantApi` for usage.  All you have to do here is set the `webPaymentsToken` field on the shared `FattmerchantConfiguration`. `FattmerchantApi` will then use that configuration by default.
+## Setup Info.plist
+
+In order to build and run with the Cardpresent functionality, you must include the following in your project's `Info.plist`
+
+* **NSBluetoothAlwaysUsageDescription**: Provide a value here to let your users know why Bluetooth access is required
+
+## Initialize
+
+Create an instance of `InitParams`
 
 ```swift
-import UIKit
-import Fattmerchant
+var initParams = Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
+```
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+Pass the initParams to `Omni.initialize(...)`, along with a completion lambda and an error lambda
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    FattmerchantConfiguration.shared.webPaymentsToken = "mywebpaymentstoken"
-    // ...
-    return true
-  }
+```swift
+omni = Omni()
+
+log("Attempting initalization...")
+
+// Initialize Omni
+omni?.initialize(params: initParams, completion: {
+  // Initialized!
+}) { (error) in
+
 }
 ```
 
-Alternatively, you may create a configuration object and pass it to the new `FattmerchantApi` instance as you need it.
+***
+
+# Connect a Mobile Reader
+
+In order to connect a mobile reader, you must first search for a list of available readers
 
 ```swift
-let configuration = FattmerchantConfiguration(webPaymentsToken: "mywebpaymentstoken")
-let fattClient = FattmerchantApi(configuration: configuration)
-```
+omni.getAvailableReaders { readers ->
 
-#### Collect payment information
-You first want to collect credit card information and populate a `CreditCard` or a `BankAccount` object.
-
-```swift
-let card = CreditCard(personName: "Joan Parsnip",
-                      cardNumber: "4111111111111111",
-                      cardExp: "1220",
-                      addressZip: "32814")
-
-
-// Or for a bank account...
-let bankAccount = BankAccount(routingNumber: "021000021",
-                              accountNumber: "38294738291937485",
-                              bankHolderType: .personal,
-                              accountType: .checking)
-```
-
-#### Associate a Customer
-If you want to associate a Customer with the new PaymentMethod, all you have to do is pass is set the `customerId` on the `CreditCard` or `BankAccount`
-
-```swift
-let card = CreditCard(personName: "Joan Parsnip",
-                      cardNumber: "4111111111111111",
-                      cardExp: "1220",
-                      addressZip: "32814",
-                      customerId: "7404cae1-86ba-408c-bb43-8c5cacfdcaab")
-```
-
-#### Get a payment method token
-Once you have a `CreditCard` object, call the `tokenize(:)` method on  `FattmerchantAPI` object and pass a block to run once tokenization is complete.
-
-```swift
-let fattClient = FattmerchantApi(webPaymentsToken: "mywebpaymentstoken")
-fattClient.tokenize(card) { (response) in
-  if case let .success(paymentMethod) = response {
-    let paymentToken = paymentMethod.id
-    print("I must now use \(paymentToken) to create a payment.")
-  }
-  // Success! You can now run a transaction with Fattmerchant using paymentToken as the PaymentMethod
 }
 ```
 
-Or you can set a delegate to be notified.
+Once you have the list of available ones, you can choose which one you'd like to connect
 
 ```swift
-class MyClass: FattmerchantApiDelegate {
-
-  func gottaHaveThatFunc() {
-    // ...
-    let fattClient = FattmerchantApi(webPaymentsToken: "mywebpaymentstoken")
-    fattClient.delegate = self
-    fattClient.tokenize(card)
+omni?.getAvailableReaders(completion: { readers in
+  guard !readers.isEmpty else {
+    self.log("No readers found")
+    return
   }
 
-  func fattmerchantApi(_ fattmerchantApi: FattmerchantApi, didCreatePaymentMethod paymentMethod: PaymentMethod) {
-    let paymentToken = paymentMethod.token
-    // You can now run a transaction with Fattmerchant using paymentToken as the PaymentMethod
+  var chosenReader = ... // Choose a reader
+
+  omni.connect(reader: chosenReader, completion: { connectedReader in
+    self.log("Connected reader: \(connectedReader)")
+  }) { (error) in
+    // Something went wrong
   }
-  
-  func fattmerchantApi(_ fattmerchantApi: FattmerchantApi, didReceiveError: Error) {
-    if case let .tokenizationError(errors) = error {
-      print("Uh oh! 😡 We got errors!")
-      errors.forEach { print($0) }
-    }
-  }
+}) {
+  self.log("Couldn't connect to the mobile reader")
 }
 ```
 
+***
 
-#### Using the token
-Now that you have the token representing the payment method, you can send it to your server to run a payment with it. You have to setup a way for your backend to accept the token and create a transaction with it.
+# Take a Payment
 
-## <a name="testing">Testing</a>
-If you'd like to try tokenization without real payment information, you can use the `CreditCard.testCreditCard()` or `BankAccount.testBankAccount()` methods to get a test credit card or bank account.
-
-```swift
-let creditCard = CreditCard.testCreditCard()
-
-let bankAccount = BankAccount.testBankAccount()
-```
-
-If you want to test failures, you can use the following methods
+To take a payment, simply create a `TransactionRequest` and pass it along to `omni.takeMobileReaderTransaction(...)`
 
 ```swift
-let failingCreditCard = CreditCard.failingTestCreditCard()
+// Create an Amount
+let amount = Amount(cents: 50)
 
-let failingBankAccount = BankAccount.failingTestBankAccount()
+// Create the TransactionRequest
+let request = TransactionRequest(amount: amount)
+
+// Take the payment
+omni.takeMobileReaderTransaction(request, { completedTransaction in
+    // Payment successful!
+}) {
+    // Error
+}
 ```
 
-Or you can create the `CreditCard` or `BankAccount` object with the following testing payment information:
+By default, the PaymentMethod used in the Transaction is tokenized for reuse. This allows the PaymentMethod to be used from the Stax Virtual Terminal and via the Stax API. To opt-out of tokenization, you can set the `tokenize` field of `TransactionRequest` to `false`
 
-#### Credit card numbers
+```swift
+// Create a TransactionRequest with no tokenization
+let request = TransactionRequest(amount: amount, tokenize: false)
+```
 
-| Card Type | Good Card | Bad Card |
-|---------|--------------------|-----------|
-|VISA|4111111111111111|4012888888881881|
-|Mastercard|5555555555554444|5105105105105100|
-|Amex|378282246310005|371449635398431|
-|Discover|6011111111111117|6011000990139424|
-|JCB|3569990010030400|3528327757705979|
-|Diners Club|30569309025904|30207712915383|
+***
 
-> Use any CVV number for the above
+# Refund a Payment
 
-#### Bank routing & account numbers
+You can use the [Stax API]({{ site.api_ref_url }}#reference/0/transactions){:target="_blank" rel="noreferrer"} to do so.
+Once you get the transaction, you can use the `refundMobileReaderTransaction` method to attempt the refund.
 
-* Routing: 021000021
-* Account: 9876543210
+```swift
+// Attain a transaction
+var transaction = Transaction()
 
-To test failing bank accounts, use the given routing number and any other account number
+// Perform refund
+omni.refundMobileReaderTransaction(transaction: transaction, completion: { (refundedTransaction) in
+  // Refund successful!
+}, error: { error in
+  // Error
+})
+```
+
