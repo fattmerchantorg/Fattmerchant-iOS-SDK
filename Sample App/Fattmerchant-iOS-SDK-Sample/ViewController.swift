@@ -9,7 +9,7 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate {
+class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
 
   var omni: Omni?
 
@@ -45,7 +45,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.cancelTransaction()
   }
 
-  let apiKey = ""
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldi5mYXR0bGFicy5jb20vYXV0aGVudGljYXRlIiwiaWF0IjoxNjE2MzUyNjA4LCJleHAiOjE2MTY0MzkwMDgsIm5iZiI6MTYxNjM1MjYwOCwianRpIjoiV254UXNrQmtlZGFDRXQ4SSJ9.wbdC-Jq2mT-9ntLONW9SV7rZAFOaId5EvbQJGVIqNic"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -62,6 +62,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     omni = Omni()
     omni?.signatureProvider = SignatureViewController()
     omni?.transactionUpdateDelegate = self
+    omni?.userNotificationDelegate = self
     omni?.mobileReaderConnectionUpdateDelegate = self
 
     log("Attempting initalization...")
@@ -93,32 +94,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     }, error: { error in
       self.log(error)
     })
-  }
-
-  fileprivate func log(_ transactionUpdate: TransactionUpdate) {
-    var message = "[\(transactionUpdate.value)]"
-    if let userFriendlyMessage = transactionUpdate.userFriendlyMessage {
-      message += " | \(userFriendlyMessage)"
-    }
-    self.log(message)
-  }
-
-  fileprivate func log(_ error: OmniException) {
-    var errorMessage = error.message
-    if let detail = error.detail {
-      errorMessage += ". \(detail)"
-    }
-    self.log(errorMessage)
-  }
-
-  fileprivate func log(_ message: String) {
-    DispatchQueue.main.async {
-      let textCount: Int = ("\n \(self.timestamp()) | \(message)" + self.activityTextArea.text).count
-      self.activityTextArea.insertText("\n \(self.timestamp()) | \(message)")
-      if textCount > 1 {
-        self.activityTextArea.scrollRangeToVisible(NSRange(location: textCount - 1, length: 1))
-      }
-    }
   }
 
   fileprivate func takePayment() {
@@ -156,6 +131,33 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       self.log("Finished transaction successfully")
     }, error: { error in
       self.log(error)
+    })
+  }
+
+  @IBAction fileprivate func payWithBankAccount() {
+    fatalError("This feature isn't available yet")
+  }
+
+  @IBAction fileprivate func tokenizeCard() {
+    self.log("Attempting CNP Tokenization")
+    var card = CreditCard.testCreditCard()
+    card.personName = "Test Creditcard"
+    omni?.tokenize(card, { (paymentMethod) in
+      self.log("Created PaymentMethod Successfully")
+      self.log(paymentMethod)
+    }, error: { (err) in
+      self.log(err)
+    })
+  }
+
+  @IBAction fileprivate func tokenizeBankAccount() {
+    self.log("Attempting CNP Tokenization")
+    let bank = BankAccount.testBankAccount()
+    omni?.tokenize(bank, { (paymentMethod) in
+      self.log("Created PaymentMethod Successfully")
+      self.log(paymentMethod)
+    }, error: { (err) in
+      self.log(err)
     })
   }
 
@@ -221,7 +223,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   fileprivate func getReaderInfo() {
     self.log("Trying to get info about the connected reader")
     omni?.getConnectedReader(completion: { reader in
-      var a = reader
       self.log("Done")
     }, error: { error in
       self.log(error.detail ?? "huh")
@@ -264,6 +265,54 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
     self.log(transactionUpdate)
+  }
+
+  func onUserNotification(userNotification: UserNotification) {
+    self.log(userNotification)
+  }
+
+  // MARK: Logging
+  fileprivate func log(_ message: String) {
+    DispatchQueue.main.async {
+      let textCount: Int = ("\n \(self.timestamp()) | \(message)" + self.activityTextArea.text).count
+      self.activityTextArea.insertText("\n \(self.timestamp()) | \(message)")
+      if textCount > 1 {
+        self.activityTextArea.scrollRangeToVisible(NSRange(location: textCount - 1, length: 1))
+      }
+    }
+  }
+
+
+  fileprivate func log(_ transactionUpdate: TransactionUpdate) {
+    var message = "[\(transactionUpdate.value)]"
+    if let userFriendlyMessage = transactionUpdate.userFriendlyMessage {
+      message += " | \(userFriendlyMessage)"
+    }
+    self.log(message)
+  }
+
+  fileprivate func log(_ userNotification: UserNotification) {
+    var message = "[\(userNotification.value)]"
+    if let userFriendlyMessage = userNotification.userFriendlyMessage {
+      message += " | \(userFriendlyMessage)"
+    }
+    self.log(message)
+  }
+
+  fileprivate func log(_ error: OmniException) {
+    var errorMessage = error.message
+    if let detail = error.detail {
+      errorMessage += ". \(detail)"
+    }
+    self.log(errorMessage)
+  }
+
+  fileprivate func log(_ paymentMethod: PaymentMethod) {
+    var message = "PaymentMethod: "
+    message += "\n\t id: \(paymentMethod.id ?? "")"
+    message += "\n\t customerId: \(paymentMethod.customerId)"
+    message += "\n\t method: \(paymentMethod.method?.rawValue ?? "")"
+    log(message)
   }
 }
 

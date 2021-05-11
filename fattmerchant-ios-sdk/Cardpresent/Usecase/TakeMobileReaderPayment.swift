@@ -55,7 +55,6 @@ enum TakeMobileReaderPaymentException: OmniException {
       return "Could not create invoice"
     }
   }
-
 }
 
 class TakeMobileReaderPayment {
@@ -70,6 +69,7 @@ class TakeMobileReaderPayment {
   var request: TransactionRequest
   var signatureProvider: SignatureProviding?
   weak var transactionUpdateDelegate: TransactionUpdateDelegate?
+  weak var userNotificationDelegate: UserNotificationDelegate?
 
   init(
     mobileReaderDriverRepository: MobileReaderDriverRepository,
@@ -79,7 +79,8 @@ class TakeMobileReaderPayment {
     transactionRepository: TransactionRepository,
     request: TransactionRequest,
     signatureProvider: SignatureProviding?,
-    transactionUpdateDelegate: TransactionUpdateDelegate?) {
+    transactionUpdateDelegate: TransactionUpdateDelegate?,
+    userNotificationDelegate: UserNotificationDelegate?) {
 
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
     self.invoiceRepository = invoiceRepository
@@ -89,15 +90,16 @@ class TakeMobileReaderPayment {
     self.request = request
     self.signatureProvider = signatureProvider
     self.transactionUpdateDelegate = transactionUpdateDelegate
+    self.userNotificationDelegate = userNotificationDelegate
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
     availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
-
       self.getOrCreateInvoice(failure) { (createdInvoice) in
         self.takeMobileReaderPayment(with: driver,
                                      signatureProvider: self.signatureProvider,
                                      transactionUpdateDelegate: self.transactionUpdateDelegate,
+                                     userNotificationDelegate: self.userNotificationDelegate,
                                      failure) { (mobileReaderPaymentResult) in
 
           // This is a callback that voids the transaction and calls the fail block
@@ -119,6 +121,7 @@ class TakeMobileReaderPayment {
 
                 self.createTransaction(
                   result: mobileReaderPaymentResult,
+                  driver: driver,
                   paymentMethod: createdPaymentMethod,
                   customer: createdCustomer,
                   invoice: updatedInvoice,
@@ -160,7 +163,13 @@ class TakeMobileReaderPayment {
     }
   }
 
-  internal func createTransaction(result: TransactionResult, paymentMethod: PaymentMethod, customer: Customer, invoice: Invoice, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Transaction) -> Void) {
+  internal func createTransaction(result: TransactionResult,
+                                  driver: MobileReaderDriver,
+                                  paymentMethod: PaymentMethod,
+                                  customer: Customer,
+                                  invoice: Invoice,
+                                  _ failure: @escaping (OmniException) -> Void,
+                                  _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
     guard let paymentMethodId = paymentMethod.id else {
@@ -169,11 +178,11 @@ class TakeMobileReaderPayment {
     }
 
     guard let lastFour = getLastFour(for: result.maskedPan) else {
-        failure(Exception.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan"))
-        return
+      failure(Exception.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan"))
+      return
     }
 
-    guard let transactionMetaJson = createTransactionMetaJson(from: result) else {
+    guard let transactionMeta = createTransactionMeta(from: result) else {
       failure(Exception.couldNotCreateTransaction(detail: "Could not generate transaction meta json"))
       return
     }
@@ -206,7 +215,7 @@ class TakeMobileReaderPayment {
     transactionToCreate.total = request.amount.dollars()
     transactionToCreate.success = result.success ?? false
     transactionToCreate.lastFour = lastFour
-    transactionToCreate.meta = transactionMetaJson
+    transactionToCreate.meta = transactionMeta
     transactionToCreate.type = "charge"
     transactionToCreate.method = "card"
     transactionToCreate.source = "iOS|CPSDK|\(result.source)"
@@ -216,38 +225,102 @@ class TakeMobileReaderPayment {
     transactionToCreate.token = result.externalId
     transactionToCreate.message = result.message
 
+    // Set the transaction to not refundable or voidable if the Omni backend cannot perform the refund
+    // This is extremely important because it prevents a user from attempting a refund via the VT or the Omni API that
+    // could never work. The reason it won't work is because Omni doesn't have a deep integration with all of our
+    // third party vendors, such as AnywhereCommerce.
+    if !type(of: driver).omniRefundsSupported {
+      transactionToCreate.isRefundable = false
+      transactionToCreate.isVoidable = false
+    }
+
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
   }
 
   /// Creates a JSONValue object that from the transactionResult, including only the items that make up the TransactionMeta
   /// - Parameter transactionResult: the TransactionResult object to be converted into transaction meta
-  fileprivate func createTransactionMetaJson(from transactionResult: TransactionResult) -> JSONValue? {
-    var dict: [String: String] = [:]
+  fileprivate func createTransactionMeta(from transactionResult: TransactionResult) -> JSONValue? {
+    var dict = [String: JSONValue?]()
 
-    //TODO: Move this somewhere outside the UseCase
     #if !targetEnvironment(simulator)
     if transactionResult.source.contains(ChipDnaDriver.source) {
       if let userRef = transactionResult.userReference {
-        dict["nmiUserRef"] = userRef
+        dict["nmiUserRef"] = JSONValue(userRef)
       }
 
       if let localId = transactionResult.localId {
-        dict["cardEaseReference"] = localId
+        dict["cardEaseReference"] = JSONValue(localId)
       }
 
       if let externalId = transactionResult.externalId {
-        dict["nmiTransactionId"] = externalId
+        dict["nmiTransactionId"] = JSONValue(externalId)
+      }
+    } else if transactionResult.source.contains(AWCDriver.source) {
+      if let externalId = transactionResult.externalId {
+        dict["awcTransactionId"] = JSONValue(externalId)
       }
     }
-//    else if transactionResult.source.contains(AWCDriver.source) {
-//      if let externalId = transactionResult.externalId {
-//        dict["awcTransactionId"] = externalId
-//      }
-//    }
     #endif
 
     if let gatewayResponse = transactionResult.gatewayResponse {
-      dict["gatewayResponse"] = gatewayResponse
+      dict["gatewayResponse"] = JSONValue(gatewayResponse)
+    }
+
+    if let lineItemResponse = transactionResult.request?.lineItems {
+      dict["lineItems"] = JSONValue(lineItemResponse)
+    }
+
+    if let subtotal = transactionResult.request?.subtotal {
+      dict["subtotal"] = JSONValue(subtotal)
+    }
+
+    if let tax = transactionResult.request?.tax {
+      dict["tax"] = JSONValue(tax)
+    }
+
+    if let memo = transactionResult.request?.memo {
+      dict["memo"] = JSONValue(memo)
+    }
+
+    if let reference = transactionResult.request?.reference {
+      dict["reference"] = JSONValue(reference)
+    }
+
+    if let tip = transactionResult.request?.tip {
+      dict["tip"] = JSONValue(tip)
+    }
+
+    return dict.jsonValue()
+  }
+
+  fileprivate func createInvoiceMeta() -> JSONValue? {
+    var dict = [String: JSONValue?]()
+
+    if let subtotal = self.request.subtotal {
+      dict["subtotal"] = JSONValue(subtotal)
+    } else {
+      // If the user does not specify a subtotal, we a
+      dict["subtotal"] = JSONValue(request.amount.dollars())
+    }
+
+    if let tax = self.request.tax {
+      dict["tax"] = JSONValue(tax)
+    }
+
+    if let memo = self.request.memo {
+      dict["memo"] = JSONValue(memo)
+    }
+
+    if let reference = self.request.reference {
+      dict["reference"] = JSONValue(reference)
+    }
+
+    if let tip = self.request.tip {
+      dict["tip"] = JSONValue(tip)
+    }
+
+    if let lineItems = self.request.lineItems {
+      dict["lineItems"] = JSONValue(lineItems)
     }
 
     return dict.jsonValue()
@@ -292,7 +365,7 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
-    let paymentMethodToCreate = PaymentMethod()
+    let paymentMethodToCreate = PaymentMethod(customer: customer)
 
     guard let customerId = customer.id else {
       failure(Exception.couldNotCreateCustomer(detail: "Customer id is required"))
@@ -314,7 +387,7 @@ class TakeMobileReaderPayment {
     paymentMethodToCreate.method = PaymentMethodType.card
     paymentMethodToCreate.cardLastFour = lastFour
     paymentMethodToCreate.cardType = cardType
-    paymentMethodToCreate.personName = "\(customer.firstname ?? "") \(customer.lastname ?? "")"
+    paymentMethodToCreate.personName = "\(customer.firstname) \(customer.lastname)"
     paymentMethodToCreate.tokenize = false
     paymentMethodToCreate.paymentToken = result.paymentToken
 
@@ -329,19 +402,37 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
-    let customerToCreate = Customer()
-    customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
-    customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+    let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
+    let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+    var customerToCreate = Customer(firstName: firstname, lastName: lastname)
+
+    if let transactionSource = transactionResult.transactionSource {
+      if transactionSource.lowercased().contains("contactless") {
+        customerToCreate.firstname = "Mobile Device"
+        customerToCreate.lastname = "Customer"
+      } else {
+        customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
+        customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+      }
+    } else {
+      customerToCreate.firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
+      customerToCreate.lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
+    }
+
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
   }
 
   fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver,
                                            signatureProvider: SignatureProviding?,
                                            transactionUpdateDelegate: TransactionUpdateDelegate?,
+                                           userNotificationDelegate: UserNotificationDelegate?,
                                            _ failure: (OmniException) -> Void,
                                            _ completion: @escaping (TransactionResult) -> Void) {
-    print("Performing transaction")
-    driver.performTransaction(with: self.request, signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate, completion: completion)
+    driver.performTransaction(with: self.request,
+                              signatureProvider: signatureProvider,
+                              transactionUpdateDelegate: transactionUpdateDelegate,
+                              userNotificationDelegate: userNotificationDelegate,
+                              completion: completion)
   }
 
   /// Gets the invoice with the id in the transaction request or creates a new one
@@ -359,11 +450,8 @@ class TakeMobileReaderPayment {
       let invoiceToCreate = Invoice()
       invoiceToCreate.total = request.amount.dollars()
       invoiceToCreate.url = "https://fattpay.com/#/bill"
-      let invoiceMeta = [
-        "subtotal": self.request.amount.dollarsString()
-      ]
 
-      guard let invoiceMetaJson = invoiceMeta.jsonValue() else {
+      guard let invoiceMetaJson = createInvoiceMeta() else {
         failure(Exception.couldNotCreateInvoice(detail: "Error generating json for meta"))
         return
       }
@@ -381,15 +469,14 @@ class TakeMobileReaderPayment {
   fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
     repo.getInitializedDrivers { initializedDrivers in
       // Get drivers that are ready for payment
-      filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }) { driversReadyForPayment in
+      filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }, completion: { driversReadyForPayment in
         guard let driver = driversReadyForPayment.first else {
           failure(TakeMobileReaderPaymentException.mobileReaderNotFound)
           return
         }
 
         completion(driver)
-      }
+      })
     }
   }
-
 }

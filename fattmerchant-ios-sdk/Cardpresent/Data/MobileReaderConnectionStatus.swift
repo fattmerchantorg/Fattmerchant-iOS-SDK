@@ -20,9 +20,12 @@ public enum MobileReaderConnectionStatus: String {
   case disconnected
 
   /// The reader is performing an update
+  case updating_configuration
+
+  /// The reader is performing an update on the firmware
   ///
-  /// - Note: This might be a long-running operation
-  case updating
+  /// - Note: This is a long-running operation
+  case updating_firmware
 
   /// The reader is performing a reboot
   case rebooting

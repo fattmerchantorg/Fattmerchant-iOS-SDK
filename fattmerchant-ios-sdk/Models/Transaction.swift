@@ -9,10 +9,8 @@
 import Foundation
 
 /// A Transaction in the Omni Platform
-public class Transaction: Model {
-
+public class Transaction: Model, Codable {
   public init() {}
-
   /// The id of the transaction in Omni
   public var id: String?
 
@@ -101,4 +99,12 @@ public class Transaction: Model {
   var sourceIp: String?
   var response: JSONValue?
   var updatedAt: String?
+  var channel: String? = "ios"
+
+  public func getLineItems() -> [CatalogItem]? {
+    if let dict = meta?.toDictionary() {
+      return dict["lineItems"] as? [CatalogItem]
+    }
+    return nil
+  }
 }

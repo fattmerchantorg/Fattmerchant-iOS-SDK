@@ -58,13 +58,14 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   func initialize(args: [String: Any], completion: (Bool) -> Void) {
     guard
       let appId = args["appId"] as? String,
-      let merchant = args["merchant"] as? Merchant,
-      let apiKey = merchant.emvPassword(),
-      !apiKey.isEmpty
+      let nmiDetails = args["nmi"] as? NMIDetails,
+      !nmiDetails.securityKey.isEmpty
       else {
+        ChipDnaMobile.dispose(nil)
         completion(false)
         return
     }
+    let apiKey = nmiDetails.securityKey
 
     // Store the apiKey and the init args for later use
     securityKey = apiKey
@@ -75,6 +76,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     parameters.setValue("password", forKey: CCParamPassword)
     parameters.setValue(CCValueTrue, forKey: CCParamAutoConfirm)
     if ChipDnaMobile.initialize(parameters)?[CCParamResult] != CCValueTrue {
+      ChipDnaMobile.dispose(nil)
       completion(false)
       return
     }
@@ -86,6 +88,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     properties.setValue(CCValueEnvironmentLive, forKey: CCParamEnvironment)
     let setPropertiesResult = ChipDnaMobile.sharedInstance()?.setProperties(properties)
     if setPropertiesResult?[CCParamResult] != CCValueTrue {
+      ChipDnaMobile.dispose(nil)
       completion(false)
       return
     }
@@ -210,6 +213,18 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
+    performTransaction(with: request,
+                       signatureProvider: signatureProvider,
+                       transactionUpdateDelegate: transactionUpdateDelegate,
+                       userNotificationDelegate: nil,
+                       completion: completion)
+  }
+
+  func performTransaction(with request: TransactionRequest,
+                          signatureProvider: SignatureProviding?,
+                          transactionUpdateDelegate: TransactionUpdateDelegate?,
+                          userNotificationDelegate: UserNotificationDelegate?,
+                          completion: @escaping (TransactionResult) -> Void) {
     let requestParams = CCParameters(transactionRequest: request)
 
     chipDnaTransactionListener.detachFromChipDna()
@@ -217,6 +232,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     chipDnaTransactionListener.onFinished = { result in
 
       let success = result[CCParamTransactionResult] == CCValueApproved
+      let receiptData = ChipDnaMobileSerializer.deserializeReceiptData(result[CCParamReceiptData])
 
       var transactionResult = TransactionResult()
       transactionResult.source = Self.source
@@ -230,6 +246,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.userReference = result[CCParamUserReference]
       transactionResult.localId = result[CCParamCardEaseReference]
       transactionResult.externalId = result[CCParamTransactionId]
+      transactionResult.transactionSource = receiptData?[kCCReceiptFieldTransactionSource]?.value
 
       if let token = result[CCParamCustomerVaultId] {
         transactionResult.paymentToken = "nmi_\(token)"
@@ -243,7 +260,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       }
     }
 
-    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider, transactionUpdateDelegate: transactionUpdateDelegate)
+    chipDnaTransactionListener.bindToChipDna(signatureProvider: signatureProvider,
+                                             transactionUpdateDelegate: transactionUpdateDelegate,
+                                             userNotificationDelegate: userNotificationDelegate)
 
     ChipDnaMobile.sharedInstance()?.startTransaction(requestParams)
   }
@@ -334,6 +353,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       return
     }
 
+    let receiptData = ChipDnaMobileSerializer.deserializeReceiptData(result[CCParamReceiptData])
+
     // Check status
     if result[CCParamErrors] != nil {
       error(RefundException.errorRefunding(details: "Error while performing refund"))
@@ -343,6 +364,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.success = true
       transactionResult.transactionType = "refund"
       transactionResult.amount = refundAmount
+      transactionResult.transactionSource = receiptData?["TRANSACTION_SOURCE"]?.value
       completion(transactionResult)
     }
   }
@@ -412,7 +434,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
 
     // If no reader was connected, pass nil
-    if (parameters[CCParamResult] != CCValueTrue) {
+    if parameters[CCParamResult] != CCValueTrue {
       didConnectAndConfigure(nil)
     }
 

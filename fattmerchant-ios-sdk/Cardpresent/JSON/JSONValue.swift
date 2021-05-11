@@ -18,22 +18,22 @@ import Foundation
 
  `JSONValue` can wrap String, Int, Double, Bool, Array<`JSONValue`> and Dictionary<String, `JSONValue`>
 
-  ```
-   var dict: [String: String] = [:]
+ ```
+ var dict: [String: String] = [:]
 
-   if let userRef = transactionResult.userReference {
-     dict["nmiUserRef"] = userRef
-   }
+ if let userRef = transactionResult.userReference {
+ dict["nmiUserRef"] = userRef
+ }
 
-   if let localId = transactionResult.localId {
-     dict["cardEaseReference"] = localId
-   }
+ if let localId = transactionResult.localId {
+ dict["cardEaseReference"] = localId
+ }
 
-   if let externalId = transactionResult.externalId {
-     dict["nmiTransactionId"] = externalId
-   }
+ if let externalId = transactionResult.externalId {
+ dict["nmiTransactionId"] = externalId
+ }
 
-   let jsonDict = JSONValue(dict)
+ let jsonDict = JSONValue(dict)
  ```
 
  ## Example - Parsing Unstructured Json
@@ -46,17 +46,17 @@ import Foundation
  let personJson =
  """
  {
-   "name": "Johnathan Pearson",
-   "meta": {
-     "nickname": "JP"
-   }
+ "name": "Johnathan Pearson",
+ "meta": {
+ "nickname": "JP"
+ }
  }
  """.data(using: .utf8)
 
  // You could create a class Person, using a JSONValue for meta
  class Person: Codable {
-  var name: String
-  var meta: JSONValue
+ var name: String
+ var meta: JSONValue
  }
 
  // Decode
@@ -70,7 +70,7 @@ import Foundation
  ## Note
  It is best to avoid using JSONValue if you are certain of what the structure of the data you are decoding/encoding is
  */
-public enum JSONValue: Codable, Equatable {
+public indirect enum JSONValue: Codable, Equatable {
 
   public enum JSONValueError: Error {
     case InitializationError(message: String)
@@ -80,6 +80,7 @@ public enum JSONValue: Codable, Equatable {
   case int(Int)
   case double(Double)
   case bool(Bool)
+  case item(CatalogItem)
   case object([String: JSONValue?])
   case array([JSONValue])
 
@@ -94,6 +95,8 @@ public enum JSONValue: Codable, Equatable {
       jsonValue = .double(value)
     } else if let value = from as? Bool {
       jsonValue = .bool(value)
+    } else if let value = from as? CatalogItem {
+      jsonValue = .item(value)
     } else if let value = from as? [Codable] {
       if let jsonValueArray = value.map({ JSONValue($0) }).filter({ $0 != nil }) as? [JSONValue] {
         jsonValue = .array(jsonValueArray)
@@ -101,6 +104,12 @@ public enum JSONValue: Codable, Equatable {
     } else if let value = from as? [String: Codable] {
       let jsonDictionary = value.mapValues({ JSONValue($0) })
       jsonValue = .object(jsonDictionary)
+    } else if let value = from as? JSONValue {
+      if case let JSONValue.array(from) = from {
+        jsonValue = .array(from as [JSONValue])
+      } else {
+        jsonValue = value
+      }
     }
 
     if jsonValue != nil {
@@ -123,10 +132,24 @@ public enum JSONValue: Codable, Equatable {
         let val = dict[key],
         val != nil,
         case let JSONValue.int(i) = val!
-      else {
-        return nil
+        else {
+          return nil
       }
 
+      return i
+    }
+    return nil
+  }
+
+  subscript(key: String) -> Double? {
+    if case let JSONValue.object(dict) = self, dict.keys.contains(key) {
+      guard
+        let val = dict[key],
+        val != nil,
+        case let JSONValue.double(i) = val!
+        else {
+          return nil
+      }
       return i
     }
     return nil
@@ -138,8 +161,8 @@ public enum JSONValue: Codable, Equatable {
         let val = dict[key],
         val != nil,
         case let JSONValue.string(i) = val!
-      else {
-        return nil
+        else {
+          return nil
       }
 
       return i
@@ -164,6 +187,8 @@ public enum JSONValue: Codable, Equatable {
       self = .double(value)
     } else if let value = try? container.decode(Bool.self) {
       self = .bool(value)
+    } else if let value = try? container.decode(CatalogItem.self) {
+      self = .item(value)
     } else if let value = try? container.decode([String: JSONValue?].self) {
       self = .object(value)
     } else if let value = try? container.decode([JSONValue].self) {
@@ -185,13 +210,64 @@ public enum JSONValue: Codable, Equatable {
       try container.encode(value)
     case .bool(let value):
       try container.encode(value)
+    case .item(let value):
+      try container.encode(value)
     case .object(let value):
       try container.encode(value)
     case .array(let value):
       try container.encode(value)
     }
   }
+}
 
+extension JSONValue {
+  func toDictionary() -> [String: Any?] {
+    var dict = [String: Any?]()
+    if case let JSONValue.object(jsonDict) = self {
+      for key in jsonDict.keys {
+        switch jsonDict[key] {
+        case .array(let value):
+          if let array = extractElements(from: value) {
+            dict[key] = array
+          }
+        case .string(let value):
+          dict[key] = value
+        case .bool(let value):
+          dict[key] = value
+        case .double(let value):
+          dict[key] = value
+        case .int(let value):
+          dict[key] = value
+        case .item(let value):
+          dict[key] = value
+        default:
+          continue
+        }
+      }
+    }
+    return dict
+  }
+
+  func extractElements(from array: [JSONValue]) -> [Any]? {
+    var extractedArray = [Any]()
+    for element in array {
+      switch element {
+      case .string(let string):
+        extractedArray.append(string)
+      case .bool(let bool):
+        extractedArray.append(bool)
+      case .double(let double):
+        extractedArray.append(double)
+      case .int(let int):
+        extractedArray.append(int)
+      case .item(let item):
+        extractedArray.append(item)
+      default:
+        continue
+      }
+    }
+    return extractedArray
+  }
 }
 
 extension Dictionary where Value: Codable, Key == String {

@@ -44,9 +44,10 @@ public class MobileReader: CustomStringConvertible {
     self.make = make
     self.model = model
     self.serialNumber = serialNumber
+    self.connectionType = nil
   }
 
-  /// Initialize a MobileReader
+  /// Initialize a MobileReader by name
   ///
   /// This name must match the real name of the mobile reader, or mobile reader operations will not work
   /// - Parameter name: The name of the mobile reader

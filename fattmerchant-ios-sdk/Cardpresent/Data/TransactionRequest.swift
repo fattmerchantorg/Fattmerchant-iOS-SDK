@@ -42,6 +42,27 @@ public struct TransactionRequest {
   /// The `CreditCard` to charge
   public var card: CreditCard?
 
+  /// The `BankAccount` to charge
+  public var bankAccount: BankAccount?
+
+  /// The `LineItem`s being passed to the transaction
+  public var lineItems: [CatalogItem]?
+
+  /// The subtotal of the transaction
+  public var subtotal: Double?
+
+  /// The tax applied to the transaction
+  public var tax: Double?
+
+  /// The tip amount applied to the transaction
+  public var tip: Double?
+
+  /// A memo for the transaction
+  public var memo: String?
+
+  /// A reference for the transaction
+  public var reference: String?
+
   /// The option to tokenize the payment method for later usage
   ///
   /// - Note: Defaults to true
@@ -63,10 +84,22 @@ public struct TransactionRequest {
 
   /// Initializes a TransactionRequest with the given amount.
   ///
-  /// - Parameter amount: The  `Amount` to be collected during the transaction
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - card: The `card` to charge
   public init(amount: Amount, card: CreditCard) {
     self.amount = amount
     self.card = card
+  }
+
+  /// Initializes a TransactionRequest with the given amount.
+  ///
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - bank: The `bankAccount` to charge
+  public init(amount: Amount, bankAccount: BankAccount) {
+    self.amount = amount
+    self.bankAccount = bankAccount
   }
 
   /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
@@ -101,5 +134,39 @@ public struct TransactionRequest {
     self.amount = amount
     self.tokenize = tokenize
     self.invoiceId = invoiceId
+  }
+
+  /// Initializes a TransactionRequest with the given amount and a list of line items
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - lineItems: A list of  `LineItem` that are attached to the transaction
+  public init(amount: Amount, lineItems: [CatalogItem]?) {
+    self.amount = amount
+    self.lineItems = lineItems
+  }
+
+  /// Initializes a TransactionRequest with the given amount and a list of line items
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - card: A `CreditCard` to charge
+  ///   - lineItems: A list of  `LineItem` that are attached to the transaction
+  public init(amount: Amount, card: CreditCard, lineItems: [CatalogItem]?) {
+    self.amount = amount
+    self.card = card
+    self.lineItems = lineItems
+  }
+
+  /// Initializes a TransactionRequest with the given amount, explicitly sets the tokenize value and a contains a list of line items
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - tokenize: A value that dictates whether or not the payment method used in the transaction
+  ///   should be tokenized.
+  ///   - card: A `CreditCard` to charge
+  ///   - lineItems: A list of  `LineItem` that are attached to the transaction
+  public init(amount: Amount, tokenize: Bool, card: CreditCard, lineItems: [CatalogItem]?) {
+    self.amount = amount
+    self.tokenize = tokenize
+    self.card = card
+    self.lineItems = lineItems
   }
 }

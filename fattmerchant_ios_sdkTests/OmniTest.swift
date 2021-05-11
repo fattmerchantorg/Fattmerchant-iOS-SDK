@@ -154,7 +154,9 @@ class OmniTest: XCTestCase {
 
     let data = "{\"card_number\":\"4111111111111111\",\"method\":\"card\",\"person_name\":\"Joe Tester\",\"card_exp\":\"0230\",\"address_zip\":\"32812\"}".data(using: .utf8)
 
-    let paymentMethod = PaymentMethod()
+    let customer = Customer(firstName: "Joe", lastName: "Tester")
+    customer.id = "customerid"
+    let paymentMethod = PaymentMethod(customer: customer)
     paymentMethod.id = "12345"
     paymentMethod.customerId = "customerid"
     paymentMethod.merchantId = "merchantid"
@@ -168,23 +170,6 @@ class OmniTest: XCTestCase {
     }
 
     wait(for: [transactionWasCompleted], timeout: 10.0)
-  }
-
-  func testCanNotPayWithCreditCardWithoutMerchant() {
-    omni.merchant = nil
-    let creditCard = CreditCard(personName: "Joe Tester", cardNumber: "4111111111111111", cardExp: "0230", addressZip: "32812")
-    let transactionRequest = TransactionRequest(amount: Amount(cents: 10), tokenize: false, card: creditCard)
-    let transactionFailed = XCTestExpectation(description: "Transaction failed")
-    let expectedError = OmniGeneralException.uninitialized
-
-    omni.pay(transactionRequest: transactionRequest, completion: { _ in
-      XCTFail("Transaction succeeded but shouldnt have")
-    }) { error in
-      XCTAssertEqual(error as! OmniGeneralException, expectedError)
-      transactionFailed.fulfill()
-    }
-
-    wait(for: [transactionFailed], timeout: 10.0)
   }
 
   func testCanNoTakeTransactionIfMobileReaderNotReady() {
@@ -217,6 +202,13 @@ class OmniTest: XCTestCase {
     omniSelf.merchant = merchant
     (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
 
+    let mockApi = omni.omniApi as! MockOmniApi
+
+    let awcDetails = AWCDetails(terminalId: "someterminalid", terminalSecret: "terminalsecret")
+    let mobileReaderDetails = MobileReaderDetails()
+    mobileReaderDetails.anywhereCommerce = awcDetails
+    mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
+
     let initialized = expectation(description: "Omni gets initialized")
     
     omni.initialize(
@@ -228,6 +220,67 @@ class OmniTest: XCTestCase {
     }
 
     wait(for: [initialized], timeout: 10.0)
+  }
+
+  func testCanInitializeWithMobileReaderSettingsInMerchantOptions() {
+    // Mock the self object
+    let merchant = Merchant()
+    merchant.id = "generated_merchant_id_123"
+    let omniSelf = OmniSelf()
+    omniSelf.merchant = merchant
+    (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
+    let mockApi = omni.omniApi as! MockOmniApi
+
+    // Make the omni api NOT return the mobile reader settings.
+    // This will still make the http call succeed, but it will not provide the necessary info to initialize
+    let mobileReaderDetails = MobileReaderDetails()
+    mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
+
+    // Give the merchant the mobile reader creds. This will be the fallback since the gateways call will not
+    // return the details
+    merchant.options = ["emv_password": "somepassword"].jsonValue()!
+
+    let initialized = expectation(description: "Omni gets initialized")
+
+    omni.initialize(
+      params: Omni.InitParams(appId: "123", apiKey: "123"),
+      completion: {
+        initialized.fulfill()
+    }) { (error) in
+      XCTFail()
+    }
+
+    wait(for: [initialized], timeout: 3.0)
+  }
+
+  func testThrowsErrorWhenMobileReaderSettingsMissing() {
+    // Mock the self object
+    let merchant = Merchant()
+    merchant.id = "generated_merchant_id_123"
+    let omniSelf = OmniSelf()
+    omniSelf.merchant = merchant
+    (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
+    let mockApi = omni.omniApi as! MockOmniApi
+
+    // Make the omni api NOT return the mobile reader settings.
+    // This will still make the http call succeed, but it will not provide the necessary info to initialize
+    let mobileReaderDetails = MobileReaderDetails()
+    mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
+
+    let errorThrown = expectation(description: "Omni throws error")
+    let expectedError = OmniInitializeException.mobileReaderPaymentsNotConfigured
+
+    omni.initialize(
+      params: Omni.InitParams(appId: "123", apiKey: "123"),
+      completion: {
+        XCTFail()
+    }) { (error) in
+      XCTAssertEqual(error as! OmniInitializeException, expectedError)
+      XCTAssertNotNil(error.detail)
+      errorThrown.fulfill()
+    }
+
+    wait(for: [errorThrown], timeout: 3.0)
   }
 
   /// Tests that the isInitialized function truly reflects initialization status

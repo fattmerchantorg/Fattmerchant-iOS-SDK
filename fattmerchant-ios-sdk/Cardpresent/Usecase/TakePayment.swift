@@ -36,14 +36,16 @@ class TakePayment {
   /// Responsible for communicating with Omni
   var omniApi: OmniApi
 
-  /// The Merchant that will be associated with the Transaction
-  var merchant: Merchant
+  private var customerRepository: CustomerRepository
+  private var paymentMethodRepository: PaymentMethodRepository
 
-  /// Initializes a `TakePayment` with a `TransactionRequest`, an `OmniApi`, and a `Merchant`
-  init(request: TransactionRequest, omniApi: OmniApi, merchant: Merchant) {
+  init(request: TransactionRequest,
+       customerRepository: CustomerRepository,
+       paymentMethodRepository: PaymentMethodRepository) {
     self.request = request
-    self.merchant = merchant
-    self.omniApi = omniApi
+    self.customerRepository = customerRepository
+    self.paymentMethodRepository = paymentMethodRepository
+    self.omniApi = customerRepository.omniApi
   }
 
   /// Kicks off the process of taking the payment
@@ -51,15 +53,13 @@ class TakePayment {
   ///   - completion: A block to call once finished. This will receive the completed `Transaction`
   ///   - failure: a block to call if a failure occurs. This will receive an `OmniException`
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
-    // Make sure a valid payment method was provided
-    guard let card = request.card else {
-      failure(Exception.couldNotTokenizePaymentMethod(detail: "No payment method provided"))
-      return
+    let tokenize = tokenizeJob()
+    guard let tokenizeJob = tokenize.0 else {
+      return failure(tokenize.1 ?? Exception.couldNotTokenizePaymentMethod(detail: "No payment method provided"))
     }
 
-    // Tokenize the payment method first then pay using the Omni API and the tokenized Payment Method
-    let tokenizeJob = TokenizePaymentMethod(omniApi: omniApi, merchant: merchant)
-    tokenizeJob.start(codablePaymentMethod: card, completion: { (tokenizedPaymentMethod) in
+    // Tokenize the payment method first
+    tokenizeJob.start(completion: { (tokenizedPaymentMethod) in
       // Ensure that the tokenized payment method has an ID
       guard let paymentMethodId = tokenizedPaymentMethod.id else {
         failure(Exception.couldNotTokenizePaymentMethod())
@@ -73,6 +73,25 @@ class TakePayment {
       // Make the request to Omni
       self.omniApi.request(method: "post", urlString: "/charge", body: body, completion: completion, failure: failure)
     }, failure: failure)
+  }
+
+  /// Creates a TokenizePaymentMethod job from the TransactionRequest
+  internal func tokenizeJob() -> (TokenizePaymentMethod?, OmniException?) {
+    var job: TokenizePaymentMethod
+
+    if let card = request.card {
+      job = TokenizePaymentMethod(customerRepository: customerRepository,
+                                   paymentMethodRepository: paymentMethodRepository,
+                                   creditCard: card)
+    } else if let bank = request.bankAccount {
+      job = TokenizePaymentMethod(customerRepository: customerRepository,
+                                   paymentMethodRepository: paymentMethodRepository,
+                                   bankAccount: bank)
+    } else {
+      return (nil, Exception.couldNotTokenizePaymentMethod(detail: "No payment method provided"))
+    }
+
+    return (job, nil)
   }
 
   /// Creates a ChargeRequest from an Amount and a PaymentMethod id
