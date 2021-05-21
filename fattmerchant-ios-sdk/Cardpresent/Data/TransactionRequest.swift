@@ -70,6 +70,14 @@ public struct TransactionRequest {
   /// Set this to false if you do not want the payment method stored
   public var tokenize: Bool = true
 
+  /// The option to perform a preauthorization
+  ///
+  /// - Note: Defaults to false
+  ///
+  /// Set this to true if you would like to *only* authorize an amount. This means that the transaction will
+  /// only hold funds and you will need to capture it at a later date via the Stax API or the SDK
+  public var preauth: Bool = false
+
   /// The id of the invoice that this payment should be applied to
   ///
   /// If nil, then a new invoice will be created
