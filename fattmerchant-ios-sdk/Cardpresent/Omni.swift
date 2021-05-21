@@ -320,6 +320,13 @@ public class Omni: NSObject {
     job.start(completion: completion, error: error)
   }
 
+  public func voidTransaction(transactionId: String,
+                              completion: @escaping (Transaction) -> Void,
+                              error: @escaping (OmniException) -> Void) {
+    let job = VoidTransaction(transactionId: transactionId, omniApi: omniApi)
+    job.start(completion: completion, error: error)
+  }
+
   /// Cancels the current mobile reader transaction
   ///
   /// - Parameters:

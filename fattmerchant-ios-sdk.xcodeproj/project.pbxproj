@@ -184,6 +184,8 @@
 		D7D2C51E23F203F8001733A2 /* RefundMobileReaderTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D2C51C23F203CF001733A2 /* RefundMobileReaderTransactionTests.swift */; };
 		D7E15C5626577CFA006D4EE7 /* CapturePreauthTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E15C5526577CFA006D4EE7 /* CapturePreauthTransaction.swift */; };
 		D7E15C5726577CFA006D4EE7 /* CapturePreauthTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E15C5526577CFA006D4EE7 /* CapturePreauthTransaction.swift */; };
+		D7E15C5926578C6E006D4EE7 /* VoidTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E15C5826578C6E006D4EE7 /* VoidTransaction.swift */; };
+		D7E15C5A26578C6E006D4EE7 /* VoidTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E15C5826578C6E006D4EE7 /* VoidTransaction.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -331,6 +333,7 @@
 		D7C17B2B23EA00EB0031D9BB /* MockDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDriver.swift; sourceTree = "<group>"; };
 		D7D2C51C23F203CF001733A2 /* RefundMobileReaderTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundMobileReaderTransactionTests.swift; sourceTree = "<group>"; };
 		D7E15C5526577CFA006D4EE7 /* CapturePreauthTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreauthTransaction.swift; sourceTree = "<group>"; };
+		D7E15C5826578C6E006D4EE7 /* VoidTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidTransaction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -660,6 +663,7 @@
 				D73BBCF4244D7F380052B525 /* DisconnectMobileReader.swift */,
 				594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */,
 				D7E15C5526577CFA006D4EE7 /* CapturePreauthTransaction.swift */,
+				D7E15C5826578C6E006D4EE7 /* VoidTransaction.swift */,
 			);
 			path = Usecase;
 			sourceTree = "<group>";
@@ -882,6 +886,7 @@
 				D7C17B2C23EA00EB0031D9BB /* MockDriver.swift in Sources */,
 				D765D46C23CC478000656040 /* Invoice.swift in Sources */,
 				D765D47F23CCBBFD00656040 /* OmniException.swift in Sources */,
+				D7E15C5926578C6E006D4EE7 /* VoidTransaction.swift in Sources */,
 				D79308C423D0E3C90066FCA2 /* RefundMobileReaderTransaction.swift in Sources */,
 				5993C25C2076BD68004DDA9F /* PaymentMethod.swift in Sources */,
 				46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */,
@@ -944,6 +949,7 @@
 				59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */,
 				D7C17B2D23EA010F0031D9BB /* MockDriver.swift in Sources */,
 				D7B7113C23D63B0D00EF98DB /* Environment.swift in Sources */,
+				D7E15C5A26578C6E006D4EE7 /* VoidTransaction.swift in Sources */,
 				D765D49A23CFC22600656040 /* PaymentMethodRepository.swift in Sources */,
 				D765D47D23CCBB0500656040 /* ModelRepository.swift in Sources */,
 				D702B7CE23C8F80200B8AB79 /* BankAccount.swift in Sources */,

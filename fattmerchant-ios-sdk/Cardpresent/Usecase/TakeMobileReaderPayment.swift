@@ -245,6 +245,7 @@ class TakeMobileReaderPayment {
       transactionToCreate.type = "pre_auth"
       transactionToCreate.preAuth = true
       transactionToCreate.isCaptured = 0
+      transactionToCreate.isVoidable = true
     }
 
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
