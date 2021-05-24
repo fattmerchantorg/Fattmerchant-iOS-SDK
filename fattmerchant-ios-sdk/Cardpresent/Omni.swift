@@ -304,6 +304,29 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
 
+  /// Captures a previously-authorized transaction
+  ///
+  /// - Parameters:
+  ///   - transactionId: The id of the transaction you want to capture
+  ///   - amount: the amount that you want to capture. If nil, then the original transaction amount will be captured
+  ///   - completion: Called when the operation is complete successfully. Receives a Transaction
+  ///   - error: Receives any errors that happened while attempting the operation
+  public func capturePreauthTransaction(transactionId: String,
+                                        amount: Amount?,
+                                        completion: @escaping (Transaction) -> Void,
+                                        error: @escaping (OmniException) -> Void) {
+
+    let job = CapturePreauthTransaction(transactionId: transactionId, captureAmount: amount, omniApi: omniApi)
+    job.start(completion: completion, error: error)
+  }
+
+  public func voidTransaction(transactionId: String,
+                              completion: @escaping (Transaction) -> Void,
+                              error: @escaping (OmniException) -> Void) {
+    let job = VoidTransaction(transactionId: transactionId, omniApi: omniApi)
+    job.start(completion: completion, error: error)
+  }
+
   /// Cancels the current mobile reader transaction
   ///
   /// - Parameters:

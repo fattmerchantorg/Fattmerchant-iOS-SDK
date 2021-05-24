@@ -12,6 +12,7 @@ import Fattmerchant
 class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
 
   var omni: Omni?
+  var lastPreauthTransaction: Transaction? = nil
 
   @IBOutlet weak var activityTextArea: UITextView!
   @IBOutlet weak var initializeButton: UIButton!
@@ -37,6 +38,18 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.takePayment()
   }
 
+  @IBAction func onPreauthPaymentButtonPress(_ sender: UIButton) {
+    self.takePayment(preauth: true)
+  }
+
+  @IBAction func onCaptureLastTransactionButtonPress(_ sender: UIButton) {
+    self.captureLastTransaction()
+  }
+
+  @IBAction func onVoidLastTransactionButtonPress(_ sender: UIButton) {
+    self.voidLastTransaction()
+  }
+
   @IBAction func onGetReaderInfoButtonPress(_ sender: UIButton) {
     self.getReaderInfo()
   }
@@ -45,7 +58,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.cancelTransaction()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldi5mYXR0bGFicy5jb20vYXV0aGVudGljYXRlIiwiaWF0IjoxNjE2MzUyNjA4LCJleHAiOjE2MTY0MzkwMDgsIm5iZiI6MTYxNjM1MjYwOCwianRpIjoiV254UXNrQmtlZGFDRXQ4SSJ9.wbdC-Jq2mT-9ntLONW9SV7rZAFOaId5EvbQJGVIqNic"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE2MjE1Njc0OTgsImV4cCI6MTYyMTY1Mzg5OCwibmJmIjoxNjIxNTY3NDk4LCJqdGkiOiIxeUI4Yzg1NjBNMWdnbTJUIn0.Qde-E0IU91ZW0uoQuMEg4uiD7Kko9LzPcD0cuDVBya0"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -96,9 +109,46 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     })
   }
 
-  fileprivate func takePayment() {
-    omni?.takeMobileReaderTransaction(request: createTransactionRequest(), completion: { _ in
+  fileprivate func takePayment(preauth: Bool = false) {
+    var req = createTransactionRequest()
+    req.preauth = preauth
+    omni?.takeMobileReaderTransaction(request: req, completion: { transaction in
       self.log("Finished transaction successfully")
+
+      if preauth {
+        self.lastPreauthTransaction = transaction
+      }
+    }, error: { error in
+      self.log(error)
+    })
+  }
+
+  fileprivate func captureLastTransaction() {
+    guard let id = lastPreauthTransaction?.id else {
+      return self.log("No preauth transactions to capture")
+    }
+
+    var amount: Amount?
+
+    if let total = lastPreauthTransaction?.total,
+       getAmount().dollarsString() != Amount(dollars: total).dollarsString() {
+      amount = getAmount()
+    }
+
+    omni?.capturePreauthTransaction(transactionId: id, amount: amount, completion: { transaction in
+      self.log("Captured transaction successfully")
+    }, error: { error in
+      self.log(error)
+    })
+  }
+
+  fileprivate func voidLastTransaction() {
+    guard let id = lastPreauthTransaction?.id else {
+      return self.log("No preauth transactions to capture")
+    }
+
+    omni?.voidTransaction(transactionId: id, completion: { transaction in
+      self.log("Voided transaction successfully")
     }, error: { error in
       self.log(error)
     })
@@ -163,7 +213,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   fileprivate func createTransactionRequest() -> TransactionRequest {
     var request = TransactionRequest(amount: getAmount())
-    request.invoiceId = "2bbe0ec0-f2d5-4fff-b6b3-0db8550cea77"
     return request
   }
 
