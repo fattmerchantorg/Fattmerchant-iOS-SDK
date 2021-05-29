@@ -133,6 +133,12 @@ class TakeMobileReaderPayment {
                     return
                   }
 
+                  // If the transaction is a pre-auth, then we don't need to capture it
+                  if self.request.preauth {
+                    completion(completedTransaction)
+                    return
+                  }
+
                   driver.capture(transaction: completedTransaction) { (success) in
                     if success {
                       completion(completedTransaction)
@@ -232,6 +238,14 @@ class TakeMobileReaderPayment {
     if !type(of: driver).omniRefundsSupported {
       transactionToCreate.isRefundable = false
       transactionToCreate.isVoidable = false
+    }
+
+    // Mark the transaction as pre-auth, if necessary
+    if request.preauth {
+      transactionToCreate.type = "pre_auth"
+      transactionToCreate.preAuth = true
+      transactionToCreate.isCaptured = 0
+      transactionToCreate.isVoidable = true
     }
 
     transactionRepository.create(model: transactionToCreate, completion: completion, error: failure)
