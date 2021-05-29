@@ -34,8 +34,19 @@ internal class Networking {
 
     let session = URLSession(configuration: .default)
 
-    session.dataTask(with: request as URLRequest) { (data, _, _) in
-      completion(data != nil, data)
+    session.dataTask(with: request as URLRequest) { (data, urlResponse, nil) in
+      if let response = urlResponse as? HTTPURLResponse {
+        switch response.statusCode {
+        case 0..<300:
+          completion(true, data)
+        case 300..<500:
+          completion(false, data)
+        default:
+          completion(data != nil, data)
+        }
+      } else {
+        completion(data != nil, data)
+      }
     }.resume()
   }
 
