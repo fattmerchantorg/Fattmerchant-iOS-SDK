@@ -83,6 +83,63 @@ class OmniApi {
   var environment: Environment = .DEV
   var apiKey: String?
 
+  func captureTransaction(id: String, captureAmount: Amount? = nil, completion: @escaping (Transaction) -> Void, failure: @escaping (String?) -> Void) {
+    guard let baseUrl = environment.baseUrl() else {
+      failure("Base url not found")
+      return
+    }
+
+    var body: Data?
+
+    if let amount = captureAmount, let data = try? JSONEncoder().encode( ["total": amount.dollars()] ) {
+      body = data
+    }
+
+    log("------ HTTP REQUEST ------")
+    let client = Networking(baseUrl)
+    client.apiKey = apiKey
+
+    let request = client.urlRequest(path: "/transaction/\(id)/capture", body: body)
+
+    log("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
+
+    if let body = body, let bodyString = String(data: body, encoding: .utf8) {
+      log("REQUEST BODY:")
+      log(bodyString)
+      log("")
+    }
+
+    client.dataTask(request: request, method: "POST") { (success, obj) in
+
+      if let data = obj as? Data {
+        if let dataString = String(data: data, encoding: .utf8) {
+          self.log("RESPONSE:")
+          self.log(dataString)
+          self.log("")
+        }
+
+        do {
+          let jsonDecoder = JSONDecoder()
+          jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+          let authTransaction = try jsonDecoder.decode(Transaction.self, from: data)
+
+          if success {
+            completion(authTransaction)
+          } else {
+            if let latestCaptureTransaction = authTransaction.childCaptures?.first {
+              failure(latestCaptureTransaction.message)
+            } else {
+              failure(nil)
+            }
+          }
+
+        } catch {
+          failure(nil)
+        }
+      }
+    }
+  }
+
   func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (OmniException) -> Void) where T: Codable {
     guard let baseUrl = environment.baseUrl() else {
       failure(OmniNetworkingException.baseUrlNotFound)

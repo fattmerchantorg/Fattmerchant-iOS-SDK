@@ -320,6 +320,12 @@ public class Omni: NSObject {
     job.start(completion: completion, error: error)
   }
 
+  /// Voids a transaction
+  ///
+  /// - Parameters:
+  ///   - transactionId: The id of the transaction you want to void
+  ///   - completion: Called when the operation is complete successfully. Receives a Transaction
+  ///   - error: Receives any errors that happened while attempting the operation
   public func voidTransaction(transactionId: String,
                               completion: @escaping (Transaction) -> Void,
                               error: @escaping (OmniException) -> Void) {

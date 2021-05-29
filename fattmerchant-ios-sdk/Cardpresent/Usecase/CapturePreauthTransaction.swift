@@ -11,7 +11,18 @@ import Foundation
 enum CapturePreauthTransactionException: OmniException {
   static var mess: String = "Could not capture funds"
 
-  case errorCapturing
+  case errorCapturing(detail: String?)
+  case captureAmountExceedsAuth(detail: String)
+
+  var detail: String? {
+    switch self {
+    case .errorCapturing(let d):
+      return d ?? "Unknown error"
+
+    case .captureAmountExceedsAuth(let d):
+      return d
+    }
+  }
 }
 
 class CapturePreauthTransaction {
@@ -33,17 +44,19 @@ class CapturePreauthTransaction {
     // be hitting this code for anything except NMI. With that assumption, we can get away with asking the Stax API
     // to perform the capture for us
 
-    var body: Data?
+    self.omniApi.captureTransaction(id: transactionId, captureAmount: captureAmount, completion: completion) { (errorString) in
+      error(self.exception(from: errorString))
+    }
+  }
 
-    if let amount = captureAmount, let data = try? JSONEncoder().encode( ["total": amount.dollars()] ) {
-      body = data
+  func exception(from errorString: String?) -> CapturePreauthTransactionException {
+    guard let error = errorString else { return .errorCapturing(detail: errorString) }
+
+    if error.contains("exceeds the authorization amount") {
+      return .captureAmountExceedsAuth(detail: error)
     }
 
-    self.omniApi.request(method: "POST",
-                         urlString: "/transaction/\(transactionId)/capture",
-                         body: body,
-                         completion: completion,
-                         failure: error)
+    return .errorCapturing(detail: error)
   }
 
 }
