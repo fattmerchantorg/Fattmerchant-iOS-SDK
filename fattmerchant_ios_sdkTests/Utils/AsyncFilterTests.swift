@@ -79,7 +79,7 @@ class AsyncFilterTests: XCTestCase {
   /// Emulates an async operation
   fileprivate func asyncIsNotEmpty(string: String, completion: @escaping (Bool) -> Void) {
     DispatchQueue.global(qos: .background).async {
-      usleep(2000 * UInt32.random(in: 1..<100)) // sleep for some amount of time, less than one second
+      usleep(1000 * UInt32.random(in: 1..<100)) // sleep for some amount of time, less than one second
       completion(!string.isEmpty)
     }
   }
