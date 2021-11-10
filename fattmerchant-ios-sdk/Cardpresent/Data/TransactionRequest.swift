@@ -60,6 +60,12 @@ public struct TransactionRequest {
   /// A memo for the transaction
   public var memo: String?
 
+  /// The shipping applied to the transaction
+  public var shippingAmount: Double?
+
+  /// The purchase order number for the transaction
+  public var poNumber: String?
+
   /// A reference for the transaction
   public var reference: String?
 
