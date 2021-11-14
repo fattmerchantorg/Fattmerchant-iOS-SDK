@@ -303,4 +303,28 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     wait(for: [expectation], timeout: 3.0)
   }
 
+  func testInvoiceMetaCreationContainsProperFields() {
+    // Setup the transaction request that has all of the important data
+    var transactionRequest = TransactionRequest(amount: Amount(cents: 1))
+    transactionRequest.subtotal = 0.01
+    transactionRequest.tax = 2
+    transactionRequest.tip = 0
+    transactionRequest.memo = "This transaction is so great!"
+    transactionRequest.reference = "1478"
+    transactionRequest.poNumber = "988"
+    transactionRequest.shippingAmount = 33.43
+
+    // Create the meta
+    let meta = TakeMobileReaderPayment.createInvoiceMeta(from: transactionRequest)!
+
+    // Verify fields
+    XCTAssertEqual(meta["memo"], transactionRequest.memo)
+    XCTAssertEqual(meta["reference"], transactionRequest.reference)
+    XCTAssertEqual(meta["poNumber"], transactionRequest.poNumber)
+    XCTAssertEqual(meta["shippingAmount"], transactionRequest.shippingAmount)
+    XCTAssertEqual(meta["tip"], transactionRequest.tip)
+    XCTAssertEqual(meta["subtotal"], transactionRequest.subtotal)
+    XCTAssertEqual(meta["tax"], transactionRequest.tax)
+  }
+
 }

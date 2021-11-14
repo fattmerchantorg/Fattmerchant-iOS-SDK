@@ -307,33 +307,44 @@ class TakeMobileReaderPayment {
     return dict.jsonValue()
   }
 
-  fileprivate func createInvoiceMeta() -> JSONValue? {
+  /// Creates the json meta for the invoice as modeled in the given transaction request
+  /// - Parameter request: a TransactionRequest
+  /// - Returns: an instance of JSONValue; the meta in json form
+  internal static func createInvoiceMeta(from request: TransactionRequest) -> JSONValue? {
     var dict = [String: JSONValue?]()
 
-    if let subtotal = self.request.subtotal {
+    if let subtotal = request.subtotal {
       dict["subtotal"] = JSONValue(subtotal)
     } else {
       // If the user does not specify a subtotal, we a
       dict["subtotal"] = JSONValue(request.amount.dollars())
     }
 
-    if let tax = self.request.tax {
+    if let tax = request.tax {
       dict["tax"] = JSONValue(tax)
     }
 
-    if let memo = self.request.memo {
+    if let memo = request.memo {
       dict["memo"] = JSONValue(memo)
     }
 
-    if let reference = self.request.reference {
+    if let reference = request.reference {
       dict["reference"] = JSONValue(reference)
     }
 
-    if let tip = self.request.tip {
+    if let tip = request.tip {
       dict["tip"] = JSONValue(tip)
     }
 
-    if let lineItems = self.request.lineItems {
+    if let shippingAmount = request.shippingAmount {
+      dict["shippingAmount"] = JSONValue(shippingAmount)
+    }
+
+    if let poNumber = request.poNumber {
+      dict["poNumber"] = JSONValue(poNumber)
+    }
+
+    if let lineItems = request.lineItems {
       dict["lineItems"] = JSONValue(lineItems)
     }
 
@@ -465,7 +476,7 @@ class TakeMobileReaderPayment {
       invoiceToCreate.total = request.amount.dollars()
       invoiceToCreate.url = "https://fattpay.com/#/bill"
 
-      guard let invoiceMetaJson = createInvoiceMeta() else {
+      guard let invoiceMetaJson = Self.createInvoiceMeta(from: request) else {
         failure(Exception.couldNotCreateInvoice(detail: "Error generating json for meta"))
         return
       }
