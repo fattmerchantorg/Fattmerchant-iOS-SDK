@@ -33,6 +33,7 @@ extern CCParameterValue const CCValuePerformingTmsUpdate; /**< @memberof CCParam
 extern CCParameterValue const CCValueCheckingPinPadConfig; /**< @memberof CCParameters Parameter value indicating that {@link ChipDnaMobile#connectAndConfigure:} is checking the configuration on the PIN pad. */
 extern CCParameterValue const CCValueUpdatingPinPadConfig; /**< @memberof CCParameters Parameter value indicating that {@link ChipDnaMobile#connectAndConfigure:} is updating the configuration on the PIN pad. */
 extern CCParameterValue const CCValueUpdatingPinPadFirmware; /** @memberof CCParameters Parameter value indicating that {@link ChipDnaMobile#connectAndConfigure:} is updating the firmware on the PIN pad. */
+extern CCParameterValue const CCValueUpdatingPinPadFirmwareConfig;/** @memberof CCParameters Parameter value indicating that {@link ChipDnaMobile#connectAndConfigure:} is updating the firmware config on the PIN pad. */
 extern CCParameterValue const CCValueVerifyingPinPad; /**< @memberof CCParameters Parameter value indicating that {@link ChipDnaMobile#connectAndConfigure:} is verifying the PIN pad. */
 extern CCParameterValue const CCValueRebootingPinPad; /**< @memberof CCParameters Parameter value indicating that {@link ChipDnaMobile#connectAndConfigure:} is rebooting the PIN pad. */
 extern CCParameterValue const CCValueUpdatingSecurityConfig; /**< @memberof CCParameters Parameter value indicating that {@link ChipDnaMobile#connectAndConfigure:} is updating security configuration on the PIN pad. */
@@ -59,6 +60,8 @@ extern CCParameterValue const CCValueUncommitted; /**< @memberof CCParameters Pa
 extern CCParameterValue const CCValueVoided; /**< @memeberof CCParameters Parameter value returned when the state of a transaction is void. */
 extern CCParameterValue const CCValueUncommittedVoid; /**< @memberof CCParameters Parameter value returned when the state of a transaction is uncommitted void. */
 extern CCParameterValue const CCValuePartiallyCommitted; /** @memberof CCParameter Parameter value returned when the state of a transaction is partially committed. */
+
+extern CCParameterValue const CCValueDelayed; /** @memberof CCParameter Parameter value returned when the state of a transaction is delayed.*/
 
 extern CCParameterValue const CCValueOfflineFailed; /**< @memeberof CCParameters Parameter value to indicate that there is an offline request which has failed to send. */
 extern CCParameterValue const CCValueOfflinePending; /**< @memeberof CCParameters Parameter value to indicate that there is an offline request pending for the transaction. */
@@ -265,6 +268,9 @@ extern CCParameterKey const CCParamAutoConfirm; /**< @memberof CCParameter Param
 extern CCParameterKey const CCParamMerchantData; /**< @memberof CCParameter Parameter key for the merchant data.*/
 extern CCParameterKey const CCParamMerchantDisplayName; /**< @memberof CCParameter Parameter key for configured merchant display name. The default name displayed on the PIN pad when it is idle. */
 extern CCParameterKey const CCParamMerchantName; /**< @memberof CCParameter Parameter key for the merchant name*/
+
+extern CCParameterKey const CCParamDelayOnlineProcessing;
+extern CCParameterKey const CCParamEncodedRequest;
 
 extern CCParameterKey const CCParamBLEScanTime; /**< @memberof CCParameter Parameter key for configuring the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not passed into {@link availablePinPadsRequest} and {@link connectAndConfigure}.*/
 /**

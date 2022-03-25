@@ -66,6 +66,11 @@ typedef NS_ENUM(NSUInteger, DeviceStatusEnum) {
 @property (nonatomic, strong, readonly)NSString *serialNumber;
 
 /**
+* Revision of currently connected PIN pad.
+*/
+@property (nonatomic, strong, readonly)NSString *pinPadRevision;
+
+/**
  * Convert string constant into {@link DeviseStatus#DeviceStatusEnum DeviceStatusEnum}.
  */
 +(DeviceStatusEnum)getDeviceStatusEnum:(NSString *)deviceStatusStr;

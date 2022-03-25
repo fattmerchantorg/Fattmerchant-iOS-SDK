@@ -134,7 +134,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
     // Set the connection type to BT
     let params = CCParameters()
-    params[CCParamPinPadConnectionType] = CCValueBluetooth
+    params[CCParamPinPadConnectionType] = CCValueBLE
     params[CCParamBLEScanTime] = "5"
 
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
