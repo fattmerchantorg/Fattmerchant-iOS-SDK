@@ -3,9 +3,9 @@
  *The ChipDNA Mobile API contains the classes necessary to process Card Present sale and refund transactions on a mobile platform. Processing Card Present transactions requires one of the following PIN pads:
  *
  * <ul>
- * <li>BBPOS Chipper CHB20 or CHB22
+ * <li>BBPOS Chipper CHB20, CHB22 or CHB29
  * <li>Datecs Bluepad50 Contact or Contactless</li>
- * <li>Miura M007, M010 or M020</li>
+ * <li>Miura M010 or M020</li>
  * </ul>
  *
  * The ChipDNA Mobile API uses an encrypted database and needs to be initialised with a password before the API functionality can be used. {@link ChipDnaMobile#initialize: initialize} method is used to start the initialisation process. Once initialized an instance of the {@link ChipDnaMobile} class obtained using the static {@link ChipDnaMobile#sharedInstance sharedInstance} method.
@@ -109,9 +109,9 @@ extern NSString * const CCInitialisationException;
  *
  * Only the following PIN pads are supported:
  * <ul>
- * <li>BBPOS Chipper CHB20 or CHB22
+ * <li>BBPOS Chipper CHB20, CHB22 or CHB29
  * <li>Datecs Bluepad50 Contact or Contactless</li>
- * <li>Miura M007, M010 or M020</li>
+ * <li>Miura M010 or M020</li>
  * </ul>
  *
  * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not available. </p>
@@ -260,7 +260,7 @@ extern NSString * const CCInitialisationException;
 -(CCParameters *)startTransaction:(CCParameters *)request;
 
 /**
- * Display text on the PIN pad for a given amount of time at which point the PIN pad will return to idle. Currently only supported by the Miura M010 and M007
+ * Display text on the PIN pad for a given amount of time at which point the PIN pad will return to idle. Currently only supported by the Miura M010
  * 
  * @param request A parameter list which can contain:
  * <p>{@link CCParameters#CCParamIdleMessage CCParamIdleMessage} Message to be displayed by PIN pad. </p>
@@ -428,6 +428,7 @@ extern NSString * const CCInitialisationException;
  * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} The 3-char currency code used during the transaction. </p>
  * <p>{@link CCParameters#CCParamMaskedPan CCParamMaskedPan} The masked primary account number of the original sale transaction, showing only the first 6 (if available) and last 4 digits.</p>
  * <p>{@link CCParameters#CCParamDateTimeFormat CCParamDateTimeFormat} The format of the date and time in {@link CCParameters#CCParamTransactionDateTime CCParamTransactionDateTime} parameter.</p>
+ * <p>{@link CCParameters#CCParamPaymentMethod} When performing a Cash or Cheque Linked Refund, the payment method of {@link CCParameters#CCValueCash} or {@link CCParameters#CCValueCheque} will need to be provided, Card will be used by default</p>
  * <p>{@link CCParameters#CCParamCardSchemeId CCParamCardSchemeId} The {@link CCParameters#CCParamCardSchemeId} of the original sale transaction.</p>
  * <p>{@link CCParameters#CCParamCardEaseReference CCParamCardEaseReference} The CardEase reference for the original sale transaction - a unique GUID generated for a transaction if the authorization was submitted online to the Creditcall payment platform.. </p>
  * <p>{@link CCParameters#CCParamAuthCode CCParamAuthCode} The alpha numeric authorization code, up to 12 characters.</p>
@@ -689,6 +690,7 @@ extern NSString * const CCInitialisationException;
  *
  * Observer are returned a {@link CCParameters} collection which will contain:
  * <p>{@link CCParameters#CCParamSignatureData CCParamSigantureData} The signature data of receipt after resize and validation. Returned as a base 64 encoded string.
+ * <p>{@link CCParameters#CCParamReceiptData} data to create signature receipt.  An array of {@ReceiptField} objects serialized in an XML format. Can be deserialized into an object using {@link ChipDnaMobileSerializer#deserializeReceiptData:}.
  *
  * @param target Target wishing to know when signature verification is required.
  * @param action Action to be called on the observing target.
@@ -849,6 +851,9 @@ extern NSString * const CCInitialisationException;
 
 /**
  * Add an observer and action to get the event for signature capture. Set observer before calling method {@link ChipDnaMobile#startTransaction}.
+ *
+ * Observers are returned a {@link CCParameters} collection which will contain:
+ * <p>{@link CCParameters#CCParamReceiptData} data to create signature receipt.  An array of {@ReceiptField} objects serialized in an XML format. Can be deserialized into an object using {@link ChipDnaMobileSerializer#deserializeReceiptData:}.
  *
  * When updates are no longer required by the observer a call should be made to {@link ChipDnaMobile#removeSignatureCaptureTarget:}.
  *
