@@ -1,0 +1,22 @@
+name: Test iOS SDK
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+      - release/**
+jobs:
+  build:
+    name: Build and Test default scheme using iPhone/iPad simulator
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: testing ... iPhone 8
+        run: >-
+          xcodebuild test -workspace fattmerchant-ios-sdk.xcworkspace -scheme FattmerchantTests -destination 'platform=iOS Simulator,name=iPhone 8,OS=12.4'
+      - name: testing ... iPad Pro 12.9
+        run: >-
+          xcodebuild test -workspace fattmerchant-ios-sdk.xcworkspace -scheme FattmerchantTests -destination 'platform=iOS Simulator,OS=15.4,name=iPad Pro (12.9-inch) (5th generation)'
