@@ -38,6 +38,17 @@ public struct Amount {
   /// amount.cents // => 498
   /// ```
   public init(dollars: Double) {
+    // Use Decimal to get the exact product of dollars and 100
+    let centsDecimal = Decimal(dollars) * Decimal(100.0)
+
+    // Turn it to a string and take everything before the decimal place.
+    // This is a safe way to turn a Decimal into an Int
+    if let centsString = centsDecimal.description.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: true).first,
+        let centsInt = Int(centsString) {
+      self.cents = centsInt
+      return
+    }
+
     self.cents = Int(dollars * 100.0)
   }
 
