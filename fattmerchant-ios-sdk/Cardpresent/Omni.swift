@@ -36,7 +36,7 @@ public enum OmniInitializeException: OmniException {
     case .missingInitializationDetails:
       return "Missing initialization details"
 
-    case .mobileReaderPaymentsNotConfigured:
+    default:
       return "Your account is not configured to accept mobile reader payments"
     }
   }
