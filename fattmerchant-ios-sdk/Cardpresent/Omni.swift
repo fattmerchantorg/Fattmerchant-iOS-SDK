@@ -29,6 +29,7 @@ public enum OmniInitializeException: OmniException {
   case missingInitializationDetails
   case mobileReaderPaymentsNotConfigured
   case missingMobileReaderCredentials
+  case invalidMobileReaderCredentials
 
   public static var mess: String = "Omni Initialization Exception"
 
@@ -40,6 +41,8 @@ public enum OmniInitializeException: OmniException {
         return "Your account is not configured to accept mobile reader payments"
       case .missingMobileReaderCredentials:
         return "Your account does not have mobile reader credentials"
+      case .invalidMobileReaderCredentials:
+        return "Your account has invalid mobile reader credentials"
     }
   }
 }
@@ -198,7 +201,7 @@ public class Omni: NSObject {
           self.preferredQueue.async(execute: completion)
         }, failure: { _ in
           self.initialized = true
-          self.preferredQueue.async(execute: completion)
+          error(OmniInitializeException.invalidMobileReaderCredentials)
         })
       }, failure: { _ in
 
@@ -215,7 +218,7 @@ public class Omni: NSObject {
           self.preferredQueue.async(execute: completion)
         }, failure: { _ in
           self.initialized = true
-          self.preferredQueue.async(execute: completion)
+          error(OmniInitializeException.invalidMobileReaderCredentials)
         })
       })
     }, failure: error)
@@ -300,16 +303,7 @@ public class Omni: NSObject {
     guard initialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
-    var args: [String: Any] = [:]
-    self.omniApi.getMobileReaderSettings(completion: { mrDetails in
-      if let awcDetails = mrDetails.anywhereCommerce {
-        args.updateValue(awcDetails, forKey: "awc")
-      }
-      if let nmiDetails = mrDetails.nmi {
-        args.updateValue(nmiDetails, forKey: "nmi")
-      }},failure: { _ in error(OmniGeneralException.noReaders)}
-    )
+
     let job: TakeMobileReaderPayment = TakeMobileReaderPayment(
       mobileReaderDriverRepository: mobileReaderDriverRepository,
       invoiceRepository: invoiceRepository,
