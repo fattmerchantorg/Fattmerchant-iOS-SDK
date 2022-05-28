@@ -263,18 +263,19 @@ class OmniTest: XCTestCase {
     let mockApi = omni.omniApi as! MockOmniApi
 
     // Make the omni api NOT return the mobile reader settings.
-    // This will still make the http call succeed, but it will not provide the necessary info to initialize
+    // This will still make the http call succeed & initialize the API, but it will not provide the necessary info to init mobile readers
     let mobileReaderDetails = MobileReaderDetails()
     mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
 
     let errorThrown = expectation(description: "Omni throws error")
-    let expectedError = OmniInitializeException.mobileReaderPaymentsNotConfigured
+    let expectedError = OmniInitializeException.missingMobileReaderCredentials
 
     omni.initialize(
       params: Omni.InitParams(appId: "123", apiKey: "123"),
       completion: {
         XCTFail()
     }) { (error) in
+      XCTAssertEqual(self.omni.isInitialized, true)
       XCTAssertEqual(error as! OmniInitializeException, expectedError)
       XCTAssertNotNil(error.detail)
       errorThrown.fulfill()

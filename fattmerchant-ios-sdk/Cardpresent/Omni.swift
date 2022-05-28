@@ -28,6 +28,7 @@ enum OmniNetworkingException: OmniException {
 public enum OmniInitializeException: OmniException {
   case missingInitializationDetails
   case mobileReaderPaymentsNotConfigured
+  case missingMobileReaderCredentials
   
   public static var mess: String = "Omni Initialization Exception"
   
@@ -35,9 +36,10 @@ public enum OmniInitializeException: OmniException {
     switch self {
       case .missingInitializationDetails:
         return "Missing initialization details"
-        
-      default:
+      case .mobileReaderPaymentsNotConfigured:
         return "Your account is not configured to accept mobile reader payments"
+      case .missingMobileReaderCredentials:
+        return "Your account does not have mobile reader credentials"
     }
   }
 }
@@ -187,6 +189,13 @@ public class Omni: NSObject {
         if let nmiDetails = mrDetails.nmi {
           args.updateValue(nmiDetails, forKey: "nmi")
         }
+        if args["awc"] == nil && args["nmi"] == nil {
+          self.preferredQueue.async {
+            self.initialized = true
+            error(OmniInitializeException.missingMobileReaderCredentials)
+          }
+          return
+        }
         InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
           self.initialized = true
           self.preferredQueue.async(execute: completion)
@@ -195,6 +204,15 @@ public class Omni: NSObject {
           self.preferredQueue.async(execute: completion)
         })
       }, failure: { _ in
+        
+        // If the call to merchant gateways fails, try to init with the merchant options anyways
+        if args["awc"] == nil && args["nmi"] == nil {
+          self.preferredQueue.async {
+            self.initialized = true
+            error(OmniInitializeException.missingMobileReaderCredentials)
+          }
+          return
+        }
         InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
           self.initialized = true
           self.preferredQueue.async(execute: completion)

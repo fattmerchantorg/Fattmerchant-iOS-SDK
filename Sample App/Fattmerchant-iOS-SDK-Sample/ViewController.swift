@@ -58,7 +58,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.cancelTransaction()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOnRydWUsImJyYW5kIjoiZmF0dG1lcmNoYW50Iiwic3ViIjoiMzBjNmVlYjYtNjRiNi00N2Y2LWJjZjYtNzg3YTljNTg3OThiIiwiaXNzIjoiaHR0cDovL2FwaWRldjAxLmZhdHRsYWJzLmNvbS9hdXRoZW50aWNhdGUiLCJpYXQiOjE2MjE1Njc0OTgsImV4cCI6MTYyMTY1Mzg5OCwibmJmIjoxNjIxNTY3NDk4LCJqdGkiOiIxeUI4Yzg1NjBNMWdnbTJUIn0.Qde-E0IU91ZW0uoQuMEg4uiD7Kko9LzPcD0cuDVBya0"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImViNDhlZjk5LWFhNzgtNDk2ZS05YjAxLTQyMWY4ZGFmNzMyMyIsImdvZFVzZXIiOmZhbHNlLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsInN1YiI6IjIxODNhODQ1LWMxMjAtNGZkYi04Mzc4LThlZjBkYzhhYjkzYSIsImlzcyI6Imh0dHA6Ly9hcGlkZXYuZmF0dGxhYnMuY29tL2F1dGhlbnRpY2F0ZSIsImlhdCI6MTY1Mzc0NTY3NSwiZXhwIjoxNjUzODMyMDc1LCJuYmYiOjE2NTM3NDU2NzUsImp0aSI6IlMwWXNZOVJSSzYxbVI5cmQifQ.I1bqJ2zW4CgN5au11Cthtczp884C__2bbWwPxEqLWlA"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -85,6 +85,10 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       self.initializeButton.isHidden = true
       self.log("Initialized")
     }, error: { (error) in
+      if let initialized = self.omni?.isInitialized, initialized {
+        self.initializeButton.isHidden = true
+        self.log("Initialized")
+      }
       self.log(error)
     })
 
