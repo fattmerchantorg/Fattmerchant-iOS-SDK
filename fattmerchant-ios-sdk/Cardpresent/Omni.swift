@@ -29,9 +29,9 @@ public enum OmniInitializeException: OmniException {
   case missingInitializationDetails
   case mobileReaderPaymentsNotConfigured
   case missingMobileReaderCredentials
-  
+
   public static var mess: String = "Omni Initialization Exception"
-  
+
   public var detail: String? {
     switch self {
       case .missingInitializationDetails:
@@ -46,15 +46,12 @@ public enum OmniInitializeException: OmniException {
 
 public enum OmniGeneralException: OmniException {
   case uninitialized
-  case noReaders
   public static var mess: String = "Omni General Error"
   
   public var detail: String? {
     switch self {
       case .uninitialized:
         return "Omni has not been initialized yet"
-      case .noReaders:
-        return "No mobile reader payments for your account"
     }
   }
 }
@@ -204,7 +201,7 @@ public class Omni: NSObject {
           self.preferredQueue.async(execute: completion)
         })
       }, failure: { _ in
-        
+
         // If the call to merchant gateways fails, try to init with the merchant options anyways
         if args["awc"] == nil && args["nmi"] == nil {
           self.preferredQueue.async {
