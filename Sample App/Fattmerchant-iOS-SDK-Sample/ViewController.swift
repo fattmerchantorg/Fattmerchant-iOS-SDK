@@ -27,7 +27,25 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   @IBAction func onConnectReaderButtonPress(_ sender: UIButton) {
+    #if targetEnvironment(simulator)
+    let alertController = UIAlertController(title: "Number of readers wanted", message: "", preferredStyle: UIAlertController.Style.alert)
+    alertController.addTextField { (textField : UITextField!) -> Void in
+      textField.placeholder = "Enter number of readers needed"
+    }
+    let saveAction = UIAlertAction(title: "Save", style: UIAlertAction.Style.default, handler: { alert -> Void in
+      let firstTextField = alertController.textFields![0] as UITextField
+      let numberWanted: Int? = Int(firstTextField.text ?? "")
+      self.searchForReaders(numberOfReadersNeeded: numberWanted ?? 0)
+    })
+    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: {
+      (action : UIAlertAction!) -> Void in })
+    alertController.addAction(saveAction)
+    alertController.addAction(cancelAction)
+
+    self.present(alertController, animated: true, completion: nil)
+    #else
     self.searchForReaders()
+    #endif
   }
 
   @IBAction func onDisconnectButtonPress(_ sender: Any) {
@@ -228,7 +246,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     })
   }
 
-  fileprivate func searchForReaders() {
+  fileprivate func searchForReaders(numberOfReadersNeeded: Int? = 0) {
     log("Searching for available reader...")
     omni?.getAvailableReaders(completion: { readers in
       guard !readers.isEmpty else {
@@ -246,7 +264,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       }
     }, error: { (error) in
       self.log(error)
-    }, args: ["readersNeeded":0])
+    }, args: ["readersNeeded": numberOfReadersNeeded])
   }
 
   fileprivate func connectReader(reader: MobileReader, completion: @escaping (MobileReader) -> Void) {

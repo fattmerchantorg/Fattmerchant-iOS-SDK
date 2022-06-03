@@ -14,30 +14,6 @@ class MockDriver: MobileReaderDriver {
 
   var currentlyConnectedReader: MobileReader?
 
-  var reader: MobileReader? = MobileReader(name: "Reader",
-                            firmwareVersion: "FakeFirmwareVersion1",
-                            make: "FakeMakeR1",
-                            model: "FakeModelR1",
-                            serialNumber: "FakeSerialNumber")
-
-  var reader2: MobileReader? = MobileReader(name: "Reader 2",
-                                           firmwareVersion: "fwv2",
-                                           make: "FakeMakeR2",
-                                           model: "FakeModelR2",
-                                           serialNumber: "TJCJX23UWLE9Y69J")
-
-  var reader3: MobileReader? = MobileReader(name: "Reader 3",
-                                           firmwareVersion: "fwv3",
-                                           make: "FakeMakeR3",
-                                           model: "FakeModelR3",
-                                           serialNumber: "GDES4RB9K4QPGWWW")
-
-  var reader4: MobileReader? = MobileReader(name: "Reader 4",
-                                           firmwareVersion: "fwv4",
-                                           make: "FakeMakeR4",
-                                           model: "FakeModelR4",
-                                           serialNumber: "7ZP3Y2JM5G227U9E")
-
   /// Set this to false to simulate a busy mobile reader
   var readyToTakePayment = true
 
@@ -70,17 +46,20 @@ class MockDriver: MobileReaderDriver {
 
   func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
     // We have multiple cases for readers either 0, 1, many
-    let listOfReaders: [MobileReader] = [reader!, reader2!, reader3!, reader4!]
+    var listOfReaders: [MobileReader] = []
     guard let readersNeeded = args["readersNeeded"] as? Int else {
-      return completion([listOfReaders.first!])
-    }
-    if readersNeeded <= 0 {
-      return completion([])
-    } else if readersNeeded == 1 {
-      return completion([listOfReaders.first!])
-    } else {
       return completion(listOfReaders)
     }
+    // Auto generate mobile readers with any wanted number given
+    for i in 0..<readersNeeded {
+      let mockReader = MobileReader(name: "Reader\(i+1)",
+                                    firmwareVersion: "FakeFirmwareVersion\(i+1)",
+                                    make: "FakeMakeR\(i+1)",
+                                    model: "FakeModelR\(i+1)",
+                                    serialNumber: "FakeSerialNumber\(i+1)")
+      listOfReaders.append(mockReader)
+    }
+    completion(listOfReaders)
   }
 
   func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
