@@ -58,7 +58,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.cancelTransaction()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImU3MTJhZThlLTIwOWUtNGNkYi05MDMwLTc1NWU2OWFmMTI0NiIsImdvZFVzZXIiOmZhbHNlLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsInN1YiI6IjIxODNhODQ1LWMxMjAtNGZkYi04Mzc4LThlZjBkYzhhYjkzYSIsImlzcyI6Imh0dHA6Ly9hcGlkZXYuZmF0dGxhYnMuY29tL2F1dGhlbnRpY2F0ZSIsImlhdCI6MTY1Mzc0NzM1NCwiZXhwIjoxNjUzODMzNzU0LCJuYmYiOjE2NTM3NDczNTQsImp0aSI6IjdVYTNBckhlN0t3TlI3NnAifQ.ev5kFgpup49bv10mjGGCX6aSkGKjHXEQJw5QFwA6Q1A"
+  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6IjQ2NTQ0MTg5LWZmNTItNGQ1Zi05NTMyLTU0ZDA2MmM4Mzk5OCIsImdvZFVzZXIiOmZhbHNlLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsInN1YiI6IjIxODNhODQ1LWMxMjAtNGZkYi04Mzc4LThlZjBkYzhhYjkzYSIsImlzcyI6Imh0dHA6Ly9hcGlkZXYuZmF0dGxhYnMuY29tL2F1dGhlbnRpY2F0ZSIsImlhdCI6MTY1NDI1MzAwNywiZXhwIjoxNjU0MzM5NDA3LCJuYmYiOjE2NTQyNTMwMDcsImp0aSI6ImE2VDM2TEZSUURNT0hzRTUifQ.qgPu-gG_bqj6r3mrPCUCkFimfvXjYfg0pRaHlSXoq9o"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -246,7 +246,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       }
     }, error: { (error) in
       self.log(error)
-    })
+    }, args: ["readersNeeded":0])
   }
 
   fileprivate func connectReader(reader: MobileReader, completion: @escaping (MobileReader) -> Void) {

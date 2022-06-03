@@ -403,12 +403,12 @@ public class Omni: NSObject {
   /// - Parameters:
   ///   - completion: Receives an array of MobileReaders that are available
   ///   - error: Receives any errors that happened while attempting the operation
-  public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void) {
+  public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void, args: [String: Any]? = nil) {
     guard initialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
-    SearchForReaders(mobileReaderDriverRepository: mobileReaderDriverRepository, args: [:]).start(completion: { (readers) in
+    SearchForReaders(mobileReaderDriverRepository: mobileReaderDriverRepository, args: args ?? [:]).start(completion: { (readers) in
       self.preferredQueue.async { completion(readers) }
     }, failure: ({ exception in
       self.preferredQueue.async { error(exception) }
