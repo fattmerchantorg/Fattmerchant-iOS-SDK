@@ -189,7 +189,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       let text = totalTextInput.text ?? totalTextInput.placeholder,
       let number = numberFormatter().number(from: text)
       else {
-        return Amount(cents: 1)
+        return Amount(cents: 2)
     }
 
     return Amount(dollars: number.doubleValue)
