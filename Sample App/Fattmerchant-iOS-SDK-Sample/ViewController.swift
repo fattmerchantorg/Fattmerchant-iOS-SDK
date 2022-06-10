@@ -135,7 +135,15 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     var req = createTransactionRequest()
     req.preauth = preauth
     omni?.takeMobileReaderTransaction(request: req, completion: { transaction in
-      self.log("Finished transaction successfully")
+      guard let isSuccess = transaction.success else {
+        self.log("Transaction failed")
+        return
+      }
+      if isSuccess {
+        self.log("Finished transaction successfully")
+      } else {
+        self.log(transaction.message ?? "")
+      }
 
       if preauth {
         self.lastPreauthTransaction = transaction

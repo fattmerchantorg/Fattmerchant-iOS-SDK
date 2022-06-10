@@ -327,4 +327,34 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     XCTAssertEqual(meta["tax"], transactionRequest.tax)
   }
 
+  func testTransactionRequestWithInsufficientAmountFails() {
+    let fakeBankAccount = BankAccount(personName: "fakePerson", bankType: "fakeType", bankHolderType: .personal, bankAccount: "fakeBank", bankRouting: "fakeRoute", addressZip: "fakeAddress")
+    let transactionRequest = TransactionRequest(amount: Amount(dollars: 1000.0), bankAccount: fakeBankAccount)
+    let job = TakeMobileReaderPayment(
+      mobileReaderDriverRepository: mobileReaderDriverRepo,
+      invoiceRepository: invoiceRepo,
+      customerRepository: customerRepo,
+      paymentMethodRepository: paymentMethodRepo,
+      transactionRepository: transactionRepo,
+      request: transactionRequest,
+      signatureProvider: nil,
+      transactionUpdateDelegate: nil,
+      userNotificationDelegate: nil
+    )
+
+    let expectedError = XCTestError(description: "Insufficient funds")
+
+    job.start(completion: { _ in
+      XCTFail("Transaction didn't fail")
+    }) { error in
+      XCTAssertEqual(error.message, expectedError.message)
+      if expectedError.message = error.message {
+        expectedError.fulfill()
+      } else {
+        XCTFail("Wrong error thrown")
+      }
+    }
+
+    wait(for: [expectedError], timeout: 10.0)
+  }
 }

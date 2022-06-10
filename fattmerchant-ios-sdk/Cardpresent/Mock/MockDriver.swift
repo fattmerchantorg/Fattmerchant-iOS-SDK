@@ -95,9 +95,11 @@ class MockDriver: MobileReaderDriver {
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
+    let isInsufficient = request.bankAccount?.bankName == "fakeBank" && request.amount.dollars() == 1000.0
+    let isDeclined = request.bankAccount?.bankRouting == "fakeRoute"
     var transactionResult = TransactionResult()
     transactionResult.request = request
-    transactionResult.success = true
+    transactionResult.success = isDeclined ? false : isInsufficient ? false : true
     transactionResult.maskedPan = "411111111234"
     transactionResult.cardHolderFirstName = "William"
     transactionResult.cardHolderLastName = "Holder"
@@ -106,6 +108,7 @@ class MockDriver: MobileReaderDriver {
     transactionResult.amount = request.amount
     transactionResult.cardType = "visa"
     transactionResult.userReference = "cdm-123123"
+    transactionResult.message = isDeclined ? "Transaction declined" : isInsufficient ? "Insufficient funds" : nil
 
     completion(transactionResult)
   }
