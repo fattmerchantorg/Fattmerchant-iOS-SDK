@@ -17,7 +17,7 @@ class OmniTest: XCTestCase {
 
   override func setUp() {
     // Mark Omni as initialized so we don't have to run through the initialization. There is a test for the initialization
-    omni.initialized = true
+    omni.mobileReaderDriversInitialized = true
 
     // Give omni the mock api
     omni.omniApi = omniApi
@@ -116,7 +116,7 @@ class OmniTest: XCTestCase {
   }
 
   func testCantGetConnectedMobileReaderIfUninitialized() {
-    omni.initialized = false
+    omni.mobileReaderDriversInitialized = false
     let errorThrown = XCTestExpectation(description: "Error was thrown")
     let expectedError = OmniGeneralException.uninitialized
 
@@ -253,7 +253,7 @@ class OmniTest: XCTestCase {
     wait(for: [initialized], timeout: 3.0)
   }
 
-  func testThrowsErrorWhenMobileReaderSettingsMissing() {
+  func testShouldNotThrowErrorWhenMobileReaderSettingsMissing() {
     // Mock the self object
     let merchant = Merchant()
     merchant.id = "generated_merchant_id_123"
@@ -273,11 +273,9 @@ class OmniTest: XCTestCase {
     omni.initialize(
       params: Omni.InitParams(appId: "123", apiKey: "123"),
       completion: {
-        XCTFail()
+        errorThrown.fulfill()
     }) { (error) in
-      XCTAssertEqual(self.omni.isInitialized, true)
-      XCTAssertEqual(error as! OmniInitializeException, expectedError)
-      XCTAssertNotNil(error.detail)
+      XCTFail()
       errorThrown.fulfill()
     }
 
@@ -286,10 +284,10 @@ class OmniTest: XCTestCase {
 
   /// Tests that the isInitialized function truly reflects initialization status
   func testIsInitialized() {
-    omni.initialized = false
+    omni.mobileReaderDriversInitialized = false
     XCTAssertEqual(omni.isInitialized, false)
 
-    omni.initialized = true
+    omni.mobileReaderDriversInitialized = true
     XCTAssertEqual(omni.isInitialized, true)
   }
 
