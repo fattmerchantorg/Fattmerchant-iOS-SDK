@@ -79,7 +79,7 @@ public enum OmniGeneralException: OmniException {
  */
 public class Omni: NSObject {
   
-  internal var initialized: Bool = false
+  internal var mobileReaderDriversInitialized: Bool = false
   internal var omniApi = OmniApi()
   internal var transactionRepository: TransactionRepository!
   internal var invoiceRepository: InvoiceRepository!
@@ -135,7 +135,7 @@ public class Omni: NSObject {
   
   /// True when Omni is initialized. False otherwise
   public var isInitialized: Bool {
-    return initialized
+    return mobileReaderDriversInitialized
   }
   
   /// Used to initialize the Omni object
@@ -189,18 +189,30 @@ public class Omni: NSObject {
         if let nmiDetails = mrDetails.nmi {
           args.updateValue(nmiDetails, forKey: "nmi")
         }
+
+        // Check if there are creds for AWC or NMI
         if args["awc"] == nil && args["nmi"] == nil {
           self.preferredQueue.async {
-            self.initialized = true
-            error(OmniInitializeException.missingMobileReaderCredentials)
+            completion()
           }
           return
         }
+
+        //
+        if (args["awc"] as? AWCDetails)?.terminalId.isBlank() ?? true
+            && (args["awc"] as? AWCDetails)?.terminalSecret.isBlank() ?? true
+            && (args["nmi"] as? NMIDetails)?.securityKey.isBlank() ?? true {
+          self.preferredQueue.async {
+            completion()
+          }
+          return
+        }
+
         InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
-          self.initialized = true
+          self.mobileReaderDriversInitialized = true
           self.preferredQueue.async(execute: completion)
         }, failure: { _ in
-          self.initialized = true
+          self.mobileReaderDriversInitialized = true
           error(OmniInitializeException.invalidMobileReaderCredentials)
         })
       }, failure: { _ in
@@ -208,16 +220,16 @@ public class Omni: NSObject {
         // If the call to merchant gateways fails, try to init with the merchant options anyways
         if args["awc"] == nil && args["nmi"] == nil {
           self.preferredQueue.async {
-            self.initialized = true
+            self.mobileReaderDriversInitialized = true
             error(OmniInitializeException.missingMobileReaderCredentials)
           }
           return
         }
         InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
-          self.initialized = true
+          self.mobileReaderDriversInitialized = true
           self.preferredQueue.async(execute: completion)
         }, failure: { _ in
-          self.initialized = true
+          self.mobileReaderDriversInitialized = true
           error(OmniInitializeException.invalidMobileReaderCredentials)
         })
       })
@@ -300,7 +312,7 @@ public class Omni: NSObject {
   ///   - completion: Called when the operation is complete successfully. Receives a Transaction
   ///   - error: Receives any errors that happened while attempting the operation
   public func takeMobileReaderTransaction(request: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
 
@@ -355,7 +367,7 @@ public class Omni: NSObject {
   ///   otherwise
   ///   - error: receives any errors that happened while attempting the operation
   public func cancelMobileReaderTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
@@ -378,7 +390,7 @@ public class Omni: NSObject {
   ///   - completion: Receives the Transaction that represents the refund in Omni
   ///   - error: Receives any errors that happened while attempting the operation
   public func refundMobileReaderTransaction(transaction: Transaction, refundAmount: Amount? = nil, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
@@ -404,7 +416,7 @@ public class Omni: NSObject {
   ///   - completion: Receives an array of MobileReaders that are available
   ///   - error: Receives any errors that happened while attempting the operation
   public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
@@ -420,7 +432,7 @@ public class Omni: NSObject {
   ///   - completion: Receives the connected mobile reader, if any
   ///   - error: Receives any errors that happened while attempting the operation
   public func getConnectedReader(completion: @escaping (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
@@ -439,7 +451,7 @@ public class Omni: NSObject {
   ///   - error: A block to call if this operation fails
   @available (*, deprecated, message: "Please use the connect method that provides error handling")
   public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping () -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error()
     }
     
@@ -460,7 +472,7 @@ public class Omni: NSObject {
   ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
   ///   - error: A block to call if this operation fails. Receives an OmniException
   public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
@@ -486,7 +498,7 @@ public class Omni: NSObject {
   ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
   ///   - error: A block to call if this operation fails
   public func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
@@ -503,7 +515,7 @@ public class Omni: NSObject {
   ///   - completion: Receives a list of Transactions
   ///   - error: A block to call if this operation fails
   public func getMobileReaderTransactions(completion: @escaping ([Transaction]) -> Void, error: @escaping (OmniException) -> Void) {
-    guard initialized else {
+    guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
     
