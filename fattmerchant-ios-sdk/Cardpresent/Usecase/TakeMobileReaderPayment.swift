@@ -113,6 +113,19 @@ class TakeMobileReaderPayment {
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
+    if let customerId = self.request.customerId {
+      self.validateCustomer(withId: customerId, { error in
+        let _: (OmniException) -> Void = { exception in
+          failure(exception)
+        }
+      }, { customer in
+        if customer.id == nil || customer.firstname == "" {
+          let _: (OmniException) -> Void = { exception in
+            failure(exception)
+          }
+        }
+      })
+    }
     availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
       self.getOrCreateInvoice(failure) { (createdInvoice) in
         self.takeMobileReaderPayment(with: driver,
@@ -460,6 +473,10 @@ class TakeMobileReaderPayment {
     }
 
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
+  }
+
+  fileprivate func validateCustomer(withId: String, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
+    customerRepository.getById(id: withId, completion: completion, error: failure)
   }
 
   fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver,
