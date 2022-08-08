@@ -110,4 +110,107 @@ class TakePaymentTests: XCTestCase {
     wait(for: [exception], timeout: 10.0)
   }
 
+  func testCannotTakePaymentBecauseInvalidCustomerIdProvided() {
+    modelStore = [:]
+    var card = CreditCard.testCreditCard()
+    card.personName = "Bob Will"
+    let amount = Amount(cents: 10)
+    let transactionRequest = TransactionRequest(amount: amount, tokenize: true, customerId: "invalid_id")
+    let transaction = Transaction()
+    transaction.id = "transactionid"
+
+    // Stub out customer
+    let customer = Customer(firstName: "Bob", lastName: "Will")
+    customer.id = "invalid_id"
+
+    // Stub out payment method
+    let paymentMethod = PaymentMethod(customer: customer)
+    paymentMethod.customerId = "invalid_id"
+    paymentMethod.personName = "Bob Will"
+    paymentMethod.method = .card
+    paymentMethod.cardNumber = card.cardNumber
+    paymentMethod.cardExp = card.cardExp
+    let createPaymentMethodBody = try! omniApi.jsonEncoder().encode(paymentMethod)
+    paymentMethod.id = "payment_method_id_bob_will"
+    omniApi.stub("post", "/payment-method", body: createPaymentMethodBody, response: .success(paymentMethod))
+
+    // Stub out charge
+    let chargeRequest = ChargeRequest(paymentMethodId: "payment_method_id_bob_will", total: "0.10", meta: [
+      "subtotal": "0.10"
+    ])
+    let chargeBody = Data(chargeRequest: chargeRequest)
+    omniApi.stub("post", "/charge", body: chargeBody, response: .success(transaction))
+
+    // Perform operation
+    let paymentSuccessful = XCTestExpectation(description: "Successful payment")
+    let exception = XCTestExpectation(description: "TakePayment fails because no card was provided")
+
+    let takePayment = TakePayment(request: transactionRequest, customerRepository: customerRepo, paymentMethodRepository: paymentMethodRepo)
+
+    takePayment.start(completion: { _ in
+      XCTFail("Exception not thrown")
+    }) { (error) in
+      if case TakePayment.Exception.couldNotTokenizePaymentMethod(_) = error {
+        XCTAssertNotNil(error.detail)
+        exception.fulfill()
+        return
+      }
+
+      XCTFail("Wrong exception thrown")
+    }
+    wait(for: [exception], timeout: 10.0)
+
+  }
+
+  func testCanTakePaymentWithNoCustomerId() {
+    modelStore = [:]
+    var card = CreditCard.testCreditCard()
+    card.personName = "Bob Will"
+    let amount = Amount(cents: 10)
+    let transactionRequest = TransactionRequest(amount: amount, tokenize: true, customerId: nil)
+    let transaction = Transaction()
+    transaction.id = "transactionid"
+
+    // Stub out customer
+    let customer = Customer(firstName: "Bob", lastName: "Will")
+    customer.id = ""
+
+    // Stub out payment method
+    let paymentMethod = PaymentMethod(customer: customer)
+    paymentMethod.customerId = ""
+    paymentMethod.personName = "Bob Will"
+    paymentMethod.method = .card
+    paymentMethod.cardNumber = card.cardNumber
+    paymentMethod.cardExp = card.cardExp
+    let createPaymentMethodBody = try! omniApi.jsonEncoder().encode(paymentMethod)
+    paymentMethod.id = "payment_method_id_bob_will"
+    omniApi.stub("post", "/payment-method", body: createPaymentMethodBody, response: .success(paymentMethod))
+
+    // Stub out charge
+    let chargeRequest = ChargeRequest(paymentMethodId: "payment_method_id_bob_will", total: "0.10", meta: [
+      "subtotal": "0.10"
+    ])
+    let chargeBody = Data(chargeRequest: chargeRequest)
+    omniApi.stub("post", "/charge", body: chargeBody, response: .success(transaction))
+
+    // Perform operation
+    let paymentSuccessful = XCTestExpectation(description: "Successful payment")
+    let exception = XCTestExpectation(description: "TakePayment fails because no card was provided")
+
+    let takePayment = TakePayment(request: transactionRequest, customerRepository: customerRepo, paymentMethodRepository: paymentMethodRepo)
+
+    takePayment.start(completion: { _ in
+      XCTFail("Exception not thrown")
+    }) { (error) in
+      if case TakePayment.Exception.couldNotTokenizePaymentMethod(_) = error {
+        XCTAssertNotNil(error.detail)
+        exception.fulfill()
+        return
+      }
+
+      XCTFail("Wrong exception thrown")
+    }
+    wait(for: [exception], timeout: 10.0)
+
+  }
 }

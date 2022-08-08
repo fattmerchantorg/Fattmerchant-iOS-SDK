@@ -327,4 +327,5 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     XCTAssertEqual(meta["tax"], transactionRequest.tax)
   }
 
+  
 }
