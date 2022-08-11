@@ -9,10 +9,9 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
-
+class ViewController: UIViewController {
   var omni: Omni?
-  var lastPreauthTransaction: Transaction? = nil
+  var lastPreauthTransaction: Transaction?
 
   @IBOutlet weak var activityTextArea: UITextView!
   @IBOutlet weak var initializeButton: UIButton!
@@ -22,42 +21,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   @IBOutlet weak var refundPaymentButton: UIButton!
   @IBOutlet weak var totalTextInput: UITextField!
 
-  @IBAction func onRefundPaymentButtonPress(_ sender: UIButton) {
-    self.fetchTransactions()
-  }
-
-  @IBAction func onConnectReaderButtonPress(_ sender: UIButton) {
-    self.searchForReaders()
-  }
-
-  @IBAction func onDisconnectButtonPress(_ sender: Any) {
-    self.disconnectReader()
-  }
-
-  @IBAction func onTakePaymentButtonPress(_ sender: UIButton) {
-    self.takePayment()
-  }
-
-  @IBAction func onPreauthPaymentButtonPress(_ sender: UIButton) {
-    self.takePayment(preauth: true)
-  }
-
-  @IBAction func onCaptureLastTransactionButtonPress(_ sender: UIButton) {
-    self.captureLastTransaction()
-  }
-
-  @IBAction func onVoidLastTransactionButtonPress(_ sender: UIButton) {
-    self.voidLastTransaction()
-  }
-
-  @IBAction func onGetReaderInfoButtonPress(_ sender: UIButton) {
-    self.getReaderInfo()
-  }
-
-  @IBAction func onCancelTransactionButtonPress(_ sender: UIButton) {
-    self.cancelTransaction()
-  }
-
+  // swiftlint:disable:next line_length
   let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImU3MTJhZThlLTIwOWUtNGNkYi05MDMwLTc1NWU2OWFmMTI0NiIsImdvZFVzZXIiOmZhbHNlLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsInN1YiI6IjIxODNhODQ1LWMxMjAtNGZkYi04Mzc4LThlZjBkYzhhYjkzYSIsImlzcyI6Imh0dHA6Ly9hcGlkZXYuZmF0dGxhYnMuY29tL2F1dGhlbnRpY2F0ZSIsImlhdCI6MTY1Mzc0NzM1NCwiZXhwIjoxNjUzODMzNzU0LCJuYmYiOjE2NTM3NDczNTQsImp0aSI6IjdVYTNBckhlN0t3TlI3NnAifQ.ev5kFgpup49bv10mjGGCX6aSkGKjHXEQJw5QFwA6Q1A"
 
   override func viewDidLoad() {
@@ -139,7 +103,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       amount = getAmount()
     }
 
-    omni?.capturePreauthTransaction(transactionId: id, amount: amount, completion: { transaction in
+    omni?.capturePreauthTransaction(transactionId: id, amount: amount, completion: { _ in
       self.log("Captured transaction successfully")
     }, error: { error in
       self.log(error)
@@ -151,7 +115,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       return self.log("No preauth transactions to capture")
     }
 
-    omni?.voidTransaction(transactionId: id, completion: { transaction in
+    omni?.voidTransaction(transactionId: id, completion: { _ in
       self.log("Voided transaction successfully")
     }, error: { error in
       self.log(error)
@@ -159,7 +123,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   fileprivate func cancelTransaction() {
-    omni?.cancelMobileReaderTransaction(completion: { success in
+    omni?.cancelMobileReaderTransaction(completion: { _ in
       self.log("Transaction cancelled")
     }, error: { error in
       self.log(error)
@@ -179,9 +143,12 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   @IBAction fileprivate func payWithCard() {
     self.log("Attempting CNP Transaction")
-    let card = CreditCard(personName: "Test Payment", cardNumber: "4111111111111111", cardExp: "0224", addressZip: "32812")
+    let card = CreditCard(personName: "Test Payment",
+                          cardNumber: "4111111111111111",
+                          cardExp: "0224",
+                          addressZip: "32812")
     let transactionRequest = TransactionRequest(amount: getAmount(), card: card)
-    omni?.pay(transactionRequest: transactionRequest, completion: { completedTransaction in
+    omni?.pay(transactionRequest: transactionRequest, completion: { _ in
       self.log("Finished transaction successfully")
     }, error: { error in
       self.log(error)
@@ -256,10 +223,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     }
   }
 
-  func mobileReaderConnectionStatusUpdate(status: MobileReaderConnectionStatus) {
-    self.log("Mobile reader \(status.rawValue)")
-  }
-
   fileprivate func disconnectReader() {
     omni?.getConnectedReader(completion: { reader in
       guard let reader = reader else { return }
@@ -275,7 +238,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   fileprivate func getReaderInfo() {
     self.log("Trying to get info about the connected reader")
-    omni?.getConnectedReader(completion: { reader in
+    omni?.getConnectedReader(completion: { _ in
       self.log("Done")
     }, error: { error in
       self.log(error.detail ?? "huh")
@@ -316,14 +279,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
   }
 
-  func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
-    self.log(transactionUpdate)
-  }
-
-  func onUserNotification(userNotification: UserNotification) {
-    self.log(userNotification)
-  }
-
   // MARK: Logging
   fileprivate func log(_ message: String) {
     DispatchQueue.main.async {
@@ -334,7 +289,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       }
     }
   }
-
 
   fileprivate func log(_ transactionUpdate: TransactionUpdate) {
     var message = "[\(transactionUpdate.value)]"
@@ -370,7 +324,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 }
 
 extension UIViewController: UITextFieldDelegate {
-
   fileprivate func numberFormatter() -> NumberFormatter {
     let formatter = NumberFormatter()
     formatter.numberStyle = .currency
@@ -387,5 +340,60 @@ extension UIViewController: UITextFieldDelegate {
     let number = Double(numberString)
     textField.text = numberFormatter().string(for: number)
   }
+}
 
+extension UIViewController {
+  @IBAction func onRefundPaymentButtonPress(_ sender: UIButton) {
+    self.fetchTransactions()
+  }
+
+  @IBAction func onConnectReaderButtonPress(_ sender: UIButton) {
+    self.searchForReaders()
+  }
+
+  @IBAction func onDisconnectButtonPress(_ sender: Any) {
+    self.disconnectReader()
+  }
+
+  @IBAction func onTakePaymentButtonPress(_ sender: UIButton) {
+    self.takePayment()
+  }
+
+  @IBAction func onPreauthPaymentButtonPress(_ sender: UIButton) {
+    self.takePayment(preauth: true)
+  }
+
+  @IBAction func onCaptureLastTransactionButtonPress(_ sender: UIButton) {
+    self.captureLastTransaction()
+  }
+
+  @IBAction func onVoidLastTransactionButtonPress(_ sender: UIButton) {
+    self.voidLastTransaction()
+  }
+
+  @IBAction func onGetReaderInfoButtonPress(_ sender: UIButton) {
+    self.getReaderInfo()
+  }
+
+  @IBAction func onCancelTransactionButtonPress(_ sender: UIButton) {
+    self.cancelTransaction()
+  }
+}
+
+extension UIViewController: TransactionUpdateDelegate {
+  func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
+    self.log(transactionUpdate)
+  }
+}
+
+extension UIViewController: MobileReaderConnectionStatusDelegate {
+  func mobileReaderConnectionStatusUpdate(status: MobileReaderConnectionStatus) {
+    self.log("Mobile reader \(status.rawValue)")
+  }
+}
+
+extension UIViewController: UserNotificationDelegate {
+  func onUserNotification(userNotification: UserNotification) {
+    self.log(userNotification)
+  }
 }

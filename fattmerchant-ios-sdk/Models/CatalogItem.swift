@@ -15,7 +15,7 @@ public struct CatalogItem: Model, Codable, Equatable {
   public var item: String?
   /// The description of the item
   public var details: String?
-  ///. The number of items to be purchased
+  /// The number of items to be purchased
   public var quantity: Int
   /// The price of the item in dollars
   public var price: Double
