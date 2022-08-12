@@ -19,6 +19,7 @@ enum TakeMobileReaderPaymentException: OmniException {
   case couldNotUpdateInvoice(detail: String?)
   case couldNotCreateTransaction(detail: String?)
   case couldNotCaptureTransaction
+  case invalidCustomer(detail: String?)
 
   static var mess: String = "Error taking mobile reader payment"
 
@@ -53,6 +54,9 @@ enum TakeMobileReaderPaymentException: OmniException {
 
     case .invoiceIdCannotBeBlank:
       return "Could not create invoice"
+
+    case .invalidCustomer(let d):
+      return d ?? "Could not create customer"
     }
   }
 }
@@ -113,6 +117,22 @@ class TakeMobileReaderPayment {
   }
 
   func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
+    var validCustomer: Customer? = nil
+    if let customerId = self.request.customerId {
+      self.validateCustomer(withId: customerId, { error in
+        let _: (OmniException) -> Void = { (exception) in
+          failure(exception)
+        }
+      }, { customer in
+        if customer.id == nil || customer.firstname == "" {
+          let _: (OmniException) -> Void = { (exception) in
+            failure(exception)
+          }
+        } else {
+          validCustomer = customer
+        }
+      })
+    }
     availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
       self.getOrCreateInvoice(failure) { (createdInvoice) in
         self.takeMobileReaderPayment(with: driver,
@@ -132,11 +152,16 @@ class TakeMobileReaderPayment {
             }
           }
 
-          self.createCustomer(mobileReaderPaymentResult, voidAndFail) { (createdCustomer) in
+          if validCustomer == nil {
+            /// Create a new customer if no customerId has been passed
+            self.createCustomer(mobileReaderPaymentResult, voidAndFail) { (createdCustomer) in
+              validCustomer = createdCustomer
+            }
+          }
 
-            self.createPaymentMethod(for: createdCustomer, mobileReaderPaymentResult, voidAndFail) { (createdPaymentMethod) in
+          self.createPaymentMethod(for: validCustomer, mobileReaderPaymentResult, voidAndFail) { (createdPaymentMethod) in
 
-              self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: createdCustomer, voidAndFail) { (updatedInvoice) in
+            self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: validCustomer, voidAndFail) { (updatedInvoice) in
 
                 let transactionDetails = CreateTransactionWithDetails(
                   result: mobileReaderPaymentResult,
@@ -146,38 +171,37 @@ class TakeMobileReaderPayment {
                   invoice: updatedInvoice)
                 self.createTransaction(with: transactionDetails, voidAndFail) { completedTransaction in
 
-                  // Make sure the transaction from Omni has an id. This should be true pretty much all the time
-                  guard let transactionId = completedTransaction.id else {
-                    voidAndFail(TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: nil))
-                    return
-                  }
+                // Make sure the transaction from Omni has an id. This should be true pretty much all the time
+                guard let transactionId = completedTransaction.id else {
+                  voidAndFail(TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: nil))
+                  return
+                }
 
-                  // If the transaction is a pre-auth, then we don't need to capture it
-                  if self.request.preauth {
+                // If the transaction is a pre-auth, then we don't need to capture it
+                if self.request.preauth {
+                  completion(completedTransaction)
+                  return
+                }
+
+                driver.capture(transaction: completedTransaction) { (success) in
+                  if success {
                     completion(completedTransaction)
-                    return
-                  }
+                  } else {
+                    /* We couldn't capture the transaction. So void the NMI transaction and mark it failed on Omni */
 
-                  driver.capture(transaction: completedTransaction) { (success) in
-                    if success {
-                      completion(completedTransaction)
-                    } else {
-                      /* We couldn't capture the transaction. So void the NMI transaction and mark it failed on Omni */
+                    // Mark omni transaction failed
+                    let failedTransaction = completedTransaction
+                    failedTransaction.success = false
+                    failedTransaction.message = "Error capturing the transaction"
 
-                      // Mark omni transaction failed
-                      let failedTransaction = completedTransaction
-                      failedTransaction.success = false
-                      failedTransaction.message = "Error capturing the transaction"
-
-                      // Fail the transaction in omni
-                      self.transactionRepository.update(model: failedTransaction, id: transactionId, completion: { _ in
-                        voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
-                        return
-                      }, error: { _ in
-                        voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
-                        return
-                      })
-                    }
+                    // Fail the transaction in omni
+                    self.transactionRepository.update(model: failedTransaction, id: transactionId, completion: { _ in
+                      voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
+                      return
+                    }, error: { _ in
+                      voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
+                      return
+                    })
                   }
                 }
               }
@@ -368,7 +392,7 @@ class TakeMobileReaderPayment {
 
   fileprivate func updateInvoice(_ invoice: Invoice,
                                  with paymentMethod: PaymentMethod,
-                                 and customer: Customer,
+                                 and customer: Customer?,
                                  _ failure: @escaping (OmniException) -> Void,
                                  completion: @escaping (Invoice) -> Void) {
     let newInvoice = Invoice()
@@ -383,7 +407,12 @@ class TakeMobileReaderPayment {
       return
     }
 
-    guard let customerId = customer.id else {
+    guard let validCustomer = customer else {
+      failure(Exception.invalidCustomer(detail: "Invalid customer info"))
+      return
+    }
+
+    guard let customerId = validCustomer.id else {
       failure(Exception.couldNotUpdateInvoice(detail: "Customer id is required"))
       return
     }
@@ -404,10 +433,15 @@ class TakeMobileReaderPayment {
     return String(maskedPan.suffix(from: lastFourIdx))
   }
 
-  fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
-    let paymentMethodToCreate = PaymentMethod(customer: customer)
+  fileprivate func createPaymentMethod(for customer: Customer?, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
+    guard let validCustomer = customer else {
+      failure(Exception.invalidCustomer(detail: "Invalid customer info"))
+      return
+    }
 
-    guard let customerId = customer.id else {
+    let paymentMethodToCreate = PaymentMethod(customer: validCustomer)
+
+    guard let customerId = validCustomer.id else {
       failure(Exception.couldNotCreateCustomer(detail: "Customer id is required"))
       return
     }
@@ -427,7 +461,7 @@ class TakeMobileReaderPayment {
     paymentMethodToCreate.method = PaymentMethodType.card
     paymentMethodToCreate.cardLastFour = lastFour
     paymentMethodToCreate.cardType = cardType
-    paymentMethodToCreate.personName = "\(customer.firstname) \(customer.lastname)"
+    paymentMethodToCreate.personName = "\(validCustomer.firstname) \(validCustomer.lastname)"
     paymentMethodToCreate.tokenize = false
     paymentMethodToCreate.paymentToken = result.paymentToken
 
@@ -460,6 +494,10 @@ class TakeMobileReaderPayment {
     }
 
     customerRepository.create(model: customerToCreate, completion: completion, error: failure)
+  }
+
+  fileprivate func validateCustomer(withId: String, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
+    customerRepository.getById(id: withId, completion: completion, error: failure)
   }
 
   fileprivate func takeMobileReaderPayment(with driver: MobileReaderDriver,

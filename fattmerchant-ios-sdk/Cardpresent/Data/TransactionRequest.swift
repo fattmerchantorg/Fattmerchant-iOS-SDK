@@ -89,6 +89,14 @@ public struct TransactionRequest {
   /// If nil, then a new invoice will be created
   public var invoiceId: String?
 
+
+  /// The id of the customer this payment should be associated with
+  ///
+  /// - Note: Defaults to nil
+  ///
+  /// If nil, then a new customer will be created with other info passed
+  public var customerId: String?
+
   /// Initializes a TransactionRequest with the given amount.
   ///
   /// - Parameter amount: The  `Amount` to be collected during the transaction
@@ -182,5 +190,17 @@ public struct TransactionRequest {
     self.tokenize = tokenize
     self.card = card
     self.lineItems = lineItems
+  }
+
+  /// Initializes a TransactionRequest with the given amount and explicitly sets the tokenize value
+  /// - Parameters:
+  ///   - amount: The `Amount` to be collected during the transaction
+  ///   - tokenize: A value that dictates whether or not the payment method used in the transaction
+  ///   should be tokenized. Defaults to `true`
+  ///   - customerId: The cutomer to associate this payment with. If nil, a new customer is created. Defaults to nil.
+  public init(amount: Amount, tokenize: Bool = true, customerId: String? = nil) {
+    self.amount = amount
+    self.tokenize = tokenize
+    self.customerId = customerId
   }
 }
