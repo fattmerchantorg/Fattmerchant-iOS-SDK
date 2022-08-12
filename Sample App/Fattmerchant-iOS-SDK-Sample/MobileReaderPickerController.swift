@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// Controls a UIPickerView
-class StringPickerController<T: CustomStringConvertible>: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class StringPickerController<T: CustomStringConvertible>: UIViewController {
 
   var values: [T] = []
   var handler: (T?) -> Void
@@ -43,7 +43,10 @@ class StringPickerController<T: CustomStringConvertible>: UIViewController, UIPi
     (view as? UIPickerView)?.delegate = self
     (view as? UIPickerView)?.dataSource = self
   }
+}
 
+extension StringPickerController: UIPickerViewDelegate,
+                                  UIPickerViewDataSource {
   func numberOfComponents(in pickerView: UIPickerView) -> Int {
     return 1
   }

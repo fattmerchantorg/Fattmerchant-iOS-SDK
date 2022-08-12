@@ -71,6 +71,25 @@ class TakeMobileReaderPayment {
   weak var transactionUpdateDelegate: TransactionUpdateDelegate?
   weak var userNotificationDelegate: UserNotificationDelegate?
 
+  internal struct CreateTransactionWithDetails {
+    let result: TransactionResult
+    let driver: MobileReaderDriver
+    let paymentMethod: PaymentMethod
+    let customer: Customer
+    let invoice: Invoice
+    init(result: TransactionResult,
+         driver: MobileReaderDriver,
+         paymentMethod: PaymentMethod,
+         customer: Customer,
+         invoice: Invoice) {
+      self.result = result
+      self.driver = driver
+      self.paymentMethod = paymentMethod
+      self.customer = customer
+      self.invoice = invoice
+    }
+  }
+
   init(
     mobileReaderDriverRepository: MobileReaderDriverRepository,
     invoiceRepository: InvoiceRepository,
@@ -119,13 +138,13 @@ class TakeMobileReaderPayment {
 
               self.updateInvoice(createdInvoice, with: createdPaymentMethod, and: createdCustomer, voidAndFail) { (updatedInvoice) in
 
-                self.createTransaction(
+                let transactionDetails = CreateTransactionWithDetails(
                   result: mobileReaderPaymentResult,
                   driver: driver,
                   paymentMethod: createdPaymentMethod,
                   customer: createdCustomer,
-                  invoice: updatedInvoice,
-                  voidAndFail) { completedTransaction in
+                  invoice: updatedInvoice)
+                self.createTransaction(with: transactionDetails, voidAndFail) { completedTransaction in
 
                   // Make sure the transaction from Omni has an id. This should be true pretty much all the time
                   guard let transactionId = completedTransaction.id else {
@@ -169,33 +188,29 @@ class TakeMobileReaderPayment {
     }
   }
 
-  internal func createTransaction(result: TransactionResult,
-                                  driver: MobileReaderDriver,
-                                  paymentMethod: PaymentMethod,
-                                  customer: Customer,
-                                  invoice: Invoice,
+  internal func createTransaction(with info: CreateTransactionWithDetails,
                                   _ failure: @escaping (OmniException) -> Void,
                                   _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
-    guard let paymentMethodId = paymentMethod.id else {
+    guard let paymentMethodId = info.paymentMethod.id else {
       failure(Exception.couldNotUpdateInvoice(detail: "Payment method id is required"))
       return
     }
 
-    guard let lastFour = getLastFour(for: result.maskedPan) else {
+    guard let lastFour = getLastFour(for: info.result.maskedPan) else {
       failure(Exception.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan"))
       return
     }
 
-    guard let transactionMeta = createTransactionMeta(from: result) else {
+    guard let transactionMeta = createTransactionMeta(from: info.result) else {
       failure(Exception.couldNotCreateTransaction(detail: "Could not generate transaction meta json"))
       return
     }
 
     var gatewayResponseJson: JSONValue?
 
-    if let authCode = result.authCode, result.source.lowercased() == "nmi" {
+    if let authCode = info.result.authCode, info.result.source.lowercased() == "nmi" {
       let gatewayResponse = [
         "gateway_specific_response_fields": [
           "nmi": [
@@ -207,35 +222,35 @@ class TakeMobileReaderPayment {
       gatewayResponseJson = gatewayResponse.jsonValue()
     }
 
-    guard let customerId = customer.id else {
+    guard let customerId = info.customer.id else {
       failure(Exception.couldNotCreateTransaction(detail: "Customer id is required"))
       return
     }
 
-    guard let invoiceId = invoice.id else {
+    guard let invoiceId = info.invoice.id else {
       failure(Exception.couldNotCreateTransaction(detail: "Invoice id is required"))
       return
     }
 
     transactionToCreate.paymentMethodId = paymentMethodId
     transactionToCreate.total = request.amount.dollars()
-    transactionToCreate.success = result.success ?? false
+    transactionToCreate.success = info.result.success ?? false
     transactionToCreate.lastFour = lastFour
     transactionToCreate.meta = transactionMeta
     transactionToCreate.type = "charge"
     transactionToCreate.method = "card"
-    transactionToCreate.source = "iOS|CPSDK|\(result.source)"
+    transactionToCreate.source = "iOS|CPSDK|\(info.result.source)"
     transactionToCreate.customerId = customerId
     transactionToCreate.invoiceId = invoiceId
     transactionToCreate.response = gatewayResponseJson
-    transactionToCreate.token = result.externalId
-    transactionToCreate.message = result.message
+    transactionToCreate.token = info.result.externalId
+    transactionToCreate.message = info.result.message
 
     // Set the transaction to not refundable or voidable if the Omni backend cannot perform the refund
     // This is extremely important because it prevents a user from attempting a refund via the VT or the Omni API that
     // could never work. The reason it won't work is because Omni doesn't have a deep integration with all of our
     // third party vendors, such as AnywhereCommerce.
-    if !type(of: driver).omniRefundsSupported {
+    if !type(of: info.driver).omniRefundsSupported {
       transactionToCreate.isRefundable = false
       transactionToCreate.isVoidable = false
     }
@@ -429,7 +444,7 @@ class TakeMobileReaderPayment {
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
     let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
     let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
-    var customerToCreate = Customer(firstName: firstname, lastName: lastname)
+    let customerToCreate = Customer(firstName: firstname, lastName: lastname)
 
     if let transactionSource = transactionResult.transactionSource {
       if transactionSource.lowercased().contains("contactless") {
@@ -468,7 +483,7 @@ class TakeMobileReaderPayment {
         failure(TakeMobileReaderPaymentException.invoiceIdCannotBeBlank)
         return
       }
-      invoiceRepository.getById(id: invoiceId, completion: completion) { (error) in
+      invoiceRepository.getById(id: invoiceId, completion: completion) { (_) in
         failure(TakeMobileReaderPaymentException.invoiceNotFound)
       }
     } else {

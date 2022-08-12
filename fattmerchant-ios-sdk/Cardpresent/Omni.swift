@@ -11,16 +11,16 @@ import Foundation
 enum OmniNetworkingException: OmniException {
   case couldNotGetMerchantDetails
   case couldNotGetPaginatedTransactions
-  
+
   static var mess: String = "Omni Networking Exception"
-  
+
   var detail: String? {
     switch self {
-      case .couldNotGetMerchantDetails:
-        return "Could not get merchant details from Omni"
-        
-      case .couldNotGetPaginatedTransactions:
-        return "Could not get paginated transactions"
+    case .couldNotGetMerchantDetails:
+      return "Could not get merchant details from Omni"
+
+    case .couldNotGetPaginatedTransactions:
+      return "Could not get paginated transactions"
     }
   }
 }
@@ -35,14 +35,14 @@ public enum OmniInitializeException: OmniException {
 
   public var detail: String? {
     switch self {
-      case .missingInitializationDetails:
-        return "Missing initialization details"
-      case .mobileReaderPaymentsNotConfigured:
-        return "Your account is not configured to accept mobile reader payments"
-      case .missingMobileReaderCredentials:
-        return "Your account does not have mobile reader credentials"
-      case .invalidMobileReaderCredentials:
-        return "Your account has invalid mobile reader credentials"
+    case .missingInitializationDetails:
+      return "Missing initialization details"
+    case .mobileReaderPaymentsNotConfigured:
+      return "Your account is not configured to accept mobile reader payments"
+    case .missingMobileReaderCredentials:
+      return "Your account does not have mobile reader credentials"
+    case .invalidMobileReaderCredentials:
+      return "Your account has invalid mobile reader credentials"
     }
   }
 }
@@ -50,11 +50,11 @@ public enum OmniInitializeException: OmniException {
 public enum OmniGeneralException: OmniException {
   case uninitialized
   public static var mess: String = "Omni General Error"
-  
+
   public var detail: String? {
     switch self {
-      case .uninitialized:
-        return "Omni has not been initialized yet"
+    case .uninitialized:
+      return "Omni has not been initialized yet"
     }
   }
 }
@@ -78,7 +78,7 @@ public enum OmniGeneralException: OmniException {
  Once initialized, you can call its methods like `getAvailableReaders` and `takeMobileReaderTransaction`
  */
 public class Omni: NSObject {
-  
+
   internal var mobileReaderDriversInitialized: Bool = false
   internal var omniApi = OmniApi()
   internal var transactionRepository: TransactionRepository!
@@ -87,57 +87,57 @@ public class Omni: NSObject {
   internal var paymentMethodRepository: PaymentMethodRepository!
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
   internal var merchant: Merchant?
-  
+
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
-  
+
   /// Responsible for providing signatures for transactions, when required
   public var signatureProvider: SignatureProviding?
-  
+
   /// Receives notifications about transaction events such as when a card is swiped
   public weak var transactionUpdateDelegate: TransactionUpdateDelegate?
-  
+
   /// Receives notifications about user-facing transaction events such as when a user swipes a chip card
   public weak var userNotificationDelegate: UserNotificationDelegate?
-  
+
   /// Receives notifications about reader connection events
   public weak var mobileReaderConnectionUpdateDelegate: MobileReaderConnectionStatusDelegate?
-  
+
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
     /// An id for your application
     public var appId: String?
-    
+
     /// An ephemeral Omni api key
     public var apiKey: String?
-    
+
     /// The Omni enviroment to use
     public var environment: Environment
-    
+
     /// The Omni webpayments token
     ///
     /// This is used for tokenizing and charging payment methods
     public var webpaymentsToken: String?
-    
+
     public init(appId: String, apiKey: String, environment: Environment = Environment.LIVE) {
       self.appId = appId
       self.apiKey = apiKey
       self.environment = environment
     }
   }
-  
+
   fileprivate func initRepos(omniApi: OmniApi) {
     transactionRepository = TransactionRepository(omniApi: omniApi)
     invoiceRepository = InvoiceRepository(omniApi: omniApi)
     customerRepository = CustomerRepository(omniApi: omniApi)
     paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
   }
-  
+
   /// True when Omni is initialized. False otherwise
   public var isInitialized: Bool {
     return mobileReaderDriversInitialized
   }
-  
+
   /// Used to initialize the Omni object
   /// - Parameters:
   ///   - params: an instance of InitParams which contains all necessary information to initialize omni
@@ -148,39 +148,39 @@ public class Omni: NSObject {
       error(OmniInitializeException.missingInitializationDetails)
       return
     }
-    
+
     omniApi.apiKey = params.apiKey
     omniApi.environment = params.environment
     initRepos(omniApi: omniApi)
-    
+
     // Verify the apikey corresponds to a real merchant
     omniApi.getSelf(completion: { myself in
-      
+
       guard let merchant = myself.merchant else {
         error(OmniNetworkingException.couldNotGetMerchantDetails)
         return
       }
-      
+
       // Assign merchant to self
       self.merchant = merchant
-      
+
       // A dict that contains the initialization details for the drivers
       var args: [String: Any] = [ "appId": appId ]
-      
+
       // Eagerly try to fill out the mobile reader settings from the merchant options.
       // The getMobileReaderSettings step will override these if successful, but if that step fails to grab the
       // settings from the gateways, then at least we have these as a fallback.
-      
+
       // AWC
       if let emvTerminalSecret = merchant.emvTerminalSecret(), let emvTerminalId = merchant.emvTerminalId() {
         args["awc"] = AWCDetails(terminalId: emvTerminalId, terminalSecret: emvTerminalSecret)
       }
-      
+
       // NMI
       if let emvPassword = merchant.emvPassword() {
         args["nmi"] = NMIDetails(securityKey: emvPassword)
       }
-      
+
       // Try to get the details from the merchant gateways. This *should* rewrite the args dict
       self.omniApi.getMobileReaderSettings(completion: { mrDetails in
         if let awcDetails = mrDetails.anywhereCommerce {
@@ -235,7 +235,7 @@ public class Omni: NSObject {
       })
     }, failure: error)
   }
-  
+
   /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
   /// - Parameters:
   ///   - creditCard: Contains the details of the payment method to tokenize
@@ -247,7 +247,7 @@ public class Omni: NSObject {
                           bankAccount: bankAccount
     ).start(completion: completion, failure: error)
   }
-  
+
   /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
   /// - Parameters:
   ///   - creditCard: Contains the details of the payment method to tokenize
@@ -259,7 +259,7 @@ public class Omni: NSObject {
                           creditCard: creditCard
     ).start(completion: completion, failure: error)
   }
-  
+
   /// Captures a transaction without a mobile reader
   /// - Parameters:
   ///   - transactionRequest: A request for a Transaction
@@ -269,7 +269,7 @@ public class Omni: NSObject {
     let job = TakePayment(request: transactionRequest, customerRepository: customerRepository, paymentMethodRepository: paymentMethodRepository)
     job.start(completion: completion, failure: error)
   }
-  
+
   /// Creates a Fattmerchant PaymentMethod out of the given CreditCard
   ///
   /// - Parameters:
@@ -282,10 +282,10 @@ public class Omni: NSObject {
       paymentMethodRepository: paymentMethodRepository,
       creditCard: card
     )
-    
+
     job.start(completion: completion, failure: error)
   }
-  
+
   /// Creates a Fattmerchant PaymentMethod out of the given BankAccount
   ///
   /// - Parameters:
@@ -298,10 +298,10 @@ public class Omni: NSObject {
       paymentMethodRepository: paymentMethodRepository,
       bankAccount: bankAccount
     )
-    
+
     job.start(completion: completion, failure: error)
   }
-  
+
   /// Captures a mobile reader transaction
   ///
   /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called. This
@@ -327,10 +327,10 @@ public class Omni: NSObject {
       transactionUpdateDelegate: transactionUpdateDelegate,
       userNotificationDelegate: userNotificationDelegate
     )
-    
+
     job.start(completion: completion, failure: error)
   }
-  
+
   /// Captures a previously-authorized transaction
   ///
   /// - Parameters:
@@ -342,11 +342,11 @@ public class Omni: NSObject {
                                         amount: Amount?,
                                         completion: @escaping (Transaction) -> Void,
                                         error: @escaping (OmniException) -> Void) {
-    
+
     let job = CapturePreauthTransaction(transactionId: transactionId, captureAmount: amount, omniApi: omniApi)
     job.start(completion: completion, error: error)
   }
-  
+
   /// Voids a transaction
   ///
   /// - Parameters:
@@ -359,7 +359,7 @@ public class Omni: NSObject {
     let job = VoidTransaction(transactionId: transactionId, omniApi: omniApi)
     job.start(completion: completion, error: error)
   }
-  
+
   /// Cancels the current mobile reader transaction
   ///
   /// - Parameters:
@@ -370,7 +370,7 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
+
     let job = CancelCurrentTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository)
     job.start(completion: { success in
       self.preferredQueue.async {
@@ -382,7 +382,7 @@ public class Omni: NSObject {
       }
     })
   }
-  
+
   /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
   /// - Parameters:
   ///   - transaction: the transaction to refund
@@ -393,7 +393,7 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
+
     let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository,
                                             transactionRepository: transactionRepository,
                                             transaction: transaction,
@@ -401,7 +401,7 @@ public class Omni: NSObject {
                                             omniApi: omniApi)
     job.start(completion: completion, failure: error)
   }
-  
+
   /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
   /// - Parameters:
   ///   - transaction: the transaction to refund
@@ -410,7 +410,7 @@ public class Omni: NSObject {
   public func refundMobileReaderTransaction(transaction: Transaction, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
     refundMobileReaderTransaction(transaction: transaction, refundAmount: nil, completion: completion, error: error)
   }
-  
+
   /// Finds the available readers that Omni can connect to
   /// - Parameters:
   ///   - completion: Receives an array of MobileReaders that are available
@@ -419,14 +419,14 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
+
     SearchForReaders(mobileReaderDriverRepository: mobileReaderDriverRepository, args: [:]).start(completion: { (readers) in
       self.preferredQueue.async { completion(readers) }
     }, failure: ({ exception in
       self.preferredQueue.async { error(exception) }
     }))
   }
-  
+
   /// Returns the connected mobile reader
   /// - Parameters:
   ///   - completion: Receives the connected mobile reader, if any
@@ -435,14 +435,14 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
+
     GetConnectedMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository).start(completion: { reader in
       self.preferredQueue.async { completion(reader) }
     }, failure: ({ exception in
       self.preferredQueue.async { error(exception) }
     }))
   }
-  
+
   /// Attempts to connect to the given MobileReader
   ///
   /// - Parameters:
@@ -454,7 +454,7 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error()
     }
-    
+
     let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository,
                                    mobileReader: reader,
                                    mobileReaderConnectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
@@ -464,7 +464,7 @@ public class Omni: NSObject {
       error()
     })
   }
-  
+
   /// Attempts to connect to the given MobileReader
   ///
   /// - Parameters:
@@ -475,7 +475,7 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
+
     let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository,
                                    mobileReader: reader,
                                    mobileReaderConnectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
@@ -488,9 +488,9 @@ public class Omni: NSObject {
         error(exception)
       }
     })
-    
+
   }
-  
+
   /// Attempts to disconnect the given MobileReader
   ///
   /// - Parameters:
@@ -501,7 +501,7 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
+
     let task = DisconnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
     task.start(completion: { success in
       self.preferredQueue.async { completion(success) }
@@ -509,7 +509,7 @@ public class Omni: NSObject {
       self.preferredQueue.async { error(exception) }
     }))
   }
-  
+
   /// Retrieves a list of the most recent mobile reader transactions from Omni
   /// - Parameters:
   ///   - completion: Receives a list of Transactions
@@ -518,7 +518,7 @@ public class Omni: NSObject {
     guard mobileReaderDriversInitialized else {
       return error(OmniGeneralException.uninitialized)
     }
-    
+
     transactionRepository.getList(completion: ({ paginatedTransactions in
       guard let transactions = paginatedTransactions.data else {
         error(OmniNetworkingException.couldNotGetPaginatedTransactions)
@@ -527,5 +527,5 @@ public class Omni: NSObject {
       completion(transactions)
     }), error: error)
   }
-  
+
 }
