@@ -167,7 +167,7 @@ class TakeMobileReaderPayment {
                   result: mobileReaderPaymentResult,
                   driver: driver,
                   paymentMethod: createdPaymentMethod,
-                  customer: createdCustomer,
+                  customer: validCustomer ?? Customer(fullName: ""),
                   invoice: updatedInvoice)
                 self.createTransaction(with: transactionDetails, voidAndFail) { completedTransaction in
 

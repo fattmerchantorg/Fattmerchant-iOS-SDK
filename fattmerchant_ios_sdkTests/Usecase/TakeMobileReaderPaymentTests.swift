@@ -79,11 +79,13 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     result.externalId = "externalId"
     result.maskedPan = "41111111111111111"
 
-    job.createTransaction(result: result,
-                          driver: mobileReaderDriverRepo.driver,
-                          paymentMethod: paymentMethod,
-                          customer: customer,
-                          invoice: invoice,
+    let transactionDetails = TakeMobileReaderPayment.CreateTransactionWithDetails(
+      result: result,
+      driver: mobileReaderDriverRepo.driver,
+      paymentMethod: paymentMethod,
+      customer: customer,
+      invoice: invoice)
+    job.createTransaction(with: transactionDetails,
                           { exception in
                             XCTFail()
                           }, { transaction in
