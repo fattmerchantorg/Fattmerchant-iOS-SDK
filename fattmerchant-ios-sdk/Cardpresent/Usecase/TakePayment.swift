@@ -67,7 +67,7 @@ class TakePayment {
       }
 
       // Create the request body
-      let chargeRequest = Self.createChargeRequest(amount: self.request.amount, paymentMethodId: paymentMethodId)
+        let chargeRequest = Self.createChargeRequest(amount: self.request.amount, paymentMethodId: paymentMethodId,poNumber: self.request.poNumber)
       let body = Data(chargeRequest: chargeRequest)
 
       // Make the request to Omni
@@ -99,11 +99,11 @@ class TakePayment {
   ///   - amount: the Amount to charge
   ///   - paymentMethodId: the id of the PaymentMethod to charge
   /// - Returns: a ChargeRequest
-  internal static func createChargeRequest(amount: Amount, paymentMethodId: String) -> ChargeRequest {
+    internal static func createChargeRequest(amount: Amount, paymentMethodId: String, poNumber: String?  ) -> ChargeRequest {
     let chargeRequestMeta = [
-      "subtotal": amount.dollarsString()
+      "subtotal": amount.dollarsString(),
+      "poNumber": poNumber ?? ""
     ]
-
     return ChargeRequest(paymentMethodId: paymentMethodId,
                                       total: amount.dollarsString(),
                                       preAuth: false,
