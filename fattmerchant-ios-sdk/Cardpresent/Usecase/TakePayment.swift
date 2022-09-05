@@ -101,10 +101,20 @@ class TakePayment {
     /// - poNumber: The purchase order number for the transaction
   /// - Returns: a ChargeRequest
     internal static func createChargeRequest(amount: Amount, paymentMethodId: String, poNumber: String?  ) -> ChargeRequest {
-    let chargeRequestMeta = [
-      "subtotal": amount.dollarsString(),
-      "poNumber": poNumber ?? ""
-    ]
+    
+        let chargeRequestMeta :[String: String] = {
+            if poNumber != nil {
+                return [
+                    "subtotal": amount.dollarsString(),
+                    "poNumber": poNumber!
+                ]
+            } else {
+                return [
+                    "subtotal": amount.dollarsString()
+                ]
+            }
+        }()
+        
     return ChargeRequest(paymentMethodId: paymentMethodId,
                                       total: amount.dollarsString(),
                                       preAuth: false,
