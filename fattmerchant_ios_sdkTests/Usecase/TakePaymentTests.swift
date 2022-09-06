@@ -32,17 +32,37 @@ class TakePaymentTests: XCTestCase {
 
   func testCreateChargeRequest() {
     let amount = Amount(dollars: 10.00)
+    let poNumber = "asdf4terstges"
     let paymentMethodId = "123"
-    let chargeReq = TakePayment.createChargeRequest(amount: amount, paymentMethodId: paymentMethodId)
+    let chargeReq = TakePayment.createChargeRequest(amount: amount, paymentMethodId: paymentMethodId, poNumber: poNumber)
 
     let expectedMeta = [
-      "subtotal": "10.00"
+      "subtotal": "10.00",
+      "poNumber": poNumber
     ]
     XCTAssertEqual(chargeReq.meta, expectedMeta)
     XCTAssertEqual(chargeReq.preAuth, false)
     XCTAssertEqual(chargeReq.paymentMethodId, paymentMethodId)
     XCTAssertEqual(chargeReq.total, "10.00")
   }
+    
+    func testCreateChargeRequestWhenPoNumberIsNil() {
+      let amount = Amount(dollars: 10.00)
+      let poNumber: String? = nil
+      let paymentMethodId = "123"
+      let chargeReq = TakePayment.createChargeRequest(amount: amount, paymentMethodId: paymentMethodId, poNumber: poNumber)
+
+      let expectedMeta = [
+        "subtotal": amount.dollarsString(),
+        "poNumber": poNumber ?? ""
+      ]
+      XCTAssertEqual(chargeReq.meta, expectedMeta)
+      XCTAssertEqual(chargeReq.preAuth, false)
+      XCTAssertEqual(chargeReq.paymentMethodId, paymentMethodId)
+      XCTAssertEqual(chargeReq.total, amount.dollarsString())
+    }
+    
+    
 
   func testCanTakePayment() {
     modelStore = [:]
