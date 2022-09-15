@@ -12,6 +12,7 @@ import Foundation
 public enum Environment {
   case LIVE
   case DEV
+  case QA(qaUrl: String)
 
   func baseUrlString() -> String {
     switch self {
@@ -19,6 +20,8 @@ public enum Environment {
       return "https://apidev.fattlabs.com"
     case .LIVE:
       return "https://apiprod.fattlabs.com"
+    case .QA(let qaUrl):
+      return qaUrl
     }
   }
 

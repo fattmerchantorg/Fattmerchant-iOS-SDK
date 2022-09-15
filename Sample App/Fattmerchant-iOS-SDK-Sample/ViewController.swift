@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     self.view.addGestureRecognizer(tap)
   }
 
-  fileprivate func initializeOmni() {
+  fileprivate func initializeOmni(forQAURL: String? = nil) {
     // instantiate Omni and store somewhere
     omni = Omni()
     omni?.signatureProvider = SignatureViewController()
@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     log("Attempting initalization...")
 
     // Initialize Omni
-    omni?.initialize(params: initParams(), completion: {
+    omni?.initialize(params: initParams(forQA: forQAURL), completion: {
       self.initializeButton.isHidden = true
       self.log("Initialized")
     }, error: { (error) in
@@ -275,7 +275,10 @@ class ViewController: UIViewController {
     return formatter.string(from: Date())
   }
 
-  fileprivate func initParams() -> Omni.InitParams {
+  fileprivate func initParams(forQA: String? = nil) -> Omni.InitParams {
+    if let qaURL = forQA {
+      return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.QA(qaUrl: qaURL))
+    }
     return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
   }
 
@@ -321,6 +324,34 @@ class ViewController: UIViewController {
     message += "\n\t method: \(paymentMethod.method?.rawValue ?? "")"
     log(message)
   }
+
+  fileprivate func initQA() {
+    let alert = UIAlertController(title: "QA build URL", message: "Please input QA URL", preferredStyle: UIAlertController.Style.alert )
+    let save = UIAlertAction(title: "Save", style: .default) { (alertAction) in
+      let textField = alert.textFields![0] as UITextField
+
+      if textField.text != "" {
+        print(textField.text!)
+        print("TF 1 : \(textField.text!)")
+        self.initializeOmni(forQAURL: textField.text)
+      } else {
+        print("TF 1 is Empty...")
+      }
+    }
+
+    //For first TF
+    alert.addTextField { (textField) in
+      textField.placeholder = "https://qa-build.com"
+    }
+
+    //Step : 4
+    alert.addAction(save)
+    //Cancel action
+    let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in }
+    alert.addAction(cancel)
+
+    self.present(alert, animated:true, completion: nil)
+  }
 }
 
 extension UIViewController: UITextFieldDelegate {
@@ -342,7 +373,11 @@ extension UIViewController: UITextFieldDelegate {
   }
 }
 
-extension UIViewController {
+extension ViewController {
+  @IBAction func onInitializeButtonPress(_ sender: UIButton) {
+    self.initQA()
+  }
+
   @IBAction func onRefundPaymentButtonPress(_ sender: UIButton) {
     self.fetchTransactions()
   }
@@ -380,19 +415,19 @@ extension UIViewController {
   }
 }
 
-extension UIViewController: TransactionUpdateDelegate {
+extension ViewController: TransactionUpdateDelegate {
   func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
     self.log(transactionUpdate)
   }
 }
 
-extension UIViewController: MobileReaderConnectionStatusDelegate {
+extension ViewController: MobileReaderConnectionStatusDelegate {
   func mobileReaderConnectionStatusUpdate(status: MobileReaderConnectionStatus) {
     self.log("Mobile reader \(status.rawValue)")
   }
 }
 
-extension UIViewController: UserNotificationDelegate {
+extension ViewController: UserNotificationDelegate {
   func onUserNotification(userNotification: UserNotification) {
     self.log(userNotification)
   }
