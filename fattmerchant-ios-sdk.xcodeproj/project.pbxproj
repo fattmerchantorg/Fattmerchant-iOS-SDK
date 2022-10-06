@@ -1139,7 +1139,7 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1176,7 +1176,7 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
