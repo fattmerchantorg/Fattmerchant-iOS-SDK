@@ -234,26 +234,41 @@ extern NSString * const CCInitialisationException;
 /**
 * Start a transaction. Observe {@link ChipDnaMobile#addTransactionFinishedTarget:action: transactionFinished} to get the transaction results. To receive updates during a transaction observe {@link ChipDnaMobile#addTransactionUpdateTarget:action: transactionUpdates}.
  *
- * Before calling {@link ChipDnaMobile#startTransaction:} add an observer and action for
+ * Before calling {@link ChipDnaMobile#startTransaction: startTransaction} add an observer and action for
  * <ul>
- * <li>(@link ChipDnaMobile#addDeferredAuthorizationTarget)</li>
- * <li>(@link ChipDnaMobile#addForcedAcceptanceTarget)</li>
- * <li>(@link ChipDnaMobile#addPartialApprovalTarget)</li>
- * <li>(@link ChipDnaMobile#addSignatureVerificationTarget)</li>
- * <li>(@link ChipDnaMobile#addTransactionFinishedTarget)</li>
- * <li>(@link ChipDnaMobile#addTransactionUpdateTarget)</li>
- * <li>(@link ChipDnaMobile#addIdVerificationTarget)</li>
- * <li>(@link ChipDnaMobile#addVoiceReferralTarget)</li>
- * <li>(@link ChipDnaMobile#addUserNotificationTarget) - recommended for BBPOS Chipper 2X BT</li>
- * <li>(@link ChipDnaMobile#addCardApplicationSelectionTarget) - required for BBPOS Chipper 2X BT</li>
+ * <li>{@link ChipDnaMobile#addDeferredAuthorizationTarget:action: DeferredAuthorization}</li>
+ * <li>{@link ChipDnaMobile#addForcedAcceptanceTarget:action: ForcedAcceptance}</li>
+ * <li>{@link ChipDnaMobile#addPartialApprovalTarget:action: PartialApproval}</li>
+ * <li>{@link ChipDnaMobile#addSignatureVerificationTarget:action: SignatureVerification}</li>
+ * <li>{@link ChipDnaMobile#addTransactionFinishedTarget:action: TransactionFinished}</li>
+ * <li>{@link ChipDnaMobile#addTransactionUpdateTarget:action: TransactionUpdate}</li>
+ * <li>{@link ChipDnaMobile#addIdVerificationTarget:action: IDVerification}</li>
+ * <li>{@link ChipDnaMobile#addVoiceReferralTarget:action: VoiceReferral}</li>
+ * <li>{@link ChipDnaMobile#addUserNotificationTarget:action: UserNotification} - recommended for BBPOS Chipper 2X BT</li>
+ * <li>{@link ChipDnaMobile#addCardApplicationSelectionTarget:action: CardApplicationSelection} - required for BBPOS Chipper 2X BT</li>
  * </ul>
  *
  * @param requestParameters {@link CCParameters} collection which can contain:
  * <p>{@link CCParameters#CCParamAmount CCParamAmount} The amount to be used in the transaction.</p>
- * <p>{@link CCParameters#CCParamUserReferrence CCParamUserReference} A unique reference for this transaction.
- * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} The transaction type for this transaction. Values can be {@link CCParameters#CCValueSale CCValueSale}, {@link CCParameters#CCValueRefund CCValueRefund} or {@link CCParameter#CCValueAccountVerification CCValueAccountVerification}.
- * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} Set the currency for this transaction. Only required when {@link ChipDnaMobile#getAvailableCurrencies:} returns more than one currency. If only a single currency is supported, it will be used by default.</p>
- * <p>@link CCParameters#CCParamPANKeyEntry CCParamPANKeyEntry} Requests a PAN key entry transaction is started for a card not present transaction. Value can be either {@link CCParameters#CCValueTrue TRUE} or {@link CCParameters#CCValueFalse FALSE}.</p>
+ * <p>{@link CCParameters#CCParamUserReference CCParamUserReference} A unique reference for this transaction.
+ * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} The transaction type for this transaction. Values can be {@link CCParameters#CCValueSale CCValueSale}, {@link CCParameters#CCValueRefund CCValueRefund} or {@link CCParameters#CCValueAccountVerification CCValueAccountVerification}.
+ * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} Set the currency for this transaction. Only required when {@link ChipDnaMobile#getAvailableCurrencies: getAvailableCurrencies} returns more than one currency. If only a single currency is supported, it will be used by default.</p>
+ * <p>{@link CCParameters#CCParamPANKeyEntry CCParamPANKeyEntry} Requests a PAN key entry transaction is started for a card not present transaction. Value can be either {@link CCParameters#CCValueTrue TRUE} or {@link CCParameters#CCValueFalse FALSE}.</p>
+ * <p>{@link CCParameters#CCParamCredentialOnFileFirstStore CCParamCredentialOnFileFirstStore} (Optional) Flags the transaction as the first store for a Credential on File transaction when the value is {@link CCParameters#CCValueTrue TRUE}. </p>
+ * <p>{@link CCParameters#CCParamCredentialOnFileReason CCParamCredentialOnFileReason} (Optional) Indicates the reason for a Credential on File transaction. Only considered if the value for {@link CCParameters#CCParamCredentialOnFileFirstStore CCParamCredentialOnFileFirstStore} is {@link CCParameters#CCValueTrue TRUE}. Values can be:
+ * <ul>
+ * <li>{@link CCParameters#CCValueReasonUnscheduled CCValueReasonUnscheduled}</li>
+ * <li>{@link CCParameters#CCValueReasonInstallment CCValueReasonInstallment}</li>
+ * <li>{@link CCParameters#CCValueReasonIncremental CCValueReasonIncremental}</li>
+ * <li>{@link CCParameters#CCValueReasonResubmission CCValueReasonResubmission}</li>
+ * <li>{@link CCParameters#CCValueReasonDelayedCharge CCValueReasonDelayedCharge}</li>
+ * <li>{@link CCParameters#CCValueReasonReAuth CCValueReasonReAuth}</li>
+ * <li>{@link CCParameters#CCValueReasonNoShow CCValueReasonNoShow}</li>
+ * </ul>
+ * </p>
+ * <p>{@link CCParameters#CCParamOnDeviceTippingPrompt CCParamOnDeviceTippingPrompt} (Optional) Sets a custom tipping prompt for on-device tipping. Only supported on Miura M020 and M021 PIN pads.</p>
+ * <p>{@link CCParameters#CCParamDynamicTippingAmounts CCParamDynamicTippingAmounts} (Optional) or {@link CCParameters#CCParamDynamicTippingPercentages CCParamDynamicTippingPercentages} (Optional) Enables on-device dynamic tipping using the provided amounts or percentages. Only one of the amount types can be used in a request. Dynamic tipping is currently only supported on Miura M020 and M021 PIN pads.</p>
+ * <p>{@link CCParameters#CCParamDynamicTippingHeader CCParamDynamicTippingHeader} (Optional) Sets the header for the dynamic tipping screen. This is only supported if dynamic tipping is enabled.</p>
  *
  * @return parameter collection containing {@link CCParameters#CCParamResult CCParamResult} and if applicable {@link CCParameters#CCParamErrors CCParamErrors}.
  */

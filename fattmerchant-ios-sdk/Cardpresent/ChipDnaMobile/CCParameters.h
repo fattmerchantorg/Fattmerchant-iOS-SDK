@@ -73,6 +73,14 @@ extern CCParameterValue const CCValueDeferredAuthorizationReasonProcessingFailed
 extern CCParameterValue const CCValueOfflineCompletionStateProcessed; /**< @memberof CCParameters Parameter value indicating that the offline request was successfully completed and sent online. */
 extern CCParameterValue const CCValueOfflineCompletionStateDeleted; /**< @memberof CCParameters Parameter value indicating that the offline request was deleted (and not sent online). */
 
+extern CCParameterValue const CCValueReasonUnscheduled; /**< @memberof CCParameters The Credential on File transaction is an unscheduled transaction. */
+extern CCParameterValue const CCValueReasonInstallment; /**< @memberof CCParameters The Credential on File transaction is an installment. */
+extern CCParameterValue const CCValueReasonIncremental; /**< @memberof CCParameters The Credential on File transaction is an incremental transaction. */
+extern CCParameterValue const CCValueReasonResubmission; /**< @memberof CCParameters The Credential on File transaction is a resubmission. */
+extern CCParameterValue const CCValueReasonDelayedCharge; /**< @memberof CCParameters The Credential on File transaction is a delayed charge. */
+extern CCParameterValue const CCValueReasonReAuth; /**< @memberof CCParameters The Credential on File transaction is a re-auth. */
+extern CCParameterValue const CCValueReasonNoShow; /**<@memberof CCParameters The Credential on File transaction is due to no show. */
+
 /**
  * @}
  */
@@ -147,6 +155,13 @@ extern CCParameterKey const CCParamUserReference; /**< @memeberof CCParameters P
 extern CCParameterKey const CCParamCurrency; /**< @memberof CCParameters Parameter key for the currency for a transaction. If only one currency is available ChipDNA Mobile will default to that currency. */
 
 extern CCParameterKey const CCParamTippingType; /**< @memberof CCParameters Parameter key for tipping type being used for a transaction. Values can be {@link CCParameters#CCValueEndOfDayTipping END_OF_DAY}, {link CCParameters#CCValueOnDeviceTipping ON_DEVICE_TIPPING} or {@link CCParameters#CCValueBothTipping BOTH}. */
+
+extern CCParameterKey const CCParamOnDeviceTippingPrompt; /**< @memberof CCParameters Parameter key to add a custom on-device tipping prompt. With the Miura M020 and M021 the value can have a maximum of 4 lines with a maximum of 21 characters in each line, with new lines indicated by “\n” or “\r”. The value accepts UTF-8 characters and cannot be longer than 195 bytes. */
+
+extern CCParameterKey const CCParamDynamicTippingAmounts; /**< @memberof CCParameters Parameter key for on-device dynamic tipping amounts in minor units. Value must be three comma-separated numeric values between 0 and 1000000. For example, for tip amounts of $3.00, $4.50, and $10.00, the value entered must be “300,450,1000”. */
+extern CCParameterKey const CCParamDynamicTippingPercentages; /**< @memberof CCParameters Parameter key for on-device dynamic tipping percentages. Value must be three comma-separated numeric values between 0 and 100. */
+extern CCParameterKey const CCParamDynamicTippingHeader; /**< @memberof CCParameters Parameter key for on-device dynamic tipping header. With the Miura M020 and M021 the value accepts UTF-8 characters and cannot be longer than 63 bytes. The value must not be empty. */
+
 extern CCParameterKey const CCParamPaymentMethod; /**< @memberof CCParameters Parameter key to indicate how a transaction will be processed. Values can be {@link CCParameters#CCValueCash CASH}, {@link CCParameters#CCValueCheque CHEQUE} or {@link CCParameters#CCValueCard CARD}. */
 extern CCParameterKey const CCParamOperatorPin; /**< @memeberof CCParameters Parameter key for the operator pin.  */
 extern CCParameterKey const CCParamCustomerVaultId; /**< @memberof CCParameters Parameter key for customer vault identifier */
@@ -273,6 +288,9 @@ extern CCParameterKey const CCParamDelayOnlineProcessing;
 extern CCParameterKey const CCParamEncodedRequest;
 
 extern CCParameterKey const CCParamBLEScanTime; /**< @memberof CCParameter Parameter key for configuring the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not passed into {@link availablePinPadsRequest} and {@link connectAndConfigure}.*/
+
+extern CCParameterKey const CCParamCredentialOnFileFirstStore; /**< @memberof CCParameter Parameter key to indicate the transaction is the first store for a Credential on File transaction. */
+extern CCParameterKey const CCParamCredentialOnFileReason; /**< @memberof CCParameter Parameter key for Credential on File transactions to indicate the reason for the transaction. Values can be {@link CCParameters#CCValueReasonUnscheduled UNSCHEDULED}, {@link CCParameters#CCValueReasonInstallment INSTALLMENT}, {@link CCParameters#CCValueReasonIncremental INCREMENTAL}, {@link CCParameters#CCValueReasonResubmission RESUBMISSION}, {@link CCParameters#CCValueReasonDelayedCharge DELAYED_CHARGE}, {@link CCParameters#CCValueReasonReAuth RE_AUTH} or {@link CCParameters#CCValueReasonNoShow NO_SHOW}. */
 /**
  * @}
  */

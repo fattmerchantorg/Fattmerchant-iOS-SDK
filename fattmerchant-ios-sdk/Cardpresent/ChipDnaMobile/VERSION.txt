@@ -1,4 +1,0 @@
-Name: Payment Device SDK for iOS
-Release Date: 07/03/2022
-Version Name: Lapis Lazuli
-Version Number: 3.05.87045472
