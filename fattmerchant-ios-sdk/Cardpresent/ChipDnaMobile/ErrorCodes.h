@@ -65,6 +65,12 @@ extern NSString * const InvalidPaymentMethod;      /**< Invalid payment method p
 extern NSString * const TransactionTypeMissing;    /**< Transaction type parameter method missing. */
 extern NSString * const InvalidTransactionType;    /**< Invalid transaction type parameter value. */
 extern NSString * const TippingTypeInvalid;        /**< Invalid tipping type parameter value. */
+extern NSString * const OnDeviceTippingPromptInvalid;      /**< The on-device tipping prompt is invalid. */
+extern NSString * const OnDeviceTippingPromptNotSupported; /**< A custom on-device tipping prompt is not supported. */
+extern NSString * const DynamicTippingNotSupported;                      /**< Dynamic tipping is not supported. */
+extern NSString * const DynamicTippingAmountsAndPercentagesNotSupported; /**< Dynamic tipping amounts and dynamic tipping percentages cannot be supplied together. */
+extern NSString * const DynamicTippingValueInvalid;                      /**< The dynamic tipping value is invalid. */
+extern NSString * const DynamicTippingHeaderInvalid;                     /**< The dynamic tipping header value is invalid. */
 extern NSString * const InvalidAuthCode;           /**< Invalid authorization code parameter value. */
 extern NSString * const AuthCodeMissing;           /**< Authorization code parameter missing. */
 extern NSString * const PhoneNumberMissing;        /**< Phone number parameter is missing. */
@@ -342,7 +348,7 @@ extern NSString * const HardwareError;                   /**< Hardware error. */
 extern NSString * const InvalidChecksum;                 /**< Invalid checksum, reserved for future use. */
 extern NSString * const ActionCancelled;                 /**< Action aborted with cancel key. */
 extern NSString * const InvalidSignature;                /**< Invalid signature. */
-extern NSString * const SWSInvalidHeader;                   /**< Invalid header. */
+extern NSString * const SWSInvalidHeader;                /**< Invalid header. */
 extern NSString * const InvalidPassword;                 /**< Invalid password. */
 extern NSString * const InvalidKeyFormat;                /**< Invalid security key format. */
 extern NSString * const SCRHardwareError;                /**< SCR Hardware error. */
@@ -563,17 +569,18 @@ extern NSString * const ConfirmAccountVerificationNotAllowed;       /**< Transac
 extern NSString * const VoidAccountVerificationNotAllowed;          /**< Transaction type Account Verification cannot be voided. */
 extern NSString * const AccountVerificationNotSupported;            /**< Transaction type Account Verification not supported. */
 extern NSString * const RefundAccountVerificationNotAllowed;        /**< Transaction type Account Verification cannot be refunded. */
+extern NSString * const CredentialOnFileReasonInvalid;              /**< The Credential on File reason is invalid. */
 extern NSString * const VoiceReferralResponseNotExpected;           /**< Unexpected Voice Referral response. */
 extern NSString * const AutoConfirmNotSupported;                    /**< Auto confirmation of transaction is not supported.*/
 extern NSString * const VoidRequestFailed;                          /**< Confirmation request failed to go online and wasn't able to be stored offline. Confirmation requests can be retried using {@link ChipDnaMobile#confirmTransaction:}.*/
 extern NSString * const ConfirmRequestFailed;                       /**< Void request failed to go online and wasn't able to be stored offline. Void requests can be retried using {@link ChipDnaMobile#voidTransaction:}. */
 extern NSString * const AmbiguousReference;                         /**< Ambiguous reference parameters supplied. Multiple identifiers for a transaction are not supported. */
-extern NSString * const RefundAccountVerificationNotAllowed;        /** <Transaction type AccountVerification cannot be refunded. */
+extern NSString * const RefundAccountVerificationNotAllowed;        /**<Transaction type AccountVerification cannot be refunded. */
 
 extern NSString * const DelayAccountVerificationNotAllowed;         /** <Transaction type AccountVerification cannot be delayed. */
 extern NSString * const VoidDelayOnlineProcessingNotAllowed;        /** <Transactions with delayed online processing cannot be voided. */
 extern NSString * const ConfirmDelayOnlineProcessingNotAllowed;     /** <Transactions with delayed online processing cannot be confirmed. */
-extern NSString * const RefundDelayOnlineProcessingNotAllowed;       /** <Transactions with delayed online processing cannot be refunded. */
+extern NSString * const RefundDelayOnlineProcessingNotAllowed;      /** <Transactions with delayed online processing cannot be refunded. */
 extern NSString * const DelayPanKeyEntryNotAllowed;                 /** <Transactions with PAN key entry cannot be delayed. */
 extern NSString * const RequestEncryptionFailed;                    /** <Failed to encrypt the request. */
 extern NSString * const RequestEncodingFailed;                      /** <Failed to encode the request. */
