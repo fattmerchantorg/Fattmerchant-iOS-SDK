@@ -3,9 +3,9 @@
  *The ChipDNA Mobile API contains the classes necessary to process Card Present sale and refund transactions on a mobile platform. Processing Card Present transactions requires one of the following PIN pads:
  *
  * <ul>
- * <li>BBPOS Chipper CHB20 or CHB22
+ * <li>BBPOS Chipper CHB20, CHB22 or CHB29
  * <li>Datecs Bluepad50 Contact or Contactless</li>
- * <li>Miura M007, M010 or M020</li>
+ * <li>Miura M010 or M020</li>
  * </ul>
  *
  * The ChipDNA Mobile API uses an encrypted database and needs to be initialised with a password before the API functionality can be used. {@link ChipDnaMobile#initialize: initialize} method is used to start the initialisation process. Once initialized an instance of the {@link ChipDnaMobile} class obtained using the static {@link ChipDnaMobile#sharedInstance sharedInstance} method.
@@ -109,9 +109,9 @@ extern NSString * const CCInitialisationException;
  *
  * Only the following PIN pads are supported:
  * <ul>
- * <li>BBPOS Chipper CHB20 or CHB22
+ * <li>BBPOS Chipper CHB20, CHB22 or CHB29
  * <li>Datecs Bluepad50 Contact or Contactless</li>
- * <li>Miura M007, M010 or M020</li>
+ * <li>Miura M010 or M020</li>
  * </ul>
  *
  * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not available. </p>
@@ -234,33 +234,48 @@ extern NSString * const CCInitialisationException;
 /**
 * Start a transaction. Observe {@link ChipDnaMobile#addTransactionFinishedTarget:action: transactionFinished} to get the transaction results. To receive updates during a transaction observe {@link ChipDnaMobile#addTransactionUpdateTarget:action: transactionUpdates}.
  *
- * Before calling {@link ChipDnaMobile#startTransaction:} add an observer and action for
+ * Before calling {@link ChipDnaMobile#startTransaction: startTransaction} add an observer and action for
  * <ul>
- * <li>(@link ChipDnaMobile#addDeferredAuthorizationTarget)</li>
- * <li>(@link ChipDnaMobile#addForcedAcceptanceTarget)</li>
- * <li>(@link ChipDnaMobile#addPartialApprovalTarget)</li>
- * <li>(@link ChipDnaMobile#addSignatureVerificationTarget)</li>
- * <li>(@link ChipDnaMobile#addTransactionFinishedTarget)</li>
- * <li>(@link ChipDnaMobile#addTransactionUpdateTarget)</li>
- * <li>(@link ChipDnaMobile#addIdVerificationTarget)</li>
- * <li>(@link ChipDnaMobile#addVoiceReferralTarget)</li>
- * <li>(@link ChipDnaMobile#addUserNotificationTarget) - recommended for BBPOS Chipper 2X BT</li>
- * <li>(@link ChipDnaMobile#addCardApplicationSelectionTarget) - required for BBPOS Chipper 2X BT</li>
+ * <li>{@link ChipDnaMobile#addDeferredAuthorizationTarget:action: DeferredAuthorization}</li>
+ * <li>{@link ChipDnaMobile#addForcedAcceptanceTarget:action: ForcedAcceptance}</li>
+ * <li>{@link ChipDnaMobile#addPartialApprovalTarget:action: PartialApproval}</li>
+ * <li>{@link ChipDnaMobile#addSignatureVerificationTarget:action: SignatureVerification}</li>
+ * <li>{@link ChipDnaMobile#addTransactionFinishedTarget:action: TransactionFinished}</li>
+ * <li>{@link ChipDnaMobile#addTransactionUpdateTarget:action: TransactionUpdate}</li>
+ * <li>{@link ChipDnaMobile#addIdVerificationTarget:action: IDVerification}</li>
+ * <li>{@link ChipDnaMobile#addVoiceReferralTarget:action: VoiceReferral}</li>
+ * <li>{@link ChipDnaMobile#addUserNotificationTarget:action: UserNotification} - recommended for BBPOS Chipper 2X BT</li>
+ * <li>{@link ChipDnaMobile#addCardApplicationSelectionTarget:action: CardApplicationSelection} - required for BBPOS Chipper 2X BT</li>
  * </ul>
  *
  * @param requestParameters {@link CCParameters} collection which can contain:
  * <p>{@link CCParameters#CCParamAmount CCParamAmount} The amount to be used in the transaction.</p>
- * <p>{@link CCParameters#CCParamUserReferrence CCParamUserReference} A unique reference for this transaction.
- * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} The transaction type for this transaction. Values can be {@link CCParameters#CCValueSale CCValueSale}, {@link CCParameters#CCValueRefund CCValueRefund} or {@link CCParameter#CCValueAccountVerification CCValueAccountVerification}.
- * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} Set the currency for this transaction. Only required when {@link ChipDnaMobile#getAvailableCurrencies:} returns more than one currency. If only a single currency is supported, it will be used by default.</p>
- * <p>@link CCParameters#CCParamPANKeyEntry CCParamPANKeyEntry} Requests a PAN key entry transaction is started for a card not present transaction. Value can be either {@link CCParameters#CCValueTrue TRUE} or {@link CCParameters#CCValueFalse FALSE}.</p>
+ * <p>{@link CCParameters#CCParamUserReference CCParamUserReference} A unique reference for this transaction.
+ * <p>{@link CCParameters#CCParamTransactionType CCParamTransactionType} The transaction type for this transaction. Values can be {@link CCParameters#CCValueSale CCValueSale}, {@link CCParameters#CCValueRefund CCValueRefund} or {@link CCParameters#CCValueAccountVerification CCValueAccountVerification}.
+ * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} Set the currency for this transaction. Only required when {@link ChipDnaMobile#getAvailableCurrencies: getAvailableCurrencies} returns more than one currency. If only a single currency is supported, it will be used by default.</p>
+ * <p>{@link CCParameters#CCParamPANKeyEntry CCParamPANKeyEntry} Requests a PAN key entry transaction is started for a card not present transaction. Value can be either {@link CCParameters#CCValueTrue TRUE} or {@link CCParameters#CCValueFalse FALSE}.</p>
+ * <p>{@link CCParameters#CCParamCredentialOnFileFirstStore CCParamCredentialOnFileFirstStore} (Optional) Flags the transaction as the first store for a Credential on File transaction when the value is {@link CCParameters#CCValueTrue TRUE}. </p>
+ * <p>{@link CCParameters#CCParamCredentialOnFileReason CCParamCredentialOnFileReason} (Optional) Indicates the reason for a Credential on File transaction. Only considered if the value for {@link CCParameters#CCParamCredentialOnFileFirstStore CCParamCredentialOnFileFirstStore} is {@link CCParameters#CCValueTrue TRUE}. Values can be:
+ * <ul>
+ * <li>{@link CCParameters#CCValueReasonUnscheduled CCValueReasonUnscheduled}</li>
+ * <li>{@link CCParameters#CCValueReasonInstallment CCValueReasonInstallment}</li>
+ * <li>{@link CCParameters#CCValueReasonIncremental CCValueReasonIncremental}</li>
+ * <li>{@link CCParameters#CCValueReasonResubmission CCValueReasonResubmission}</li>
+ * <li>{@link CCParameters#CCValueReasonDelayedCharge CCValueReasonDelayedCharge}</li>
+ * <li>{@link CCParameters#CCValueReasonReAuth CCValueReasonReAuth}</li>
+ * <li>{@link CCParameters#CCValueReasonNoShow CCValueReasonNoShow}</li>
+ * </ul>
+ * </p>
+ * <p>{@link CCParameters#CCParamOnDeviceTippingPrompt CCParamOnDeviceTippingPrompt} (Optional) Sets a custom tipping prompt for on-device tipping. Only supported on Miura M020 and M021 PIN pads.</p>
+ * <p>{@link CCParameters#CCParamDynamicTippingAmounts CCParamDynamicTippingAmounts} (Optional) or {@link CCParameters#CCParamDynamicTippingPercentages CCParamDynamicTippingPercentages} (Optional) Enables on-device dynamic tipping using the provided amounts or percentages. Only one of the amount types can be used in a request. Dynamic tipping is currently only supported on Miura M020 and M021 PIN pads.</p>
+ * <p>{@link CCParameters#CCParamDynamicTippingHeader CCParamDynamicTippingHeader} (Optional) Sets the header for the dynamic tipping screen. This is only supported if dynamic tipping is enabled.</p>
  *
  * @return parameter collection containing {@link CCParameters#CCParamResult CCParamResult} and if applicable {@link CCParameters#CCParamErrors CCParamErrors}.
  */
 -(CCParameters *)startTransaction:(CCParameters *)request;
 
 /**
- * Display text on the PIN pad for a given amount of time at which point the PIN pad will return to idle. Currently only supported by the Miura M010 and M007
+ * Display text on the PIN pad for a given amount of time at which point the PIN pad will return to idle. Currently only supported by the Miura M010
  * 
  * @param request A parameter list which can contain:
  * <p>{@link CCParameters#CCParamIdleMessage CCParamIdleMessage} Message to be displayed by PIN pad. </p>
@@ -428,6 +443,7 @@ extern NSString * const CCInitialisationException;
  * <p>{@link CCParameters#CCParamCurrency CCParamCurrency} The 3-char currency code used during the transaction. </p>
  * <p>{@link CCParameters#CCParamMaskedPan CCParamMaskedPan} The masked primary account number of the original sale transaction, showing only the first 6 (if available) and last 4 digits.</p>
  * <p>{@link CCParameters#CCParamDateTimeFormat CCParamDateTimeFormat} The format of the date and time in {@link CCParameters#CCParamTransactionDateTime CCParamTransactionDateTime} parameter.</p>
+ * <p>{@link CCParameters#CCParamPaymentMethod} When performing a Cash or Cheque Linked Refund, the payment method of {@link CCParameters#CCValueCash} or {@link CCParameters#CCValueCheque} will need to be provided, Card will be used by default</p>
  * <p>{@link CCParameters#CCParamCardSchemeId CCParamCardSchemeId} The {@link CCParameters#CCParamCardSchemeId} of the original sale transaction.</p>
  * <p>{@link CCParameters#CCParamCardEaseReference CCParamCardEaseReference} The CardEase reference for the original sale transaction - a unique GUID generated for a transaction if the authorization was submitted online to the Creditcall payment platform.. </p>
  * <p>{@link CCParameters#CCParamAuthCode CCParamAuthCode} The alpha numeric authorization code, up to 12 characters.</p>
@@ -689,6 +705,7 @@ extern NSString * const CCInitialisationException;
  *
  * Observer are returned a {@link CCParameters} collection which will contain:
  * <p>{@link CCParameters#CCParamSignatureData CCParamSigantureData} The signature data of receipt after resize and validation. Returned as a base 64 encoded string.
+ * <p>{@link CCParameters#CCParamReceiptData} data to create signature receipt.  An array of {@ReceiptField} objects serialized in an XML format. Can be deserialized into an object using {@link ChipDnaMobileSerializer#deserializeReceiptData:}.
  *
  * @param target Target wishing to know when signature verification is required.
  * @param action Action to be called on the observing target.
@@ -849,6 +866,9 @@ extern NSString * const CCInitialisationException;
 
 /**
  * Add an observer and action to get the event for signature capture. Set observer before calling method {@link ChipDnaMobile#startTransaction}.
+ *
+ * Observers are returned a {@link CCParameters} collection which will contain:
+ * <p>{@link CCParameters#CCParamReceiptData} data to create signature receipt.  An array of {@ReceiptField} objects serialized in an XML format. Can be deserialized into an object using {@link ChipDnaMobileSerializer#deserializeReceiptData:}.
  *
  * When updates are no longer required by the observer a call should be made to {@link ChipDnaMobile#removeSignatureCaptureTarget:}.
  *
