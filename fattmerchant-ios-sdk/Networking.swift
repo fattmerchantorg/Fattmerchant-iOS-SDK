@@ -34,7 +34,7 @@ internal class Networking {
 
     let session = URLSession(configuration: .default)
 
-    session.dataTask(with: request as URLRequest) { (data, urlResponse, nil) in
+    session.dataTask(with: request as URLRequest) { (data, urlResponse, _) in
       if let response = urlResponse as? HTTPURLResponse {
         switch response.statusCode {
         case 0..<300:

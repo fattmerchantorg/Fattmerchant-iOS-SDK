@@ -457,7 +457,7 @@ class TakeMobileReaderPayment {
         failure(TakeMobileReaderPaymentException.invoiceIdCannotBeBlank)
         return
       }
-      invoiceRepository.getById(id: invoiceId, completion: completion) { (error) in
+      invoiceRepository.getById(id: invoiceId, completion: completion) { (_) in
         failure(TakeMobileReaderPaymentException.invoiceNotFound)
       }
     } else {
