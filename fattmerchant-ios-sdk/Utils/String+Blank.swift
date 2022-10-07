@@ -6,6 +6,8 @@
 //  Copyright © 2022 Fattmerchant. All rights reserved.
 //
 
+import Foundation
+
 extension String {
 
     /// Checks to see if the receiver contains non-whitespace characters
