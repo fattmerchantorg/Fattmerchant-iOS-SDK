@@ -23,33 +23,33 @@ import Foundation
 ///
 ///   - completion: a function that gets the list of filtered items
 public func filter<T>(items: [T], predicate: @escaping (T) -> (@escaping (Bool) -> Void) -> Void, completion: @escaping ([T]) -> Void) {
-  guard !items.isEmpty else {
-    completion(items)
-    return
-  }
-
-  DispatchQueue.global(qos: .default).async {
-    var result: [T] = []
-    let dispatchGroup = DispatchGroup()
-    let semaphore = DispatchSemaphore(value: 1)
-
-    items.forEach { item in
-      dispatchGroup.enter()
-      let addToListIfSuccessful = { (success: Bool) in
-        if success {
-          semaphore.wait()
-          result.append(item)
-          semaphore.signal()
-        }
-        dispatchGroup.leave()
-      }
-
-      predicate(item)(addToListIfSuccessful)
+    guard !items.isEmpty else {
+        completion(items)
+        return
     }
 
-    dispatchGroup.wait()
-    completion(result)
-  }
+    DispatchQueue.global(qos: .default).async {
+        var result: [T] = []
+        let dispatchGroup = DispatchGroup()
+        let semaphore = DispatchSemaphore(value: 1)
+
+        items.forEach { item in
+            dispatchGroup.enter()
+            let addToListIfSuccessful = { (success: Bool) in
+                if success {
+                    semaphore.wait()
+                    result.append(item)
+                    semaphore.signal()
+                }
+                dispatchGroup.leave()
+            }
+
+            predicate(item)(addToListIfSuccessful)
+        }
+
+        dispatchGroup.wait()
+        completion(result)
+    }
 }
 
 /// Filters `items` by executing async function `predicate` on each item
@@ -67,31 +67,31 @@ public func filter<T>(items: [T], predicate: @escaping (T) -> (@escaping (Bool) 
 ///
 ///   - completion: a function that gets the list of filtered items
 public func filter<T>(items: [T], predicate: @escaping (T, @escaping (Bool) -> Void) -> Void, completion: @escaping ([T]) -> Void) {
-  guard !items.isEmpty else {
-    completion(items)
-    return
-  }
-
-  DispatchQueue.global(qos: .default).async {
-    var result: [T] = []
-    let dispatchGroup = DispatchGroup()
-    let semaphore = DispatchSemaphore(value: 1)
-
-    items.forEach { item in
-      dispatchGroup.enter()
-      let addToListIfSuccessful = { (success: Bool) in
-        if success {
-          semaphore.wait()
-          result.append(item)
-          semaphore.signal()
-        }
-        dispatchGroup.leave()
-      }
-
-      predicate(item, addToListIfSuccessful)
+    guard !items.isEmpty else {
+        completion(items)
+        return
     }
 
-    dispatchGroup.wait()
-    completion(result)
-  }
+    DispatchQueue.global(qos: .default).async {
+        var result: [T] = []
+        let dispatchGroup = DispatchGroup()
+        let semaphore = DispatchSemaphore(value: 1)
+
+        items.forEach { item in
+            dispatchGroup.enter()
+            let addToListIfSuccessful = { (success: Bool) in
+                if success {
+                    semaphore.wait()
+                    result.append(item)
+                    semaphore.signal()
+                }
+                dispatchGroup.leave()
+            }
+
+            predicate(item, addToListIfSuccessful)
+        }
+
+        dispatchGroup.wait()
+        completion(result)
+    }
 }

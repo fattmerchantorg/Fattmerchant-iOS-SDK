@@ -9,37 +9,37 @@
 import Foundation
 
 protocol OmniEndpoint {
-  static func resourceEndpoint() -> String
+    static func resourceEndpoint() -> String
 }
 
 extension Merchant: OmniEndpoint {
-  static func resourceEndpoint() -> String {
-    return "/merchant"
-  }
+    static func resourceEndpoint() -> String {
+        return "/merchant"
+    }
 }
 
 extension Invoice: OmniEndpoint {
-  static func resourceEndpoint() -> String {
-    return "/invoice"
-  }
+    static func resourceEndpoint() -> String {
+        return "/invoice"
+    }
 }
 
 extension Transaction: OmniEndpoint {
-  static func resourceEndpoint() -> String {
-    return "/transaction"
-  }
+    static func resourceEndpoint() -> String {
+        return "/transaction"
+    }
 }
 
 extension Customer: OmniEndpoint {
-  static func resourceEndpoint() -> String {
-    return "/customer"
-  }
+    static func resourceEndpoint() -> String {
+        return "/customer"
+    }
 }
 
 extension PaymentMethod: OmniEndpoint {
-  static func resourceEndpoint() -> String {
-    return "/payment-method"
-  }
+    static func resourceEndpoint() -> String {
+        return "/payment-method"
+    }
 }
 
 extension MobileReaderDetails: OmniEndpoint {

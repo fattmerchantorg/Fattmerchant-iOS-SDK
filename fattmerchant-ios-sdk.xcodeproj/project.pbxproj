@@ -70,8 +70,7 @@
 		59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */; };
 		A788DDCA28EFC7E4002D02B3 /* libCardEaseXml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966542425003B8600A56943 /* libCardEaseXml.a */; };
 		A788DDCB28EFC7E4002D02B3 /* libChipDnaMobileAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966543125003B8700A56943 /* libChipDnaMobileAPI.a */; };
-		A788DDCC28EFC7E4002D02B3 /* libLumberjack.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966543825003B8700A56943 /* libLumberjack.a */; };
-		A788DDCD28EFC7E4002D02B3 /* libsqlcipher-4.0.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966545A250040C400A56943 /* libsqlcipher-4.0.1.a */; };
+		A788DDCD28EFC7E4002D02B3 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		A788DDCF28EFC99D002D02B3 /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A788DDCE28EFC99D002D02B3 /* AnyPay.framework */; };
 		A788DDD028EFC99D002D02B3 /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A788DDCE28EFC99D002D02B3 /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D702B7BD23C8D0DD00B8AB79 /* OmniApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */; };
@@ -82,7 +81,9 @@
 		D702B7D023C8F80200B8AB79 /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
 		D702B7D123C8F80200B8AB79 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2592076BD16004DDA9F /* Networking.swift */; };
 		D71B6F91239E971A007FB7C4 /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
-		D71B6F93239E9892007FB7C4 /* chipdna-bridging-header.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6F92239E9892007FB7C4 /* chipdna-bridging-header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D71B6F93239E9892007FB7C4 /* chipdna-bridging-header.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6F92239E9892007FB7C4 /* chipdna-bridging-header.h */; };
+		D71DDE7E28979D9F00D4C42E /* String+Blank.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71DDE7D28979D9F00D4C42E /* String+Blank.swift */; };
+		D71DDE7F28979D9F00D4C42E /* String+Blank.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71DDE7D28979D9F00D4C42E /* String+Blank.swift */; };
 		D73BBCF2244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */; };
 		D73BBCF3244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */; };
 		D73BBCF5244D7F380052B525 /* DisconnectMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF4244D7F380052B525 /* DisconnectMobileReader.swift */; };
@@ -241,11 +242,9 @@
 		5966543525003B8700A56943 /* SQLCipher */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SQLCipher; sourceTree = "<group>"; };
 		5966543625003B8700A56943 /* MerchantData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantData.h; sourceTree = "<group>"; };
 		5966543725003B8700A56943 /* TransactionUpdates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionUpdates.h; sourceTree = "<group>"; };
-		5966543825003B8700A56943 /* libLumberjack.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLumberjack.a; sourceTree = "<group>"; };
 		5966543925003B8800A56943 /* ErrorCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCodes.h; sourceTree = "<group>"; };
 		5966543A25003B8800A56943 /* TransactionTypeIDEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionTypeIDEnum.h; sourceTree = "<group>"; };
 		5966543B25003B8800A56943 /* ChipDnaMobile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobile.h; sourceTree = "<group>"; };
-		5966545A250040C400A56943 /* libsqlcipher-4.0.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libsqlcipher-4.0.1.a"; sourceTree = "<group>"; };
 		596963FE245FED1000D0612F /* AWCDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWCDriver.swift; sourceTree = "<group>"; };
 		597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUpdateDelegate.swift; sourceTree = "<group>"; };
 		597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionGateway.swift; sourceTree = "<group>"; };
@@ -263,6 +262,7 @@
 		D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniApi.swift; sourceTree = "<group>"; };
 		D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaDriver.swift; sourceTree = "<group>"; };
 		D71B6F92239E9892007FB7C4 /* chipdna-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "chipdna-bridging-header.h"; path = "fattmerchant-ios-sdk/chipdna-bridging-header.h"; sourceTree = SOURCE_ROOT; };
+		D71DDE7D28979D9F00D4C42E /* String+Blank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Blank.swift"; sourceTree = "<group>"; };
 		D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedMobileReader.swift; sourceTree = "<group>"; };
 		D73BBCF4244D7F380052B525 /* DisconnectMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisconnectMobileReader.swift; sourceTree = "<group>"; };
 		D73BBCF6244D805C0052B525 /* DisconnectMobileReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisconnectMobileReaderTests.swift; sourceTree = "<group>"; };
@@ -343,9 +343,8 @@
 			files = (
 				A788DDCA28EFC7E4002D02B3 /* libCardEaseXml.a in Frameworks */,
 				A788DDCB28EFC7E4002D02B3 /* libChipDnaMobileAPI.a in Frameworks */,
-				A788DDCC28EFC7E4002D02B3 /* libLumberjack.a in Frameworks */,
+				A788DDCD28EFC7E4002D02B3 /* (null) in Frameworks */,
 				A788DDCF28EFC99D002D02B3 /* AnyPay.framework in Frameworks */,
-				A788DDCD28EFC7E4002D02B3 /* libsqlcipher-4.0.1.a in Frameworks */,
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
@@ -419,6 +418,7 @@
 		593A7FD52468788000D78874 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				D71DDE7D28979D9F00D4C42E /* String+Blank.swift */,
 				593A7FD6246878B700D78874 /* AsyncFilter.swift */,
 			);
 			path = Utils;
@@ -549,13 +549,11 @@
 				5966542625003B8600A56943 /* JailbreakChecker.h */,
 				5966542425003B8600A56943 /* libCardEaseXml.a */,
 				5966543125003B8700A56943 /* libChipDnaMobileAPI.a */,
-				5966543825003B8700A56943 /* libLumberjack.a */,
 				5966543225003B8700A56943 /* Merchant.h */,
 				5966543625003B8700A56943 /* MerchantData.h */,
 				5966542A25003B8700A56943 /* PaymentPlatformStatus.h */,
 				5966543325003B8700A56943 /* ReceiptField.h */,
 				5966542B25003B8700A56943 /* RequestQueueStatus.h */,
-				5966545A250040C400A56943 /* libsqlcipher-4.0.1.a */,
 				5966543425003B8700A56943 /* SOAP */,
 				5966543525003B8700A56943 /* SQLCipher */,
 				5966542725003B8600A56943 /* TerminalStatus.h */,
@@ -703,7 +701,6 @@
 				5966544825003B8800A56943 /* CardApplication.h in Headers */,
 				5966544425003B8800A56943 /* CCCardSchemeIdEnum.h in Headers */,
 				5966544D25003B8800A56943 /* Merchant.h in Headers */,
-				D71B6F93239E9892007FB7C4 /* chipdna-bridging-header.h in Headers */,
 				5966544325003B8800A56943 /* DeviceStatus.h in Headers */,
 				5966544125003B8800A56943 /* JailbreakChecker.h in Headers */,
 				5966543D25003B8800A56943 /* CCParameters.h in Headers */,
@@ -717,6 +714,7 @@
 				5966544525003B8800A56943 /* PaymentPlatformStatus.h in Headers */,
 				5966544725003B8800A56943 /* VersionInformation.h in Headers */,
 				5966545225003B8800A56943 /* TransactionUpdates.h in Headers */,
+				D71B6F93239E9892007FB7C4 /* chipdna-bridging-header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -889,6 +887,7 @@
 				D765D49F23CFCA1400656040 /* Amount.swift in Sources */,
 				D765D49623CFC1A000656040 /* InvoiceRepository.swift in Sources */,
 				5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */,
+				D71DDE7E28979D9F00D4C42E /* String+Blank.swift in Sources */,
 				D765D47223CC49C800656040 /* Self.swift in Sources */,
 				D79308CB23D229420066FCA2 /* ChipDnaUtils.swift in Sources */,
 				D7E15C5626577CFA006D4EE7 /* CapturePreauthTransaction.swift in Sources */,
@@ -994,6 +993,7 @@
 				D7692F1A23E4B03200CB0954 /* Omni.swift in Sources */,
 				D765D49D23CFC32200656040 /* TransactionRepository.swift in Sources */,
 				D760D82823D87F5D0075057C /* InvoiceJson.swift in Sources */,
+				D71DDE7F28979D9F00D4C42E /* String+Blank.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1057,6 +1057,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lz";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1116,6 +1117,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-lz";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1154,9 +1156,8 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/ThirdParty/ChipDnaMobile/SQLCipher",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/ThirdParty/AnyPay",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-lz";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
@@ -1195,9 +1196,8 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/ThirdParty/ChipDnaMobile/SQLCipher",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/ThirdParty/AnyPay",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-lz";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;

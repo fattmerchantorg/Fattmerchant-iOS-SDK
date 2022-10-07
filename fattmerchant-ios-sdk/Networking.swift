@@ -22,69 +22,69 @@ import Foundation
 
 internal class Networking {
 
-  var baseUrl: URL
-  var apiKey: String?
+    var baseUrl: URL
+    var apiKey: String?
 
-  init(_ baseUrl: URL) {
-    self.baseUrl = baseUrl
-  }
-
-  func dataTask(request: NSMutableURLRequest, method: String, completion: @escaping (Bool, Any?) -> Void) {
-    request.httpMethod = method
-
-    let session = URLSession(configuration: .default)
-
-    session.dataTask(with: request as URLRequest) { (data, urlResponse, _) in
-      if let response = urlResponse as? HTTPURLResponse {
-        switch response.statusCode {
-        case 0..<300:
-          completion(true, data)
-        case 300..<500:
-          completion(false, data)
-        default:
-          completion(data != nil, data)
-        }
-      } else {
-        completion(data != nil, data)
-      }
-    }.resume()
-  }
-
-  func get(request: NSMutableURLRequest, completion: @escaping (Bool, Any?) -> Void) {
-    dataTask(request: request, method: "GET", completion: completion)
-  }
-
-  func get(_ path: String, completion: @escaping (Bool, Any?) -> Void) {
-    dataTask(request: urlRequest(path: path), method: "GET", completion: completion)
-  }
-
-  func post(_ path: String, body: Data? = nil, completion: @escaping (Bool, Any?) -> Void) {
-    let request = urlRequest(path: path, body: body)
-    dataTask(request: request, method: "POST", completion: completion)
-  }
-
-  func put(_ path: String, body: Data? = nil, completion: @escaping (Bool, Any?) -> Void) {
-    let request = urlRequest(path: path, body: body)
-    dataTask(request: request, method: "PUT", completion: completion)
-  }
-
-  func urlRequest(path: String, body: Data? = nil) -> NSMutableURLRequest {
-    // Set url
-    let url = baseUrl.appendingPathComponent(path)
-    let request = NSMutableURLRequest(url: url)
-
-    // Set headers
-    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-    if let token = apiKey {
-      request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    init(_ baseUrl: URL) {
+        self.baseUrl = baseUrl
     }
 
-    // Set body
-    request.httpBody = body
+    func dataTask(request: NSMutableURLRequest, method: String, completion: @escaping (Bool, Any?) -> Void) {
+        request.httpMethod = method
 
-    return request
-  }
+        let session = URLSession(configuration: .default)
+
+        session.dataTask(with: request as URLRequest) { (data, urlResponse, _) in
+            if let response = urlResponse as? HTTPURLResponse {
+                switch response.statusCode {
+                case 0..<300:
+                    completion(true, data)
+                case 300..<500:
+                    completion(false, data)
+                default:
+                    completion(data != nil, data)
+                }
+            } else {
+                completion(data != nil, data)
+            }
+        }.resume()
+    }
+
+    func get(request: NSMutableURLRequest, completion: @escaping (Bool, Any?) -> Void) {
+        dataTask(request: request, method: "GET", completion: completion)
+    }
+
+    func get(_ path: String, completion: @escaping (Bool, Any?) -> Void) {
+        dataTask(request: urlRequest(path: path), method: "GET", completion: completion)
+    }
+
+    func post(_ path: String, body: Data? = nil, completion: @escaping (Bool, Any?) -> Void) {
+        let request = urlRequest(path: path, body: body)
+        dataTask(request: request, method: "POST", completion: completion)
+    }
+
+    func put(_ path: String, body: Data? = nil, completion: @escaping (Bool, Any?) -> Void) {
+        let request = urlRequest(path: path, body: body)
+        dataTask(request: request, method: "PUT", completion: completion)
+    }
+
+    func urlRequest(path: String, body: Data? = nil) -> NSMutableURLRequest {
+        // Set url
+        let url = baseUrl.appendingPathComponent(path)
+        let request = NSMutableURLRequest(url: url)
+
+        // Set headers
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        if let token = apiKey {
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        // Set body
+        request.httpBody = body
+
+        return request
+    }
 
 }

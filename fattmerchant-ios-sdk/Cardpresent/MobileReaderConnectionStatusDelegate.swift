@@ -11,8 +11,8 @@ import Foundation
 /// Receives notifications of reader connection events such as when a reader is connecting or updating
 public protocol MobileReaderConnectionStatusDelegate: AnyObject {
 
-  /// Called when `MobileReader` has a new `MobileReaderConnectionStatus`
-  /// - Parameters:
-  ///   - status: The new `MobileReaderConnectionStatus` of the `reader`
-  func mobileReaderConnectionStatusUpdate(status: MobileReaderConnectionStatus)
+    /// Called when `MobileReader` has a new `MobileReaderConnectionStatus`
+    /// - Parameters:
+    ///   - status: The new `MobileReaderConnectionStatus` of the `reader`
+    func mobileReaderConnectionStatusUpdate(status: MobileReaderConnectionStatus)
 }

@@ -10,131 +10,131 @@ import Foundation
 
 class MockDriver: MobileReaderDriver {
 
-  weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
+    weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
 
-  var reader: MobileReader? = MobileReader(name: "Reader",
-                            firmwareVersion: "FakeFirmwareVersion",
-                            make: "FakeMake",
-                            model: "FakeModel",
-                            serialNumber: "FakeSerialNumber")
+    var reader: MobileReader? = MobileReader(name: "Reader",
+                                             firmwareVersion: "FakeFirmwareVersion",
+                                             make: "FakeMake",
+                                             model: "FakeModel",
+                                             serialNumber: "FakeSerialNumber")
 
-  /// Set this to false to simulate a busy mobile reader
-  var readyToTakePayment = true
+    /// Set this to false to simulate a busy mobile reader
+    var readyToTakePayment = true
 
-  var familiarSerialNumbers: [String] = []
+    var familiarSerialNumbers: [String] = []
 
-  var isInitialized: Bool = true
-  var shouldConnect: Bool = true
+    var isInitialized: Bool = true
+    var shouldConnect: Bool = true
 
-  static var source: String = "MOCKSOURCE"
+    static var source: String = "MOCKSOURCE"
 
-  static var omniRefundsSupported: Bool = false
+    static var omniRefundsSupported: Bool = false
 
-  func isReadyToTakePayment(completion: (Bool) -> Void) {
-    completion(readyToTakePayment)
-  }
-
-  func initialize(args: [String: Any], completion: (Bool) -> Void) {
-    if let nmiArgs = args["nmi"] as? NMIDetails {
-      return completion(!nmiArgs.securityKey.isEmpty)
-    } else if let awcArgs = args["awc"] as? AWCDetails {
-      return completion(!awcArgs.terminalId.isEmpty && !awcArgs.terminalSecret.isEmpty)
-    } else {
-      return completion(false)
-    }
-  }
-
-  func isInitialized(completion: @escaping (Bool) -> Void) {
-    completion(isInitialized)
-  }
-
-  func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
-    completion([reader!])
-  }
-
-  func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
-    guard shouldConnect else {
-      return completion(nil)
+    func isReadyToTakePayment(completion: (Bool) -> Void) {
+        completion(readyToTakePayment)
     }
 
-    if let serial = reader.serialNumber {
-      familiarSerialNumbers.append(serial)
+    func initialize(args: [String: Any], completion: (Bool) -> Void) {
+        if let nmiArgs = args["nmi"] as? NMIDetails {
+            return completion(!nmiArgs.securityKey.isEmpty)
+        } else if let awcArgs = args["awc"] as? AWCDetails {
+            return completion(!awcArgs.terminalId.isEmpty && !awcArgs.terminalSecret.isEmpty)
+        } else {
+            return completion(false)
+        }
     }
 
-    completion(reader)
-  }
+    func isInitialized(completion: @escaping (Bool) -> Void) {
+        completion(isInitialized)
+    }
 
-  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    completion(true)
-  }
+    func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
+        completion([reader!])
+    }
 
-  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
-    completion(reader)
-  }
+    func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
+        guard shouldConnect else {
+            return completion(nil)
+        }
 
-  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, userNotificationDelegate: UserNotificationDelegate?, completion: @escaping (TransactionResult) -> Void) {
-    performTransaction(with: request,
-                       signatureProvider: signatureProvider,
-                       transactionUpdateDelegate: transactionUpdateDelegate,
-                       completion: completion)
-  }
+        if let serial = reader.serialNumber {
+            familiarSerialNumbers.append(serial)
+        }
 
-  func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
-    var transactionResult = TransactionResult()
-    transactionResult.request = request
-    transactionResult.success = true
-    transactionResult.maskedPan = "411111111234"
-    transactionResult.cardHolderFirstName = "William"
-    transactionResult.cardHolderLastName = "Holder"
-    transactionResult.authCode = "abc123"
-    transactionResult.transactionType = "charge"
-    transactionResult.amount = request.amount
-    transactionResult.cardType = "visa"
-    transactionResult.userReference = "cdm-123123"
+        completion(reader)
+    }
 
-    completion(transactionResult)
-  }
+    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+        completion(true)
+    }
 
-  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    completion(true)
-  }
+    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+        completion(reader)
+    }
 
-  func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-    refund(transaction: transaction, refundAmount: nil, completion: completion, error: error)
-  }
+    func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, userNotificationDelegate: UserNotificationDelegate?, completion: @escaping (TransactionResult) -> Void) {
+        performTransaction(with: request,
+                           signatureProvider: signatureProvider,
+                           transactionUpdateDelegate: transactionUpdateDelegate,
+                           completion: completion)
+    }
 
-  func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
-    var transactionResult = TransactionResult()
-    transactionResult.request = nil
-    transactionResult.success = true
-    transactionResult.maskedPan = "411111111234"
-    transactionResult.cardHolderFirstName = "William"
-    transactionResult.cardHolderLastName = "Holder"
-    transactionResult.authCode = "def456"
-    transactionResult.transactionType = "refund"
-    transactionResult.amount = Amount(cents: 5)
-    transactionResult.cardType = "visa"
-    transactionResult.userReference = "cdm-123123"
-    transactionResult.transactionSource = nil
+    func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
+        var transactionResult = TransactionResult()
+        transactionResult.request = request
+        transactionResult.success = true
+        transactionResult.maskedPan = "411111111234"
+        transactionResult.cardHolderFirstName = "William"
+        transactionResult.cardHolderLastName = "Holder"
+        transactionResult.authCode = "abc123"
+        transactionResult.transactionType = "charge"
+        transactionResult.amount = request.amount
+        transactionResult.cardType = "visa"
+        transactionResult.userReference = "cdm-123123"
 
-    completion(transactionResult)
-  }
+        completion(transactionResult)
+    }
 
-  func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void) {
-    var transactionResult = TransactionResult()
-    transactionResult.request = nil
-    transactionResult.success = true
-    transactionResult.maskedPan = "411111111234"
-    transactionResult.cardHolderFirstName = "William"
-    transactionResult.cardHolderLastName = "Holder"
-    transactionResult.authCode = "def456"
-    transactionResult.transactionType = "refund"
-    transactionResult.amount = Amount(cents: 5)
-    transactionResult.cardType = "visa"
-    transactionResult.userReference = "cdm-123123"
-    transactionResult.transactionSource = nil
+    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+        completion(true)
+    }
 
-    completion(transactionResult)
-  }
+    func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+        refund(transaction: transaction, refundAmount: nil, completion: completion, error: error)
+    }
+
+    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+        var transactionResult = TransactionResult()
+        transactionResult.request = nil
+        transactionResult.success = true
+        transactionResult.maskedPan = "411111111234"
+        transactionResult.cardHolderFirstName = "William"
+        transactionResult.cardHolderLastName = "Holder"
+        transactionResult.authCode = "def456"
+        transactionResult.transactionType = "refund"
+        transactionResult.amount = Amount(cents: 5)
+        transactionResult.cardType = "visa"
+        transactionResult.userReference = "cdm-123123"
+        transactionResult.transactionSource = nil
+
+        completion(transactionResult)
+    }
+
+    func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void) {
+        var transactionResult = TransactionResult()
+        transactionResult.request = nil
+        transactionResult.success = true
+        transactionResult.maskedPan = "411111111234"
+        transactionResult.cardHolderFirstName = "William"
+        transactionResult.cardHolderLastName = "Holder"
+        transactionResult.authCode = "def456"
+        transactionResult.transactionType = "refund"
+        transactionResult.amount = Amount(cents: 5)
+        transactionResult.cardType = "visa"
+        transactionResult.userReference = "cdm-123123"
+        transactionResult.transactionSource = nil
+
+        completion(transactionResult)
+    }
 
 }

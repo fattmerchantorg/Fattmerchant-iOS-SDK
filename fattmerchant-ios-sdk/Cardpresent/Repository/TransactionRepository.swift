@@ -9,10 +9,10 @@
 import Foundation
 
 class TransactionRepository: ModelRepository {
-  typealias OmniModel = Transaction
-  var omniApi: OmniApi
+    typealias OmniModel = Transaction
+    var omniApi: OmniApi
 
-  required init(omniApi: OmniApi) {
-    self.omniApi = omniApi
-  }
+    required init(omniApi: OmniApi) {
+        self.omniApi = omniApi
+    }
 }

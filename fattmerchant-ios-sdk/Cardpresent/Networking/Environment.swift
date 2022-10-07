@@ -10,20 +10,20 @@ import Foundation
 
 /// The Omni environment to use
 public enum Environment {
-  case LIVE
-  case DEV
+    case LIVE
+    case DEV
 
-  func baseUrlString() -> String {
-    switch self {
-    case .DEV:
-      return "https://apidev.fattlabs.com"
-    case .LIVE:
-      return "https://apiprod.fattlabs.com"
+    func baseUrlString() -> String {
+        switch self {
+        case .DEV:
+            return "https://apidev.fattlabs.com"
+        case .LIVE:
+            return "https://apiprod.fattlabs.com"
+        }
     }
-  }
 
-  func baseUrl() -> URL? {
-    return URL(string: baseUrlString())
-  }
+    func baseUrl() -> URL? {
+        return URL(string: baseUrlString())
+    }
 
 }

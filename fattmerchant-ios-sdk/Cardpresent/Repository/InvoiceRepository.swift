@@ -9,24 +9,24 @@
 import Foundation
 
 enum CreateInvoiceException: OmniException {
-  case Something(String)
+    case Something(String)
 
-  static var mess = "Could not create customer"
+    static var mess = "Could not create customer"
 
-  var detail: String? {
-    switch self {
-    case .Something(let desc):
-      return desc
+    var detail: String? {
+        switch self {
+        case .Something(let desc):
+            return desc
+        }
     }
-  }
 
 }
 
 class InvoiceRepository: ModelRepository {
-  typealias OmniModel = Invoice
-  var omniApi: OmniApi
+    typealias OmniModel = Invoice
+    var omniApi: OmniApi
 
-  required init(omniApi: OmniApi) {
-    self.omniApi = omniApi
-  }
+    required init(omniApi: OmniApi) {
+        self.omniApi = omniApi
+    }
 }

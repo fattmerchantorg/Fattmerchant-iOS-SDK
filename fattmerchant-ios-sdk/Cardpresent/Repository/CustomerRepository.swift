@@ -9,28 +9,28 @@
 import Foundation
 
 enum CreateCustomerException: OmniException {
-  case customerNameNotSupplied
-  case unknown
+    case customerNameNotSupplied
+    case unknown
 
-  static var mess = "Could not create customer"
+    static var mess = "Could not create customer"
 
-  var detail: String? {
-    switch self {
-    case .customerNameNotSupplied:
-      return "Customer name is required"
+    var detail: String? {
+        switch self {
+        case .customerNameNotSupplied:
+            return "Customer name is required"
 
-    default:
-      return "Unknown error creating customer"
+        default:
+            return "Unknown error creating customer"
+        }
     }
-  }
 
 }
 
 class CustomerRepository: ModelRepository {
-  typealias OmniModel = Customer
-  var omniApi: OmniApi
+    typealias OmniModel = Customer
+    var omniApi: OmniApi
 
-  required init(omniApi: OmniApi) {
-    self.omniApi = omniApi
-  }
+    required init(omniApi: OmniApi) {
+        self.omniApi = omniApi
+    }
 }

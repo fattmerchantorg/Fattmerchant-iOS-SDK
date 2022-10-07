@@ -66,6 +66,35 @@ typedef NS_ENUM(NSUInteger, DeviceStatusEnum) {
 @property (nonatomic, strong, readonly)NSString *serialNumber;
 
 /**
+ * Revision of currently connected PIN pad.
+ */
+@property (nonatomic, strong, readonly)NSString *pinPadRevision;
+
+/**
+ * Battery charge percentage of the currently connected device.
+ */
+@property (nonatomic, readonly)NSInteger batteryChargePercentage;
+
+/**
+ * Charging status of the currently connected device.
+ * Returns "Not Charging", "Charging" or "Fully Charged".
+ */
+@property (nonatomic, strong, readonly)NSString *batteryChargingStatus;
+
+/**
+ * Date and time for the last battery charging status update of the currently connected device.
+ * Returned using the local date, time, and time zone of the mobile device.
+ * Format specified by batteryChargingStatusUpdateDateTimeFormat.
+ */
+@property (nonatomic, strong, readonly)NSString *batteryChargingStatusUpdateDateTime;
+
+/**
+ * Date and time format used for batteryChargingStatusUpdateDateTime.
+ * Returns "dd/MM/yyyy HH:mm:ss".
+ */
+@property (nonatomic, strong, readonly)NSString *batteryChargingStatusUpdateDateTimeFormat;
+
+/**
  * Convert string constant into {@link DeviseStatus#DeviceStatusEnum DeviceStatusEnum}.
  */
 +(DeviceStatusEnum)getDeviceStatusEnum:(NSString *)deviceStatusStr;

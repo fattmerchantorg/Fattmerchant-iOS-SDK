@@ -12,5 +12,5 @@ import Foundation
 ///
 /// For example, "Please insert/swipe your card"
 public protocol TransactionUpdateDelegate: AnyObject {
-  func onTransactionUpdate(transactionUpdate: TransactionUpdate)
+    func onTransactionUpdate(transactionUpdate: TransactionUpdate)
 }

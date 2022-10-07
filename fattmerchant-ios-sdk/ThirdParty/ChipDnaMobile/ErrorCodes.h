@@ -65,6 +65,12 @@ extern NSString * const InvalidPaymentMethod;      /**< Invalid payment method p
 extern NSString * const TransactionTypeMissing;    /**< Transaction type parameter method missing. */
 extern NSString * const InvalidTransactionType;    /**< Invalid transaction type parameter value. */
 extern NSString * const TippingTypeInvalid;        /**< Invalid tipping type parameter value. */
+extern NSString * const OnDeviceTippingPromptInvalid;      /**< The on-device tipping prompt is invalid. */
+extern NSString * const OnDeviceTippingPromptNotSupported; /**< A custom on-device tipping prompt is not supported. */
+extern NSString * const DynamicTippingNotSupported;                      /**< Dynamic tipping is not supported. */
+extern NSString * const DynamicTippingAmountsAndPercentagesNotSupported; /**< Dynamic tipping amounts and dynamic tipping percentages cannot be supplied together. */
+extern NSString * const DynamicTippingValueInvalid;                      /**< The dynamic tipping value is invalid. */
+extern NSString * const DynamicTippingHeaderInvalid;                     /**< The dynamic tipping header value is invalid. */
 extern NSString * const InvalidAuthCode;           /**< Invalid authorization code parameter value. */
 extern NSString * const AuthCodeMissing;           /**< Authorization code parameter missing. */
 extern NSString * const PhoneNumberMissing;        /**< Phone number parameter is missing. */
@@ -77,7 +83,7 @@ extern NSString * const InvalidSourceEmail;        /**< Source email address is 
 extern NSString * const ReceiptTextMissing;        /**< Receipt text is missing. */
 extern NSString * const InvalidReceiptType;        /**< The receipt type is invalid. */
 extern NSString * const ReceiptSubjectMissing;     /**< The receipt subject text is missing. */
-extern NSString * const IdleMessageTextMissing;    /**< The idle message text is missing. */
+extern NSString * const DisplayTextMissing;        /**< The text to display cannot be nil. */
 extern NSString * const SaleReferenceMissing;      /**< The sale reference is missing. */
 extern NSString * const InvalidPinPadName;         /**< Invalid PIN pad name value. */
 extern NSString * const InvalidConnectionType;     /**< Invalid connection type value. */
@@ -208,62 +214,18 @@ extern NSString * const ForcedAcceptanceObserverRequired;           /**< Method 
 extern NSString * const SignatureCaptureObserverRequired;           /**< Method required at least one observer for signature capture events. @see ChipDnaMobile#addSignatureCaptureTarget:action:*/
 extern NSString * const PartialApprovalObserverRequired;            /**< Method required at least one observer for partial approval events. @see ChipDnaMobile#addPartialApprovalTarget:action:*/
 
-extern NSString * const TerminalRiskManagementDataFormatError;               /**< There is a format error with the Terminal Risk Management Data. */
 extern NSString * const CountryCodeFormatError;                              /**< There is a format error with the Country Code. */
-extern NSString * const MerchantCategoryCodeFormatError;                     /**< There is a format error with the Merchant Category Code. */
 extern NSString * const MerchantNameAddressFormatError;                      /**< There is a format error with the Merchant Name and Address. */
-extern NSString * const ReceiptCopyToSelfFormatError;                        /**< There is a format error with the Receipt Copy to Self. */
-extern NSString * const WebmisEmailAddressFormatError;                       /**< There is a format error with the WebMIS Email Address. */
 extern NSString * const ServerTimeoutFormatError;                            /**< There is a format error with the Server Timeout. */
 extern NSString * const TerminalSerialNumberFormatError;                     /**< There is a format error with the Terminal Serial Number. */
-extern NSString * const TerminalTypeFormatError;                             /**< There is a format error with the Terminal Type. */
-extern NSString * const TerminalCapabilitiesFormatError;                     /**< There is a format error with the Terminal Capabilities. */
-extern NSString * const TerminalAdditionalCapabilitiesFormatError;           /**< There is a format error with the Terminal Additional Capabilities. */
-extern NSString * const TransactionCategoryCodeFormatError;                  /**< There is a format error with the Transaction Category Code. */
-extern NSString * const TimeOut1FormatError;                                 /**< There is a format error with the Time Out 1. */
-extern NSString * const TimeOut2FormatError;                                 /**< There is a format error with the Time Out 2. */
-extern NSString * const TimeOut3FormatError;                                 /**< There is a format error with the Time Out 3. */
-extern NSString * const AcquirerIdentifierFormatError;                       /**< There is a format error with the Acquirer Identifier. */
-extern NSString * const MerchantIdentifierFormatError;                       /**< There is a format error with the Merchant Identifier. */
-extern NSString * const TerminalIdentifierFormatError;                       /**< There is a format error with the Terminal Identifier. */
-extern NSString * const MerchantAccountFormatError;                          /**< There is a format error with the Merchant Account. */
-extern NSString * const AmexAcquirerIdentifierFormatError;                   /**< There is a format error with the Amex Acquirer Identifier. */
-extern NSString * const AmexMerchantIdentifierFormatError;                   /**< There is a format error with the Amex Merchant Identifier. */
-extern NSString * const AmexTerminalIdentifierFormatError;                   /**< There is a format error with the Amex Terminal Identifier. */
-extern NSString * const AmexMerchantAccountFormatError;                      /**< There is a format error with the Amex Merchant Account. */
-extern NSString * const DinersAcquirerIdentifierFormatError;                 /**< There is a format error with the Diners Acquirer Identifier. */
-extern NSString * const DinersMerchantIdentifierFormatError;                 /**< There is a format error with the Diners Merchant Identifier. */
-extern NSString * const DinersTerminalIdentifierFormatError;                 /**< There is a format error with the Diners Terminal Identifier. */
-extern NSString * const DinersMerchantAccountFormatError;                    /**< There is a format error with the Diners Merchant Account. */
-extern NSString * const IccTacSetFormatError;                                /**< There is a format error with the ICC Tac Set. */
-extern NSString * const AidFormatError;                                      /**< There is a format error with the AID. */
-extern NSString * const ApplicationVersionNumberFormatError;                 /**< There is a format error with the Application Version Number. */
-extern NSString * const TacDefaultFormatError;                               /**< There is a format error with the TAC Default. */
-extern NSString * const TacDenialFormatError;                                /**< There is a format error with the TAC Denial. */
-extern NSString * const TacOnlineFormatError;                                /**< There is a format error with the TAC Online. */
-extern NSString * const ForceOnlineFormatError;                              /**< There is a format error with the Force Online. */
-extern NSString * const TargetPercentageRandomSelectionFormatError;          /**< There is a format error with the Target Percentage used in Random Selection. */
-extern NSString * const MaxTargetPercentageRandomSelectionFormatError;       /**< There is a format error with the Maximum Target Percentage used in Random Selection. */
-extern NSString * const ThresholdValueRandomSelectionFormatError;            /**< There is a format error with the Threshold Value used in Random Selection. */
-extern NSString * const FloorLimitFormatError;                               /**< There is a format error with the Floor Limit. */
-extern NSString * const TdolFormatError;                                     /**< There is a format error with the TDOL. */
-extern NSString * const DdolFormatError;                                     /**< There is a format error with the DDOL. */
-extern NSString * const PosModeEntryCodeFormatError;                         /**< There is a format error with the POS Mode Entry Code. */
-extern NSString * const ProcessTypeFormatError;                              /**< There is a format error with the Process Type. */
-extern NSString * const OutputDebuggingFormatError;                          /**< There is a format error with the Output Debugging. */
-extern NSString * const SimulateCommsFailureFormatError;                     /**< There is a format error with the Simulate Comms Failure. */
 extern NSString * const SignatureCaptureSupportedFormatError;                /**< There is a format error with the Signature Capture Supported. */
 extern NSString * const SignatureCheckRequiredFormatError;                   /**< There is a format error with the Signature Check Required. */
 extern NSString * const SignatureCheckRequiredNoCvmFormatError;              /**< There is a format error with the Signature Check Required when no CVM. */
-extern NSString * const ConstraintChecksFormatError;                         /**< There is a format error with the Constraints Checks. */
 extern NSString * const AdditionalIccConstraintChecksFormatError;            /**< There is a format error with the Additional ICC Constraint Checks. */
 extern NSString * const AdditionalSwipeConstraintChecksFormatError;          /**< There is a format error with the Additional Swipe Constraint Checks. */
-extern NSString * const PinpadKernelFormatError;                             /**< There is a format error with the PIN pad Kernel. */
 extern NSString * const OperatorPinFormatError;                              /**< There is a format error with the Operator PIN. */
 extern NSString * const LinkedRefundsSupportedFormatError;                   /**< There is a format error with the Linked Refunds Supported. */
 extern NSString * const StandaloneRefundsSupportedFormatError;               /**< There is a format error with the Standalone Refunds Supported. */
-extern NSString * const PinpadCaKeysFormatError;                             /**< There is a format error with the PIN pad CaKeys. */
-extern NSString * const PinpadIccAppsFormatError;                            /**< There is a format error with the PIN pad IccApps.*/
 extern NSString * const HomeNetworkIdentityFormatError;                      /**< There is a format error with the Home Network Identity. */
 extern NSString * const MaximumDaysBetweenConfigurationUpdatesFormatError;   /**< There is a format error with the Maximum Number of Days Between Configuration Updates. */
 extern NSString * const ApplicationStateFormatError;                         /**< There is a format error with the Application State. */
@@ -273,7 +235,6 @@ extern NSString * const FileSizeTooLarge;                                    /**
 extern NSString * const ReceiptSourceEmailFormatError;                       /**< There is a format error with the Receipt Source Email. */
 extern NSString * const ReceiptSourceSmsFormatError;                         /**< There is a format error with the Receipt Source SMS. */
 extern NSString * const FileDecodeError;                                     /**< The file could not be decoded. */
-extern NSString * const FullIccRefundsSupportedFormatError;                  /**< There is a format error with the Full Icc Refunds Supported. */
 extern NSString * const TerminalLanguageFormatError;                         /**< There is a format error with the Terminal Language. */
 extern NSString * const InternationalDiallingCodeFormatError;                /**< There is a format error with the International Dialling Code. */
 extern NSString * const GratuitySupportedFormatError;                        /**< There is a format error with the Gratuity Supported. */
@@ -332,6 +293,8 @@ extern NSString * const PanKeyEntrySupportedFormatError;                     /**
 extern NSString * const LogFileStoreCountLimitFormatError;                   /**< There is a format error with LogFileStoreCountLimit. */
 extern NSString * const AutoConfirmSupportedFormatError;                     /**< There is a format error with AutoConfirmSupported. */
 extern NSString * const ConfigFileGenerationFailed;                          /**< There is a format error with ConfigFileGeneration. */
+extern NSString * const DelayOnlineProcessingSupportedFormatError;           /**<There is a format error with DelayOnlineProcessingSupported*/
+extern NSString * const XmlEncryptionCertificateFormatError;                 /**<There is a format error with XmlEncryptionCertificate*/
 /**
  * @}
  */
@@ -354,8 +317,9 @@ extern NSString * const UnsupportedCommunicationProtocol;    /**< Bluetooth/EA F
 extern NSString * const InvalidState;                       /**< The command can not be processed at this point in the transaction. */
 extern NSString * const DisplayTextTooLong;                 /**< The text to display is too long to fit on screen. */
 extern NSString * const DisplayTextFormatInvalid;           /**< The text to display contains invalid characters. */
-extern NSString * const NilDisplayText;                     /**< The text to display can not be nil. */
+extern NSString * const PinPadIdleMessageTimeoutFormatError;/**< The Idle Message Timeout contains invalid characters*/
 extern NSString * const UnableToStartGetCardDetails;        /**< Get card details could not be initialised. */
+extern NSString * const DisplayTimeInvalid;                 /**< The display time is invalid. */
 extern NSString * const ForcedAcceptanceNotSuported;        /**< Forced acceptance is not supported. */
 extern NSString * const DeferredAuthorizationNotSupported;  /**< Deferred authorization is not supported. */
 extern NSString * const PartialApprovalNotSupported;        /**< Partial approval is not supported. */
@@ -384,7 +348,7 @@ extern NSString * const HardwareError;                   /**< Hardware error. */
 extern NSString * const InvalidChecksum;                 /**< Invalid checksum, reserved for future use. */
 extern NSString * const ActionCancelled;                 /**< Action aborted with cancel key. */
 extern NSString * const InvalidSignature;                /**< Invalid signature. */
-extern NSString * const SWSInvalidHeader;                   /**< Invalid header. */
+extern NSString * const SWSInvalidHeader;                /**< Invalid header. */
 extern NSString * const InvalidPassword;                 /**< Invalid password. */
 extern NSString * const InvalidKeyFormat;                /**< Invalid security key format. */
 extern NSString * const SCRHardwareError;                /**< SCR Hardware error. */
@@ -605,13 +569,22 @@ extern NSString * const ConfirmAccountVerificationNotAllowed;       /**< Transac
 extern NSString * const VoidAccountVerificationNotAllowed;          /**< Transaction type Account Verification cannot be voided. */
 extern NSString * const AccountVerificationNotSupported;            /**< Transaction type Account Verification not supported. */
 extern NSString * const RefundAccountVerificationNotAllowed;        /**< Transaction type Account Verification cannot be refunded. */
+extern NSString * const CredentialOnFileReasonInvalid;              /**< The Credential on File reason is invalid. */
 extern NSString * const VoiceReferralResponseNotExpected;           /**< Unexpected Voice Referral response. */
 extern NSString * const AutoConfirmNotSupported;                    /**< Auto confirmation of transaction is not supported.*/
 extern NSString * const VoidRequestFailed;                          /**< Confirmation request failed to go online and wasn't able to be stored offline. Confirmation requests can be retried using {@link ChipDnaMobile#confirmTransaction:}.*/
 extern NSString * const ConfirmRequestFailed;                       /**< Void request failed to go online and wasn't able to be stored offline. Void requests can be retried using {@link ChipDnaMobile#voidTransaction:}. */
 extern NSString * const AmbiguousReference;                         /**< Ambiguous reference parameters supplied. Multiple identifiers for a transaction are not supported. */
-extern NSString * const RefundAccountVerificationNotAllowed;        /** <Transaction type AccountVerification cannot be refunded. */
+extern NSString * const RefundAccountVerificationNotAllowed;        /**<Transaction type AccountVerification cannot be refunded. */
 
+extern NSString * const DelayAccountVerificationNotAllowed;         /** <Transaction type AccountVerification cannot be delayed. */
+extern NSString * const VoidDelayOnlineProcessingNotAllowed;        /** <Transactions with delayed online processing cannot be voided. */
+extern NSString * const ConfirmDelayOnlineProcessingNotAllowed;     /** <Transactions with delayed online processing cannot be confirmed. */
+extern NSString * const RefundDelayOnlineProcessingNotAllowed;      /** <Transactions with delayed online processing cannot be refunded. */
+extern NSString * const DelayPanKeyEntryNotAllowed;                 /** <Transactions with PAN key entry cannot be delayed. */
+extern NSString * const RequestEncryptionFailed;                    /** <Failed to encrypt the request. */
+extern NSString * const RequestEncodingFailed;                      /** <Failed to encode the request. */
+extern NSString * const DelayOnlineProcessingNotSupported;          /** <Delay online processing not supported by this device. */
 /**
  * @}
  */
