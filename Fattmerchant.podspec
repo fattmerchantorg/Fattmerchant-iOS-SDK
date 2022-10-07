@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source = { :git => 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git', :tag => s.version }
 
   s.ios.deployment_target = '12.0'
-  s.swift_versions = ['4.0', '4.2', '5.2']  
+  s.swift_versions = ['5']  
   s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
   s.exclude_files = "fattmerchant-ios-sdk/ThirdParty/AnyPay/**/*.{h,m}"
 
