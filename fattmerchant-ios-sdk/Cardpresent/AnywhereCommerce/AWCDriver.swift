@@ -224,7 +224,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
       guard let message = message else {
         return
       }
-      print(message.message)
+      print(message.message as Any)
       if let transactionUpdate = TransactionUpdate(anpMeaningfulMessage: message) {
         DispatchQueue.main.asyncAfter(deadline: .now() + self.transactionUpdateDelay) {
           transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: transactionUpdate)
@@ -338,6 +338,8 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
       print("central.state is .poweredOff")
     case .poweredOn:
       print("central.state is .poweredOn")
+    @unknown default:
+      print("central.state is .unknown")
     }
   }
 

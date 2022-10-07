@@ -418,7 +418,7 @@ class TakeMobileReaderPayment {
   fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
     let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
     let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
-    var customerToCreate = Customer(firstName: firstname, lastName: lastname)
+    let customerToCreate = Customer(firstName: firstname, lastName: lastname)
 
     if let transactionSource = transactionResult.transactionSource {
       if transactionSource.lowercased().contains("contactless") {

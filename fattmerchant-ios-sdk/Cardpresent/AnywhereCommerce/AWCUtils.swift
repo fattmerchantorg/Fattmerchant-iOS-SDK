@@ -129,7 +129,7 @@ extension TransactionResult {
 
 extension Transaction {
   func awcExternalId() -> String? {
-    let g = ANPGatewayResponse(response: meta?["awcTransactionId"])
+      _ = ANPGatewayResponse(response: meta?["awcTransactionId"])
     return meta?["awcTransactionId"]
   }
 }
