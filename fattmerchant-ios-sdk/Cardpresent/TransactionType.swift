@@ -9,6 +9,6 @@
 import Foundation
 
 enum TransactionType: String {
-  case sale
-  case refund
+    case sale
+    case refund
 }

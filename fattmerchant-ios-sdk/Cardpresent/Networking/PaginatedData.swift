@@ -9,5 +9,5 @@
 import Foundation
 
 class PaginatedData<T: Codable>: Codable {
-  var data: [T]?
+    var data: [T]?
 }

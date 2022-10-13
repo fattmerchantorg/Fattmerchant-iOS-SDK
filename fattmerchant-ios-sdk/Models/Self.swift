@@ -9,5 +9,5 @@
 import Foundation
 
 class OmniSelf: Codable {
-  var merchant: Merchant?
+    var merchant: Merchant?
 }

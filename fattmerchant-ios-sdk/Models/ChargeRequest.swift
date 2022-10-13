@@ -10,30 +10,30 @@ import Foundation
 
 /// A request to perform a Charge on Omni
 internal struct ChargeRequest: Codable {
-  /// The payment method to charge
-  var paymentMethodId: String
+    /// The payment method to charge
+    var paymentMethodId: String
 
-  /// The total to charge
-  var total: String
+    /// The total to charge
+    var total: String
 
-  /// True when the charge should be a pre-auth operation
-  var preAuth: Bool = false
+    /// True when the charge should be a pre-auth operation
+    var preAuth: Bool = false
 
-  /// Contains metadata about the charge, such as subtotal and tax
-  var meta: [String: String]
+    /// Contains metadata about the charge, such as subtotal and tax
+    var meta: [String: String]
 }
 
 extension Data {
-  /// Initializes a `Data` with a `ChargeRequest`
-  ///
-  /// - Note: The need for this is primarily to convert the keys to snake case
-  init?(chargeRequest: ChargeRequest) {
-    let encoder = JSONEncoder()
-    encoder.keyEncodingStrategy = .convertToSnakeCase
-    do {
-      self = try encoder.encode(chargeRequest)
-    } catch {
-      return nil
+    /// Initializes a `Data` with a `ChargeRequest`
+    ///
+    /// - Note: The need for this is primarily to convert the keys to snake case
+    init?(chargeRequest: ChargeRequest) {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        do {
+            self = try encoder.encode(chargeRequest)
+        } catch {
+            return nil
+        }
     }
-  }
 }

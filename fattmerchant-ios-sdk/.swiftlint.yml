@@ -6,6 +6,7 @@ opt_in_rules:
 excluded:
 - Carthage
 - Pods
+- ThirdParty
 - SwiftLint/Common/3rdPartyLib
 line_length:
     warning: 150

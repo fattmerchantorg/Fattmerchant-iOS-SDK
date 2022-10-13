@@ -6,17 +6,22 @@ on:
   pull_request:
     branches:
       - master
+      - develop
       - release/**
 jobs:
-  build:
-    name: Build and Test default scheme using iPhone/iPad simulator
-    runs-on: macos-latest
+  build-ios:
+    name: Compile on iOS 16.0
+    runs-on: macos-12
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: testing ... iPhone 8
-        run: >-
-          xcodebuild test -workspace fattmerchant-ios-sdk.xcworkspace -scheme FattmerchantTests -destination 'platform=iOS Simulator,name=iPhone 8,OS=15.2'
-      - name: testing ... iPad Pro 12.9
-        run: >-
-          xcodebuild test -workspace fattmerchant-ios-sdk.xcworkspace -scheme FattmerchantTests -destination 'platform=iOS Simulator,OS=15.2,name=iPad Pro (12.9-inch) (5th generation)'
+      - name: Build SDK for iOS 16.0
+        run: xcodebuild -workspace fattmerchant-ios-sdk.xcworkspace -scheme fattmerchant-ios-sdk -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0'
+  unit-test:
+    name: Run Tests on iOS 16.0
+    runs-on: macos-12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Unit Tests
+        run: xcodebuild test -workspace fattmerchant-ios-sdk.xcworkspace -scheme FattmerchantTests -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0'

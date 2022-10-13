@@ -11,7 +11,7 @@ import Foundation
 /// Provides a signature to Omni when required
 public protocol SignatureProviding {
 
-  /// Called when a transaction requires a signature
-  /// - Parameter completion: a block to run once the signature is complete. This should be given the signature
-  func signatureRequired(completion: @escaping (String) -> Void)
+    /// Called when a transaction requires a signature
+    /// - Parameter completion: a block to run once the signature is complete. This should be given the signature
+    func signatureRequired(completion: @escaping (String) -> Void)
 }

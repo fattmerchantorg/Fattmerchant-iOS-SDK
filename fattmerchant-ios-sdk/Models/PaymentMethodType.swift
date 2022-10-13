@@ -25,5 +25,5 @@ import Foundation
 /// - card: A credit card
 /// - bank: A bank account
 public enum PaymentMethodType: String, Codable {
-  case card, bank
+    case card, bank
 }

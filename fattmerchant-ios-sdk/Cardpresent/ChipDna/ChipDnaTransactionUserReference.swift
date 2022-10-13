@@ -12,10 +12,10 @@ import Foundation
 ///
 /// - Returns: a String containing the generated user reference
 func generateChipDnaTransactionUserReference() -> String {
-  let dateFormatter = DateFormatter()
-  dateFormatter.locale = Locale(identifier: "en_US")
-  dateFormatter.setLocalizedDateFormatFromTemplate("yy-MM-dd-HH.mm.ss")
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "en_US")
+    dateFormatter.setLocalizedDateFormatFromTemplate("yy-MM-dd-HH.mm.ss")
 
-  let dateString = dateFormatter.string(from: Date())
-  return "CDM-\(dateString)"
+    let dateString = dateFormatter.string(from: Date())
+    return "CDM-\(dateString)"
 }

@@ -25,5 +25,5 @@ import Foundation
 /// - personal: A personal bank account
 /// - business: A business bank account
 public enum BankHolderType: String, Codable {
-  case personal, business
+    case personal, business
 }
