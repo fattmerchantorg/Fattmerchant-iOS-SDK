@@ -81,18 +81,21 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
     endpoint.worldnetTerminalID = worldnetTerminalId
     // endpoint.worldnetSecret = worldnetSecret
     endpoint.gatewayUrl = gatewayUrl
-    // Authenticate
-    anyPay.terminal.endpoint.authenticateTerminal { (authenticated, _) in
-      // If we were unable to authenticate with AWC, then clear out the anyPay instance
-      if authenticated == false {
-        self.anyPay = nil
-      } else {
-        self.startBtService()
-        self.onCardReaderDisconnected = {
-          self.mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: .disconnected)
+
+    // Authenticate if credentials aren't blank
+    if (!worldnetSecret.isBlank() && !worldnetTerminalId.isBlank()) {
+      anyPay.terminal.endpoint.authenticateTerminal { (authenticated, _) in
+        // If we were unable to authenticate with AWC, then clear out the anyPay instance
+        if authenticated == false {
+          self.anyPay = nil
+        } else {
+          self.startBtService()
+          self.onCardReaderDisconnected = {
+            self.mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: .disconnected)
+          }
         }
+        completion(authenticated)
       }
-      completion(authenticated)
     }
   }
 
