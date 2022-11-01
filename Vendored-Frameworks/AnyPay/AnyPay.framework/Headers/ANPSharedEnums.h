@@ -25,7 +25,8 @@ typedef NS_ENUM(NSUInteger, ANPTransactionStatus) {
     ANPTransactionStatus_DELETED,
     ANPTransactionStatus_FAILED,
     ANPTransactionStatus_QUEUED,
-    ANPTransactionStatus_PROCESSING
+    ANPTransactionStatus_PROCESSING,
+    ANPTransactionStatus_DEFERRED
 };
 
 typedef NS_ENUM(NSUInteger, ANPTransactionType) {
@@ -35,7 +36,8 @@ typedef NS_ENUM(NSUInteger, ANPTransactionType) {
     ANPTransactionType_VOID,
     ANPTransactionType_SALE,
     ANPTransactionType_REFUND,
-    ANPTransactionType_ADMIN
+    ANPTransactionType_ADMIN,
+    ANPTransactionType_REVERSEREFUND
 };
 
 #endif /* ANPSharedEnums_h */

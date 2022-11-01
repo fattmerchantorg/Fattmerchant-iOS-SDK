@@ -37,6 +37,7 @@
 @property (nonatomic, readonly) BOOL isSupportedTrack3;
 @property (nonatomic, readonly) BOOL isUsbConnected;
 @property (nonatomic) ANPCardReaderInterface selectedCardInterface;
+@property (nonatomic, copy) NSString *name;
 
 - (NSString *)name;
 - (ANPCardReaderInterface)cardInterface;

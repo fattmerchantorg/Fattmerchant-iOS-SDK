@@ -43,8 +43,8 @@ typedef NS_ENUM(NSUInteger, ANPLogLevel){
 #define ANP_LOG_MACRO(logStream, cdn, lvl, fnct, frmt, ...) \
 [logStream log:lvl condition:cdn function:fnct file:__FILE__ line:__LINE__ format:(frmt), ## __VA_ARGS__];
 
-#define ANP_LOG_MACRO_WITH_PARAMS(logStream, cdn, lvl, fnct, frmt) \
-[logStream log:lvl function:fnct file:__FILE__ line:__LINE__ params:frmt];
+#define ANP_LOG_MACRO_WITH_PARAMS(logStream, cdn, lvl, fnct, msg, frmt) \
+[logStream log:lvl function:fnct file:__FILE__ line:__LINE__ message:msg params:frmt];
 
 #define ANPLogError(logStream, frmt, ...)   ANP_LOG_MACRO(logStream, YES, ANPLogLevelError, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
 #define ANPLogWarn(logStream, frmt, ...)    ANP_LOG_MACRO(logStream, YES, ANPLogLevelWarning, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
@@ -58,11 +58,11 @@ typedef NS_ENUM(NSUInteger, ANPLogLevel){
 #define ANPLogDebugIf(logStream, condtion, frmt, ...)   ANP_LOG_MACRO(logStream, condtion, ANPLogLevelDebug, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
 #define ANPLogVerboseIf(logStream, condtion, frmt, ...) ANP_LOG_MACRO(logStream, condtion, ANPLogLevelVerbose, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
 
-#define ANPLogErrorWithParams(logStream, params)   ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelError, __PRETTY_FUNCTION__, params)
-#define ANPLogWarnWithParams(logStream, params)    ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelWarning, __PRETTY_FUNCTION__, params)
-#define ANPLogInfoWithParams(logStream, params)    ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelInfo, __PRETTY_FUNCTION__, params)
-#define ANPLogDebugWithParams(logStream, params)   ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelDebug, __PRETTY_FUNCTION__, params)
-#define ANPLogVerboseWithParams(logStream, params) ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelVerbose, __PRETTY_FUNCTION__, params)
+#define ANPLogErrorWithParams(logStream, message, params)   ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelError, __PRETTY_FUNCTION__, message, params)
+#define ANPLogWarnWithParams(logStream, message, params)    ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelWarning, __PRETTY_FUNCTION__, message, params)
+#define ANPLogInfoWithParams(logStream, message, params)    ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelInfo, __PRETTY_FUNCTION__, message, params)
+#define ANPLogDebugWithParams(logStream, message, params)   ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelDebug, __PRETTY_FUNCTION__, message, params)
+#define ANPLogVerboseWithParams(logStream, message, params) ANP_LOG_MACRO_WITH_PARAMS(logStream, YES, ANPLogLevelVerbose, __PRETTY_FUNCTION__, message, params)
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -76,9 +76,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)withContext:(NSString *)context;
 + (instancetype)withContext:(NSString *)context type:(NSString *)type;
 - (void)log:(ANPLogLevel)level condition:(BOOL)condition function:(const char *)function file:(const char *)file line:(NSUInteger)line format:(NSString *)format, ...;
-- (void)log:(ANPLogLevel)level function:(const char *)function file:(const char *)file line:(NSUInteger)line params:(NSDictionary *)parameters;
+- (void)log:(ANPLogLevel)level function:(const char *)function file:(const char *)file line:(NSUInteger)line message:( NSString * _Nullable )message params:(NSDictionary *)params;
 + (BOOL)addLogger:(ANPLogger *)logger;
 + (BOOL)removeLogger:(char)identifier;
+
++ (void)addEventProperty:(NSString *)key value:(id)value;
++ (void)removeEventProperty:(NSString *)key;
 
 - (void)trace;
 - (void)trace:(NSString *)message;
@@ -100,6 +103,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (ANPLogger *)getLogger:(NSString *)type;
 
 + (NSString *)getFileLogsAsString;
+
++ (BOOL)isConfigurationApplied;
 
 @end
 

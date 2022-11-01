@@ -18,5 +18,6 @@
 @property (nonatomic) BOOL allowTip;
 @property (nonatomic) BOOL allowKeyedTransactions;
 @property (nonatomic) NSString *currency;
+@property (nonatomic, strong) NSDictionary *merchantDetails;
 
 @end

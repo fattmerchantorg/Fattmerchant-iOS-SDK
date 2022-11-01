@@ -15,18 +15,20 @@ NS_ASSUME_NONNULL_BEGIN
 @class AnyPayTransaction, ANPCloudPOSTerminalMessage;
 @interface AnyPayTerminal : ANPCloudPOSTerminal<ANPTerminal>
 
-@property (nonatomic, copy) NSString *cloudPOSURL;
+//@property (nonatomic, copy) NSString *cloudPOSURL;
 
 + (instancetype)getInstance;
 + (instancetype)getInstanceWithConfigurationFile:(NSString *)terminalFilePath;
 + (instancetype)initialize:(AnyPayEndpoint *)endpoint;
 + (instancetype)initializeFromCloudWithActivationCode:(NSString *)activationCode activationKey:(NSString *)activationKey completionHandler:(void (^)(BOOL, ANPMeaningfulError * _Nullable error))completionHandler;
++ (instancetype)defaultTerminalFromJsonFile;
 
 + (AnyPayTerminal *)restoreState;
 
 - (void)saveState;
 + (BOOL)clearSavedState;
 - (void)clearSavedState;
+- (void)overwriteConfiguration:(AnyPayTerminal *)terminal;
 
 - (BOOL)isActivated;
 + (BOOL)isActivated;
@@ -49,6 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getQueuedMessage:(void (^)(ANPCloudPOSTerminalMessage *message, ANPMeaningfulError * _Nullable error))completionHandler;
 - (void)getQueuedMessageForReader:(NSString *)readerSerialNumber completionHandler:(void (^)(ANPCloudPOSTerminalMessage *message, ANPMeaningfulError * _Nullable error))completionHandler;
 - (void)getTransactionWithUUID:(NSString *)uuid completionHandler:(void (^)(AnyPayTransaction *transaction, ANPMeaningfulError * _Nullable error))completionHandler;
+
+- (void)processDeferredTransactions:(void (^)(NSString *, id))eventHandler notificationHandler:(void (^)(NSString *transactionId, BOOL success, ANPMeaningfulError * _Nullable error))notificationHandler;
 
 - (void)logout;
 

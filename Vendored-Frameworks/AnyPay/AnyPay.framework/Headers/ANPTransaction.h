@@ -59,6 +59,7 @@
 @property (nonatomic, strong, readonly) NSDictionary<NSString *, id> *customProperties;
 @property (nonatomic) ANPTransmissionStatus transmissionStatus;
 @property (nonatomic, strong, readonly) NSArray<NSString *> *warnings;
+@property (nonatomic) BOOL allowOffline;
 
 - (instancetype)initWithType:(ANPTransactionType)type;
 
@@ -83,6 +84,7 @@
 - (BOOL)isCancelled;
 - (BOOL)isSuspended;
 - (BOOL)isFinalized;
+- (BOOL)isDeferred;
 - (id<IAnyPayTransaction>)createReversal;
 
 - (void)setOnSignatureRequired:(void (^)(void))signatureRequiredHandler;
@@ -90,6 +92,7 @@
 - (void)persist;
 
 - (void)addCustomProperty:(NSString *)key value:(id)value;
+- (id)getCustomProperty:(NSString *)key defaultValue:(id)value;
 - (void)removeCustomProperty:(NSString *)key;
 
 - (void)addWarning:(NSString *)warning;

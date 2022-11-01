@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)sendReceiptToEmail:(NSString *)email phone:(NSString *)phone resultHandler:(void (^)(BOOL sent, ANPMeaningfulError * _Nullable))resultHandler;
 - (void)updateWithSignature:(ANPSignature *)signature resultHandler:(void (^)(BOOL sent, ANPMeaningfulError * _Nullable))resultHandler;
 - (instancetype)createCapture;
+- (NSDictionary *)toSecureObject;
+- (BOOL)isDeferredProcessingEligibleWithDefaultRules;
 
 @end
 

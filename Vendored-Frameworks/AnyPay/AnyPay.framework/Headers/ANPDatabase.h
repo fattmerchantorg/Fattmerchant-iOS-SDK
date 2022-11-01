@@ -17,5 +17,6 @@
 + (NSArray *)getTransactionWithPredicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor *)sortDescriptor;
 + (void)deleteAllTransactions:(NSError **)error;
 + (void)deleteTransactionWithID:(NSString *)ID error:(NSError * __autoreleasing *)error;
++ (NSArray<AnyPayTransaction *> *)getAllOfflineDeferredTransactions;
 
 @end

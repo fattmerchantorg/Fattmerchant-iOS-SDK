@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *streamLogTo;
 @property (nonatomic, copy) NSString *logLevel;
 
+@property (nonatomic, strong) NSMutableDictionary *customFields;
+
 @end
 
 NS_ASSUME_NONNULL_END

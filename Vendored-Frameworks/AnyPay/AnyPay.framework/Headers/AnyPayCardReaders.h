@@ -21,6 +21,9 @@
 #import "ANPNomadWP2.h"
 #import "ANPNomadWP2Plus.h"
 #import "ANPRambler.h"
+#import "ANPWisePad3.h"
+#import "ANPWisePad3S.h"
+#import "ANPWiseCube.h"
 #import "ANPBBPOSDevice.h"
 #import "AnyPayCardReader.h"
 

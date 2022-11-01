@@ -23,7 +23,7 @@ extension MobileReader {
   }
 
   static func from(anyPayCardReader: AnyPayCardReader) -> MobileReader {
-    return MobileReader(name: anyPayCardReader.name(),
+    return MobileReader(name: anyPayCardReader.name,
                         firmwareVersion: anyPayCardReader.firmwareVersion,
                         model: (anyPayCardReader as ANPPeripheralDevice).productID,
                         serialNumber: anyPayCardReader.serialNumber)

@@ -79,7 +79,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
       return
     }
     endpoint.worldnetTerminalID = worldnetTerminalId
-    endpoint.worldnetSecret = worldnetSecret
+    // endpoint.worldnetSecret = worldnetSecret
     endpoint.gatewayUrl = gatewayUrl
     // Authenticate
     anyPay.terminal.endpoint.authenticateTerminal { (authenticated, _) in

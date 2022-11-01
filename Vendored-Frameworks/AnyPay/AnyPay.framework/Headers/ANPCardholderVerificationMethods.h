@@ -23,5 +23,6 @@ typedef NS_ENUM(NSUInteger, ANPCardholderVerificationMethod) {
 + (ANPCardholderVerificationMethod)enumValue:(NSString *)stringValue;
 + (NSString *)valueOf:(ANPCardholderVerificationMethod)cvm;
 + (ANPCardholderVerificationMethod)cvmFromTag9f34:(NSString *) tag9f34Value;
++ (NSString *)cvmBitsFromTag9f34:(NSString *)tag9f34Value;
 
 @end

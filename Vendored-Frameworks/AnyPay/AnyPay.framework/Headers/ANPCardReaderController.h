@@ -25,20 +25,25 @@
 - (void)unsubscribeOnCardReaderDisConnected:(void (^ _Nonnull)(void))handler;
 - (void)unsubscribeOnCardReaderConnectionFailed:(void (^ _Nonnull)(ANPMeaningfulError * _Nullable error))errorHandler;
 - (void)unsubscribeOnCardReaderError:(void (^ _Nonnull)(ANPMeaningfulError * _Nullable cardReader))errorHandler;
+- (void)unsubscribeAllHandlers;
 
 + (instancetype _Nonnull )sharedController;
 
 - (BOOL)isReaderConnected;
 - (NSArray<Class> *)supportedReaders;
 - (NSDictionary<NSString *, Class> *)readerClasses;
++ (NSDictionary<NSString *, Class> *)models;
++ (Class)getCardReaderClassFromProductId:(NSString *)productId;
 
 #pragma mark Audio
 - (void)connectAudioReader;
 
 #pragma mark Bluetooth
 - (void)connectBluetoothReader:(void (^ _Nullable)(NSArray<ANPBluetoothDevice *> *_Nullable))availableBTReadersToConnectHandler;
-- (void)connectToBluetoothReader:(ANPBluetoothDevice * _Nonnull)reader;
+- (void)connectToBluetoothReader:(NSObject * _Nonnull)reader;
 - (void)connectToBluetoothReaderWithSerial:(NSString * _Nonnull)serialNumber;
+- (void)connectToBluetoothReaderWithName:(NSString *)readerName availableBTReadersToConnectHandler:(void (^ _Nullable)(NSArray<ANPBluetoothDevice *> *))availableBTReadersToConnectHandler;
+- (void)stopBTReaderScan;
 
 #pragma mark USB
 - (void)connectUSBReader;

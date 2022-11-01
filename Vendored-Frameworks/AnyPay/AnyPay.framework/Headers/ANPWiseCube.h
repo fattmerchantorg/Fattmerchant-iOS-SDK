@@ -6,7 +6,7 @@
 //  Copyright © 2019 Dan McCann. All rights reserved.
 //
 
-#import <AnyPay/AnyPay.h>
+#import "ANPWalkerC2XBT.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

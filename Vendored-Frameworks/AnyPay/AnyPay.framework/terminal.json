@@ -1,12 +1,7 @@
 {
     "activationCode": "",
-    "cloudPOSURL" : "https://cloud-sandbox.payments.ac/",
     "sessionKeyExpiry": "0001-01-01T00:00:00+00:00",
-    "secretKey": "",
     "status": "ACTIVE",
-    "uuid": "",
-    "id": "",
-    "portfolio": "",
     "dateCreated": "2018-12-13T05:31:13.2148953-06:00",
     "dateModified": "2018-12-16T03:25:37.3500227-06:00",
     "configuration": {
@@ -167,12 +162,15 @@
         "allowUnreferencedTransactions": true,
         "allowTax": true,
         "allowTip": true,
-        "cloudPOSURL" : "https://cloud.payments.ac/",
         "scheduleVoidOnFailure" : true,
+        "signatureCaptureEnabled" : false,
+        "allowOTAUpdateSettings" : true,
+        "networkCheckEnabled" : true,
         "logging" : {
             "logLevel" : "ERROR",
-            "remoteLoggingEnabled" : false,
+            "remoteLoggingEnabled" : true,
             "logToFile" : false
-        }
+        },
+        "autoValidateDeferredProcessing" : false
      }
 }

@@ -10,13 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ANPMeaningfulError, AnyPayTransaction, ANPCloudPOSTerminalMessage, ANPShadowTransactionRequest;
+@class ANPMeaningfulError, AnyPayTransaction, ANPCloudPOSTerminalMessage, ANPShadowTransactionRequest, ANPCloudPosSupportKey;
 @interface ANPCloudAPI : NSObject
 
 //@property (nonatomic, copy) NSString *cloudPOSURL;
+@property (nonatomic, copy) NSString *apiBaseUrl;
+@property (nonatomic, copy) NSString *logApiBaseUrl;
 
 + (instancetype)getInstance;
 + (void)setFlavor:(NSString *)flavor;
+- (void)setFlavor:(NSString *)flavor;
+- (NSString *)getFlavor;
+- (void)modulateFlavor:(NSString *)flavor;
++ (NSString *)getFlavor:(NSString *)url;
 
 - (void)activateTerminal:(AnyPayTerminal *)terminal completionHandler:(void (^)(AnyPayTerminal *terminal, ANPMeaningfulError * _Nullable))completionHandler;
 - (void)getTransactions:(AnyPayTerminal *)terminal forReader:(NSString * _Nullable)connectedReader completionHandler:(void (^)(AnyPayTransaction *transaction, ANPMeaningfulError * _Nullable))completionHandler;
@@ -35,6 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)streamToLog:(NSString *)log terminal:(AnyPayTerminal *)terminal realtime:(BOOL)realtime completionHandler:(void (^)(BOOL success, ANPMeaningfulError * _Nullable))completionHandler;
 
 - (id)getMessages:(AnyPayTerminal *)terminal forReader:(NSString *)connectedReader;
+//- (void)getDeviceIdAssignedTerminal:(AnyPayTerminal *)terminal deviceId:(NSString *)deviceId completionHandler:(void (^)(ANPCloudPosSupportKey *, ANPMeaningfulError * _Nullable))completionHandler;
+
+- (void)getSupportKey:(NSString * _Nullable)passphrase completionHandler:(void (^)(NSString *, ANPMeaningfulError * _Nullable))completionHandler;
+- (void)getSupportKey:(NSString *)passphrase descriptor:(NSString *)descriptor completionHandler:(void (^)(NSString *, ANPMeaningfulError * _Nullable))completionHandler;
+- (void)addSupportKeyTerminal:(void (^)(ANPMeaningfulError * _Nullable))completionHandler;
+- (NSString *)getSavedSupportKey;
+
+- (void)recordTransaction:(NSDictionary *)tx completionHandler:(void (^)(ANPMeaningfulError * _Nullable))completionHandler;
 
 #pragma mark Private Methods
 + (instancetype)sharedInstance;

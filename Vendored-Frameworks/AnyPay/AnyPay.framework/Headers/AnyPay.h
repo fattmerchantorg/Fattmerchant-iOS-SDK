@@ -44,7 +44,6 @@ FOUNDATION_EXPORT const unsigned char AnyPayVersionString[];
 #import "ANPCloudPOSTerminalUser.h"
 #import "ANPShadowTransactionRequest.h"
 #import "ANPCloudPOSTerminalMessage.h"
-#import "ANPCloudPosTerminalMessageQueue.h"
 #import "ANPTerminalNotActivatedException.h"
 #import "ANPLogStream.h"
 #import "ANPLogger.h"
@@ -53,6 +52,8 @@ FOUNDATION_EXPORT const unsigned char AnyPayVersionString[];
 
 //CloudPOS related
 #import "ANPCloudAPI.h"
+#import "ANPCloudPosTerminalMessageQueue.h"
+#import "ANPCloudPosTerminalConnectionStatus.h"
 
 //ProPay related
 #import "ANPProPayTerminal.h"
@@ -79,9 +80,13 @@ FOUNDATION_EXPORT const unsigned char AnyPayVersionString[];
 @property (nonnull, nonatomic, strong) id<ANPTerminal> terminal;
 
 + (nonnull instancetype)initialise;
++ (nonnull instancetype)initialise:(NSString *_Nullable)flavor;
 + (nullable instancetype)initialiseWithConfiguration:(nonnull ANPConfiguration *)configuration;
 + (nullable instancetype)initialiseWithConfigurationFile:(nonnull NSString *)terminalFilePath;
-
++ (void)getSupportKey:(NSString *)passphrase completionHandler:(void (^)(NSString *))completionHandler;
++ (void)getSupportKey:(NSString *)passphrase descriptor:(NSString *)descriptor completionHandler:(void (^)(NSString *))completionHandler;
++ (NSString *)getSavedSupportKey;
++ (void)setSupportKeyPassphrase:(NSString *_Nonnull)passphrase completionHandler:(void (^_Nullable)(BOOL))completionHandler;
 + (nullable instancetype)initializeWithTerminal:(nullable id<ANPTerminal>) terminal __deprecated;
 
 + (nullable instancetype)init NS_UNAVAILABLE;
@@ -90,6 +95,8 @@ FOUNDATION_EXPORT const unsigned char AnyPayVersionString[];
 
 + (BOOL)isTerminalActivated;
 + (BOOL)clearTerminalState;
+
++ (void)addBlockedBIN:(NSString *)binToBlock;
 
 #pragma mark - Configuration
 + (void)setDebugLogsEnabled:(BOOL)enabled __deprecated;

@@ -24,5 +24,7 @@
 - (void)submitSignature:(ANPSignature * _Nonnull)signature forTransaction:(ANPTransaction * _Nonnull)transaction resultHandler:(void (^_Nullable)(BOOL submitted, ANPMeaningfulError * _Nullable))resultHandler;
 - (void)cancelTransaction:(ANPTransaction * _Nonnull)transaction;
 - (void)sendReceiptForTransaction:(ANPTransaction * _Nonnull)transaction toEmail:(NSString * _Nullable)email phone:(NSString * _Nullable)phone resultHandler:(void (^ _Nullable)(BOOL sent, ANPMeaningfulError * _Nullable))resultHandler;
+- (NSDictionary *_Nullable)toSecureObject;
+- (void)fetchTransactionWithInternalId:(NSString *)internalId responseHandler:(void (^)(ANPTransaction * _Nullable, ANPMeaningfulError *))responseHandler;
 
 @end
