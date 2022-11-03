@@ -69,6 +69,14 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
         completion(false)
         return
     }
+    
+    // If there are nmi creds, default to those
+    if (args["nmi"] != nil) {
+      anyPay = nil
+      completion(false)
+      return
+    }
+    
     let worldnetSecret = awcDetails.terminalSecret
     let worldnetTerminalId = awcDetails.terminalId
     // Initialize the AnyPay object. This will allow us to interact with AnyPay later on
