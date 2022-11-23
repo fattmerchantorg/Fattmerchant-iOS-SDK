@@ -204,9 +204,7 @@ class OmniTest: XCTestCase {
 
     let mockApi = omni.omniApi as! MockOmniApi
 
-    let awcDetails = AWCDetails(terminalId: "someterminalid", terminalSecret: "terminalsecret")
     let mobileReaderDetails = MobileReaderDetails()
-    mobileReaderDetails.anywhereCommerce = awcDetails
     mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
 
     let initialized = expectation(description: "Omni gets initialized")

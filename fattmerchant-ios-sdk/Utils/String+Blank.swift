@@ -5,7 +5,7 @@
 //  Created by Tulio Troncoso on 8/1/22.
 //  Copyright © 2022 Fattmerchant. All rights reserved.
 //
-
+import Foundation
 extension String {
 
   /// Checks to see if the receiver contains non-whitespace characters

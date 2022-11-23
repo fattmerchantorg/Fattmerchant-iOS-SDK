@@ -170,12 +170,6 @@ public class Omni: NSObject {
       // Eagerly try to fill out the mobile reader settings from the merchant options.
       // The getMobileReaderSettings step will override these if successful, but if that step fails to grab the
       // settings from the gateways, then at least we have these as a fallback.
-      
-      // AWC
-      if let emvTerminalSecret = merchant.emvTerminalSecret(), let emvTerminalId = merchant.emvTerminalId() {
-        args["awc"] = AWCDetails(terminalId: emvTerminalId, terminalSecret: emvTerminalSecret)
-      }
-      
       // NMI
       if let emvPassword = merchant.emvPassword() {
         args["nmi"] = NMIDetails(securityKey: emvPassword)
@@ -183,15 +177,12 @@ public class Omni: NSObject {
       
       // Try to get the details from the merchant gateways. This *should* rewrite the args dict
       self.omniApi.getMobileReaderSettings(completion: { mrDetails in
-        if let awcDetails = mrDetails.anywhereCommerce {
-          args.updateValue(awcDetails, forKey: "awc")
-        }
         if let nmiDetails = mrDetails.nmi {
           args.updateValue(nmiDetails, forKey: "nmi")
         }
 
-        // Check if there are creds for AWC or NMI
-        if args["awc"] == nil && args["nmi"] == nil {
+        // Check if there are creds for NMI
+        if args["nmi"] == nil {
           self.preferredQueue.async {
             completion()
           }
@@ -199,9 +190,7 @@ public class Omni: NSObject {
         }
 
         //
-        if (args["awc"] as? AWCDetails)?.terminalId.isBlank() ?? true
-            && (args["awc"] as? AWCDetails)?.terminalSecret.isBlank() ?? true
-            && (args["nmi"] as? NMIDetails)?.securityKey.isBlank() ?? true {
+        if (args["nmi"] as? NMIDetails)?.securityKey.isBlank() ?? true {
           self.preferredQueue.async {
             completion()
           }
@@ -218,7 +207,7 @@ public class Omni: NSObject {
       }, failure: { _ in
 
         // If the call to merchant gateways fails, try to init with the merchant options anyways
-        if args["awc"] == nil && args["nmi"] == nil {
+        if args["nmi"] == nil {
           self.preferredQueue.async {
             self.mobileReaderDriversInitialized = true
             error(OmniInitializeException.missingMobileReaderCredentials)

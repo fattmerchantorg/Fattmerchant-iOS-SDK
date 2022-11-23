@@ -18,7 +18,7 @@ struct TransactionResult {
 
   var success: Bool?
 
-  /// The place where the transaction took place. For example, "NMI" or "AWC"
+  /// The place where the transaction took place. For example, "NMI"
   var source: String = ""
 
   /**

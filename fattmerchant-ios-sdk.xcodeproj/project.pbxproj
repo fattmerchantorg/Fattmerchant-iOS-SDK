@@ -12,10 +12,7 @@
 		46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
-		591B69E026388B000078787B /* AnyPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 591B69DE26388AFB0078787B /* AnyPay.framework */; };
-		591B69E126388B000078787B /* AnyPay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 591B69DE26388AFB0078787B /* AnyPay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
-		593A7FB02460118400D78874 /* AWCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FAF2460118400D78874 /* AWCUtils.swift */; };
 		593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
 		593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
 		593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FDA2468956000D78874 /* AsyncFilterTests.swift */; };
@@ -58,7 +55,6 @@
 		5966545625003B8800A56943 /* ChipDnaMobile.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543B25003B8800A56943 /* ChipDnaMobile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		596654572500406900A56943 /* libCardEaseXml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966542425003B8600A56943 /* libCardEaseXml.a */; };
 		596654582500406C00A56943 /* libChipDnaMobileAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966543125003B8700A56943 /* libChipDnaMobileAPI.a */; };
-		596963FF245FED1000D0612F /* AWCDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596963FE245FED1000D0612F /* AWCDriver.swift */; };
 		597BEA48247FE205009319D6 /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */; };
 		597BEA4B2480C4C9009319D6 /* TransactionGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */; };
 		597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */; };
@@ -195,7 +191,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				591B69E126388B000078787B /* AnyPay.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,12 +200,10 @@
 /* Begin PBXFileReference section */
 		46231C5A24DAF4A500A06E1B /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
 		46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDetails.swift; sourceTree = "<group>"; };
-		591B69DE26388AFB0078787B /* AnyPay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnyPay.framework; path = "Vendored-Frameworks/AnyPay/AnyPay.framework"; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C2094206EB12F00C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C20A3206EB26700C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		593A7FAF2460118400D78874 /* AWCUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWCUtils.swift; sourceTree = "<group>"; };
 		593A7FD6246878B700D78874 /* AsyncFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilter.swift; sourceTree = "<group>"; };
 		593A7FDA2468956000D78874 /* AsyncFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilterTests.swift; sourceTree = "<group>"; };
 		594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransaction.swift; sourceTree = "<group>"; };
@@ -245,7 +238,6 @@
 		5966543925003B8800A56943 /* ErrorCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCodes.h; sourceTree = "<group>"; };
 		5966543A25003B8800A56943 /* TransactionTypeIDEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionTypeIDEnum.h; sourceTree = "<group>"; };
 		5966543B25003B8800A56943 /* ChipDnaMobile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobile.h; sourceTree = "<group>"; };
-		596963FE245FED1000D0612F /* AWCDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWCDriver.swift; sourceTree = "<group>"; };
 		597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUpdateDelegate.swift; sourceTree = "<group>"; };
 		597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionGateway.swift; sourceTree = "<group>"; };
 		597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaXMLTransactionParser.swift; sourceTree = "<group>"; };
@@ -342,7 +334,6 @@
 			files = (
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
-				591B69E026388B000078787B /* AnyPay.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
@@ -429,15 +420,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		596963FD245FECEA00D0612F /* AnywhereCommerce */ = {
-			isa = PBXGroup;
-			children = (
-				596963FE245FED1000D0612F /* AWCDriver.swift */,
-				593A7FAF2460118400D78874 /* AWCUtils.swift */,
-			);
-			path = AnywhereCommerce;
-			sourceTree = "<group>";
-		};
 		597BEA4F24851B68009319D6 /* ChipDna */ = {
 			isa = PBXGroup;
 			children = (
@@ -484,7 +466,6 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				591B69DE26388AFB0078787B /* AnyPay.framework */,
 				D793091523D2568D0066FCA2 /* MediaPlayer.framework */,
 				D793091123D256690066FCA2 /* CoreBluetooth.framework */,
 				D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */,
@@ -510,7 +491,6 @@
 				D765D47723CC4AFF00656040 /* Repository */,
 				D765D48223CE419700656040 /* JSON */,
 				D765D48123CD00C800656040 /* Data */,
-				596963FD245FECEA00D0612F /* AnywhereCommerce */,
 				D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */,
 				D79308A623D0A9050066FCA2 /* MobileReaderDriver.swift */,
 				D79308AF23D0AA9A0066FCA2 /* TransactionType.swift */,
@@ -871,7 +851,6 @@
 				D79308D223D22F480066FCA2 /* ChipDnaTransactionUserReference.swift in Sources */,
 				D79308C123D0E0B40066FCA2 /* SearchForReaders.swift in Sources */,
 				D79308B023D0AA9A0066FCA2 /* TransactionType.swift in Sources */,
-				596963FF245FED1000D0612F /* AWCDriver.swift in Sources */,
 				D765D48423CE41A500656040 /* JSONValue.swift in Sources */,
 				D765D49F23CFCA1400656040 /* Amount.swift in Sources */,
 				D765D49623CFC1A000656040 /* InvoiceRepository.swift in Sources */,
@@ -891,7 +870,6 @@
 				D79308B823D0AC3A0066FCA2 /* ConnectMobileReader.swift in Sources */,
 				597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */,
 				D781037F23D9F85100256F2F /* PaginatedData.swift in Sources */,
-				593A7FB02460118400D78874 /* AWCUtils.swift in Sources */,
 				D765D46623CC465800656040 /* Customer.swift in Sources */,
 				D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */,
 				594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
@@ -1127,9 +1105,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
-					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
-					"$(PROJECT_DIR)/Vendored-Frameworks/AnyPay",
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1164,9 +1139,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
-					"$(PROJECT_DIR)/Vendored\\ Frameworks/AnyPay",
-					"$(PROJECT_DIR)/Vendored-Frameworks/AnyPay",
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
