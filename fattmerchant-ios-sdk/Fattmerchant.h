@@ -42,12 +42,6 @@
 #import "VersionInformation.h"
 // End ChipDNA
 
-// AnyPay
-#import <AnyPay/ANPBluetoothDevice.h>
-#import <AnyPay/AnyPay.h>
-#import <AnyPay/AnyPayTransaction.h>
-// End AnyPay
-
 //! Project version number for fattmerchant_ios_sdk.
 FOUNDATION_EXPORT double fattmerchant_ios_sdkVersionNumber;
 

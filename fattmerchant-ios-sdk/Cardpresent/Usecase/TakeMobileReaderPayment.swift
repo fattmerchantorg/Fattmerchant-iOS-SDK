@@ -269,10 +269,6 @@ class TakeMobileReaderPayment {
       if let externalId = transactionResult.externalId {
         dict["nmiTransactionId"] = JSONValue(externalId)
       }
-    } else if transactionResult.source.contains(AWCDriver.source) {
-      if let externalId = transactionResult.externalId {
-        dict["awcTransactionId"] = JSONValue(externalId)
-      }
     }
     #endif
 
