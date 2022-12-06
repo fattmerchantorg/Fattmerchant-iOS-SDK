@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '9.0'
   s.swift_versions = ['4.0', '4.2', '5.2']  
-  s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}", "fattmerchant-ios-sdk/Vendored-Frameworks/AnyPay/**/*.{h,m}"
+  s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
 
   s.frameworks = 'UIKit', 'AVFoundation', 'MediaPlayer', 'CoreAudio', 'ExternalAccessory', 'CoreBluetooth', 'AudioToolbox'
 
@@ -19,8 +19,6 @@ Pod::Spec.new do |s|
   'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libChipDnaMobileAPI.a',
   'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libCardEaseXml.a',
   'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a'
-  
-  s.vendored_frameworks = 'Vendored-Frameworks/AnyPay/AnyPay.framework'
 
   s.pod_target_xcconfig = { 
     'ENABLE_BITCODE' => 'NO',
