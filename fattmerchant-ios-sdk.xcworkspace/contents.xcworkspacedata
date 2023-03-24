@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:StaxApi">
+   </FileRef>
+   <FileRef
       location = "group:Sample App/Fattmerchant-iOS-SDK-Sample.xcodeproj">
    </FileRef>
    <FileRef
