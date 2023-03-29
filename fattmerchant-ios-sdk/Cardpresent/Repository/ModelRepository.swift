@@ -13,58 +13,58 @@ protocol ModelRepository {
 
     /// The type of the model that this repository deals with.
     /// - Note: This must implement Model
-    associatedtype OmniModel: Model
+    associatedtype StaxModel: Model
 
     typealias EmptyCompletionHandler = () -> Void
-    typealias ErrorHandler = (OmniException) -> Void
-    typealias CompletionHandler = (OmniModel) -> Void
+    typealias ErrorHandler = (StaxException) -> Void
+    typealias CompletionHandler = (StaxModel) -> Void
 
-    init(omniApi: OmniApi)
+    init(staxApi: StaxApi)
 
-    /// An instance of OmniApi
+    /// An instance of StaxApi
     ///
-    /// This is the object responsible for reaching out to Omni
-    var omniApi: OmniApi { get set }
+    /// This is the object responsible for reaching out to Stax
+    var staxApi: StaxApi { get set }
 
-    /// Creates an instance of the model in Omni
+    /// Creates an instance of the model in Stax
     ///
     /// - Parameters:
-    ///   - model: the model to be created in Omni
+    ///   - model: the model to be created in Stax
     ///   - completion: block to run upon completion
     ///   - error: the block to run if an error is thrown
-    func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
+    func create(model: StaxModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
-    /// Updates an instance of the model in Omni
+    /// Updates an instance of the model in Stax
     ///
     /// - Parameters:
-    ///   - model: the model to be updated in Omni
+    ///   - model: the model to be updated in Stax
     ///   - completion: block to run upon completion
-    ///   - id: the id fo the model to be updated in Omni
+    ///   - id: the id fo the model to be updated in Stax
     ///   - error: the block to run if an error is thrown
-    func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
+    func update(model: StaxModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
-    /// Deletes an instance of the model in Omni
+    /// Deletes an instance of the model in Stax
     ///
     /// - Parameters:
-    ///   - model: the model to be created in Omni
+    ///   - model: the model to be created in Stax
     ///   - completion: block to run upon completion
     ///   - error: the block to run if an error is thrown
-    func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler)
+    func delete(model: StaxModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler)
 
-    /// Gets a model with the given id from Omni
+    /// Gets a model with the given id from Stax
     ///
     /// - Parameters:
-    ///   - model: the model to be created in Omni
+    ///   - model: the model to be created in Stax
     ///   - completion: block to run upon completion
     ///   - error: the block to run if an error is thrown
     func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler)
 
-    /// Gets a list of the current type from omni
+    /// Gets a list of the current type from stax
     ///
     /// - Parameters:
     ///   - completion: block to run upon completion
     ///   - error: the block to run if an error is thrown
-    func getList(completion: @escaping (PaginatedData<OmniModel>) -> Void, error: @escaping ErrorHandler)
+    func getList(completion: @escaping (PaginatedData<StaxModel>) -> Void, error: @escaping ErrorHandler)
 
 }
 

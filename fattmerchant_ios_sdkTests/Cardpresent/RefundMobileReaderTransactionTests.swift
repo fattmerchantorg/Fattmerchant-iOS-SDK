@@ -11,7 +11,7 @@ import XCTest
 
 class RefundMobileReaderTransactionTests: XCTestCase {
 
-  var mockOmniApi: MockOmniApi = MockOmniApi()
+  var mockStaxApi: MockStaxApi = MockStaxApi()
   var mobileReaderDriverRepo: MobileReaderDriverRepository!
   var invoiceRepo: InvoiceRepository!
   var customerRepo: CustomerRepository!
@@ -19,10 +19,10 @@ class RefundMobileReaderTransactionTests: XCTestCase {
   var transactionRepo: TransactionRepository!
 
   override func setUp() {
-    invoiceRepo = InvoiceRepository(omniApi: mockOmniApi)
-    customerRepo = CustomerRepository(omniApi: mockOmniApi)
-    paymentMethodRepo = PaymentMethodRepository(omniApi: mockOmniApi)
-    transactionRepo = TransactionRepository(omniApi: mockOmniApi)
+    invoiceRepo = InvoiceRepository(staxApi: mockStaxApi)
+    customerRepo = CustomerRepository(staxApi: mockStaxApi)
+    paymentMethodRepo = PaymentMethodRepository(staxApi: mockStaxApi)
+    transactionRepo = TransactionRepository(staxApi: mockStaxApi)
     mobileReaderDriverRepo = MobileReaderDriverRepository()
   }
 
@@ -55,8 +55,8 @@ XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundA
     XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundAmount: Amount(dollars: 0.00)))
   }
 
-  func testShouldRefundUsingOmniIfDriverSupportsIt() {
-    MockDriver.omniRefundsSupported = true
+  func testShouldRefundUsingStaxIfDriverSupportsIt() {
+    MockDriver.staxRefundsSupported = true
 
     let transactionToRefund = Transaction()
     let transactionId = UUID().uuidString
@@ -64,13 +64,13 @@ XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundA
     transactionToRefund.id = transactionId
     modelStore = [transactionId: transactionToRefund]
 
-    let expectation = XCTestExpectation(description: "Request to omni is build properly")
+    let expectation = XCTestExpectation(description: "Request to stax is build properly")
     let expectedMethod = "post"
     let expectedUrlString = "/transaction/\(transactionId)/void-or-refund"
     let expectedBody: Data? = nil
 
-    // We want mock omni api to be called witha void-or-refund
-    mockOmniApi.expectRequest(method: expectedMethod,
+    // We want mock stax api to be called witha void-or-refund
+    mockStaxApi.expectRequest(method: expectedMethod,
                               urlString: expectedUrlString,
                               body: expectedBody) { () -> Bool in
       expectation.fulfill()
@@ -82,7 +82,7 @@ XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundA
       mobileReaderDriverRepository: mobileReaderDriverRepo,
       transactionRepository: transactionRepo,
       transaction: transactionToRefund,
-      omniApi: mockOmniApi
+      staxApi: mockStaxApi
     ).start(completion: { _ in
       XCTFail()
     }) { _ in
@@ -99,7 +99,7 @@ XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundA
     XCTAssertNotNil(RefundMobileReaderTransaction.validateRefund(transaction: transaction, refundAmount: Amount(dollars: 1.00)))
   }
 
-  fileprivate func getRefundValidationError(total: Double, totalRefunded: Double, refundAmount: Amount) -> OmniException? {
+  fileprivate func getRefundValidationError(total: Double, totalRefunded: Double, refundAmount: Amount) -> StaxException? {
     let transaction = Transaction()
     transaction.total = total
     transaction.totalRefunded = totalRefunded

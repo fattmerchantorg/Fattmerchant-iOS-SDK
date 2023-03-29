@@ -11,7 +11,7 @@ import XCTest
 
 class TakeMobileReaderPaymentTests: XCTestCase {
 
-  var mockOmniApi: MockOmniApi = MockOmniApi()
+  var mockStaxApi: MockStaxApi = MockStaxApi()
   var mobileReaderDriverRepo: MobileReaderDriverRepository!
   var invoiceRepo: InvoiceRepository!
   var customerRepo: CustomerRepository!
@@ -19,10 +19,10 @@ class TakeMobileReaderPaymentTests: XCTestCase {
   var transactionRepo: TransactionRepository!
 
   override func setUp() {
-    invoiceRepo = InvoiceRepository(omniApi: mockOmniApi)
-    customerRepo = CustomerRepository(omniApi: mockOmniApi)
-    paymentMethodRepo = PaymentMethodRepository(omniApi: mockOmniApi)
-    transactionRepo = TransactionRepository(omniApi: mockOmniApi)
+    invoiceRepo = InvoiceRepository(staxApi: mockStaxApi)
+    customerRepo = CustomerRepository(staxApi: mockStaxApi)
+    paymentMethodRepo = PaymentMethodRepository(staxApi: mockStaxApi)
+    transactionRepo = TransactionRepository(staxApi: mockStaxApi)
     mobileReaderDriverRepo = MobileReaderDriverRepository()
   }
 
@@ -241,10 +241,10 @@ class TakeMobileReaderPaymentTests: XCTestCase {
       wait(for: [expectation], timeout: 10.0)
   }
 
-  func testTransactionGetsSetToNotRefundableIfOmniCantPerformRefund() {
-    // Set the driver to understand that omni cannot perform the refund. This is the deciding factor in whether or not
+  func testTransactionGetsSetToNotRefundableIfStaxCantPerformRefund() {
+    // Set the driver to understand that stax cannot perform the refund. This is the deciding factor in whether or not
     // the transaction gets is_refundable and is_voidable set to false
-    MockDriver.omniRefundsSupported = false
+    MockDriver.staxRefundsSupported = false
 
     let transactionRequest = TransactionRequest(amount: Amount(cents: 2))
 
@@ -272,10 +272,10 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     wait(for: [expectation], timeout: 3.0)
   }
 
-  func testTransactionDoesNotGetSetToNotRefundableIfOmniCanPerformRefund() {
-    // Set the driver to understand that omni cannot perform the refund. This is the deciding factor in whether or not
+  func testTransactionDoesNotGetSetToNotRefundableIfStaxCanPerformRefund() {
+    // Set the driver to understand that stax cannot perform the refund. This is the deciding factor in whether or not
     // the transaction gets is_refundable and is_voidable set to false
-    MockDriver.omniRefundsSupported = true
+    MockDriver.staxRefundsSupported = true
 
     let transactionRequest = TransactionRequest(amount: Amount(cents: 2))
 

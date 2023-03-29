@@ -75,7 +75,7 @@ struct TransactionResult {
 
     /// A message to display with the transaction
     ///
-    /// In Omni, this is typically used to show an error describing what went wrong with the transaction. For example,
+    /// In Stax, this is typically used to show an error describing what went wrong with the transaction. For example,
     /// "Insufficient Funds"
     internal var message: String?
 }

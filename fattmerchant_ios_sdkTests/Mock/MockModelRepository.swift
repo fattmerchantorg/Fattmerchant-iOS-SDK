@@ -16,7 +16,7 @@ extension ModelRepository {
     return UUID().uuidString
   }
 
-  func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
+  func create(model: StaxModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
     var m = model
     let id = uniqueId()
     m.id = id
@@ -24,14 +24,14 @@ extension ModelRepository {
     completion(m)
   }
 
-  func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
+  func update(model: StaxModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
     var m = model
     m.id = id
     modelStore[id] = m
     completion(m)
   }
 
-  func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {
+  func delete(model: StaxModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {
     if let id = model.id {
       modelStore.removeValue(forKey: id)
     }
@@ -39,14 +39,14 @@ extension ModelRepository {
   }
 
   func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
-    if let model = modelStore[id] as? Self.OmniModel {
+    if let model = modelStore[id] as? Self.StaxModel {
       completion(model)
     } else {
-      error(OmniApi.OmniNetworkingException.unknown("Model not found"))
+      error(StaxApi.StaxNetworkingException.unknown("Model not found"))
     }
   }
 
-  func getList(completion: @escaping (PaginatedData<OmniModel>) -> Void, error: @escaping ErrorHandler) {
+  func getList(completion: @escaping (PaginatedData<StaxModel>) -> Void, error: @escaping ErrorHandler) {
     fatalError("Need to implement this")
   }
 }

@@ -1,5 +1,5 @@
 //
-//  OmniApi.swift
+//  StaxApi.swift
 //  fattmerchant-ios-sdk
 //
 //  Created by Tulio Troncoso on 1/10/20.
@@ -8,15 +8,15 @@
 
 import Foundation
 
-/// Responsible for communicating with Omni
-class MockOmniApi: OmniApi {
+/// Responsible for communicating with Stax
+class MockStaxApi: StaxApi {
 
-  var omniSelf: OmniSelf?
+  var staxSelf: StaxSelf?
 
   struct Stub {
     enum Response {
       case success(_ value: Any)
-      case failure(_ value: OmniException)
+      case failure(_ value: StaxException)
     }
 
     let method: String
@@ -25,7 +25,7 @@ class MockOmniApi: OmniApi {
     let completionResponse: Response
   }
 
-  /// This block runs before the mock omni api has executed one of the completion blocks, and is a good opportunity
+  /// This block runs before the mock stax api has executed one of the completion blocks, and is a good opportunity
   /// to, for example, verify that the method has been called at all.
   ///
   /// All the arguments of the request are passed in here, so you can verify that a request is being attempted and
@@ -46,15 +46,15 @@ class MockOmniApi: OmniApi {
     expectedRequests.append(spy)
   }
 
-  override func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
-    if let omniSelf = omniSelf {
-      completion(omniSelf)
+  override func getSelf(completion: @escaping (StaxSelf) -> Void, failure: @escaping (StaxException) -> Void ) {
+    if let staxSelf = staxSelf {
+      completion(staxSelf)
     } else {
-      failure(OmniNetworkingException.unknown("Could not get self"))
+      failure(StaxNetworkingException.unknown("Could not get self"))
     }
   }
 
-  override func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (OmniException) -> Void) where T : Decodable, T : Encodable {
+  override func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (StaxException) -> Void) where T : Decodable, T : Encodable {
 
     // See if any of the spies want to prevent further execution
     for request in expectedRequests {

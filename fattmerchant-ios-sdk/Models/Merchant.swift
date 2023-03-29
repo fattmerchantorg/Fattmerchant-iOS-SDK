@@ -8,10 +8,10 @@
 
 import Foundation
 
-/// A Merchant in the Omni platform
+/// A Merchant in the Stax platform
 class Merchant: Model, Codable {
 
-    /// The omni id of the merchant
+    /// The stax id of the merchant
     public var id: String?
 
     /// A token that enables hosted webpayments

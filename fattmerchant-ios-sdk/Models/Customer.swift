@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// A Customer in the Omni platform
+/// A Customer in the Stax platform
 public class Customer: Model {
     public var id: String?
     public var address1: String?

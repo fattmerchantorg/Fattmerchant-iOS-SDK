@@ -1,5 +1,5 @@
 //
-//  OmniTest.swift
+//  StaxTest.swift
 //  FattmerchantTests
 //
 //  Created by Tulio Troncoso on 1/31/20.
@@ -9,36 +9,36 @@
 import Foundation
 import XCTest
 
-class OmniTest: XCTestCase {
+class StaxTest: XCTestCase {
 
-  var omni: Omni = Omni()
-  let omniApi = MockOmniApi()
+  var stax: Stax = Stax()
+  let staxApi = MockStaxApi()
   let hostedPaymentsToken = "faketoken"
 
   override func setUp() {
-    // Mark Omni as initialized so we don't have to run through the initialization. There is a test for the initialization
-    omni.mobileReaderDriversInitialized = true
+    // Mark Stax as initialized so we don't have to run through the initialization. There is a test for the initialization
+    stax.mobileReaderDriversInitialized = true
 
-    // Give omni the mock api
-    omni.omniApi = omniApi
+    // Give stax the mock api
+    stax.staxApi = staxApi
 
-    // Give omni a Merchant
-    omni.merchant = Merchant()
-    omni.merchant?.hostedPaymentsToken = hostedPaymentsToken
+    // Give stax a Merchant
+    stax.merchant = Merchant()
+    stax.merchant?.hostedPaymentsToken = hostedPaymentsToken
 
-    // Give omni the mock repositories
-    omni.mobileReaderDriverRepository = MobileReaderDriverRepository()
-    omni.mobileReaderDriverRepository.driver = MockDriver()
-    omni.invoiceRepository = InvoiceRepository(omniApi: omniApi)
-    omni.transactionRepository = TransactionRepository(omniApi: omniApi)
-    omni.paymentMethodRepository = MockPaymentMethodRepository(omniApi: omniApi)
-    omni.customerRepository = CustomerRepository(omniApi: omniApi)
+    // Give stax the mock repositories
+    stax.mobileReaderDriverRepository = MobileReaderDriverRepository()
+    stax.mobileReaderDriverRepository.driver = MockDriver()
+    stax.invoiceRepository = InvoiceRepository(staxApi: staxApi)
+    stax.transactionRepository = TransactionRepository(staxApi: staxApi)
+    stax.paymentMethodRepository = MockPaymentMethodRepository(staxApi: staxApi)
+    stax.customerRepository = CustomerRepository(staxApi: staxApi)
   }
 
   func testCanGetAvailableReaders() {
     let readersAreAvailable = XCTestExpectation(description: "There is at least one mobile reader that is available")
 
-    omni.getAvailableReaders(
+    stax.getAvailableReaders(
       completion: { (availableReaders) in
         readersAreAvailable.fulfill()
     }) { error in
@@ -51,9 +51,9 @@ class OmniTest: XCTestCase {
   func testCanConnectMobileReader() {
     let connectedReader = XCTestExpectation(description: "Connected the mobile reader")
 
-    omni.getAvailableReaders(completion: { availableReaders in
+    stax.getAvailableReaders(completion: { availableReaders in
       let chosenReader = availableReaders.first!
-      self.omni.connect(reader: chosenReader, completion: { reader in
+      self.stax.connect(reader: chosenReader, completion: { reader in
         connectedReader.fulfill()
       }, error: { _ in
         XCTFail("Could not connect reader")
@@ -67,11 +67,11 @@ class OmniTest: XCTestCase {
 
   func testThrowsReaderConnectionError() {
     let errorThrown = XCTestExpectation(description: "Connected the mobile reader")
-    omni.mobileReaderDriverRepository.driver.shouldConnect = false
+    stax.mobileReaderDriverRepository.driver.shouldConnect = false
 
-    omni.getAvailableReaders(completion: { availableReaders in
+    stax.getAvailableReaders(completion: { availableReaders in
       let chosenReader = availableReaders.first!
-      self.omni.connect(reader: chosenReader, completion: { _ in
+      self.stax.connect(reader: chosenReader, completion: { _ in
         XCTFail("Connected reader, but was expecting error")
       }, error: { exception in
 
@@ -91,7 +91,7 @@ class OmniTest: XCTestCase {
 
   func testCanGetConnectedMobileReader() {
     let readerFound = XCTestExpectation(description: "Reader was found")
-    omni.getConnectedReader(completion: { connectedReader in
+    stax.getConnectedReader(completion: { connectedReader in
       readerFound.fulfill()
     }) { error in
       XCTFail("Didn't find the reader")
@@ -104,8 +104,8 @@ class OmniTest: XCTestCase {
     let connectedReaderNil = XCTestExpectation(description: "No connected reader found")
     let driver = MockDriver()
     driver.reader = nil
-    omni.mobileReaderDriverRepository.driver = driver
-    omni.getConnectedReader(completion: { connectedReader in
+    stax.mobileReaderDriverRepository.driver = driver
+    stax.getConnectedReader(completion: { connectedReader in
       XCTAssertNil(connectedReader)
       connectedReaderNil.fulfill()
     }) { error in
@@ -116,14 +116,14 @@ class OmniTest: XCTestCase {
   }
 
   func testCantGetConnectedMobileReaderIfUninitialized() {
-    omni.mobileReaderDriversInitialized = false
+    stax.mobileReaderDriversInitialized = false
     let errorThrown = XCTestExpectation(description: "Error was thrown")
-    let expectedError = OmniGeneralException.uninitialized
+    let expectedError = StaxGeneralException.uninitialized
 
-    omni.getConnectedReader(completion: { connectedReader in
+    stax.getConnectedReader(completion: { connectedReader in
       XCTFail()
     }) { error in
-      XCTAssertEqual(error as! OmniGeneralException, expectedError)
+      XCTAssertEqual(error as! StaxGeneralException, expectedError)
       XCTAssertNotNil(error.detail)
       errorThrown.fulfill()
     }
@@ -133,11 +133,11 @@ class OmniTest: XCTestCase {
 
   func testCanDisconnectMobileReader() {
     let reader = MobileReader(name: "Reader", serialNumber: "1234")
-    omni.mobileReaderDriverRepository.driver.reader = reader
-    omni.mobileReaderDriverRepository.driver.familiarSerialNumbers.append(reader.serialNumber!)
+    stax.mobileReaderDriverRepository.driver.reader = reader
+    stax.mobileReaderDriverRepository.driver.familiarSerialNumbers.append(reader.serialNumber!)
 
     let expectation = XCTestExpectation(description: "Mobile reader is no longer connected")
-    omni.disconnect(reader: reader, completion: { disconnected in
+    stax.disconnect(reader: reader, completion: { disconnected in
       XCTAssert(disconnected)
       expectation.fulfill()
     }) { error in
@@ -161,9 +161,9 @@ class OmniTest: XCTestCase {
     paymentMethod.customerId = "customerid"
     paymentMethod.merchantId = "merchantid"
 
-    omniApi.stub("post", "/webpayment/\(hostedPaymentsToken)/tokenize", body: data, response: .success(paymentMethod))
+    staxApi.stub("post", "/webpayment/\(hostedPaymentsToken)/tokenize", body: data, response: .success(paymentMethod))
 
-    omni.pay(transactionRequest: transactionRequest, completion: { (completedTransaction) in
+    stax.pay(transactionRequest: transactionRequest, completion: { (completedTransaction) in
       transactionWasCompleted.fulfill()
     }) { error in
       XCTFail("Transaction failed")
@@ -176,10 +176,10 @@ class OmniTest: XCTestCase {
     let transactionDoesntStart = XCTestExpectation()
 
     // Simulate busy mobile reader
-    omni.mobileReaderDriverRepository.driver.readyToTakePayment = false
+    stax.mobileReaderDriverRepository.driver.readyToTakePayment = false
 
     // Begin the transaction and wait for it to fail
-    omni.takeMobileReaderTransaction(
+    stax.takeMobileReaderTransaction(
       request: TransactionRequest(amount: Amount(cents: 10)),
       completion: { _ in
         XCTFail("Transaction went through with busy reader")
@@ -198,21 +198,21 @@ class OmniTest: XCTestCase {
     // Mock the self object
     let merchant = Merchant()
     merchant.id = "generated_merchant_id_123"
-    let omniSelf = OmniSelf()
-    omniSelf.merchant = merchant
-    (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
+    let staxSelf = StaxSelf()
+    staxSelf.merchant = merchant
+    (stax.staxApi as? MockStaxApi)?.staxSelf = staxSelf
 
-    let mockApi = omni.omniApi as! MockOmniApi
+    let mockApi = stax.staxApi as! MockStaxApi
 
     let awcDetails = AWCDetails(terminalId: "someterminalid", terminalSecret: "terminalsecret")
     let mobileReaderDetails = MobileReaderDetails()
     mobileReaderDetails.anywhereCommerce = awcDetails
     mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
 
-    let initialized = expectation(description: "Omni gets initialized")
+    let initialized = expectation(description: "Stax gets initialized")
     
-    omni.initialize(
-      params: Omni.InitParams(appId: "123", apiKey: "123"),
+    stax.initialize(
+      params: Stax.InitParams(appId: "123", apiKey: "123"),
       completion: {
         initialized.fulfill()
     }) { (error) in
@@ -226,12 +226,12 @@ class OmniTest: XCTestCase {
     // Mock the self object
     let merchant = Merchant()
     merchant.id = "generated_merchant_id_123"
-    let omniSelf = OmniSelf()
-    omniSelf.merchant = merchant
-    (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
-    let mockApi = omni.omniApi as! MockOmniApi
+    let staxSelf = StaxSelf()
+    staxSelf.merchant = merchant
+    (stax.staxApi as? MockStaxApi)?.staxSelf = staxSelf
+    let mockApi = stax.staxApi as! MockStaxApi
 
-    // Make the omni api NOT return the mobile reader settings.
+    // Make the stax api NOT return the mobile reader settings.
     // This will still make the http call succeed, but it will not provide the necessary info to initialize
     let mobileReaderDetails = MobileReaderDetails()
     mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
@@ -240,10 +240,10 @@ class OmniTest: XCTestCase {
     // return the details
     merchant.options = ["emv_password": "somepassword"].jsonValue()!
 
-    let initialized = expectation(description: "Omni gets initialized")
+    let initialized = expectation(description: "Stax gets initialized")
 
-    omni.initialize(
-      params: Omni.InitParams(appId: "123", apiKey: "123"),
+    stax.initialize(
+      params: Stax.InitParams(appId: "123", apiKey: "123"),
       completion: {
         initialized.fulfill()
     }) { (error) in
@@ -257,21 +257,21 @@ class OmniTest: XCTestCase {
     // Mock the self object
     let merchant = Merchant()
     merchant.id = "generated_merchant_id_123"
-    let omniSelf = OmniSelf()
-    omniSelf.merchant = merchant
-    (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
-    let mockApi = omni.omniApi as! MockOmniApi
+    let staxSelf = StaxSelf()
+    staxSelf.merchant = merchant
+    (stax.staxApi as? MockStaxApi)?.staxSelf = staxSelf
+    let mockApi = stax.staxApi as! MockStaxApi
 
-    // Make the omni api NOT return the mobile reader settings.
+    // Make the stax api NOT return the mobile reader settings.
     // This will still make the http call succeed & initialize the API, but it will not provide the necessary info to init mobile readers
     let mobileReaderDetails = MobileReaderDetails()
     mockApi.stub("get", "/team/gateway/hardware/mobile", body: nil, response: .success(mobileReaderDetails))
 
-    let errorThrown = expectation(description: "Omni throws error")
-    let expectedError = OmniInitializeException.missingMobileReaderCredentials
+    let errorThrown = expectation(description: "Stax throws error")
+    let expectedError = StaxInitializeException.missingMobileReaderCredentials
 
-    omni.initialize(
-      params: Omni.InitParams(appId: "123", apiKey: "123"),
+    stax.initialize(
+      params: Stax.InitParams(appId: "123", apiKey: "123"),
       completion: {
         errorThrown.fulfill()
     }) { (error) in
@@ -284,30 +284,30 @@ class OmniTest: XCTestCase {
 
   /// Tests that the isInitialized function truly reflects initialization status
   func testIsInitialized() {
-    omni.mobileReaderDriversInitialized = false
-    XCTAssertEqual(omni.isInitialized, false)
+    stax.mobileReaderDriversInitialized = false
+    XCTAssertEqual(stax.isInitialized, false)
 
-    omni.mobileReaderDriversInitialized = true
-    XCTAssertEqual(omni.isInitialized, true)
+    stax.mobileReaderDriversInitialized = true
+    XCTAssertEqual(stax.isInitialized, true)
   }
 
-  /// Tests cases where omni initialization fails
+  /// Tests cases where stax initialization fails
   func testFailedInitialization() {
     // Mock the self object, but leave out the merchant
     let merchant = Merchant()
     merchant.id = "generated_merchant_id_123"
-    let omniSelf = OmniSelf()
-    (omni.omniApi as? MockOmniApi)?.omniSelf = omniSelf
+    let staxSelf = StaxSelf()
+    (stax.staxApi as? MockStaxApi)?.staxSelf = staxSelf
 
     let missingMerchant = expectation(description: "Couldn't get merchant")
-    let expectedError = OmniNetworkingException.couldNotGetMerchantDetails
+    let expectedError = StaxNetworkingException.couldNotGetMerchantDetails
 
-    omni.initialize(
-      params: Omni.InitParams(appId: "123", apiKey: "123"),
+    stax.initialize(
+      params: Stax.InitParams(appId: "123", apiKey: "123"),
       completion: {
         XCTFail()
     }) { error in
-      XCTAssertEqual(error as! OmniNetworkingException, expectedError)
+      XCTAssertEqual(error as! StaxNetworkingException, expectedError)
       XCTAssertNotNil(error.detail)
       missingMerchant.fulfill()
     }
@@ -315,20 +315,20 @@ class OmniTest: XCTestCase {
     wait(for: [missingMerchant], timeout: 10.0)
   }
 
-  /// Tests cases where omni initialization fails
+  /// Tests cases where stax initialization fails
   func testFailedInitializationIfDetailsAreMissing() {
     let missingMerchant = expectation(description: "Couldnt initialize")
-    var initParams = Omni.InitParams(appId: "", apiKey: "")
+    var initParams = Stax.InitParams(appId: "", apiKey: "")
     initParams.appId = nil
 
-    let expectedError = OmniInitializeException.missingInitializationDetails
+    let expectedError = StaxInitializeException.missingInitializationDetails
 
-    omni.initialize(
+    stax.initialize(
       params: initParams,
       completion: {
         XCTFail()
     }) { error in
-      XCTAssertEqual(error as! OmniInitializeException, expectedError)
+      XCTAssertEqual(error as! StaxInitializeException, expectedError)
       XCTAssertNotNil(error.detail)
       missingMerchant.fulfill()
     }
@@ -336,51 +336,51 @@ class OmniTest: XCTestCase {
     wait(for: [missingMerchant], timeout: 10.0)
   }
 
-  func testUninitializedOmniThrowsError() {
-    let omni = Omni()
+  func testUninitializedStaxThrowsError() {
+    let stax = Stax()
 
-    func errorBlock(expectation: XCTestExpectation) -> (OmniException) -> Void {
+    func errorBlock(expectation: XCTestExpectation) -> (StaxException) -> Void {
       return { exception in
         switch exception {
-        case OmniGeneralException.uninitialized:
+        case StaxGeneralException.uninitialized:
           XCTAssertNotNil(exception.detail)
           expectation.fulfill()
         default:
-          XCTFail("Omni expected to throw an uninitialized exception, but didn't")
+          XCTFail("Stax expected to throw an uninitialized exception, but didn't")
         }
       }
     }
 
     // Test that connect reader fails
-    let connectReaderFails = XCTestExpectation(description: "Omni throws an uninitialized error")
-    omni.connect(reader: MobileReader(name: "reader"), completion: { _ in
-      XCTFail("Omni expected to throw an uninitialized exception, but didn't")
+    let connectReaderFails = XCTestExpectation(description: "Stax throws an uninitialized error")
+    stax.connect(reader: MobileReader(name: "reader"), completion: { _ in
+      XCTFail("Stax expected to throw an uninitialized exception, but didn't")
     }, error: { _ in
       connectReaderFails.fulfill()
     })
 
     // Test that get available readers fails
-    let getAvailableReadersFails = XCTestExpectation(description: "Omni throws an uninitialized error")
-    omni.getAvailableReaders(completion: { _ in
-      XCTFail("Omni expected to throw an uninitialized exception, but didn't")
+    let getAvailableReadersFails = XCTestExpectation(description: "Stax throws an uninitialized error")
+    stax.getAvailableReaders(completion: { _ in
+      XCTFail("Stax expected to throw an uninitialized exception, but didn't")
     }, error: errorBlock(expectation: getAvailableReadersFails))
 
     // Test that get mobile reader transactions fails
-    let getMobileReaderTransactionsFails = XCTestExpectation(description: "Omni throws an uninitialized error")
-    omni.getMobileReaderTransactions(completion: { _ in
-      XCTFail("Omni expected to throw an uninitialized exception, but didn't")
+    let getMobileReaderTransactionsFails = XCTestExpectation(description: "Stax throws an uninitialized error")
+    stax.getMobileReaderTransactions(completion: { _ in
+      XCTFail("Stax expected to throw an uninitialized exception, but didn't")
     }, error: errorBlock(expectation: getMobileReaderTransactionsFails))
 
     // Test that refund fails
-    let refundMobileReaderFails = XCTestExpectation(description: "Omni throws an uninitialized error")
-    omni.refundMobileReaderTransaction(transaction: Transaction(), completion: { _ in
-      XCTFail("Omni expected to throw an uninitialized exception, but didn't")
+    let refundMobileReaderFails = XCTestExpectation(description: "Stax throws an uninitialized error")
+    stax.refundMobileReaderTransaction(transaction: Transaction(), completion: { _ in
+      XCTFail("Stax expected to throw an uninitialized exception, but didn't")
     }, error: errorBlock(expectation: refundMobileReaderFails))
 
     // Test that mobile reader transaction fails
-    let mobileReaderTransactionFails = XCTestExpectation(description: "Omni throws an uninitialized error")
-    omni.takeMobileReaderTransaction(request: TransactionRequest(amount: Amount(cents: 10)), completion: { _ in
-        XCTFail("Omni expected to throw an uninitialized exception, but didn't")
+    let mobileReaderTransactionFails = XCTestExpectation(description: "Stax throws an uninitialized error")
+    stax.takeMobileReaderTransaction(request: TransactionRequest(amount: Amount(cents: 10)), completion: { _ in
+        XCTFail("Stax expected to throw an uninitialized exception, but didn't")
     }, error: errorBlock(expectation: mobileReaderTransactionFails))
 
     wait(for: [

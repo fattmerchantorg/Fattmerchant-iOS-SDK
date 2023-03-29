@@ -51,7 +51,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
     /// The place where the transactions take place
     static var source: String = "AWC"
 
-    static var omniRefundsSupported: Bool = false
+    static var staxRefundsSupported: Bool = false
 
     var familiarSerialNumbers: [String] = []
 
@@ -160,12 +160,12 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
         ANPCardReaderController.shared().connectToBluetoothReader(withSerial: serialNumber)
     }
 
-    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         ANPCardReaderController.shared().disconnectReader()
         completion(true)
     }
 
-    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         guard let transaction = currentTransaction else {
             return error(CancelCurrentTransactionException.noTransactionToCancel)
         }
@@ -236,7 +236,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
         })
     }
 
-    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (StaxException) -> Void) {
         let refund = AnyPayTransaction(type: .REFUND)
         refund?.externalID = transaction.awcExternalId()
         refund?.totalAmount = ANPAmount(string: refundAmount?.dollarsString())
@@ -247,7 +247,7 @@ class AWCDriver: NSObject, MobileReaderDriver, CBCentralManagerDelegate {
         })
     }
 
-    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (StaxException) -> Void) {
         guard let reader = ANPCardReaderController.shared().connectedReader else {
             return completion(nil)
         }

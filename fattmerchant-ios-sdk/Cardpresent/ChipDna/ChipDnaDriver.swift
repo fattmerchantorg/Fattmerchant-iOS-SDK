@@ -21,7 +21,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     /// The place where the transactions take place
     static var source: String = "NMI"
 
-    static var omniRefundsSupported: Bool = true
+    static var staxRefundsSupported: Bool = true
 
     enum PinPadManufacturer: String {
         case Miura, BBPOS
@@ -173,10 +173,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     /// - Parameters:
     ///   - completion: the connected MobileReader, if any
     ///   - error: a block to run if anything goes wrong during the operation
-    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (StaxException) -> Void) {
         // ChipDna must be initialized
         if !ChipDnaMobile.isInitialized() {
-            error(OmniGeneralException.uninitialized)
+            error(StaxGeneralException.uninitialized)
         }
 
         completion(ChipDnaDriver.connectedReader())
@@ -202,10 +202,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ///   - reader: the MobileReader that is to be disconnected
     ///   - completion: a block to run once done. if disconnected, this receives true
     ///   - error: a block to run in anything goes wrong during the operation
-    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         // ChipDna must be initialized
         if !ChipDnaMobile.isInitialized() {
-            error(OmniGeneralException.uninitialized)
+            error(StaxGeneralException.uninitialized)
         }
 
         ChipDnaMobile.dispose(nil)
@@ -301,7 +301,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
         }
     }
 
-    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         if let result = ChipDnaMobile.sharedInstance()?.terminateTransaction(nil) {
             if let success = result[CCParamResult], success == CCValueTrue {
                 completion(true)
@@ -327,7 +327,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     ///   - completion: A block to run after the refund is complete
     ///   - refundAmount: The amount to be refunded. If nil is passed, the remaining amount will be refunded
     ///   - error: A block to run in case an error occurs
-    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (StaxException) -> Void) {
         // Get card ease reference. This is what we use to reference the transaction within NMI
         guard let cardEaseReference = extractCardEaseReference(from: transaction) else {
             error(RefundException.transactionNotRefundable(details: "Could not find user reference"))

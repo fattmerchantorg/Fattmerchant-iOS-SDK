@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum TakeMobileReaderPaymentException: OmniException {
+enum TakeMobileReaderPaymentException: StaxException {
     case mobileReaderNotFound
     case mobileReaderNotReady
     case invoiceNotFound
@@ -93,7 +93,7 @@ class TakeMobileReaderPayment {
         self.userNotificationDelegate = userNotificationDelegate
     }
 
-    func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
+    func start(completion: @escaping (Transaction) -> Void, failure: @escaping (StaxException) -> Void) {
         availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
             self.getOrCreateInvoice(failure) { (createdInvoice) in
                 self.takeMobileReaderPayment(with: driver,
@@ -103,10 +103,10 @@ class TakeMobileReaderPayment {
                                              failure) { (mobileReaderPaymentResult) in
 
                     // This is a callback that voids the transaction and calls the fail block
-                    let voidAndFail: (OmniException) -> Void = { exception in
+                    let voidAndFail: (StaxException) -> Void = { exception in
 
                         // By the time this is invoked, the NMI transaction went through fine but something happened while doing
-                        // one of the calls to Omni. Since the transaction is pending confirmation, then we need to void it *before*
+                        // one of the calls to Stax. Since the transaction is pending confirmation, then we need to void it *before*
                         // invoking the failure block. That way the customer gets their money back
                         driver.void(transactionResult: mobileReaderPaymentResult) { _ in
                             failure(exception)
@@ -127,7 +127,7 @@ class TakeMobileReaderPayment {
                                     invoice: updatedInvoice,
                                     voidAndFail) { completedTransaction in
 
-                                    // Make sure the transaction from Omni has an id. This should be true pretty much all the time
+                                    // Make sure the transaction from Stax has an id. This should be true pretty much all the time
                                     guard let transactionId = completedTransaction.id else {
                                         voidAndFail(TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: nil))
                                         return
@@ -143,14 +143,14 @@ class TakeMobileReaderPayment {
                                         if success {
                                             completion(completedTransaction)
                                         } else {
-                                            /* We couldn't capture the transaction. So void the NMI transaction and mark it failed on Omni */
+                                            /* We couldn't capture the transaction. So void the NMI transaction and mark it failed on Stax */
 
-                                            // Mark omni transaction failed
+                                            // Mark stax transaction failed
                                             let failedTransaction = completedTransaction
                                             failedTransaction.success = false
                                             failedTransaction.message = "Error capturing the transaction"
 
-                                            // Fail the transaction in omni
+                                            // Fail the transaction in stax
                                             self.transactionRepository.update(model: failedTransaction, id: transactionId, completion: { _ in
                                                 voidAndFail(TakeMobileReaderPaymentException.couldNotCaptureTransaction)
                                                 return
@@ -174,7 +174,7 @@ class TakeMobileReaderPayment {
                                     paymentMethod: PaymentMethod,
                                     customer: Customer,
                                     invoice: Invoice,
-                                    _ failure: @escaping (OmniException) -> Void,
+                                    _ failure: @escaping (StaxException) -> Void,
                                     _ completion: @escaping (Transaction) -> Void) {
         let transactionToCreate = Transaction()
 
@@ -231,11 +231,11 @@ class TakeMobileReaderPayment {
         transactionToCreate.token = result.externalId
         transactionToCreate.message = result.message
 
-        // Set the transaction to not refundable or voidable if the Omni backend cannot perform the refund
-        // This is extremely important because it prevents a user from attempting a refund via the VT or the Omni API that
-        // could never work. The reason it won't work is because Omni doesn't have a deep integration with all of our
+        // Set the transaction to not refundable or voidable if the Stax backend cannot perform the refund
+        // This is extremely important because it prevents a user from attempting a refund via the VT or the Stax API that
+        // could never work. The reason it won't work is because Stax doesn't have a deep integration with all of our
         // third party vendors, such as AnywhereCommerce.
-        if !type(of: driver).omniRefundsSupported {
+        if !type(of: driver).staxRefundsSupported {
             transactionToCreate.isRefundable = false
             transactionToCreate.isVoidable = false
         }
@@ -354,7 +354,7 @@ class TakeMobileReaderPayment {
     fileprivate func updateInvoice(_ invoice: Invoice,
                                    with paymentMethod: PaymentMethod,
                                    and customer: Customer,
-                                   _ failure: @escaping (OmniException) -> Void,
+                                   _ failure: @escaping (StaxException) -> Void,
                                    completion: @escaping (Invoice) -> Void) {
         let newInvoice = Invoice()
 
@@ -389,7 +389,7 @@ class TakeMobileReaderPayment {
         return String(maskedPan.suffix(from: lastFourIdx))
     }
 
-    fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
+    fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (StaxException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
         let paymentMethodToCreate = PaymentMethod(customer: customer)
 
         guard let customerId = customer.id else {
@@ -417,7 +417,7 @@ class TakeMobileReaderPayment {
         paymentMethodToCreate.paymentToken = result.paymentToken
 
         // When the payment method was tokenized, we want to use the
-        // createTokenizedPaymentMethod method since it tells Omni to save the token
+        // createTokenizedPaymentMethod method since it tells Stax to save the token
         if paymentMethodToCreate.paymentToken != nil {
             paymentMethodRepository.createTokenizedPaymentMethod(model: paymentMethodToCreate, completion: completion, error: failure)
         } else {
@@ -426,7 +426,7 @@ class TakeMobileReaderPayment {
 
     }
 
-    fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
+    fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (StaxException) -> Void, _ completion: @escaping (Customer) -> Void) {
         let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
         let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
         let customerToCreate = Customer(firstName: firstname, lastName: lastname)
@@ -451,7 +451,7 @@ class TakeMobileReaderPayment {
                                              signatureProvider: SignatureProviding?,
                                              transactionUpdateDelegate: TransactionUpdateDelegate?,
                                              userNotificationDelegate: UserNotificationDelegate?,
-                                             _ failure: (OmniException) -> Void,
+                                             _ failure: (StaxException) -> Void,
                                              _ completion: @escaping (TransactionResult) -> Void) {
         driver.performTransaction(with: self.request,
                                   signatureProvider: signatureProvider,
@@ -461,7 +461,7 @@ class TakeMobileReaderPayment {
     }
 
     /// Gets the invoice with the id in the transaction request or creates a new one
-    internal func getOrCreateInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
+    internal func getOrCreateInvoice(_ failure: @escaping (StaxException) -> Void, _ completion: @escaping (Invoice) -> Void) {
         // If an invoiceId was given in the transaction request, we should verify that an invoice with that id exists
         if let invoiceId = request.invoiceId {
             guard !invoiceId.isEmpty else {
@@ -491,7 +491,7 @@ class TakeMobileReaderPayment {
         }
     }
 
-    fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
+    fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (StaxException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
         repo.getInitializedDrivers { initializedDrivers in
             // Get drivers that are ready for payment
             filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }, completion: { driversReadyForPayment in

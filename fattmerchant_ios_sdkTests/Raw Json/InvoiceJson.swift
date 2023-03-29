@@ -49,7 +49,7 @@ let invoiceJson =
         "is_api_key": false,
         "acknowledgments": {
             "tutorial": true,
-            "godviewOmniSearchTooltip": true,
+            "godviewStaxSearchTooltip": true,
             "godviewWelcome": true
         },
         "created_at": "2017-11-20 18:08:08",

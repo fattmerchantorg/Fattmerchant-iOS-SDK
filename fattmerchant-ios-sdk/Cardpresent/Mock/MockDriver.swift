@@ -28,7 +28,7 @@ class MockDriver: MobileReaderDriver {
 
     static var source: String = "MOCKSOURCE"
 
-    static var omniRefundsSupported: Bool = false
+    static var staxRefundsSupported: Bool = false
 
     func isReadyToTakePayment(completion: (Bool) -> Void) {
         completion(readyToTakePayment)
@@ -64,11 +64,11 @@ class MockDriver: MobileReaderDriver {
         completion(reader)
     }
 
-    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         completion(true)
     }
 
-    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (StaxException) -> Void) {
         completion(reader)
     }
 
@@ -95,15 +95,15 @@ class MockDriver: MobileReaderDriver {
         completion(transactionResult)
     }
 
-    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         completion(true)
     }
 
-    func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+    func refund(transaction: Transaction, completion: @escaping (TransactionResult) -> Void, error: @escaping (StaxException) -> Void) {
         refund(transaction: transaction, refundAmount: nil, completion: completion, error: error)
     }
 
-    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (StaxException) -> Void) {
         var transactionResult = TransactionResult()
         transactionResult.request = nil
         transactionResult.success = true
