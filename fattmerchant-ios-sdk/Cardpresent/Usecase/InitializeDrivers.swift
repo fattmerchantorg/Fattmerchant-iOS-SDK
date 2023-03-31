@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum InitializeDriversException: OmniException {
+enum InitializeDriversException: StaxException {
     static var mess: String = "Could not initialize driver"
 
     case noMobileReadersFound
@@ -35,7 +35,7 @@ class InitializeDrivers {
         self.args = args
     }
 
-    func start(completion: @escaping (Bool) -> Void, failure: @escaping (OmniException) -> Void) {
+    func start(completion: @escaping (Bool) -> Void, failure: @escaping (StaxException) -> Void) {
         mobileReaderDriverRepository.getDrivers { (drivers) in
 
             // Make sure we have at least one available driver

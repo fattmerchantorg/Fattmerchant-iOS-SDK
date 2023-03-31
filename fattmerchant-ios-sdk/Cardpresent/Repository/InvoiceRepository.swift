@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CreateInvoiceException: OmniException {
+enum CreateInvoiceException: StaxException {
     case Something(String)
 
     static var mess = "Could not create customer"
@@ -23,10 +23,10 @@ enum CreateInvoiceException: OmniException {
 }
 
 class InvoiceRepository: ModelRepository {
-    typealias OmniModel = Invoice
-    var omniApi: OmniApi
+    typealias StaxModel = Invoice
+    var staxApi: StaxApi
 
-    required init(omniApi: OmniApi) {
-        self.omniApi = omniApi
+    required init(staxApi: StaxApi) {
+        self.staxApi = staxApi
     }
 }

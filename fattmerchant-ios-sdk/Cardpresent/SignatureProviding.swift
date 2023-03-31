@@ -1,5 +1,5 @@
 //
-//  OmniSignatureProviding.swift
+//  StaxSignatureProviding.swift
 //  fattmerchant-ios-sdk
 //
 //  Created by Tulio Troncoso on 3/3/20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// Provides a signature to Omni when required
+/// Provides a signature to Stax when required
 public protocol SignatureProviding {
 
     /// Called when a transaction requires a signature

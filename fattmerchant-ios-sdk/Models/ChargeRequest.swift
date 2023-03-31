@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// A request to perform a Charge on Omni
+/// A request to perform a Charge on Stax
 internal struct ChargeRequest: Codable {
     /// The payment method to charge
     var paymentMethodId: String

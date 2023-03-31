@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CreatePaymentMethodException: OmniException {
+enum CreatePaymentMethodException: StaxException {
     case Something(String)
 
     static var mess = "Could not create payment method"
@@ -23,14 +23,14 @@ enum CreatePaymentMethodException: OmniException {
 }
 
 class PaymentMethodRepository: ModelRepository {
-    typealias OmniModel = PaymentMethod
-    var omniApi: OmniApi
+    typealias StaxModel = PaymentMethod
+    var staxApi: StaxApi
 
-    required init(omniApi: OmniApi) {
-        self.omniApi = omniApi
+    required init(staxApi: StaxApi) {
+        self.staxApi = staxApi
     }
 
-    /// Creates an already-tokenized PaymentMethod in Omni
+    /// Creates an already-tokenized PaymentMethod in Stax
     /// - Parameters:
     ///   - model: The PaymentMethod to tokenize
     ///   - completion: A block to run once the operation is finished. Takes a PaymentMethod
@@ -38,7 +38,7 @@ class PaymentMethodRepository: ModelRepository {
     func createTokenizedPaymentMethod(model: PaymentMethod, completion: @escaping (PaymentMethod) -> Void, error: @escaping ErrorHandler) {
         let data = try? jsonEncoder().encode(model)
         let urlString = "/payment-method/token"
-        omniApi.request(method: "post", urlString: urlString, body: data, completion: completion, failure: error)
+        staxApi.request(method: "post", urlString: urlString, body: data, completion: completion, failure: error)
     }
 
 }

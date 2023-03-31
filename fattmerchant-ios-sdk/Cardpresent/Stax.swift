@@ -1,5 +1,5 @@
 //
-//  Omni.swift
+//  Stax.swift
 //  fattmerchant-ios-sdk
 //
 //  Created by Tulio Troncoso on 1/16/20.
@@ -8,29 +8,29 @@
 
 import Foundation
 
-enum OmniNetworkingException: OmniException {
+enum StaxNetworkingException: StaxException {
     case couldNotGetMerchantDetails
     case couldNotGetPaginatedTransactions
 
-    static var mess: String = "Omni Networking Exception"
+    static var mess: String = "Stax Networking Exception"
 
     var detail: String? {
         switch self {
         case .couldNotGetMerchantDetails:
-            return "Could not get merchant details from Omni"
+            return "Could not get merchant details from Stax"
         case .couldNotGetPaginatedTransactions:
             return "Could not get paginated transactions"
         }
     }
 }
 
-public enum OmniInitializeException: OmniException {
+public enum StaxInitializeException: StaxException {
     case missingInitializationDetails
     case mobileReaderPaymentsNotConfigured
     case missingMobileReaderCredentials
     case invalidMobileReaderCredentials
 
-    public static var mess: String = "Omni Initialization Exception"
+    public static var mess: String = "Stax Initialization Exception"
 
     public var detail: String? {
         switch self {
@@ -46,14 +46,14 @@ public enum OmniInitializeException: OmniException {
     }
 }
 
-public enum OmniGeneralException: OmniException {
+public enum StaxGeneralException: StaxException {
     case uninitialized
-    public static var mess: String = "Omni General Error"
+    public static var mess: String = "Stax General Error"
 
     public var detail: String? {
         switch self {
         case .uninitialized:
-            return "Omni has not been initialized yet"
+            return "Stax has not been initialized yet"
         }
     }
 }
@@ -61,25 +61,25 @@ public enum OmniGeneralException: OmniException {
 /**
  Handles cardpresent payments
 
- This is the object you used for communicating with the Omni platform
+ This is the object you used for communicating with the Stax platform
 
  ## Usage
- Create an instance of Omni
+ Create an instance of Stax
  ```
- let omni = Omni()
+ let stax = Stax()
  ```
  Then initialize, passing in an instance of InitParams
  ```
- let omniInitParms = Omni.InitParams(appId: "Myappid", apiKey: "omniephemeralkey")
- omni.initialize(omniInitParams, completion: ..., error: ...)
+ let staxInitParms = Stax.InitParams(appId: "Myappid", apiKey: "staxephemeralkey")
+ stax.initialize(staxInitParams, completion: ..., error: ...)
  ```
 
  Once initialized, you can call its methods like `getAvailableReaders` and `takeMobileReaderTransaction`
  */
-public class Omni: NSObject {
+public class Stax: NSObject {
 
     internal var mobileReaderDriversInitialized: Bool = false
-    internal var omniApi = OmniApi()
+    internal var staxApi = StaxApi()
     internal var transactionRepository: TransactionRepository!
     internal var invoiceRepository: InvoiceRepository!
     internal var customerRepository: CustomerRepository!
@@ -87,7 +87,7 @@ public class Omni: NSObject {
     internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
     internal var merchant: Merchant?
 
-    /// The queue that Omni should use to communicate back with its listeners
+    /// The queue that Stax should use to communicate back with its listeners
     public var preferredQueue: DispatchQueue = DispatchQueue.main
 
     /// Responsible for providing signatures for transactions, when required
@@ -102,18 +102,18 @@ public class Omni: NSObject {
     /// Receives notifications about reader connection events
     public weak var mobileReaderConnectionUpdateDelegate: MobileReaderConnectionStatusDelegate?
 
-    /// Contains all the data necessary to initialize `Omni`
+    /// Contains all the data necessary to initialize `Stax`
     public struct InitParams {
         /// An id for your application
         public var appId: String?
 
-        /// An ephemeral Omni api key
+        /// An ephemeral Stax api key
         public var apiKey: String?
 
-        /// The Omni enviroment to use
+        /// The Stax enviroment to use
         public var environment: Environment
 
-        /// The Omni webpayments token
+        /// The Stax webpayments token
         ///
         /// This is used for tokenizing and charging payment methods
         public var webpaymentsToken: String?
@@ -125,38 +125,38 @@ public class Omni: NSObject {
         }
     }
 
-    fileprivate func initRepos(omniApi: OmniApi) {
-        transactionRepository = TransactionRepository(omniApi: omniApi)
-        invoiceRepository = InvoiceRepository(omniApi: omniApi)
-        customerRepository = CustomerRepository(omniApi: omniApi)
-        paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
+    fileprivate func initRepos(staxApi: StaxApi) {
+        transactionRepository = TransactionRepository(staxApi: staxApi)
+        invoiceRepository = InvoiceRepository(staxApi: staxApi)
+        customerRepository = CustomerRepository(staxApi: staxApi)
+        paymentMethodRepository = PaymentMethodRepository(staxApi: staxApi)
     }
 
-    /// True when Omni is initialized. False otherwise
+    /// True when Stax is initialized. False otherwise
     public var isInitialized: Bool {
         return mobileReaderDriversInitialized
     }
 
-    /// Used to initialize the Omni object
+    /// Used to initialize the Stax object
     /// - Parameters:
-    ///   - params: an instance of InitParams which contains all necessary information to initialize omni
+    ///   - params: an instance of InitParams which contains all necessary information to initialize stax
     ///   - completion: a completion block to run once finished
     ///   - error: an error block to run in case something goes wrong
-    public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (OmniException) -> Void) {
+    public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (StaxException) -> Void) {
         guard let appId = params.appId, params.apiKey != nil else {
-            error(OmniInitializeException.missingInitializationDetails)
+            error(StaxInitializeException.missingInitializationDetails)
             return
         }
 
-        omniApi.apiKey = params.apiKey
-        omniApi.environment = params.environment
-        initRepos(omniApi: omniApi)
+        staxApi.apiKey = params.apiKey
+        staxApi.environment = params.environment
+        initRepos(staxApi: staxApi)
 
         // Verify the apikey corresponds to a real merchant
-        omniApi.getSelf(completion: { myself in
+        staxApi.getSelf(completion: { myself in
 
             guard let merchant = myself.merchant else {
-                error(OmniNetworkingException.couldNotGetMerchantDetails)
+                error(StaxNetworkingException.couldNotGetMerchantDetails)
                 return
             }
 
@@ -181,7 +181,7 @@ public class Omni: NSObject {
             }
 
             // Try to get the details from the merchant gateways. This *should* rewrite the args dict
-            self.omniApi.getMobileReaderSettings(completion: { mrDetails in
+            self.staxApi.getMobileReaderSettings(completion: { mrDetails in
                 if let awcDetails = mrDetails.anywhereCommerce {
                     args.updateValue(awcDetails, forKey: "awc")
                 }
@@ -212,7 +212,7 @@ public class Omni: NSObject {
                     self.preferredQueue.async(execute: completion)
                 }, failure: { _ in
                     self.mobileReaderDriversInitialized = true
-                    error(OmniInitializeException.invalidMobileReaderCredentials)
+                    error(StaxInitializeException.invalidMobileReaderCredentials)
                 })
             }, failure: { _ in
 
@@ -220,7 +220,7 @@ public class Omni: NSObject {
                 if args["awc"] == nil && args["nmi"] == nil {
                     self.preferredQueue.async {
                         self.mobileReaderDriversInitialized = true
-                        error(OmniInitializeException.missingMobileReaderCredentials)
+                        error(StaxInitializeException.missingMobileReaderCredentials)
                     }
                     return
                 }
@@ -229,30 +229,30 @@ public class Omni: NSObject {
                     self.preferredQueue.async(execute: completion)
                 }, failure: { _ in
                     self.mobileReaderDriversInitialized = true
-                    error(OmniInitializeException.invalidMobileReaderCredentials)
+                    error(StaxInitializeException.invalidMobileReaderCredentials)
                 })
             })
         }, failure: error)
     }
 
-    /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
+    /// Creates a PaymentMethod out of a CreditCard object for reuse with Stax
     /// - Parameters:
     ///   - creditCard: Contains the details of the payment method to tokenize
     ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
     ///   - error: Receives any errors that happened while attempting the operation
-    public func tokenize(_ bankAccount: BankAccount, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    public func tokenize(_ bankAccount: BankAccount, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (StaxException) -> Void) {
         TokenizePaymentMethod(customerRepository: customerRepository,
                               paymentMethodRepository: paymentMethodRepository,
                               bankAccount: bankAccount
         ).start(completion: completion, failure: error)
     }
 
-    /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
+    /// Creates a PaymentMethod out of a CreditCard object for reuse with Stax
     /// - Parameters:
     ///   - creditCard: Contains the details of the payment method to tokenize
     ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
     ///   - error: Receives any errors that happened while attempting the operation
-    public func tokenize(_ creditCard: CreditCard, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    public func tokenize(_ creditCard: CreditCard, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (StaxException) -> Void) {
         TokenizePaymentMethod(customerRepository: customerRepository,
                               paymentMethodRepository: paymentMethodRepository,
                               creditCard: creditCard
@@ -264,7 +264,7 @@ public class Omni: NSObject {
     ///   - transactionRequest: A request for a Transaction
     ///   - completion: Called when the operation is completed successfully. Receives a Transaction
     ///   - error: Receives any errors that happened while attempting the operation
-    public func pay(transactionRequest: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    public func pay(transactionRequest: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (StaxException) -> Void) {
         let job = TakePayment(request: transactionRequest, customerRepository: customerRepository, paymentMethodRepository: paymentMethodRepository)
         job.start(completion: completion, failure: error)
     }
@@ -275,7 +275,7 @@ public class Omni: NSObject {
     ///   - card: The CreditCard to be tokenized
     ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
     ///   - error: Receives any errors that happened while attempting the operation
-    public func tokenize(card: CreditCard, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    public func tokenize(card: CreditCard, completion: @escaping (PaymentMethod) -> Void, error: @escaping (StaxException) -> Void) {
         let job = TokenizePaymentMethod(
             customerRepository: customerRepository,
             paymentMethodRepository: paymentMethodRepository,
@@ -291,7 +291,7 @@ public class Omni: NSObject {
     ///   - bankAccount: The BankAccount to be tokenized
     ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
     ///   - error: Receives any errors that happened while attempting the operation
-    public func tokenize(bankAccount: BankAccount, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    public func tokenize(bankAccount: BankAccount, completion: @escaping (PaymentMethod) -> Void, error: @escaping (StaxException) -> Void) {
         let job = TokenizePaymentMethod(
             customerRepository: customerRepository,
             paymentMethodRepository: paymentMethodRepository,
@@ -303,16 +303,16 @@ public class Omni: NSObject {
 
     /// Captures a mobile reader transaction
     ///
-    /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called. This
+    /// - Note: `Stax` should be assigned a `SignatureProviding` object by the time this transaction is called. This
     /// object is responsible for providing a signature, in case one is required to complete the transaction
     ///
     /// - Parameters:
     ///   - request: A request for a Transaction
     ///   - completion: Called when the operation is complete successfully. Receives a Transaction
     ///   - error: Receives any errors that happened while attempting the operation
-    public func takeMobileReaderTransaction(request: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    public func takeMobileReaderTransaction(request: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         let job: TakeMobileReaderPayment = TakeMobileReaderPayment(
@@ -340,9 +340,9 @@ public class Omni: NSObject {
     public func capturePreauthTransaction(transactionId: String,
                                           amount: Amount?,
                                           completion: @escaping (Transaction) -> Void,
-                                          error: @escaping (OmniException) -> Void) {
+                                          error: @escaping (StaxException) -> Void) {
 
-        let job = CapturePreauthTransaction(transactionId: transactionId, captureAmount: amount, omniApi: omniApi)
+        let job = CapturePreauthTransaction(transactionId: transactionId, captureAmount: amount, staxApi: staxApi)
         job.start(completion: completion, error: error)
     }
 
@@ -354,8 +354,8 @@ public class Omni: NSObject {
     ///   - error: Receives any errors that happened while attempting the operation
     public func voidTransaction(transactionId: String,
                                 completion: @escaping (Transaction) -> Void,
-                                error: @escaping (OmniException) -> Void) {
-        let job = VoidTransaction(transactionId: transactionId, omniApi: omniApi)
+                                error: @escaping (StaxException) -> Void) {
+        let job = VoidTransaction(transactionId: transactionId, staxApi: staxApi)
         job.start(completion: completion, error: error)
     }
 
@@ -365,9 +365,9 @@ public class Omni: NSObject {
     ///   - completion: called when the operation is complete. Receives true when the transaction was cancelled. False
     ///   otherwise
     ///   - error: receives any errors that happened while attempting the operation
-    public func cancelMobileReaderTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    public func cancelMobileReaderTransaction(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         let job = CancelCurrentTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository)
@@ -382,41 +382,41 @@ public class Omni: NSObject {
         })
     }
 
-    /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
+    /// Refunds the given transaction and returns a new Transaction that represents the refund in Stax
     /// - Parameters:
     ///   - transaction: the transaction to refund
     ///   - refundAmount: the amount of money to refund. When present, this **must** be greater than zero and lesser than or equal to the transaction total
-    ///   - completion: Receives the Transaction that represents the refund in Omni
+    ///   - completion: Receives the Transaction that represents the refund in Stax
     ///   - error: Receives any errors that happened while attempting the operation
-    public func refundMobileReaderTransaction(transaction: Transaction, refundAmount: Amount? = nil, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    public func refundMobileReaderTransaction(transaction: Transaction, refundAmount: Amount? = nil, completion: @escaping (Transaction) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository,
                                                 transactionRepository: transactionRepository,
                                                 transaction: transaction,
                                                 refundAmount: refundAmount,
-                                                omniApi: omniApi)
+                                                staxApi: staxApi)
         job.start(completion: completion, failure: error)
     }
 
-    /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni
+    /// Refunds the given transaction and returns a new Transaction that represents the refund in Stax
     /// - Parameters:
     ///   - transaction: the transaction to refund
-    ///   - completion: Receives the Transaction that represents the refund in Omni
+    ///   - completion: Receives the Transaction that represents the refund in Stax
     ///   - error: Receives any errors that happened while attempting the operation
-    public func refundMobileReaderTransaction(transaction: Transaction, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+    public func refundMobileReaderTransaction(transaction: Transaction, completion: @escaping (Transaction) -> Void, error: @escaping (StaxException) -> Void) {
         refundMobileReaderTransaction(transaction: transaction, refundAmount: nil, completion: completion, error: error)
     }
 
-    /// Finds the available readers that Omni can connect to
+    /// Finds the available readers that Stax can connect to
     /// - Parameters:
     ///   - completion: Receives an array of MobileReaders that are available
     ///   - error: Receives any errors that happened while attempting the operation
-    public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void) {
+    public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         SearchForReaders(mobileReaderDriverRepository: mobileReaderDriverRepository, args: [:]).start(completion: { (readers) in
@@ -430,9 +430,9 @@ public class Omni: NSObject {
     /// - Parameters:
     ///   - completion: Receives the connected mobile reader, if any
     ///   - error: Receives any errors that happened while attempting the operation
-    public func getConnectedReader(completion: @escaping (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+    public func getConnectedReader(completion: @escaping (MobileReader?) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         GetConnectedMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository).start(completion: { reader in
@@ -469,10 +469,10 @@ public class Omni: NSObject {
     /// - Parameters:
     ///   - reader: The MobileReader to connect
     ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
-    ///   - error: A block to call if this operation fails. Receives an OmniException
-    public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping (OmniException) -> Void) {
+    ///   - error: A block to call if this operation fails. Receives an StaxException
+    public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository,
@@ -496,9 +496,9 @@ public class Omni: NSObject {
     ///   - reader: The MobileReader to disconnect
     ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
     ///   - error: A block to call if this operation fails
-    public func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    public func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         let task = DisconnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
@@ -509,18 +509,18 @@ public class Omni: NSObject {
         }))
     }
 
-    /// Retrieves a list of the most recent mobile reader transactions from Omni
+    /// Retrieves a list of the most recent mobile reader transactions from Stax
     /// - Parameters:
     ///   - completion: Receives a list of Transactions
     ///   - error: A block to call if this operation fails
-    public func getMobileReaderTransactions(completion: @escaping ([Transaction]) -> Void, error: @escaping (OmniException) -> Void) {
+    public func getMobileReaderTransactions(completion: @escaping ([Transaction]) -> Void, error: @escaping (StaxException) -> Void) {
         guard mobileReaderDriversInitialized else {
-            return error(OmniGeneralException.uninitialized)
+            return error(StaxGeneralException.uninitialized)
         }
 
         transactionRepository.getList(completion: ({ paginatedTransactions in
             guard let transactions = paginatedTransactions.data else {
-                error(OmniNetworkingException.couldNotGetPaginatedTransactions)
+                error(StaxNetworkingException.couldNotGetPaginatedTransactions)
                 return
             }
             completion(transactions)

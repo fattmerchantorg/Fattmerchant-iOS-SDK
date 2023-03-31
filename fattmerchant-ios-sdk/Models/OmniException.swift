@@ -1,5 +1,5 @@
 //
-//  OmniException.swift
+//  StaxException.swift
 //  fattmerchant-ios-sdk
 //
 //  Created by Tulio Troncoso on 1/13/20.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-/// An error in the Omni platform
-public protocol OmniException: Error {
+/// An error in the Stax platform
+public protocol StaxException: Error {
     static var mess: String { get }
     var message: String { get }
     var detail: String? { get }
 }
 
-extension OmniException {
+extension StaxException {
     public var message: String {
         return Self.mess
     }

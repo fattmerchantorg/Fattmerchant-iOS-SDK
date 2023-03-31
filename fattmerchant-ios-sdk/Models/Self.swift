@@ -1,5 +1,5 @@
 //
-//  OmniSelf.swift
+//  StaxSelf.swift
 //  fattmerchant-ios-sdk
 //
 //  Created by Tulio Troncoso on 1/13/20.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-class OmniSelf: Codable {
+class StaxSelf: Codable {
     var merchant: Merchant?
 }

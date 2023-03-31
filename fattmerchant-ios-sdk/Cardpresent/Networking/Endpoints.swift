@@ -8,41 +8,41 @@
 
 import Foundation
 
-protocol OmniEndpoint {
+protocol StaxEndpoint {
     static func resourceEndpoint() -> String
 }
 
-extension Merchant: OmniEndpoint {
+extension Merchant: StaxEndpoint {
     static func resourceEndpoint() -> String {
         return "/merchant"
     }
 }
 
-extension Invoice: OmniEndpoint {
+extension Invoice: StaxEndpoint {
     static func resourceEndpoint() -> String {
         return "/invoice"
     }
 }
 
-extension Transaction: OmniEndpoint {
+extension Transaction: StaxEndpoint {
     static func resourceEndpoint() -> String {
         return "/transaction"
     }
 }
 
-extension Customer: OmniEndpoint {
+extension Customer: StaxEndpoint {
     static func resourceEndpoint() -> String {
         return "/customer"
     }
 }
 
-extension PaymentMethod: OmniEndpoint {
+extension PaymentMethod: StaxEndpoint {
     static func resourceEndpoint() -> String {
         return "/payment-method"
     }
 }
 
-extension MobileReaderDetails: OmniEndpoint {
+extension MobileReaderDetails: StaxEndpoint {
     static func resourceEndpoint() -> String {
         return "/team/gateway/hardware/mobile"
     }

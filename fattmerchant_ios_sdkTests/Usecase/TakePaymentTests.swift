@@ -11,7 +11,7 @@ import XCTest
 class TakePaymentTests: XCTestCase {
 
   var merchant = Merchant()
-  var omniApi = MockOmniApi()
+  var staxApi = MockStaxApi()
   var customerRepo: CustomerRepository!
   var paymentMethodRepo: PaymentMethodRepository!
 
@@ -19,9 +19,9 @@ class TakePaymentTests: XCTestCase {
   override func setUp() {
     merchant = Merchant()
     merchant.hostedPaymentsToken = "hostedpaymentstoken"
-    omniApi = MockOmniApi()
-    customerRepo = CustomerRepository(omniApi: omniApi)
-    paymentMethodRepo = PaymentMethodRepository(omniApi: omniApi)
+    staxApi = MockStaxApi()
+    customerRepo = CustomerRepository(staxApi: staxApi)
+    paymentMethodRepo = PaymentMethodRepository(staxApi: staxApi)
   }
 
   func testCanInitialize() {
@@ -56,8 +56,8 @@ class TakePaymentTests: XCTestCase {
     // Stub out customer
     let customer = Customer(firstName: "Bob", lastName: "Will")
     customer.id = "customer_id_bobwill"
-    let createCustomerBody = try! omniApi.jsonEncoder().encode(customer)
-    omniApi.stub("post", "/customer", body: createCustomerBody, response: .success(customer))
+    let createCustomerBody = try! staxApi.jsonEncoder().encode(customer)
+    staxApi.stub("post", "/customer", body: createCustomerBody, response: .success(customer))
 
     // Stub out payment method
     let paymentMethod = PaymentMethod(customer: customer)
@@ -66,16 +66,16 @@ class TakePaymentTests: XCTestCase {
     paymentMethod.method = .card
     paymentMethod.cardNumber = card.cardNumber
     paymentMethod.cardExp = card.cardExp
-    let createPaymentMethodBody = try! omniApi.jsonEncoder().encode(paymentMethod)
+    let createPaymentMethodBody = try! staxApi.jsonEncoder().encode(paymentMethod)
     paymentMethod.id = "payment_method_id_bob_will"
-    omniApi.stub("post", "/payment-method", body: createPaymentMethodBody, response: .success(paymentMethod))
+    staxApi.stub("post", "/payment-method", body: createPaymentMethodBody, response: .success(paymentMethod))
 
     // Stub out charge
     let chargeRequest = ChargeRequest(paymentMethodId: "payment_method_id_bob_will", total: "0.10", meta: [
       "subtotal": "0.10"
     ])
     let chargeBody = Data(chargeRequest: chargeRequest)
-    omniApi.stub("post", "/charge", body: chargeBody, response: .success(transaction))
+    staxApi.stub("post", "/charge", body: chargeBody, response: .success(transaction))
 
     // Perform operation
     let paymentSuccessful = XCTestExpectation(description: "Successful payment")

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum MobileReaderDriverException: OmniException {
+enum MobileReaderDriverException: StaxException {
     case couldNotInitialize(detail: String?)
 
     static var mess: String = "Mobile reader driver error"
@@ -26,18 +26,18 @@ protocol MobileReaderDriver {
 
     static var source: String { get }
 
-    /// True when the Omni API can perfrom the refund
+    /// True when the Stax API can perfrom the refund
     ///
-    /// Some `MobileReaderDriver`s, like NMI, support a deeper integration with Omni, such that Omni can facilitate the
+    /// Some `MobileReaderDriver`s, like NMI, support a deeper integration with Stax, such that Stax can facilitate the
     /// void/refund. This allows the SDK to relieve itself of the responsibility of having to perform the refund directly
     /// with the vendor (NMI), via the vendored SDK (ChipDNA).
     ///
     /// Other `MobileReaderDriver`s, like AWC, do not support this integration. For that reason, the SDK must perform
     /// the void/refund directly with AWC via the AWC sdk.
     ///
-    /// - Returns: True when Omni should handle the void/refund logic. False when the driver itself should handle the
+    /// - Returns: True when Stax should handle the void/refund logic. False when the driver itself should handle the
     /// refund directly with the vendor.
-    static var omniRefundsSupported: Bool { get }
+    static var staxRefundsSupported: Bool { get }
 
     /// A list of serial numbers that this driver has previously connected to
     var familiarSerialNumbers: [String] { get set }
@@ -66,15 +66,15 @@ protocol MobileReaderDriver {
 
     func capture(transaction: Transaction, completion: @escaping (Bool) -> Void)
 
-    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
+    func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void)
 
-    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
+    func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void)
 
-    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
+    func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (StaxException) -> Void)
 
     func void(transactionResult: TransactionResult, completion: @escaping (Bool) -> Void)
 
-    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void)
+    func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (StaxException) -> Void)
 }
 
 extension MobileReaderDriver {

@@ -32,7 +32,7 @@ extension MobileReader {
 }
 
 extension TransactionUpdate {
-    /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
+    /// Makes an Stax TransactionUpdate from a ChipDna TransactionUpdate string
     init?(anpMeaningfulMessage: ANPMeaningfulMessage) {
         guard let message = anpMeaningfulMessage.message else {
             return nil
@@ -88,7 +88,7 @@ extension TransactionResult {
 
         if let amount = anyPayTransaction.approvedAmount {
             // AWC seems to return a negative approvedAmount for REFUNDS, so we have to take the absolute value
-            // This is because this amount gets assigned to the "total_refunded" field in Omni sees the negative
+            // This is because this amount gets assigned to the "total_refunded" field in Stax sees the negative
             // and that value is not negative
             if anyPayTransaction.transactionType == .REFUND {
                 let amt = Amount(amount)

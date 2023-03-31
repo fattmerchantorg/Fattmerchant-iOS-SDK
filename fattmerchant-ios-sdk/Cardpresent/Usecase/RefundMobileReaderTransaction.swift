@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum RefundException: OmniException {
+enum RefundException: StaxException {
     case transactionNotRefundable(details: String?)
     case missingTransactionId
     case couldNotFindMobileReaderForRefund
@@ -39,7 +39,7 @@ class RefundMobileReaderTransaction {
 
     var mobileReaderDriverRepository: MobileReaderDriverRepository
     var transactionRepository: TransactionRepository
-    var omniApi: OmniApi
+    var staxApi: StaxApi
     var transaction: Transaction
     var refundAmount: Amount?
 
@@ -47,7 +47,7 @@ class RefundMobileReaderTransaction {
          transactionRepository: TransactionRepository,
          transaction: Transaction,
          refundAmount: Amount? = nil,
-         omniApi: OmniApi) {
+         staxApi: StaxApi) {
 
         // Get the amount to refund
         var amount: Amount?
@@ -61,10 +61,10 @@ class RefundMobileReaderTransaction {
         self.transactionRepository = transactionRepository
         self.transaction = transaction
         self.refundAmount = amount
-        self.omniApi = omniApi
+        self.staxApi = staxApi
     }
 
-    func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void ) {
+    func start(completion: @escaping (Transaction) -> Void, failure: @escaping (StaxException) -> Void ) {
         // Make sure the transaction has an id
         guard let transactionId = transaction.id else {
             return failure(RefundException.missingTransactionId)
@@ -76,13 +76,13 @@ class RefundMobileReaderTransaction {
                 return failure(Exception.couldNotFindMobileReaderForRefund)
             }
 
-            // If omni can do the refund, then we should call out to Omni to do it
-            if type(of: driver).omniRefundsSupported {
-                self.omniApi.request(method: "post",
+            // If stax can do the refund, then we should call out to Stax to do it
+            if type(of: driver).staxRefundsSupported {
+                self.staxApi.request(method: "post",
                                      urlString: "/transaction/\(transactionId)/void-or-refund", body: nil,
                                      completion: completion, failure: failure)
             } else {
-                // Omni can *not* do the refund, so we have to do it
+                // Stax can *not* do the refund, so we have to do it
                 if let error = RefundMobileReaderTransaction.validateRefund(transaction: transaction, refundAmount: refundAmount) {
                     failure(error)
                     return
@@ -96,7 +96,7 @@ class RefundMobileReaderTransaction {
         }
     }
 
-    fileprivate func postRefundedTransaction(with result: TransactionResult, failure: @escaping (OmniException) -> Void, completion: @escaping (Transaction) -> Void) {
+    fileprivate func postRefundedTransaction(with result: TransactionResult, failure: @escaping (StaxException) -> Void, completion: @escaping (Transaction) -> Void) {
         let refundedTransaction = Transaction()
         refundedTransaction.total = result.amount?.dollars()
         refundedTransaction.paymentMethodId = transaction.paymentMethodId
@@ -112,8 +112,8 @@ class RefundMobileReaderTransaction {
     }
 
     /// Verifies that the refund about to happen is acceptable
-    /// - Returns: OmniException explaining why the refund should not happen. `nil` if the refund is acceptable
-    internal static func validateRefund(transaction: Transaction, refundAmount: Amount? = nil) -> OmniException? {
+    /// - Returns: StaxException explaining why the refund should not happen. `nil` if the refund is acceptable
+    internal static func validateRefund(transaction: Transaction, refundAmount: Amount? = nil) -> StaxException? {
         // Ensure transaction isn't voided
         if transaction.isVoided == true {
             return Exception.transactionNotRefundable(details: "Can not refund voided transaction")

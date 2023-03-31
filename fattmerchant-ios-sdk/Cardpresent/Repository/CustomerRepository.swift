@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CreateCustomerException: OmniException {
+enum CreateCustomerException: StaxException {
     case customerNameNotSupplied
     case unknown
 
@@ -27,10 +27,10 @@ enum CreateCustomerException: OmniException {
 }
 
 class CustomerRepository: ModelRepository {
-    typealias OmniModel = Customer
-    var omniApi: OmniApi
+    typealias StaxModel = Customer
+    var staxApi: StaxApi
 
-    required init(omniApi: OmniApi) {
-        self.omniApi = omniApi
+    required init(staxApi: StaxApi) {
+        self.staxApi = staxApi
     }
 }

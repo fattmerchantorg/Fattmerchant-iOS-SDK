@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum TakePaymentException: OmniException {
+enum TakePaymentException: StaxException {
     case couldNotTokenizePaymentMethod(detail: String? = nil)
 
     static var mess: String = "Error taking mobile reader payment"
@@ -24,7 +24,7 @@ enum TakePaymentException: OmniException {
 
 /// Takes a payment with the given TransactionRequest
 ///
-/// `TakePayment` will create a payment in Omni using the payment method given in `request`. It will charge the `Amount`
+/// `TakePayment` will create a payment in Stax using the payment method given in `request`. It will charge the `Amount`
 /// specified in `request`
 class TakePayment {
 
@@ -33,8 +33,8 @@ class TakePayment {
     /// The TransactionRequest that holds all the data necessary to take this payment
     var request: TransactionRequest
 
-    /// Responsible for communicating with Omni
-    var omniApi: OmniApi
+    /// Responsible for communicating with Stax
+    var staxApi: StaxApi
 
     private var customerRepository: CustomerRepository
     private var paymentMethodRepository: PaymentMethodRepository
@@ -45,14 +45,14 @@ class TakePayment {
         self.request = request
         self.customerRepository = customerRepository
         self.paymentMethodRepository = paymentMethodRepository
-        self.omniApi = customerRepository.omniApi
+        self.staxApi = customerRepository.staxApi
     }
 
     /// Kicks off the process of taking the payment
     /// - Parameters:
     ///   - completion: A block to call once finished. This will receive the completed `Transaction`
-    ///   - failure: a block to call if a failure occurs. This will receive an `OmniException`
-    func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
+    ///   - failure: a block to call if a failure occurs. This will receive an `StaxException`
+    func start(completion: @escaping (Transaction) -> Void, failure: @escaping (StaxException) -> Void) {
         let tokenize = tokenizeJob()
         guard let tokenizeJob = tokenize.0 else {
             return failure(tokenize.1 ?? Exception.couldNotTokenizePaymentMethod(detail: "No payment method provided"))
@@ -70,13 +70,13 @@ class TakePayment {
             let chargeRequest = Self.createChargeRequest(amount: self.request.amount, paymentMethodId: paymentMethodId)
             let body = Data(chargeRequest: chargeRequest)
 
-            // Make the request to Omni
-            self.omniApi.request(method: "post", urlString: "/charge", body: body, completion: completion, failure: failure)
+            // Make the request to Stax
+            self.staxApi.request(method: "post", urlString: "/charge", body: body, completion: completion, failure: failure)
         }, failure: failure)
     }
 
     /// Creates a TokenizePaymentMethod job from the TransactionRequest
-    internal func tokenizeJob() -> (TokenizePaymentMethod?, OmniException?) {
+    internal func tokenizeJob() -> (TokenizePaymentMethod?, StaxException?) {
         var job: TokenizePaymentMethod
 
         if let card = request.card {

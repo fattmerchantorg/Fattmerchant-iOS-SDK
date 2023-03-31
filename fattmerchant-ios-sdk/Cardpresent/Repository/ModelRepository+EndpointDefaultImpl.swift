@@ -8,35 +8,35 @@
 
 import Foundation
 
-/// Adds default functionality to the ModelRepository where the associated OmniModel type is also an OmniEndpoint
-extension ModelRepository where OmniModel: OmniEndpoint {
+/// Adds default functionality to the ModelRepository where the associated StaxModel type is also an StaxEndpoint
+extension ModelRepository where StaxModel: StaxEndpoint {
 
-    init(omniApi: OmniApi) {
-        self.init(omniApi: omniApi)
+    init(staxApi: StaxApi) {
+        self.init(staxApi: staxApi)
     }
 
-    func create(model: OmniModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
+    func create(model: StaxModel, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
         let data = try? jsonEncoder().encode(model)
-        omniApi.request(method: "post", urlString: OmniModel.resourceEndpoint(), body: data, completion: completion, failure: error)
+        staxApi.request(method: "post", urlString: StaxModel.resourceEndpoint(), body: data, completion: completion, failure: error)
     }
 
-    func update(model: OmniModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
+    func update(model: StaxModel, id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
         let data = try? jsonEncoder().encode(model)
-        let endpoint = "\(OmniModel.resourceEndpoint())/\(id)"
-        omniApi.request(method: "put", urlString: endpoint, body: data, completion: completion, failure: error)
+        let endpoint = "\(StaxModel.resourceEndpoint())/\(id)"
+        staxApi.request(method: "put", urlString: endpoint, body: data, completion: completion, failure: error)
     }
 
-    func delete(model: OmniModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {
-        //    omniApi.request(method: "delete", urlString: OmniModel.resourceEndpoint(), completion: { _ in completion() }, failure: error)
+    func delete(model: StaxModel, completion: @escaping EmptyCompletionHandler, error: @escaping ErrorHandler) {
+        //    staxApi.request(method: "delete", urlString: StaxModel.resourceEndpoint(), completion: { _ in completion() }, failure: error)
     }
 
     func getById(id: String, completion: @escaping CompletionHandler, error: @escaping ErrorHandler) {
-        let endpoint = "\(OmniModel.resourceEndpoint())/\(id)"
-        omniApi.request(method: "get", urlString: endpoint, completion: completion, failure: error)
+        let endpoint = "\(StaxModel.resourceEndpoint())/\(id)"
+        staxApi.request(method: "get", urlString: endpoint, completion: completion, failure: error)
     }
 
-    func getList(completion: @escaping (PaginatedData<OmniModel>) -> Void, error: @escaping ErrorHandler) {
-        omniApi.request(method: "get", urlString: OmniModel.resourceEndpoint(), completion: completion, failure: error)
+    func getList(completion: @escaping (PaginatedData<StaxModel>) -> Void, error: @escaping ErrorHandler) {
+        staxApi.request(method: "get", urlString: StaxModel.resourceEndpoint(), completion: completion, failure: error)
     }
 
 }

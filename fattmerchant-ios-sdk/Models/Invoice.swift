@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// An Invoice in the Omni Platform
+/// An Invoice in the Stax Platform
 class Invoice: Model {
     public var id: String?
     public var balanceDue: Double?

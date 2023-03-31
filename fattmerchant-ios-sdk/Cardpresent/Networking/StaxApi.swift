@@ -1,5 +1,5 @@
 //
-//  OmniApi.swift
+//  StaxApi.swift
 //  fattmerchant-ios-sdk
 //
 //  Created by Tulio Troncoso on 1/10/20.
@@ -8,17 +8,17 @@
 
 import Foundation
 
-/// Responsible for communicating with Omni
-class OmniApi {
+/// Responsible for communicating with Stax
+class StaxApi {
 
     private let debug = false
 
-    enum OmniNetworkingException: OmniException {
+    enum StaxNetworkingException: StaxException {
         case baseUrlNotFound
         case couldNotParseResponse(String?)
         case unknown(String?)
 
-        static var mess: String = "Omni Networking Exception"
+        static var mess: String = "Stax Networking Exception"
 
         var detail: String? {
             switch self {
@@ -32,14 +32,14 @@ class OmniApi {
         }
     }
 
-    /// A Json encoder that should be used for encoding data to send to the Omni API
+    /// A Json encoder that should be used for encoding data to send to the Stax API
     func jsonEncoder() -> JSONEncoder {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         return encoder
     }
 
-    /// A Json decoder that should be used for encoding data to send to the Omni API
+    /// A Json decoder that should be used for encoding data to send to the Stax API
     func jsonDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -52,14 +52,14 @@ class OmniApi {
         }
     }
 
-    func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
+    func getSelf(completion: @escaping (StaxSelf) -> Void, failure: @escaping (StaxException) -> Void ) {
         request(method: "get", urlString: "/self", completion: completion, failure: failure)
     }
-    func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (OmniException) -> Void) {
+    func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (StaxException) -> Void) {
         request(method: "get", urlString: MobileReaderDetails.resourceEndpoint(), completion: completion, failure: failure)
     }
 
-    /// Posts a void-or-refund to Omni
+    /// Posts a void-or-refund to Stax
     /// - Parameters:
     ///   - transactionId: the id of the transaction to void or refund
     ///   - total: the amount, in dollars, to void or refund
@@ -68,7 +68,7 @@ class OmniApi {
     func postVoidOrRefund(transactionId: String,
                           total: String? = nil,
                           completion: @escaping (Transaction) -> Void,
-                          error: @escaping (OmniException) -> Void) {
+                          error: @escaping (StaxException) -> Void) {
         var body: Data?
         if let total = total {
             body = try? jsonEncoder().encode(["total": total])
@@ -140,9 +140,9 @@ class OmniApi {
         }
     }
 
-    func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (OmniException) -> Void) where T: Codable {
+    func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (StaxException) -> Void) where T: Codable {
         guard let baseUrl = environment.baseUrl() else {
-            failure(OmniNetworkingException.baseUrlNotFound)
+            failure(StaxNetworkingException.baseUrlNotFound)
             return
         }
 
@@ -175,7 +175,7 @@ class OmniApi {
                     let model = try jsonDecoder.decode(T.self, from: data)
                     completion(model)
                 } catch {
-                    var error: OmniException = OmniNetworkingException.couldNotParseResponse(nil)
+                    var error: StaxException = StaxNetworkingException.couldNotParseResponse(nil)
 
                     // When the API throws an error it, returns json in the following structure
                     // {
@@ -188,10 +188,10 @@ class OmniApi {
                         switch json {
                         case let map as [String: [String]]:
                             let errorStrings = map.values.flatMap {$0}
-                            error = OmniNetworkingException.unknown(errorStrings.first ?? nil)
+                            error = StaxNetworkingException.unknown(errorStrings.first ?? nil)
 
                         case let arr as [String]:
-                            error = OmniNetworkingException.unknown(arr.first ?? nil)
+                            error = StaxNetworkingException.unknown(arr.first ?? nil)
 
                         default: break
                         }

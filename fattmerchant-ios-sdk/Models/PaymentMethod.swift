@@ -27,7 +27,7 @@ public class PaymentMethod: Model {
     public var merchantId: String?
     public var customerId: String
 
-    /// Whether or not Omni should tokenize this PaymentMethod
+    /// Whether or not Stax should tokenize this PaymentMethod
     ///
     /// - Note:
     /// If this field is true, `paymentToken` must be `null`
@@ -35,12 +35,12 @@ public class PaymentMethod: Model {
 
     /// The token that represents this payment method
     ///
-    /// The only use-case for this field is storing the token within Omni. After cardpresent tokenization,
+    /// The only use-case for this field is storing the token within Stax. After cardpresent tokenization,
     /// we can create a PaymentMethod using this class. If we include the paymentToken, then we can later
     /// store it as an already-tokenized PaymentMethod
     ///
     /// - Important:
-    ///   Omni performs transactions with this token. Therefore, it is crucial that only the actual payment
+    ///   Stax performs transactions with this token. Therefore, it is crucial that only the actual payment
     ///   token be placed here
     ///
     /// - Note: If this field is not `null`, then `tokenize` must be `false`

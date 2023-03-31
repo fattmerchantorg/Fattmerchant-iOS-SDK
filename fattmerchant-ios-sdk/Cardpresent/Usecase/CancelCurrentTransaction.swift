@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CancelCurrentTransactionException: OmniException {
+enum CancelCurrentTransactionException: StaxException {
     static var mess: String = "Could not cancel current transaction"
 
     case noTransactionToCancel
@@ -32,11 +32,11 @@ class CancelCurrentTransaction {
         self.mobileReaderDriverRepository = mobileReaderDriverRepository
     }
 
-    func start(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    func start(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
         mobileReaderDriverRepository.getInitializedDrivers { drivers in
             let semaphore: DispatchSemaphore? = DispatchSemaphore(value: 1)
             var success = true
-            var omniException: OmniException?
+            var staxException: StaxException?
 
             DispatchQueue.global(qos: .userInitiated).async {
                 for driver in drivers {
@@ -46,13 +46,13 @@ class CancelCurrentTransaction {
                         success = success && cancelled
                         semaphore?.signal()
                     }, error: { err in
-                        omniException = err
+                        staxException = err
                         success = false
                         semaphore?.signal()
                     })
                 }
 
-                if let exception = omniException {
+                if let exception = staxException {
                     error(exception)
                 } else {
                     completion(success)

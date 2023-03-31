@@ -30,7 +30,7 @@ extension MobileReader {
 
 extension TransactionUpdate {
 
-    /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
+    /// Makes an Stax TransactionUpdate from a ChipDna TransactionUpdate string
     init?(chipDnaTransactionUpdate: String) {
         switch chipDnaTransactionUpdate {
 
@@ -66,7 +66,7 @@ extension TransactionUpdate {
 
 extension UserNotification {
 
-    /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
+    /// Makes an Stax TransactionUpdate from a ChipDna TransactionUpdate string
     init?(chipDnaUserNotification: String) {
         switch chipDnaUserNotification {
 

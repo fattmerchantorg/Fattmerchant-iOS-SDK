@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// The Omni environment to use
+/// The Stax environment to use
 public enum Environment {
     case LIVE
     case DEV

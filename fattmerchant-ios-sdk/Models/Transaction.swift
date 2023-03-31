@@ -8,11 +8,11 @@
 
 import Foundation
 
-/// A Transaction in the Omni Platform
+/// A Transaction in the Stax Platform
 public class Transaction: Model, Codable {
     public init() {}
 
-    /// The id of the transaction in Omni
+    /// The id of the transaction in Stax
     public var id: String?
 
     /// True when the transaction was successful, false otherwise
@@ -27,10 +27,10 @@ public class Transaction: Model, Codable {
     /// The type of transaction. "charge", "refund", "void"
     public var type: String?
 
-    /// The id of the Customer associated with this Transaction in Omni
+    /// The id of the Customer associated with this Transaction in Stax
     public var customerId: String?
 
-    /// The id of the Invoice associated with this Transaction in Omni
+    /// The id of the Invoice associated with this Transaction in Stax
     public var invoiceId: String?
 
     /// True when this transaction was voided, false otherwise
@@ -77,7 +77,7 @@ public class Transaction: Model, Codable {
 
     /// The transaction 'token'
     ///
-    /// This is technically the id of the transaction in a foreign platform. The Omni API expects this value when we
+    /// This is technically the id of the transaction in a foreign platform. The Stax API expects this value when we
     /// create a transaction, but we will likely never receive it.
     internal var token: String?
 
