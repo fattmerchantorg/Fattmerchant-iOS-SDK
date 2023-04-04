@@ -1,7 +1,7 @@
 import Foundation
 
 /// An Invoice in the Stax Platform
-class Invoice: Codable {
+public class Invoice: Codable {
   public var id: String?
   public var balanceDue: Double?
   public var createdAt: String?
