@@ -323,7 +323,7 @@ public actor StaxApi {
   
   /**
    Makes a `DELETE` http request to `https://apiprod.fattlabs.com/transaction/{id}`.
-   - parameter id: The Stax item ID assosciated with the ``Transaction`` to delete.
+   - parameter id: The Stax transaction ID assosciated with the ``Transaction`` to delete.
    - returns: The recently deleted ``Transaction`` returned from the Stax API.
    - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
    - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
@@ -331,6 +331,45 @@ public actor StaxApi {
    */
   public func deleteTransaction(id: String) async throws -> Transaction? {
     let data = try await delete(resource: "/transaction/\(id)")
+    return try? decoder.decode(Transaction.self, from: data)
+  }
+  
+  /**
+   Makes a `POST` http request to `https://apiprod.fattlabs.com/transaction/{id}/capture`
+   - parameter id: The Stax transaction ID assosciated with the ``Transaction`` to capture.
+   - parameter dollars: The dollar string to capture. If this is `nil`, the full amount will be captured. Defaults to `nil`.
+   - returns: The recently captured ``Transaction`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func captureTransaction(id: String, dollars: String? = nil) async throws -> Transaction? {
+    var body: Data? = nil
+    if dollars != nil {
+      body = try? encoder.encode(["total": dollars])
+    }
+    
+    let data = try await post(resource: "/transaction/\(id)/capture", body: body)
+    return try? decoder.decode(Transaction.self, from: data)
+  }
+  
+  /**
+   Makes a `POST` http request to `https://apiprod.fattlabs.com/transaction/{id}/void-or-refund`. The action
+   being performed depends on if the transaction has settled or not.
+   - parameter id: The Stax transaction ID assosciated with the ``Transaction`` to void or refund.
+   - parameter dollars: The dollar string to void or refund. If this is `nil`, the full amount will be used. Defaults to `nil`.
+   - returns: The recently captured ``Transaction`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func voidOrRefundTransaction(id: String, dollars: String? = nil) async throws -> Transaction? {
+    var body: Data? = nil
+    if dollars != nil {
+      body = try? encoder.encode(["total": dollars])
+    }
+    
+    let data = try await post(resource: "/transaction/\(id)/void-or-refund", body: body)
     return try? decoder.decode(Transaction.self, from: data)
   }
   
