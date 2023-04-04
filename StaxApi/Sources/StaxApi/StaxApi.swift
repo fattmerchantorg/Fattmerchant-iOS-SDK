@@ -265,6 +265,76 @@ public actor StaxApi {
   }
   
   /**
+   Makes a paginated `GET` http request to `https://apiprod.fattlabs.com/transaction`.
+   - parameter page: The transaction page to get data from. Defaults to 1.
+   - parameter size: The size of the paginated data. Defaults to 50.
+   - returns: A list of Stax ``Transaction`` objects as `[Transaction]`.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func getTransactions(page: Int = 1, size: Int = 50) async throws -> [Transaction] {
+    let data = try await get(resource: "/transaction?page=\(page)&per_page=\(size)")
+    let decoded = try decoder.decode(PaginatedResponse<Transaction>.self, from: data)
+    return decoded.data ?? []
+  }
+  
+  /**
+   Makes a `GET` http request to `https://apiprod.fattlabs.com/transaction/{id}`.
+   - parameter id: The Stax transaction ID to get data from.
+   - returns: An optional ``Transaction`` object assosciated with the provided ID.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned.
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func getTransaction(id: String) async throws -> Transaction? {
+    let data = try await get(resource: "/transaction/\(id)")
+    return try? decoder.decode(Transaction.self, from: data)
+  }
+  
+  /**
+   Makes a `POST` http request to `https://apiprod.fattlabs.com/transaction`.
+   - parameter customer: The Stax ``Transaction`` object to create via the Stax API.
+   - returns: The newly created ``Transaction`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func createTransaction(transaction: Transaction) async throws -> Transaction? {
+    let body = try encoder.encode(transaction)
+    let data = try await post(resource: "/transaction", body: body)
+    return try? decoder.decode(Transaction.self, from: data)
+  }
+  
+  /**
+   Makes a `PUT` http request to `https://apiprod.fattlabs.com/transaction`.
+   - parameter id: The Stax transaction ID assosciated with the ``Transaction`` to update.
+   - parameter customer: The Stax ``Transaction`` object to modify via the Stax API.
+   - returns: The newly updated ``Transaction`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func updateTransaction(id: String, transaction: Transaction) async throws -> Transaction? {
+    let body = try encoder.encode(transaction)
+    let data = try await put(resource: "/transaction/\(id)", body: body)
+    return try? decoder.decode(Transaction.self, from: data)
+  }
+  
+  /**
+   Makes a `DELETE` http request to `https://apiprod.fattlabs.com/transaction/{id}`.
+   - parameter id: The Stax item ID assosciated with the ``Transaction`` to delete.
+   - returns: The recently deleted ``Transaction`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func deleteTransaction(id: String) async throws -> Transaction? {
+    let data = try await delete(resource: "/transaction/\(id)")
+    return try? decoder.decode(Transaction.self, from: data)
+  }
+  
+  /**
    Makes a generic `GET` http request.
    - parameter resource: The resource of the baseUrl to hit.
    - returns: The ``Data`` class returned from the response.
