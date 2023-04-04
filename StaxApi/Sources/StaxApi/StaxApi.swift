@@ -335,6 +335,82 @@ public actor StaxApi {
   }
   
   /**
+   Makes a paginated `GET` http request to `https://apiprod.fattlabs.com/payment-method`.
+   - parameter page: The payment method page to get data from. Defaults to 1.
+   - parameter size: The size of the paginated data. Defaults to 50.
+   - parameter customerId: The assosciated customer ID. Defaults to `nil`.
+   - returns: A list of Stax ``PaymentMethod`` objects as `[PaymentMethod]`.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func getPaymentMethods(page: Int = 1, size: Int = 50, customerId: String? = nil) async throws -> [PaymentMethod] {
+    var urlStr = "/payment-method?page\(page)&per_page=\(size)"
+    if let id = customerId {
+      urlStr += "&customer_id=\(id)"
+    }
+    
+    let data = try await get(resource: urlStr)
+    let decoded = try decoder.decode(PaginatedResponse<PaymentMethod>.self, from: data)
+    return decoded.data ?? []
+  }
+  
+  /**
+   Makes a `GET` http request to `https://apiprod.fattlabs.com/payment-method/{id}`.
+   - parameter id: The Stax payment method ID to get data from.
+   - returns: An optional ``PaymentMethod`` object assosciated with the provided ID.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned.
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func getPaymentMethod(id: String) async throws -> PaymentMethod? {
+    let data = try await get(resource: "/payment-method/\(id)")
+    return try? decoder.decode(PaymentMethod.self, from: data)
+  }
+  
+  /**
+   Makes a `POST` http request to `https://apiprod.fattlabs.com/payment-method`.
+   - parameter customer: The Stax ``PaymentMethod`` object to create via the Stax API.
+   - returns: The newly created ``PaymentMethod`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func createPaymentMethod(paymentMethod: PaymentMethod) async throws -> PaymentMethod? {
+    let body = try encoder.encode(paymentMethod)
+    let data = try await post(resource: "/payment-method", body: body)
+    return try? decoder.decode(PaymentMethod.self, from: data)
+  }
+  
+  /**
+   Makes a `PUT` http request to `https://apiprod.fattlabs.com/payment-method`.
+   - parameter id: The Stax payment method ID assosciated with the ``PaymentMethod`` to update.
+   - parameter customer: The Stax ``PaymentMethod`` object to modify via the Stax API.
+   - returns: The newly updated ``PaymentMethod`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func updatePaymentMethod(id: String, paymentMethod: PaymentMethod) async throws -> PaymentMethod? {
+    let body = try encoder.encode(paymentMethod)
+    let data = try await put(resource: "/payment-method/\(id)", body: body)
+    return try? decoder.decode(PaymentMethod.self, from: data)
+  }
+  
+  /**
+   Makes a `DELETE` http request to `https://apiprod.fattlabs.com/payment-method/{id}`.
+   - parameter id: The Stax item ID assosciated with the ``PaymentMethod`` to delete.
+   - returns: The recently deleted ``PaymentMethod`` returned from the Stax API.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  public func deletePaymentMethod(id: String) async throws -> PaymentMethod? {
+    let data = try await delete(resource: "/payment-method/\(id)")
+    return try? decoder.decode(PaymentMethod.self, from: data)
+  }
+  
+  /**
    Makes a generic `GET` http request.
    - parameter resource: The resource of the baseUrl to hit.
    - returns: The ``Data`` class returned from the response.
