@@ -44,12 +44,12 @@ public actor StaxApi {
   
   /**
   Makes a `GET` http request to `https://apiprod.fattlabs.com/team/gateway/hardware/mobile`
-   - returns: A ``StaxSelf`` instance with details about your Stax merchant.
+   - returns: A ``MobileReaderDetails`` instance with details about your Stax hardware readers.
    - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned.
    - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
    - throws: A ``URLError.badServerResponse`` if the http response is malformed.
    */
-  func getMobileReaderDetails() async throws -> MobileReaderDetails {
+  public func getMobileReaderDetails() async throws -> MobileReaderDetails {
     let data = try await get(resource: "/team/gateway/hardware/mobile")
     return try decoder.decode(MobileReaderDetails.self, from: data)
   }
