@@ -43,6 +43,18 @@ public actor StaxApi {
   }
   
   /**
+  Makes a `GET` http request to `https://apiprod.fattlabs.com/team/gateway/hardware/mobile`
+   - returns: A ``StaxSelf`` instance with details about your Stax merchant.
+   - throws: A ``StaxHttpError`` if a 4XX or 5XX status code is returned.
+   - throws: A ``DecodingError.dataCorrupted`` error if the returned JSON is malformed.
+   - throws: A ``URLError.badServerResponse`` if the http response is malformed.
+   */
+  func getMobileReaderDetails() async throws -> MobileReaderDetails {
+    let data = try await get(resource: "/team/gateway/hardware/mobile")
+    return try decoder.decode(MobileReaderDetails.self, from: data)
+  }
+  
+  /**
    Makes a paginated `GET` http request to `https://apiprod.fattlabs.com/customer`.
    - parameter page: The customer page to get data from. Defaults to 1.
    - parameter size: The size of the paginated data. Defaults to 50.
