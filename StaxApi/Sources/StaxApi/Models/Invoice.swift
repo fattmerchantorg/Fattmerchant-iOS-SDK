@@ -25,4 +25,12 @@ public class Invoice: Codable {
   public var url: String?
   public var userId: String?
   public var viewedAt: String?
+  
+  public init(total: Double) {
+    self.total = total
+    self.meta = JSONValue.object([
+      "subtotal": JSONValue.double(total)
+    ])
+    self.url = "http://fattpay.com/#/bill"
+  }
 }

@@ -232,7 +232,7 @@ public actor StaxApi {
    */
   public func createItem(item: Item) async throws -> Item? {
     let body = try encoder.encode(item)
-    let data = try await post(resource: "/invoice", body: body)
+    let data = try await post(resource: "/item", body: body)
     return try? decoder.decode(Item.self, from: data)
   }
   
@@ -540,17 +540,7 @@ public actor StaxApi {
     }
   }
   
-  private func handle400Error(_ data: Data, _ response: HTTPURLResponse) -> StaxError {
-    let str = String(bytes: data, encoding: .utf8)
-    if let dictionary = convertJsonStringToDictionary(text: str), let errorMsg = dictionary["error"] as? String {
-      return StaxHttpError(
-        message: "HTTP \(response.statusCode)",
-        detail: errorMsg,
-        data: data,
-        response: response
-      )
-    }
-    
+  private func handle400Error(_ data: Data, _ response: HTTPURLResponse) -> StaxError {    
     return StaxHttpError(
       message: "HTTP \(response.statusCode)",
       detail: "Unexpected 400 level error received when attempting to connect to the Stax API",
