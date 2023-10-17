@@ -58,7 +58,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.cancelTransaction()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImU3MTJhZThlLTIwOWUtNGNkYi05MDMwLTc1NWU2OWFmMTI0NiIsImdvZFVzZXIiOmZhbHNlLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsInN1YiI6IjIxODNhODQ1LWMxMjAtNGZkYi04Mzc4LThlZjBkYzhhYjkzYSIsImlzcyI6Imh0dHA6Ly9hcGlkZXYuZmF0dGxhYnMuY29tL2F1dGhlbnRpY2F0ZSIsImlhdCI6MTY1Mzc0NzM1NCwiZXhwIjoxNjUzODMzNzU0LCJuYmYiOjE2NTM3NDczNTQsImp0aSI6IjdVYTNBckhlN0t3TlI3NnAifQ.ev5kFgpup49bv10mjGGCX6aSkGKjHXEQJw5QFwA6Q1A"
+  let apiKey = ""
 
   override func viewDidLoad() {
     super.viewDidLoad()
