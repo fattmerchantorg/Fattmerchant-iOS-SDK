@@ -2,7 +2,7 @@
  * @author Creditcall Ltd
  * @brief Parameters used in communication with ChipDNA Mobile.
  * @class CCParameters
- * @copyright Copyright Creditcall Limited 2010 - 2018.
+ * @copyright Copyright Creditcall Limited 2010 - 2024.
  */
 
 #import <Foundation/Foundation.h>
@@ -22,6 +22,7 @@ extern CCParameterValue const CCValueFalse; /**< @memberof CCParameters Paramete
 extern CCParameterValue const CCValueBluetooth; /**< @memberof CCParameters Parameter value representation of BLUETOOTH connection type. */
 extern CCParameterValue const CCValueTcpIp; /**< @memberof CCParameters Parameter value representation of TCP IP connection type..*/
 extern CCParameterValue const CCValueBLE; /**< @memberof CCParameters Parameter value representation of Bluetooth Low Energy (BLE) connection type. */
+extern CCParameterValue const CCValueLightningUsb; /**< @memberof CCParameters Parameter value representation of Lightning or USB device type. */
 
 extern CCParameterValue const CCValueEnvironmentLive; /**< @memberof CCParameters Parameter value representation of LIVE environment. */
 extern CCParameterValue const CCValueEnvironmentTest; /**< @memberof CCParameters Parameter value representation of STAGING/TEST environment. */

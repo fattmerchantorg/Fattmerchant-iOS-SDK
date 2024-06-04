@@ -134,7 +134,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
     // Set the connection type to BT
     let params = CCParameters()
-    params[CCParamPinPadConnectionType] = CCValueBLE
+    // params[CCParamPinPadConnectionType] = CCValueBLE
     params[CCParamBLEScanTime] = "5"
 
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
@@ -155,10 +155,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
     let requestParams = CCParameters()
     requestParams[CCParamPinPadName] = reader.name
-    requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBluetooth
+    requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBLE
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
     didConnectAndConfigure = { connectedReader in
+      let status = ChipDnaMobile.sharedInstance().getStatus(nil)
       if let connectedReader = connectedReader, let serial = connectedReader.serialNumber {
         self.familiarSerialNumbers.append(serial)
       }
@@ -166,7 +167,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
     ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
     ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
-    ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
+    ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
   }
 
   /// Gets the connected MobileReader
@@ -399,6 +400,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       SelectablePinPad(name: pinPadName, connectionType: CCValueBluetooth)
     }
     availablePinPadsList?.append(contentsOf: btDevices ?? [])
+    
+    // USB
+    let usbDevices = (availablePinPadsDict[CCValueLightningUsb] as? [String])?.map { pinPadName in
+      SelectablePinPad(name: pinPadName, connectionType: CCValueLightningUsb)
+    }
+    availablePinPadsList?.append(contentsOf: usbDevices ?? [])
 
     return availablePinPadsList
   }
