@@ -18,6 +18,9 @@
 typedef NSString kCCReceiptField;
 extern NSString * const kCCReceiptFieldHeader; /**< Dictionary key to retrieve the receipt header receipt field.*/
 extern NSString * const kCCReceiptFieldMerchantNameAndAddress; /**< Dictionary key to retrieve the merchants name and address receipt field.*/
+extern NSString * const kCCReceiptFieldMerchantStreetAddress; /**< Dictionary key to retrieve the merchant's street address.*/
+extern NSString * const kCCReceiptFieldMerchantCityStateZip; /**< Dictionary key to retrieve the merchant's city, state and ZIP code.*/
+extern NSString * const kCCReceiptFieldMerchantPhoneNumber; /**< Dictionary key to retrieve the merchant's phone number.*/
 extern NSString * const kCCReceiptFieldApplicationId; /**< Dictionary key to retrieve the application id receipt field.*/
 extern NSString * const kCCReceiptFieldAppPreferredName;/**< Dictionary key to retrieve the card applications preferred name field.*/
 extern NSString * const kCCReceiptFieldMaskedCardNumber;/**< Dictionary key to retrieve the masked card number field.*/
@@ -91,6 +94,7 @@ extern NSString * const kCCReceiptFieldEmvTag9F12; /**< Dictionary key to retrie
 extern NSString * const kCCReceiptFieldTerminalActionCodeDefault; /**< Dictionary key to retrieve the Default TAC. */;
 extern NSString * const kCCReceiptFieldTerminalActionCodeDenial; /**< Dictionary key to retrieve the Denial TAC. */
 extern NSString * const kCCReceiptFieldTerminalActionCodeOnline; /**< Dictionary key to retrieve the Online TAC. */
+extern NSString * const kCCReceiptFieldDeclineCode; /**< Dictionary key to retrieve the Decline Code. */
 
 /**@}*/
 

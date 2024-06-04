@@ -5,7 +5,8 @@
  * <ul>
  * <li>BBPOS Chipper CHB20, CHB22 or CHB29
  * <li>Datecs Bluepad50 Contact or Contactless</li>
- * <li>Miura M010 or M020</li>
+ * <li>Miura M020 or M021</li>
+ * <li>IDTech VP3350</li>
  * </ul>
  *
  * The ChipDNA Mobile API uses an encrypted database and needs to be initialised with a password before the API functionality can be used. {@link ChipDnaMobile#initialize: initialize} method is used to start the initialisation process. Once initialized an instance of the {@link ChipDnaMobile} class obtained using the static {@link ChipDnaMobile#sharedInstance sharedInstance} method.
@@ -73,13 +74,13 @@ extern NSString * const CCInitialisationException;
 
 /**
  * Initializes ChipDnaMobile. Ensures an encrypted database is used and migrates the previous versions of the SDK
- * to use encryption, as needed. The specified delegate will be notified when a password is required and whether 
+ * to use encryption, as needed. The specified delegate will be notified when a password is required and whether
  * the initialisation was successful or not.
- * 
+ *
  * The initialization process has to be completed successfully before ChipDnaMobile functionality is enabled.
  * Only static methods can be executed before the initialisation process has finished successfully.
  *
- * Once ChipDnaMobile has been initialise successfully, @{link #dispose:} should be call before the application terminates 
+ * Once ChipDnaMobile has been initialise successfully, @{link #dispose:} should be call before the application terminates
  * to ensure resources are disposed of correctly.
  *
  * @param request with parameter collection containing oneor more of the following:
@@ -111,7 +112,8 @@ extern NSString * const CCInitialisationException;
  * <ul>
  * <li>BBPOS Chipper CHB20, CHB22 or CHB29
  * <li>Datecs Bluepad50 Contact or Contactless</li>
- * <li>Miura M010 or M020</li>
+ * <li>Miura M020 or M021</li>
+ *  * <li>IDTech VP3350</li>
  * </ul>
  *
  * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not available. </p>
@@ -153,7 +155,7 @@ extern NSString * const CCInitialisationException;
 
 /**
  * Forces an update using the TMS server. This checks whether the current version of
- * ChipDnaMobile is valid to use, whether the Terminal ID is disabled and downloads 
+ * ChipDnaMobile is valid to use, whether the Terminal ID is disabled and downloads
  * the settings configured on the TMS server.
  *
  * The result of a TMS update is returned to observers registered using {@link ChipDnaMobile#addTmsUpdateTarget addTmsUpdateTarget}
@@ -165,7 +167,7 @@ extern NSString * const CCInitialisationException;
 - (CCParameters *)requestTmsUpdate:(CCParameters *)request;
 
 /**
- * Connect to and configure the current device. This method will perform all necessary actions required to get the selected PIN pad ready for transaction. 
+ * Connect to and configure the current device. This method will perform all necessary actions required to get the selected PIN pad ready for transaction.
  * This includes performing TMS updates if required. {@link CCParameters#CCParamForceTmsUpdate} and {@link CCParameters#CCParamFullTmsUpdate} can be passed to this
  * method to force a TMS updated. When called the result of this method will be returned to observers subscribed to the {@link ChipDnaMobile#addConnectAndConfigureFinishedTarget:action: addConnectAndConfigureFinishedTarget}.
 
@@ -275,8 +277,8 @@ extern NSString * const CCInitialisationException;
 -(CCParameters *)startTransaction:(CCParameters *)request;
 
 /**
- * Display text on the PIN pad for a given amount of time at which point the PIN pad will return to idle. Currently only supported by the Miura M010
- * 
+ * Display text on the PIN pad for a given amount of time at which point the PIN pad will return to idle. Currently only supported by Miura PIN pads.
+ *
  * @param request A parameter list which can contain:
  * <p>{@link CCParameters#CCParamIdleMessage CCParamIdleMessage} Message to be displayed by PIN pad. </p>
  * <p>{@link CCParameters#CCParamClearIdleMessage CCParamClearIdleMessage} Use with a value of {@link CCParameters#CCValueTrue TRUE} to clear message back to default.
@@ -295,7 +297,7 @@ extern NSString * const CCInitialisationException;
 -(CCParameters *)terminateTransaction:(CCParameters *)request;
 
 /**
- * Continue transaction currently waiting for signature verification. This should be called when a targets observing {@link ChipDnaMobile#addSignatureVerificationTarget: SignatureVerification} receive a parameter list containing {@link CCParameters#CCParamResponseRequired} set to {@link CCParameters#CCValueTrue TRUE}. 
+ * Continue transaction currently waiting for signature verification. This should be called when a targets observing {@link ChipDnaMobile#addSignatureVerificationTarget: SignatureVerification} receive a parameter list containing {@link CCParameters#CCParamResponseRequired} set to {@link CCParameters#CCValueTrue TRUE}.
  *
  * @param request Parameter list which can contain the following:
  * <p>{@link CCParameters#CCParamResult CCParamResult} indicating the outcome of signature verification. Value can be {@link CCParameters#CCValueTrue TRUE} to indicate that signature verification was successful or {@link CCParameters#CCValueFalse FALSE} to indicate that signature verification has failed.</p>
@@ -541,7 +543,7 @@ extern NSString * const CCInitialisationException;
  * Add an observer and action to be called with the response to {@link ChipDnaMobile#tmsUpdate: tmsUpdate:}.
  *
  * When an observer no longer requires the result of calls to {@link ChipDnaMobile#tmsUpdate: tmsUpdate:} it should be removed using the {@link removeTmsUpdateTarget:} method.
- * 
+ *
  * Observers are returned a {@link CCParameters} collection which can contain:
  * <p>{@link CCParameters#CCParamResult CCParamResult} defining if the tms update was successful using the values {@link CCParameters#CCValueTrue TRUE} and {@link CCParameters#CCValuesFalse FALSE}.</p>
  * <p>{@link CCParameters#CCParamError CCParamError} defining the error which has occurred. Will always be returned if the {@link CCParameters#CCParamResult CCParamResult} is {@link CCParameters#CCValuesFalse FALSE}.</p>
@@ -565,7 +567,7 @@ extern NSString * const CCInitialisationException;
  * Observers are return a {@link CCParameters} collection which can contain:
  * <p>{@link CCParameters#CCParamResult CCParamResult} defining if the connect and configure was successful using the values {@link CCParameters#CCValueTrue TRUE} and {@link CCParameters#CCValuesFalse FALSE}.</p>
  * <p>{@link CCParameters#CCParamError CCParamError} defining the errors which have occurred. Will always be returned if the {@link CCParameters#CCParamResult CCParamResult} is {@link CCParameters#CCValuesFalse FALSE}.</p>
- * 
+ *
  * @param target Target observing results of {@link ChipDnaMobile#connectAndConfigure:}.
  * @param action Selector to be called on observing target.
  */
@@ -605,7 +607,7 @@ extern NSString * const CCInitialisationException;
  *
  * Observers are returned a {@link CCParameters} collection which will contain:
  * <p>{@CCParameters#CCParamConfigurationUpdate CCParamConfigurationUpdate} containing information about the current progress of @{ChipDnaMobile#connectAndConfigure: connectAndConfigure}.
- * 
+ *
  * @param target Target wishing to receive configuration updates.
  * @param action Selector to be called on observing target.
  */
@@ -791,7 +793,7 @@ extern NSString * const CCInitialisationException;
  * Add an observer and action to know when ID verification is required after a call to {@link ChipDnaMobile#startTransaction}.
  *
  * When updates are no longer required by the observer a call should be made to {@link ChipDnaMobile#removeIdVerificationTarget:}.
- * 
+ *
  * @param target Target wishing to know when ID verification is required.
  * @param action Action to be called on the observing target.
  */
@@ -834,7 +836,7 @@ extern NSString * const CCInitialisationException;
  * Observers will receive a {@link CCParameters} collection which can contain:
  * <p>{@link CCParameters#CCParamResult CCParamResult} defining if the receipt was successfully processed. Values can be {@link CCValueTrue TRUE} or {@link CCValueFalse}. </p>
  * <p>{@link CCParameters#CCparamError CCParamError} defining any errors while attempting to process receipt. If not present no errors occurred.</p>
- * 
+ *
  * @param target Target wishing to receive notification of results of {@link ChipDnaMobile#processReceipt}.
  * @param action Action called on observing target.
  */

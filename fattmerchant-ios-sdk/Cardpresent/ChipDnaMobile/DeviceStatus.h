@@ -71,6 +71,16 @@ typedef NS_ENUM(NSUInteger, DeviceStatusEnum) {
 @property (nonatomic, strong, readonly)NSString *pinPadRevision;
 
 /**
+ * Operating system version of the connected PIN pad.
+ */
+@property (nonatomic, strong, readonly)NSString *pinPadOsVersion;
+
+/**
+ * Kernel version of the connected PIN pad.
+ */
+@property (nonatomic, strong, readonly)NSString *pinPadKernelVersion;
+
+/**
  * Battery charge percentage of the currently connected device.
  */
 @property (nonatomic, readonly)NSInteger batteryChargePercentage;

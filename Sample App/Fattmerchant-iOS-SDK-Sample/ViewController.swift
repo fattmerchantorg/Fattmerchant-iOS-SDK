@@ -313,7 +313,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   fileprivate func initParams() -> Omni.InitParams {
-    return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
+    return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.LIVE)
   }
 
   func onTransactionUpdate(transactionUpdate: TransactionUpdate) {

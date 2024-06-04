@@ -90,6 +90,7 @@ extern NSString * const InvalidConnectionType;     /**< Invalid connection type 
 extern NSString * const InvalidPinPadIpAddress;    /**< Invalid PIN pad IP address value. */
 extern NSString * const InvalidPinPadPort;         /**< Invalid PIN pad port value. */
 extern NSString * const PinPadNameMismatch;        /**< Configured PIN pad name does not match that of the connected PIN pad.*/
+extern NSString * const UnsupportedPaymentDevice;  /**< The device model is not supported by ChipDNA.*/
 
 extern NSString * const FailedToCreate;         /**< Unable to create a database on the mobile device. */
 extern NSString * const FailedToOpen;           /**< Unable to open the database on mobile device storage. */
@@ -123,6 +124,8 @@ extern NSString * const InvalidLoginPlatform;          /**< The invalid login pl
 extern NSString * const DataNotAvailable;              /**< The request did not return any results. This might be because there are no results for the given data range or because the provided data does not generate any results (for example, incorrect guid for retrieving transaction details). */
 extern NSString * const UnexpectedChipDnaError;        /**< ChipDNA encountered an unexpected error.*/
 extern NSString * const BLEScanTimeValueInvalid; /**< BLEScanTime is invalid. */
+extern NSString * const CustomTippingPromptWithoutAmountConfirmationNotAllowed; /**< A custom on-device tipping prompt without amount confirmation is not supported.. */
+
 
 /**
  * @defgroup ConfigurationError
@@ -266,6 +269,7 @@ extern NSString * const BinRangeWhitelistSupportedFormatError;               /**
 extern NSString * const MerchantAccountsFormatError;                         /**< There is a format error with the MerchantAccounts. */
 extern NSString * const TestReceiptSelectorOverrideFormatError;              /**< There is a format error with the TestReceiptSelectorOverride. */
 extern NSString * const TippingSupportedFormatError;                         /**< There is a format error with the TippingSupported. */
+extern NSString * const BacklightEnabledFormatError;                         /**< There is a format error with the BacklightEnabled. */
 extern NSString * const TerminalConfigurationFormatError;                    /**< There is a format error with the TerminalConfiguration. */
 extern NSString * const CAPublicKeysFormatError;                             /**< There is a format error with the CAPublicKeys. */
 extern NSString * const PinPadConnectionTimeoutFormatError;                  /**< There is a format error with the PinPadConnectionTimeout. */
@@ -293,8 +297,9 @@ extern NSString * const PanKeyEntrySupportedFormatError;                     /**
 extern NSString * const LogFileStoreCountLimitFormatError;                   /**< There is a format error with LogFileStoreCountLimit. */
 extern NSString * const AutoConfirmSupportedFormatError;                     /**< There is a format error with AutoConfirmSupported. */
 extern NSString * const ConfigFileGenerationFailed;                          /**< There is a format error with ConfigFileGeneration. */
-extern NSString * const DelayOnlineProcessingSupportedFormatError;           /**<There is a format error with DelayOnlineProcessingSupported*/
-extern NSString * const XmlEncryptionCertificateFormatError;                 /**<There is a format error with XmlEncryptionCertificate*/
+extern NSString * const DelayOnlineProcessingSupportedFormatError;           /**< There is a format error with DelayOnlineProcessingSupported*/
+extern NSString * const XmlEncryptionCertificateFormatError;                 /**< There is a format error with XmlEncryptionCertificate*/
+extern NSString * const CertificationIdentifierFormatError;                  /**< There is a format error with CertificationIdentifier*/
 /**
  * @}
  */
@@ -376,6 +381,7 @@ extern NSString * const PrinterPaperEmpty;               /**< The device printer
 extern NSString * const PrinterOverheat;                 /**< The device printer has overheated. */
 extern NSString * const PrinterError;                    /**< There has been a printer error. */
 extern NSString * const PinpadResponseInvalid;           /**< The response recieved from the PINpad is invalid. */
+extern NSString * const DeviceTippingAmountConfirmationEnabledFormatError; /**< There is a format error with OnDeviceTippingAmountConfirmationEnabled*/
 
 /**
  * @}
