@@ -68,8 +68,8 @@
 		5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2652077B4EE004DDA9F /* BankHolderType.swift */; };
 		5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
 		59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */; };
-		A7970B192BD8554800856AE3 /* IDTech.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E1BD142BD84F9A00B41A9C /* IDTech.xcframework */; };
-		A7970B1A2BD8554800856AE3 /* IDTech.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7E1BD142BD84F9A00B41A9C /* IDTech.xcframework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A7CAB34B2C0FBEC30053CE4A /* IDTech.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7CAB3492C0FBE960053CE4A /* IDTech.xcframework */; };
+		A7CAB34C2C0FBEC30053CE4A /* IDTech.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7CAB3492C0FBE960053CE4A /* IDTech.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D702B7BD23C8D0DD00B8AB79 /* OmniApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */; };
 		D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25B2076BD68004DDA9F /* PaymentMethod.swift */; };
 		D702B7CD23C8F80200B8AB79 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25D2076BD73004DDA9F /* CreditCard.swift */; };
@@ -187,13 +187,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A7970B1B2BD8554800856AE3 /* Embed Frameworks */ = {
+		A7CAB34D2C0FBEC30053CE4A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A7970B1A2BD8554800856AE3 /* IDTech.xcframework in Embed Frameworks */,
+				A7CAB34C2C0FBEC30053CE4A /* IDTech.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,6 +253,7 @@
 		5993C2652077B4EE004DDA9F /* BankHolderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankHolderType.swift; sourceTree = "<group>"; };
 		5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodType.swift; sourceTree = "<group>"; };
 		59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentTests.swift; sourceTree = "<group>"; };
+		A7CAB3492C0FBE960053CE4A /* IDTech.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = IDTech.xcframework; sourceTree = "<group>"; };
 		A7E1BD142BD84F9A00B41A9C /* IDTech.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = IDTech.xcframework; path = "fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/IDTech.xcframework"; sourceTree = "<group>"; };
 		D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniApi.swift; sourceTree = "<group>"; };
 		D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaDriver.swift; sourceTree = "<group>"; };
@@ -339,7 +340,7 @@
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
-				A7970B192BD8554800856AE3 /* IDTech.xcframework in Frameworks */,
+				A7CAB34B2C0FBEC30053CE4A /* IDTech.xcframework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
 				D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */,
@@ -380,6 +381,7 @@
 		591C2092206EB12F00C848DA /* fattmerchant-ios-sdk */ = {
 			isa = PBXGroup;
 			children = (
+				A7CAB3482C0FBE100053CE4A /* Vendor */,
 				593A7FD52468788000D78874 /* Utils */,
 				D71B6F8F239E9702007FB7C4 /* Cardpresent */,
 				5993C2F6207D0402004DDA9F /* Models */,
@@ -457,6 +459,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		A7CAB3482C0FBE100053CE4A /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
 		D702B7BB23C8CDE400B8AB79 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
@@ -497,7 +507,6 @@
 				D765D47723CC4AFF00656040 /* Repository */,
 				D765D48223CE419700656040 /* JSON */,
 				D765D48123CD00C800656040 /* Data */,
-				D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */,
 				D79308A623D0A9050066FCA2 /* MobileReaderDriver.swift */,
 				D79308AF23D0AA9A0066FCA2 /* TransactionType.swift */,
 				D79308C623D1045C0066FCA2 /* Omni.swift */,
@@ -512,6 +521,7 @@
 		D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */ = {
 			isa = PBXGroup;
 			children = (
+				A7CAB3492C0FBE960053CE4A /* IDTech.xcframework */,
 				5966542D25003B8700A56943 /* CardApplication.h */,
 				5966542E25003B8700A56943 /* CCCardHash.h */,
 				5966542925003B8600A56943 /* CCCardSchemeIdEnum.h */,
@@ -706,7 +716,7 @@
 				591C208B206EB12F00C848DA /* Sources */,
 				591C208C206EB12F00C848DA /* Frameworks */,
 				591C208E206EB12F00C848DA /* Resources */,
-				A7970B1B2BD8554800856AE3 /* Embed Frameworks */,
+				A7CAB34D2C0FBEC30053CE4A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

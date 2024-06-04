@@ -25,11 +25,12 @@ Pod::Spec.new do |s|
     'CoreAudio',
     'ExternalAccessory',
     'CoreBluetooth',
-    'AudioToolbox'
+    'AudioToolbox',
+    'Framework',
   s.vendored_libraries = 
-    'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libChipDnaMobileAPI.a',
-    'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/libCardEaseXml.a',
-    'fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a'
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libChipDnaMobileAPI.a',
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libCardEaseXml.a',
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a'
   s.pod_target_xcconfig = { 
     'ENABLE_BITCODE' => 'NO',
     'OTHER_LDFLAGS' => '-lz',
