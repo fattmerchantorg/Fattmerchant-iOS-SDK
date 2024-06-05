@@ -8,20 +8,6 @@
 
 import Foundation
 
-enum TakePaymentException: OmniException {
-  case couldNotTokenizePaymentMethod(detail: String? = nil)
-
-  static var mess: String = "Error taking mobile reader payment"
-
-  var detail: String? {
-    switch self {
-    case .couldNotTokenizePaymentMethod(let d):
-      return d ?? "Could not tokenize payment method"
-    }
-  }
-
-}
-
 /// Takes a payment with the given TransactionRequest
 ///
 /// `TakePayment` will create a payment in Omni using the payment method given in `request`. It will charge the `Amount`

@@ -8,12 +8,6 @@
 
 import Foundation
 
-enum VoidTransactionException: OmniException {
-  static var mess: String = "Could not capture funds"
-
-  case errorCapturing
-}
-
 class VoidTransaction {
 
   typealias Exception = RefundException

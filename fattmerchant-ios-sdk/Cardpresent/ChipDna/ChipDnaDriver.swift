@@ -85,7 +85,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     let properties = CCParameters()
     properties.setValue(apiKey, forKey: CCParamApiKey)
     properties.setValue(appId, forKey: CCParamApplicationIdentifier)
-    properties.setValue(CCValueEnvironmentLive, forKey: CCParamEnvironment)
+    properties.setValue(CCValueEnvironmentTest, forKey: CCParamEnvironment)
     let setPropertiesResult = ChipDnaMobile.sharedInstance()?.setProperties(properties)
     if setPropertiesResult?[CCParamResult] != CCValueTrue {
       ChipDnaMobile.dispose(nil)

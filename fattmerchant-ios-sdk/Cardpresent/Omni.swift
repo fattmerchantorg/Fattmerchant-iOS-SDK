@@ -8,57 +8,6 @@
 
 import Foundation
 
-enum OmniNetworkingException: OmniException {
-  case couldNotGetMerchantDetails
-  case couldNotGetPaginatedTransactions
-  
-  static var mess: String = "Omni Networking Exception"
-  
-  var detail: String? {
-    switch self {
-      case .couldNotGetMerchantDetails:
-        return "Could not get merchant details from Omni"
-        
-      case .couldNotGetPaginatedTransactions:
-        return "Could not get paginated transactions"
-    }
-  }
-}
-
-public enum OmniInitializeException: OmniException {
-  case missingInitializationDetails
-  case mobileReaderPaymentsNotConfigured
-  case missingMobileReaderCredentials
-  case invalidMobileReaderCredentials
-
-  public static var mess: String = "Omni Initialization Exception"
-
-  public var detail: String? {
-    switch self {
-      case .missingInitializationDetails:
-        return "Missing initialization details"
-      case .mobileReaderPaymentsNotConfigured:
-        return "Your account is not configured to accept mobile reader payments"
-      case .missingMobileReaderCredentials:
-        return "Your account does not have mobile reader credentials"
-      case .invalidMobileReaderCredentials:
-        return "Your account has invalid mobile reader credentials"
-    }
-  }
-}
-
-public enum OmniGeneralException: OmniException {
-  case uninitialized
-  public static var mess: String = "Omni General Error"
-  
-  public var detail: String? {
-    switch self {
-      case .uninitialized:
-        return "Omni has not been initialized yet"
-    }
-  }
-}
-
 /**
  Handles cardpresent payments
  
@@ -144,9 +93,16 @@ public class Omni: NSObject {
   ///   - completion: a completion block to run once finished
   ///   - error: an error block to run in case something goes wrong
   public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (OmniException) -> Void) {
-    guard let appId = params.appId, params.apiKey != nil else {
+    guard let appId = params.appId, let apiKey = params.apiKey else {
       error(OmniInitializeException.missingInitializationDetails)
       return
+    }
+    
+    // Initialize the ServiceLocator services
+    if #available(iOS 15, *) {
+      Services.register(NetworkService.self, service: ConcurrentNetworkService(apiKey))
+    } else {
+      Services.register(NetworkService.self, service: CallbackNetworkService(apiKey))
     }
     
     omniApi.apiKey = params.apiKey

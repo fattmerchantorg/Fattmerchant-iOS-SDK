@@ -13,25 +13,6 @@ class OmniApi {
 
   private let debug = false
 
-  enum OmniNetworkingException: OmniException {
-    case baseUrlNotFound
-    case couldNotParseResponse(String?)
-    case unknown(String?)
-
-    static var mess: String = "Omni Networking Exception"
-
-    var detail: String? {
-      switch self {
-      case .baseUrlNotFound:
-        return "Base Url Not Found"
-      case .couldNotParseResponse(let cause):
-        return cause
-      case .unknown(let cause):
-        return cause
-      }
-    }
-  }
-
   /// A Json encoder that should be used for encoding data to send to the Omni API
   func jsonEncoder() -> JSONEncoder {
     let encoder = JSONEncoder()
@@ -96,12 +77,13 @@ class OmniApi {
     }
 
     log("------ HTTP REQUEST ------")
-    let client = Networking(baseUrl)
-    client.apiKey = apiKey
-
-    let request = client.urlRequest(path: "/transaction/\(id)/capture", body: body)
-
-    log("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
+    guard let client = Services.resolve(NetworkService.self) else {
+      failure("NetworkService not initialized")
+      return
+    }
+    let url = "\(baseUrl)/transactions/\(id)/capture"
+    
+    log("POST \(url)")
 
     if let body = body, let bodyString = String(data: body, encoding: .utf8) {
       log("REQUEST BODY:")
@@ -109,8 +91,7 @@ class OmniApi {
       log("")
     }
 
-    client.dataTask(request: request, method: "POST") { (success, obj) in
-
+    client.post(path: url, body: body) { (success, obj) in
       if let data = obj as? Data {
         if let dataString = String(data: data, encoding: .utf8) {
           self.log("RESPONSE:")
@@ -147,12 +128,12 @@ class OmniApi {
     }
 
     log("------ HTTP REQUEST ------")
-    let client = Networking(baseUrl)
-    client.apiKey = apiKey
-
-    let request = client.urlRequest(path: urlString, body: body)
-
-    log("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
+    guard let client = Services.resolve(NetworkService.self) else {
+      failure(OmniNetworkingException.serviceNotInitialized)
+      return
+    }
+    let url = "\(baseUrl)\(urlString)"
+    log("\(method) \(url)")
 
     if let body = body, let bodyString = String(data: body, encoding: .utf8) {
       log("REQUEST BODY:")
@@ -160,8 +141,8 @@ class OmniApi {
       log("")
     }
 
-    client.dataTask(request: request, method: method) { (_, obj) in
-
+    let request = client.generateURLRequest(url, HttpMethod.fromString(method), body)
+    client.fetch(request: request) { (_, obj) in
       if let data = obj as? Data {
         if let dataString = String(data: data, encoding: .utf8) {
           self.log("RESPONSE:")

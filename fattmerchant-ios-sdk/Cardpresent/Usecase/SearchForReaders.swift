@@ -8,12 +8,6 @@
 
 import Foundation
 
-enum SearchForReadersException: OmniException {
-  static var mess: String = "Couldnt find mobile readers"
-
-  case noMobileReaderAvailable
-}
-
 class SearchForReaders {
   var mobileReaderDriverRepository: MobileReaderDriverRepository
   var args: [String: Any]
