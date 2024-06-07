@@ -69,7 +69,7 @@
 		5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
 		59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */; };
 		A7CAB34B2C0FBEC30053CE4A /* IDTech.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7CAB3492C0FBE960053CE4A /* IDTech.xcframework */; };
-		A7CAB34C2C0FBEC30053CE4A /* IDTech.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7CAB3492C0FBE960053CE4A /* IDTech.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7CAB34C2C0FBEC30053CE4A /* IDTech.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7CAB3492C0FBE960053CE4A /* IDTech.xcframework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D702B7BD23C8D0DD00B8AB79 /* OmniApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */; };
 		D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25B2076BD68004DDA9F /* PaymentMethod.swift */; };
 		D702B7CD23C8F80200B8AB79 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25D2076BD73004DDA9F /* CreditCard.swift */; };
@@ -1133,8 +1133,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher",
 				);
 				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = NO;
@@ -1178,8 +1178,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher",
 				);
 				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = YES;
