@@ -1,6 +1,6 @@
 import Foundation
 
-enum TakeMobileReaderPaymentException: OmniException {
+enum TakeMobileReaderPaymentException: StaxException {
   case mobileReaderNotFound
   case mobileReaderNotReady
   case invoiceNotFound

@@ -41,7 +41,7 @@ class TokenizePaymentMethod {
     self.bankAccount = bankAccount
   }
 
-  func start(completion: @escaping (PaymentMethod) -> Void, failure: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (PaymentMethod) -> Void, failure: @escaping (StaxException) -> Void) {
 
     guard let customerName = creditCard?.personName ?? bankAccount?.personName else {
       return failure(CreateCustomerException.customerNameNotSupplied)
@@ -66,15 +66,15 @@ class TokenizePaymentMethod {
     }
   }
 
-  private func createCustomer(_ card: CreditCard, completion: @escaping (Customer?, OmniException?) -> Void) {
+  private func createCustomer(_ card: CreditCard, completion: @escaping (Customer?, StaxException?) -> Void) {
     createCustomer(card.personName, completion: completion)
   }
 
-  private func createCustomer(_ bankAccount: BankAccount, completion: @escaping (Customer?, OmniException?) -> Void) {
+  private func createCustomer(_ bankAccount: BankAccount, completion: @escaping (Customer?, StaxException?) -> Void) {
     createCustomer(bankAccount.personName, completion: completion)
   }
 
-  private func createCustomer(_ name: String, completion: @escaping (Customer?, OmniException?) -> Void) {
+  private func createCustomer(_ name: String, completion: @escaping (Customer?, StaxException?) -> Void) {
     let customerToCreate = Customer(fullName: name)
     customerRepository.create(model: customerToCreate, completion: { (createdCustomer) in
       completion(createdCustomer, nil)

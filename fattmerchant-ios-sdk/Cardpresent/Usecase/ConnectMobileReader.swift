@@ -21,7 +21,7 @@ class ConnectMobileReader {
     self.mobileReaderConnectionStatusDelegate = mobileReaderConnectionStatusDelegate
   }
 
-  func start(onConnected: @escaping (MobileReader) -> Void, onFailed: @escaping(OmniException) -> Void) {
+  func start(onConnected: @escaping (MobileReader) -> Void, onFailed: @escaping(StaxException) -> Void) {
 
     // First, try to see if the MobileReaderDriverRepo knows which Driver this MobileReader belongs to
     mobileReaderDriverRepository.getDriverFor(mobileReader: mobileReader) { (driver) in

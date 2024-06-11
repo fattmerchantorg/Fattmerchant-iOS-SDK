@@ -1,4 +1,4 @@
-enum CreateInvoiceException: OmniException {
+enum CreateInvoiceException: StaxException {
   case Something(String)
 
   static var mess = "Could not create customer"

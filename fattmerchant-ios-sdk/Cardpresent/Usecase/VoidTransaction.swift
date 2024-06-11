@@ -20,7 +20,7 @@ class VoidTransaction {
     self.omniApi = omniApi
   }
 
-  func start(completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (Transaction) -> Void, error: @escaping (StaxException) -> Void) {
     self.omniApi.request(method: "POST",
                          urlString: "/transaction/\(transactionId)/void",
                          completion: completion,

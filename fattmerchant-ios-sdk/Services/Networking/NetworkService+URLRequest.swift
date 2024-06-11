@@ -6,6 +6,7 @@ extension NetworkService {
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     request.httpMethod = method.toString()
+    request.httpBody = data
 
     // Set Stax Authorization header
     request.addValue("Bearer \(self.getApiKey())", forHTTPHeaderField: "Authorization")

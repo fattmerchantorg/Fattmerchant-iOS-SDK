@@ -15,7 +15,7 @@ class GetConnectedMobileReader {
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
   }
 
-  func start(completion: @escaping (MobileReader?) -> Void, failure: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (MobileReader?) -> Void, failure: @escaping (StaxException) -> Void) {
     mobileReaderDriverRepository.getInitializedDrivers { drivers in
       guard let driver = drivers.first else {
         failure(GetConnectedMobileReaderException.noReaderAvailable)

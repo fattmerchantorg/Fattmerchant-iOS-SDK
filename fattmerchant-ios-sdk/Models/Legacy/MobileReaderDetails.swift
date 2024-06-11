@@ -14,9 +14,3 @@ class MobileReaderDetails: Model, Codable {
     /// Holds details for NMI settings set in the mobile reader tab
     internal var nmi: NMIDetails?
 }
-
-/// Details for NMI (ChipDNA) settings set in the mobile reader tab
-internal struct NMIDetails: Codable {
-    /// NMI (ChipDNA) security key
-    var securityKey: String
-}

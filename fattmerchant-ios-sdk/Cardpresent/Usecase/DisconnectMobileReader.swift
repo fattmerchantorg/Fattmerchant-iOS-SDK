@@ -17,7 +17,7 @@ class DisconnectMobileReader {
     self.mobileReader = mobileReader
   }
 
-  func start(completion: @escaping (Bool) -> Void, failure: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (Bool) -> Void, failure: @escaping (StaxException) -> Void) {
     mobileReaderDriverRepository.getDriverFor(mobileReader: mobileReader) {
       if let driver = $0 {
         driver.disconnect(reader: self.mobileReader, completion: completion, error: failure)

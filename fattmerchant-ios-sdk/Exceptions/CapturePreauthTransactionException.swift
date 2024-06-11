@@ -1,4 +1,4 @@
-enum CapturePreauthTransactionException: OmniException {
+enum CapturePreauthTransactionException: StaxException {
   static var mess: String = "Could not capture funds"
 
   case errorCapturing(detail: String?)

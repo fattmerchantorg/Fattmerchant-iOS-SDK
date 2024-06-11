@@ -33,10 +33,10 @@ class OmniApi {
     }
   }
 
-  func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
+  func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (StaxException) -> Void ) {
     request(method: "get", urlString: "/self", completion: completion, failure: failure)
   }
-  func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (OmniException) -> Void) {
+  func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (StaxException) -> Void) {
     request(method: "get", urlString: MobileReaderDetails.resourceEndpoint(), completion: completion, failure: failure)
   }
 
@@ -49,7 +49,7 @@ class OmniApi {
   func postVoidOrRefund(transactionId: String,
                         total: String? = nil,
                         completion: @escaping (Transaction) -> Void,
-                        error: @escaping (OmniException) -> Void) {
+                        error: @escaping (StaxException) -> Void) {
     var body: Data?
     if let total = total {
       body = try? jsonEncoder().encode(["total": total])
@@ -121,15 +121,15 @@ class OmniApi {
     }
   }
 
-  func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (OmniException) -> Void) where T: Codable {
+  func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (StaxException) -> Void) where T: Codable {
     guard let baseUrl = environment.baseUrl() else {
-      failure(OmniNetworkingException.baseUrlNotFound)
+      failure(StaxNetworkingException.baseUrlNotFound)
       return
     }
 
     log("------ HTTP REQUEST ------")
     guard let client = Services.resolve(NetworkService.self) else {
-      failure(OmniNetworkingException.serviceNotInitialized)
+      failure(StaxNetworkingException.serviceNotInitialized)
       return
     }
     let url = "\(baseUrl)\(urlString)"
@@ -156,7 +156,7 @@ class OmniApi {
           let model = try jsonDecoder.decode(T.self, from: data)
           completion(model)
         } catch {
-          var error: OmniException = OmniNetworkingException.couldNotParseResponse(nil)
+          var error: StaxException = StaxNetworkingException.couldNotParseResponse(nil)
 
           // When the API throws an error it, returns json in the following structure
           // {
@@ -169,10 +169,10 @@ class OmniApi {
             switch json {
             case let map as [String: [String]]:
               let errorStrings = map.values.flatMap {$0}
-              error = OmniNetworkingException.unknown(errorStrings.first ?? nil)
+              error = StaxNetworkingException.unknown(errorStrings.first ?? nil)
 
             case let arr as [String]:
-              error = OmniNetworkingException.unknown(arr.first ?? nil)
+              error = StaxNetworkingException.unknown(arr.first ?? nil)
 
             default: break
             }

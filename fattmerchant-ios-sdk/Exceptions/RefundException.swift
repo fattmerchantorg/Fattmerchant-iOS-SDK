@@ -1,4 +1,4 @@
-enum RefundException: OmniException {
+enum RefundException: StaxException {
   case transactionNotRefundable(details: String?)
   case missingTransactionId
   case couldNotFindMobileReaderForRefund

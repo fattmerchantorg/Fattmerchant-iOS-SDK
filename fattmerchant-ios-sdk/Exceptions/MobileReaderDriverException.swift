@@ -1,4 +1,4 @@
-enum MobileReaderDriverException: OmniException {
+enum MobileReaderDriverException: StaxException {
   case couldNotInitialize(detail: String?)
 
   static var mess: String = "Mobile reader driver error"

@@ -1,4 +1,4 @@
-enum CreatePaymentMethodException: OmniException {
+enum CreatePaymentMethodException: StaxException {
   case Something(String)
 
   static var mess = "Could not create payment method"

@@ -1,4 +1,4 @@
-enum TakePaymentException: OmniException {
+enum TakePaymentException: StaxException {
   case couldNotTokenizePaymentMethod(detail: String? = nil)
 
   static var mess: String = "Error taking mobile reader payment"

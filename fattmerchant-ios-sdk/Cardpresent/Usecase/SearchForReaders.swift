@@ -17,7 +17,7 @@ class SearchForReaders {
     self.args = args
   }
 
-  func start(completion: @escaping ([MobileReader]) -> Void, failure: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping ([MobileReader]) -> Void, failure: @escaping (StaxException) -> Void) {
     mobileReaderDriverRepository.getInitializedDrivers { (drivers) in
       guard !drivers.isEmpty else {
         failure(SearchForReadersException.noMobileReaderAvailable)

@@ -49,15 +49,15 @@ protocol MobileReaderDriver {
 
   func capture(transaction: Transaction, completion: @escaping (Bool) -> Void)
 
-  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
+  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void)
 
-  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
+  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void)
 
-  func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
+  func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (StaxException) -> Void)
 
   func void(transactionResult: TransactionResult, completion: @escaping (Bool) -> Void)
 
-  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void)
+  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (StaxException) -> Void)
 }
 
 extension MobileReaderDriver {

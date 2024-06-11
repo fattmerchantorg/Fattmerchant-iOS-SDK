@@ -1,6 +1,5 @@
 import Foundation
 
-@available(iOS 15, *)
 class ConcurrentNetworkService : NetworkService {
   private var token: String
   

@@ -9,6 +9,7 @@
 import Foundation
 
 /// Receives notifications of reader connection events such as when a reader is connecting or updating
+@available(*, deprecated, renamed: "CardReaderConnectionStatusDelegate", message: "Legacy Stax Version")
 public protocol MobileReaderConnectionStatusDelegate: class {
 
   /// Called when `MobileReader` has a new `MobileReaderConnectionStatus`

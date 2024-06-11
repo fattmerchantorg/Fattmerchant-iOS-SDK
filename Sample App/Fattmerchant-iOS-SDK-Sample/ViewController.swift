@@ -9,9 +9,10 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
+class ViewController: UIViewController, TransactionUpdateDelegate, CardReaderConnectionStatusDelegate, UserNotificationDelegate {
 
   var omni: Omni?
+  var stax: Stax?
   var lastPreauthTransaction: Transaction? = nil
 
   @IBOutlet weak var activityTextArea: UITextView!
@@ -58,7 +59,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.cancelTransaction()
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnb2RVc2VyIjpmYWxzZSwibWVyY2hhbnQiOiJjNGJjNjYxYi03Njc0LTQ4MDYtYmY5Zi1mMjBhZTA4ODUyNWIiLCJzdWIiOiI2MmI2OWE2Mi0wNWY3LTRjN2QtYjgzOS1jZGM4ZWYyNzkwOWQiLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsImlzcyI6Imh0dHA6Ly9hcGlwcm9kLmZhdHRsYWJzLmNvbS90ZWFtL2FwaWtleSIsImlhdCI6MTcwNzI0NTM3MCwiZXhwIjo0ODYwODQ1MzcwLCJuYmYiOjE3MDcyNDUzNzAsImp0aSI6IjE4a2w5MzlOcVoySGpFM1YiLCJhc3N1bWluZyI6ZmFsc2V9.eZEbjp5Q2JquQsSylSpUzUpxendiEoy4GObHE5ZpK6A"
+  let apiKey = ""
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -72,6 +73,8 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   fileprivate func initializeOmni() {
     // instantiate Omni and store somewhere
+    
+    /*
     omni = Omni()
     omni?.signatureProvider = SignatureViewController()
     omni?.transactionUpdateDelegate = self
@@ -91,7 +94,22 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       }
       self.log(error)
     })
-
+     */
+    
+    Task {
+      log("Attempting initalization...")
+      do {
+        let stax = try await Stax(appId: "fmiossample", apiKey: apiKey)
+        stax.cardReaderConnectionStatusDelegate = self
+        stax.transactionUpdateDelegate = self
+        stax.userNotificationDelegate = self
+        self.stax = stax
+        self.initializeButton.isHidden = true
+        self.log("Initialized!")
+      } catch {
+        self.log(error as! StaxException)
+      }
+    }
   }
 
   fileprivate func chooseTransaction(from transactions: [Transaction], completion: @escaping (Transaction) -> Void) {
@@ -114,6 +132,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   fileprivate func takePayment(preauth: Bool = false) {
+    /*
     var req = createTransactionRequest()
     req.preauth = preauth
     omni?.takeMobileReaderTransaction(request: req, completion: { transaction in
@@ -125,6 +144,23 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     }, error: { error in
       self.log(error)
     })
+     */
+    
+    self.log("Trying to take transaction")
+    var request = createTransactionRequest()
+    request.preauth = preauth
+    Task {
+      do {
+        guard let transaction = try await stax?.chargeWithReader(request: request) else {
+          self.log("Couldn't take transaction")
+          return
+        }
+
+        self.log("Finished transaction successfully! ID: \(transaction.id ?? "")")
+      } catch {
+        self.log(error.localizedDescription)
+      }
+    }
   }
 
   fileprivate func captureLastTransaction() {
@@ -139,11 +175,13 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
       amount = getAmount()
     }
 
+    /*
     omni?.capturePreauthTransaction(transactionId: id, amount: amount, completion: { transaction in
       self.log("Captured transaction successfully")
     }, error: { error in
       self.log(error)
     })
+     */
   }
 
   fileprivate func voidLastTransaction() {
@@ -193,6 +231,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   @IBAction fileprivate func tokenizeCard() {
+    /*
     self.log("Attempting CNP Tokenization")
     var card = CreditCard.testCreditCard()
     card.personName = "Test Creditcard"
@@ -202,9 +241,25 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     }, error: { (err) in
       self.log(err)
     })
+    */
+    
+    self.log("Attempting CNP Tokenization")
+    
+    var card = CreditCard.testCreditCard()
+    card.personName = "Test CreditCard"
+    Task {
+      do {
+        let pm = try await stax!.tokenize(card: card)
+        self.log("Created PaymentMethod Successfully")
+        self.log(pm)
+      } catch {
+        self.log(error as! StaxException)
+      }
+    }
   }
 
   @IBAction fileprivate func tokenizeBankAccount() {
+    /*
     self.log("Attempting CNP Tokenization")
     let bank = BankAccount.testBankAccount()
     omni?.tokenize(bank, { (paymentMethod) in
@@ -213,6 +268,21 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     }, error: { (err) in
       self.log(err)
     })
+    */
+    
+    self.log("Attempting CNP Tokenization")
+    
+    var bank = BankAccount.testBankAccount()
+    bank.personName = "Test BankAccount"
+    Task {
+      do {
+        let pm = try await stax!.tokenize(bank: bank)
+        self.log("Created PaymentMethod Successfully")
+        self.log(pm)
+      } catch {
+        self.log(error as! StaxException)
+      }
+    }
   }
 
   fileprivate func createTransactionRequest() -> TransactionRequest {
@@ -229,6 +299,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   fileprivate func searchForReaders() {
+    /*
     log("Searching for available reader...")
     omni?.getAvailableReaders(completion: { readers in
       guard !readers.isEmpty else {
@@ -247,20 +318,52 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     }, error: { (error) in
       self.log(error)
     })
+     */
+    
+    Task {
+      log("Searching for available reader...")
+      let readers = try await stax!.getAvailableCardReaders()
+      guard !readers.isEmpty else {
+        log("No readers found...")
+        return
+      }
+      
+      log("Found readers:")
+      for reader in readers {
+        log(reader.description)
+      }
+      
+      chooseCardReader(from: readers) { chosenReader in
+        self.connectCardReader(reader: chosenReader, completion: { connectedReader in
+          self.log("Connected reader: \(connectedReader)")
+        })
+      }
+    }
   }
 
+  /*
   fileprivate func connectReader(reader: MobileReader, completion: @escaping (MobileReader) -> Void) {
     self.log("Trying to connect to \(reader)")
     omni?.connect(reader: reader, completion: completion) {
       self.log("Couldn't connect to \(reader)")
     }
   }
+   */
+  
+  fileprivate func connectCardReader(reader: CardReader, completion: @escaping (CardReader) -> Void) {
+    Task {
+      log("Trying to connect to \(reader)")
+      let r = try await stax?.connectToCardReader(reader: reader)
+      log("Connected reader: \(String(describing: r))")
+    }
+  }
 
-  func mobileReaderConnectionStatusUpdate(status: MobileReaderConnectionStatus) {
+  func cardReaderConnectionStatusUpdate(status: CardReaderConnectionStatus) {
     self.log("Mobile reader \(status.rawValue)")
   }
 
   fileprivate func disconnectReader() {
+    /*
     omni?.getConnectedReader(completion: { reader in
       guard let reader = reader else { return }
       self.omni?.disconnect(reader: reader, completion: { success in
@@ -271,15 +374,34 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     }, error: { error in
       self.log(error.detail ?? "error getting connected reader")
     })
+     */
+    
+    Task {
+      do {
+        let isSuccess = try await stax?.disconnectFromCardReader() ?? false
+        self.log(isSuccess ? "Successfully disconnected reader" : "Could not disconnect reader")
+      } catch {
+        self.log(error.localizedDescription)
+      }
+    }
   }
 
   fileprivate func getReaderInfo() {
+    /*
     self.log("Trying to get info about the connected reader")
     omni?.getConnectedReader(completion: { reader in
       self.log("Done")
     }, error: { error in
       self.log(error.detail ?? "huh")
     })
+     */
+    
+    Task {
+      self.log("Trying to get info about the connected reader")
+      let reader = try await stax?.getActiveCardReader()
+      self.log("Active Reader: \(reader?.description ?? "<NONE>")")
+      self.log("Done")
+    }
   }
 
   /// Makes the user choose which reader to connect to
@@ -288,6 +410,24 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   ///   - readers: an array of MobileReader to choose from
   ///   - completion: a block to run once the reader is chosen. Will receive a MobileReader
   fileprivate func chooseReader(from readers: [MobileReader], _ completion: @escaping (MobileReader) -> Void ) {
+    // If there is only one reader, automatically choose that one
+    guard readers.count > 1 else {
+      completion(readers[0])
+      return
+    }
+
+    let pickerController = StringPickerController(values: readers) { reader in
+      if let chosenReader = reader {
+        completion(chosenReader)
+      }
+
+      self.dismiss(animated: true, completion: nil)
+    }
+    modalPresentationStyle = .pageSheet
+    present(pickerController, animated: true, completion: nil)
+  }
+  
+  fileprivate func chooseCardReader(from readers: [CardReader], _ completion: @escaping (CardReader) -> Void ) {
     // If there is only one reader, automatically choose that one
     guard readers.count > 1 else {
       completion(readers[0])
@@ -352,6 +492,14 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     self.log(message)
   }
 
+  fileprivate func log(_ error: StaxException) {
+    var errorMessage = error.message
+    if let detail = error.detail {
+      errorMessage += ". \(detail)"
+    }
+    self.log(errorMessage)
+  }
+  
   fileprivate func log(_ error: OmniException) {
     var errorMessage = error.message
     if let detail = error.detail {

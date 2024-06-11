@@ -22,7 +22,7 @@ class CapturePreauthTransaction {
     self.omniApi = omniApi
   }
 
-  func start(completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (Transaction) -> Void, error: @escaping (StaxException) -> Void) {
     // As of 5/21/21, only NMI supports preauth and only NMI is offered to partners so we really shouldn't
     // be hitting this code for anything except NMI. With that assumption, we can get away with asking the Stax API
     // to perform the capture for us

@@ -1,4 +1,4 @@
-enum CreateCustomerException: OmniException {
+enum CreateCustomerException: StaxException {
   case customerNameNotSupplied
   case unknown
 

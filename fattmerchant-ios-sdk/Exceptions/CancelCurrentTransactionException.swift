@@ -1,4 +1,4 @@
-enum CancelCurrentTransactionException: OmniException {
+enum CancelCurrentTransactionException: StaxException {
   static var mess: String = "Could not cancel current transaction"
 
   case noTransactionToCancel

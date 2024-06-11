@@ -44,7 +44,7 @@ class TakeMobileReaderPayment {
     self.userNotificationDelegate = userNotificationDelegate
   }
 
-  func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (Transaction) -> Void, failure: @escaping (StaxException) -> Void) {
     availableMobileReaderDriver(mobileReaderDriverRepository, failure) { driver in
       self.getOrCreateInvoice(failure) { (createdInvoice) in
         self.takeMobileReaderPayment(with: driver,
@@ -54,7 +54,7 @@ class TakeMobileReaderPayment {
                                      failure) { (mobileReaderPaymentResult) in
 
           // This is a callback that voids the transaction and calls the fail block
-          let voidAndFail: (OmniException) -> Void = { exception in
+          let voidAndFail: (StaxException) -> Void = { exception in
 
             // By the time this is invoked, the NMI transaction went through fine but something happened while doing
             // one of the calls to Omni. Since the transaction is pending confirmation, then we need to void it *before*
@@ -125,7 +125,7 @@ class TakeMobileReaderPayment {
                                   paymentMethod: PaymentMethod,
                                   customer: Customer,
                                   invoice: Invoice,
-                                  _ failure: @escaping (OmniException) -> Void,
+                                  _ failure: @escaping (StaxException) -> Void,
                                   _ completion: @escaping (Transaction) -> Void) {
     let transactionToCreate = Transaction()
 
@@ -301,7 +301,7 @@ class TakeMobileReaderPayment {
   fileprivate func updateInvoice(_ invoice: Invoice,
                                  with paymentMethod: PaymentMethod,
                                  and customer: Customer,
-                                 _ failure: @escaping (OmniException) -> Void,
+                                 _ failure: @escaping (StaxException) -> Void,
                                  completion: @escaping (Invoice) -> Void) {
     let newInvoice = Invoice()
 
@@ -336,7 +336,7 @@ class TakeMobileReaderPayment {
     return String(maskedPan.suffix(from: lastFourIdx))
   }
 
-  fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (OmniException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
+  fileprivate func createPaymentMethod(for customer: Customer, _ result: TransactionResult, _ failure: @escaping (StaxException) -> Void, completion: @escaping (PaymentMethod) -> Void) {
     let paymentMethodToCreate = PaymentMethod(customer: customer)
 
     guard let customerId = customer.id else {
@@ -373,7 +373,7 @@ class TakeMobileReaderPayment {
 
   }
 
-  fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Customer) -> Void) {
+  fileprivate func createCustomer(_ transactionResult: TransactionResult, _ failure: @escaping (StaxException) -> Void, _ completion: @escaping (Customer) -> Void) {
     let firstname = transactionResult.cardHolderFirstName ?? "SWIPE"
     let lastname = transactionResult.cardHolderLastName ?? "CUSTOMER"
     var customerToCreate = Customer(firstName: firstname, lastName: lastname)
@@ -398,7 +398,7 @@ class TakeMobileReaderPayment {
                                            signatureProvider: SignatureProviding?,
                                            transactionUpdateDelegate: TransactionUpdateDelegate?,
                                            userNotificationDelegate: UserNotificationDelegate?,
-                                           _ failure: (OmniException) -> Void,
+                                           _ failure: (StaxException) -> Void,
                                            _ completion: @escaping (TransactionResult) -> Void) {
     driver.performTransaction(with: self.request,
                               signatureProvider: signatureProvider,
@@ -408,7 +408,7 @@ class TakeMobileReaderPayment {
   }
 
   /// Gets the invoice with the id in the transaction request or creates a new one
-  internal func getOrCreateInvoice(_ failure: @escaping (OmniException) -> Void, _ completion: @escaping (Invoice) -> Void) {
+  internal func getOrCreateInvoice(_ failure: @escaping (StaxException) -> Void, _ completion: @escaping (Invoice) -> Void) {
     // If an invoiceId was given in the transaction request, we should verify that an invoice with that id exists
     if let invoiceId = request.invoiceId {
       guard !invoiceId.isEmpty else {
@@ -438,7 +438,7 @@ class TakeMobileReaderPayment {
     }
   }
 
-  fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
+  fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (StaxException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
     repo.getInitializedDrivers { initializedDrivers in
       // Get drivers that are ready for payment
       filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }, completion: { driversReadyForPayment in
