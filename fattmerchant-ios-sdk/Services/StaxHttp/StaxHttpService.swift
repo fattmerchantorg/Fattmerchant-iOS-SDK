@@ -5,7 +5,7 @@ protocol StaxHttpService {
   func getSelf() async throws -> StaxSelf
   func getCardReaderSettings() async throws -> CardReaderSettings
   func getInvoice(id: String) async throws -> Invoice
-  func postVoidOrRefund() async -> Void
+  func postVoidOrRefund(id: String) async throws -> Transaction
   func postCaptureTransaction() async -> Void
   func postCustomer(customer: Customer) async throws -> Customer
   func postInvoice(invoice: Invoice) async throws -> Invoice

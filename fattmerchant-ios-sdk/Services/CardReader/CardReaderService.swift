@@ -1,7 +1,7 @@
 import Foundation
 
 protocol CardReaderService {
-  static var isRefundSupported: Bool { get }
+  static var isStaxRefundSupported: Bool { get }
   
   func initialize(_ args: [String: Any]) throws -> Void
   func isInitialized() -> Bool
@@ -11,8 +11,8 @@ protocol CardReaderService {
   func disconnectFromReader() async throws -> Bool
   func performTransaction(_ request: TransactionRequest) async -> TransactionResult
   func captureTransaction(_ transaction: Transaction) async -> Bool
-  func cancelTransaction()
-  func refundTransaction()
+  func cancelActiveTransaction() async throws -> Bool
+  func refundTransaction(_ transaction: Transaction, _ amount: Amount?) throws -> TransactionResult
   func voidTransaction(_ result: TransactionResult) async -> Bool
  
   func getCardReaderConnectionStatusDelegate() -> CardReaderConnectionStatusDelegate?

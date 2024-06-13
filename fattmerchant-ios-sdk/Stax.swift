@@ -114,13 +114,38 @@ public class Stax {
     job.transactionUpdateDelegate = self.transactionUpdateDelegate
     return try await job.start()
   }
+  
+  /// Attempts to perform a refund on a `Transaction` for a given `Amount`.
+  /// - Parameters:
+  ///   - transaction: The Stax `Transaction` record to attempt a refund on.
+  ///   - amount: An optional `Amount` to refund. If this is not passed in, the refund will be for the `transaction.total` value.
+  /// - Returns: A Stax `Transaction` record that has been successfully refunded.
+  public func cancelCharge() async throws -> Bool {
+    guard
+      let card = Services.resolve(CardReaderService.self),
+      try await card.getConnectedReader() != nil
+    else {
+      throw TakeMobileReaderPaymentException.mobileReaderNotFound
+    }
+    
+    let job = CancelCurrentCardReaderTransactionJob()
+    return try await job.start()
+  }
 
   public func charge() {}
-  public func cancelCharge() {}
   public func preAuthorizeTransaction() {}
   public func captureTransaction() {}
   public func voidTransaction() {}
-  public func refundTransaction() {}
+  
+  /// Attempts to perform a refund on a `Transaction` for a given `Amount`.
+  /// - Parameters:
+  ///   - transaction: The Stax `Transaction` record to attempt a refund on.
+  ///   - amount: An optional `Amount` to refund. If this is not passed in, the refund will be for the `transaction.total` value.
+  /// - Returns: A Stax `Transaction` record that has been successfully refunded.
+  public func refundTransaction(transaction: Transaction, amount: Amount? = nil) async throws -> Transaction {
+    let job = try RefundCardReaderTransactionJob(transaction: transaction, amount: amount)
+    return try await job.start()
+  }
 
   /// Searches for all `CardReader` objects ready to be connected to. None of the `CardReader`s will be able to take a payment until they are connected.
   /// - Returns: A `[CardReader]` with all of the `CardReader` objects available to connect to.

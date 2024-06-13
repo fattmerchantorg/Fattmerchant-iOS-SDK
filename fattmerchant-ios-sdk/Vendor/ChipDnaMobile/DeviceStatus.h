@@ -86,6 +86,11 @@ typedef NS_ENUM(NSUInteger, DeviceStatusEnum) {
 @property (nonatomic, readonly)NSInteger batteryChargePercentage;
 
 /**
+ * Raw Battery charge percentage of the currently connected device,
+ */
+@property (nonatomic, readonly)NSInteger rawBatteryChargePercentage;
+
+/**
  * Charging status of the currently connected device.
  * Returns "Not Charging", "Charging" or "Fully Charged".
  */

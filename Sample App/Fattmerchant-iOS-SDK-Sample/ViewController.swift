@@ -58,7 +58,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, CardReaderCon
   @IBAction func onCancelTransactionButtonPress(_ sender: UIButton) {
     self.cancelTransaction()
   }
-
+  
   let apiKey = ""
 
   override func viewDidLoad() {

@@ -3,7 +3,7 @@ import Foundation
 class NmiCardReaderService: NSObject, CardReaderService {
   public static let SOURCE = "NMI"
   
-  public static var isRefundSupported = true
+  public static var isStaxRefundSupported = true
   
   private var appId: String?
   private var securityKey: String?
@@ -56,7 +56,7 @@ class NmiCardReaderService: NSObject, CardReaderService {
     let setPropertiesParameters = CCParameters()
     setPropertiesParameters.setValue(appId, forKey: CCParamApplicationIdentifier)
     setPropertiesParameters.setValue(securityKey, forKey: CCParamApiKey)
-    setPropertiesParameters.setValue(CCValueEnvironmentTest, forKey: CCParamEnvironment)
+    setPropertiesParameters.setValue(CCValueEnvironmentLive, forKey: CCParamEnvironment)
     
     let setPropertiesResult = ChipDnaMobile.sharedInstance()?.setProperties(setPropertiesParameters)
     if setPropertiesResult?[CCParamResult] != CCValueTrue {
@@ -93,10 +93,13 @@ class NmiCardReaderService: NSObject, CardReaderService {
     ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
     ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
     
-    return await withCheckedContinuation { continuation in
-      onConnectAndConfigureContinuation = continuation
-      ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
-    }
+    // Wrap in a .userInitiated Task for thread safety
+    return await Task(priority: .utility){
+      await withCheckedContinuation { continuation in
+        onConnectAndConfigureContinuation = continuation
+        ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
+      }
+    }.value
   }
   
   public func getConnectedReader() async throws -> CardReader? {
@@ -117,10 +120,7 @@ class NmiCardReaderService: NSObject, CardReaderService {
     reader.serial = device.serialNumber
     reader.firmware = device.firmwareVersion
     
-    // Use continuation to make sure it's async. Probably not neccessary...but better to be typesafe!
-    return await withCheckedContinuation { continuation in
-      continuation.resume(returning: reader)
-    }
+    return reader
   }
   
   public func disconnectFromReader() async throws -> Bool {
@@ -180,12 +180,62 @@ class NmiCardReaderService: NSObject, CardReaderService {
     }
   }
   
-  public func cancelTransaction() {
+  public func cancelActiveTransaction() async throws -> Bool {
+    guard let result = ChipDnaMobile.sharedInstance()?.terminateTransaction(nil) else {
+      return false
+    }
     
+    if let isSuccess = result[CCParamResult], isSuccess == CCValueTrue {
+      return true
+    }
+    
+    guard let status = ChipDnaMobile.sharedInstance()?.getStatus(nil) else {
+      throw CancelCurrentTransactionException.noTransactionToCancel
+    }
+
+    if status[CCParamChipDnaStatus] == "IDLE" {
+      throw CancelCurrentTransactionException.noTransactionToCancel
+    } else {
+      throw CancelCurrentTransactionException.unknown
+    }
   }
   
-  public func refundTransaction() {
+  public func refundTransaction(_ transaction: Transaction, _ amount: Amount? = nil) throws -> TransactionResult {
+    // Get card ease reference. This is what we use to reference the transaction within NMI
+    guard let cardEaseReference: String = transaction.meta?["cardEaseReference"] else {
+      throw RefundException.transactionNotRefundable(details: "Could not find user reference")
+    }
+
+    // Get the amount to refund from the transaction
+    guard let amountDollars = amount?.dollars() ?? transaction.total else {
+      throw RefundException.transactionNotRefundable(details: "Could not find amount to refund")
+    }
+
+    // Create the params for the 3rd-party refund
+    let refundRequestParams = CCParameters()
+    refundRequestParams[CCParamUserReference] = generateNmiTransactionUserReference()
+    refundRequestParams[CCParamCardEaseReference] = cardEaseReference
+    refundRequestParams[CCParamAmount] = Amount(dollars: amountDollars).centsString()
+    refundRequestParams[CCParamCurrency] = "USD"
+
+    // Do the 3rd party refund
+    guard let refundStatus = ChipDnaMobile.sharedInstance()?.linkedRefundTransaction(refundRequestParams) else {
+      throw RefundException.transactionNotRefundable(details: "Error while performing refund")
+    }
+
+    // Check if errors happened during
+    if let _ = refundStatus[CCParamErrors] {
+      throw RefundException.errorRefunding(details: "Error while performing refund")
+    }
     
+    let receipt = ChipDnaMobileSerializer.deserializeReceiptData(refundStatus[CCParamReceiptData])
+    var result = TransactionResult()
+    result.source = NmiCardReaderService.SOURCE
+    result.success = true
+    result.transactionType = "refund"
+    result.amount = amount
+    result.transactionSource = receipt?["TRANSACTION_SOURCE"]?.value
+    return result
   }
   
   public func voidTransaction(_ result: TransactionResult) async -> Bool {

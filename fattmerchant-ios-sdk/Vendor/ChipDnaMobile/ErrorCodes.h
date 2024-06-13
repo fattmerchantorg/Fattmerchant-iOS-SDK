@@ -270,6 +270,7 @@ extern NSString * const MerchantAccountsFormatError;                         /**
 extern NSString * const TestReceiptSelectorOverrideFormatError;              /**< There is a format error with the TestReceiptSelectorOverride. */
 extern NSString * const TippingSupportedFormatError;                         /**< There is a format error with the TippingSupported. */
 extern NSString * const BacklightEnabledFormatError;                         /**< There is a format error with the BacklightEnabled. */
+extern NSString * const LowPowerModeEnabledFormatError;                      /**< There is a format error with the LowPowerModeEnabled. */
 extern NSString * const TerminalConfigurationFormatError;                    /**< There is a format error with the TerminalConfiguration. */
 extern NSString * const CAPublicKeysFormatError;                             /**< There is a format error with the CAPublicKeys. */
 extern NSString * const PinPadConnectionTimeoutFormatError;                  /**< There is a format error with the PinPadConnectionTimeout. */
@@ -300,6 +301,8 @@ extern NSString * const ConfigFileGenerationFailed;                          /**
 extern NSString * const DelayOnlineProcessingSupportedFormatError;           /**< There is a format error with DelayOnlineProcessingSupported*/
 extern NSString * const XmlEncryptionCertificateFormatError;                 /**< There is a format error with XmlEncryptionCertificate*/
 extern NSString * const CertificationIdentifierFormatError;                  /**< There is a format error with CertificationIdentifier*/
+extern NSString * const BbposTmsConfigurationFormatError;                    /**< There is a format error with BBPosTmsConfiguration*/
+extern NSString * const SpeedOptimisationFeaturesSupportedFormatError;       /**< There is a format error with SpeedOptimisationFeaturesSupported*/
 /**
  * @}
  */

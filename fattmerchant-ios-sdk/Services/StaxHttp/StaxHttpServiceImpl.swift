@@ -20,8 +20,8 @@ class StaxHttpServiceImpl: StaxHttpService {
     return try await request(path: "/invoice/\(id)", method: .get)
   }
   
-  func postVoidOrRefund() async {
-    
+  func postVoidOrRefund(id: String) async throws -> Transaction {
+    return try await request(path: "transaction/\(id)/void-or-refund", method: .post)
   }
   
   func postCaptureTransaction() async {

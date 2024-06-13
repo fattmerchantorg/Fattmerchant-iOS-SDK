@@ -3,7 +3,7 @@
  *The ChipDNA Mobile API contains the classes necessary to process Card Present sale and refund transactions on a mobile platform. Processing Card Present transactions requires one of the following PIN pads:
  *
  * <ul>
- * <li>BBPOS Chipper CHB20, CHB22 or CHB29
+ * <li>BBPOS Chipper CHB20, CHB22, CHB29, or CHB30
  * <li>Datecs Bluepad50 Contact or Contactless</li>
  * <li>Miura M020 or M021</li>
  * <li>IDTech VP3350</li>
@@ -110,10 +110,10 @@ extern NSString * const CCInitialisationException;
  *
  * Only the following PIN pads are supported:
  * <ul>
- * <li>BBPOS Chipper CHB20, CHB22 or CHB29
+ * <li>BBPOS Chipper CHB20, CHB22, CHB29 or CHB30
  * <li>Datecs Bluepad50 Contact or Contactless</li>
  * <li>Miura M020 or M021</li>
- *  * <li>IDTech VP3350</li>
+ * <li>IDTech VP3350</li>
  * </ul>
  *
  * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not available. </p>
@@ -187,7 +187,7 @@ extern NSString * const CCInitialisationException;
  * @param request Parameter collection which can contain the following:
  * <p>{@link CCParameters#CCParamForceTmsUpdate}</p> Force connectAndConfigure to perform a TMS update whether one is required or not.</p>
  * <p>{@link CCParameters#CCParamFullTmsUpdate} Force a full TMS update whether one is required or not. All configuration will be re-downloaded regardless of whether it's required.
- * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 5 seconds will be used if this value is not available. </p>
+ * <p>{@link CCParameters#CCParamBLEScanTime CCParamBLEScanTime} Set the length of time Bluetooth Low Energy (BLE) devices will be scanned for. The value is required to be a string valued number between 1 and 30. The default value of 15 seconds will be used if this value is not available. </p>
  *
  * @return parameter collection containing {@link CCParameters#CCParamResult CCParamResult} and if applicable {@link CCParameters#CCParamErrors CCParamErrors}.
  */

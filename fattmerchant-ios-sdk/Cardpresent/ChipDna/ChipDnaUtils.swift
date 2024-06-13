@@ -68,6 +68,7 @@ extension UserNotification {
 
   /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
   init?(chipDnaUserNotification: String) {
+    /*
     switch chipDnaUserNotification {
 
     case UserNotificationTryCardAgain:
@@ -97,6 +98,8 @@ extension UserNotification {
     default:
       return nil
     }
+     */
+    return nil
   }
 }
 
