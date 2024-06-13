@@ -8,31 +8,6 @@
 
 import Foundation
 
-enum RefundException: OmniException {
-  case transactionNotRefundable(details: String?)
-  case missingTransactionId
-  case couldNotFindMobileReaderForRefund
-  case errorRefunding(details: String?)
-
-  static var mess: String = "Could not refund transaction"
-
-  var detail: String? {
-    switch self {
-    case .transactionNotRefundable(let d):
-      return d ?? "Transaction is not refundable"
-
-    case .couldNotFindMobileReaderForRefund:
-      return "Mobile reader driver responsible for performing refund could not be found"
-
-    case .errorRefunding(let d):
-      return d ?? "Error while performing refund"
-
-    case .missingTransactionId:
-      return "Transaction id not provided"
-    }
-  }
-}
-
 class RefundMobileReaderTransaction {
 
   typealias Exception = RefundException
@@ -64,7 +39,7 @@ class RefundMobileReaderTransaction {
     self.omniApi = omniApi
   }
 
-  func start(completion: @escaping (Transaction) -> Void, failure: @escaping (OmniException) -> Void ) {
+  func start(completion: @escaping (Transaction) -> Void, failure: @escaping (StaxException) -> Void ) {
     // Make sure the transaction has an id
     guard let transactionId = transaction.id else {
       return failure(RefundException.missingTransactionId)
@@ -96,7 +71,7 @@ class RefundMobileReaderTransaction {
     }
   }
 
-  fileprivate func postRefundedTransaction(with result: TransactionResult, failure: @escaping (OmniException) -> Void, completion: @escaping (Transaction) -> Void) {
+  fileprivate func postRefundedTransaction(with result: TransactionResult, failure: @escaping (StaxException) -> Void, completion: @escaping (Transaction) -> Void) {
     let refundedTransaction = Transaction()
     refundedTransaction.total = result.amount?.dollars()
     refundedTransaction.paymentMethodId = transaction.paymentMethodId
@@ -112,8 +87,8 @@ class RefundMobileReaderTransaction {
   }
 
   /// Verifies that the refund about to happen is acceptable
-  /// - Returns: OmniException explaining why the refund should not happen. `nil` if the refund is acceptable
-  internal static func validateRefund(transaction: Transaction, refundAmount: Amount? = nil) -> OmniException? {
+  /// - Returns: StaxException explaining why the refund should not happen. `nil` if the refund is acceptable
+  internal static func validateRefund(transaction: Transaction, refundAmount: Amount? = nil) -> StaxException? {
     // Ensure transaction isn't voided
     if transaction.isVoided == true {
       return Exception.transactionNotRefundable(details: "Can not refund voided transaction")

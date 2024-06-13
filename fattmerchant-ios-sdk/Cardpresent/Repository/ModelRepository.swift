@@ -16,7 +16,7 @@ protocol ModelRepository {
   associatedtype OmniModel: Model
 
   typealias EmptyCompletionHandler = () -> Void
-  typealias ErrorHandler = (OmniException) -> Void
+  typealias ErrorHandler = (StaxException) -> Void
   typealias CompletionHandler = (OmniModel) -> Void
 
   init(omniApi: OmniApi)

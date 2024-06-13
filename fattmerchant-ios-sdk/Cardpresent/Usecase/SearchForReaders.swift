@@ -8,12 +8,6 @@
 
 import Foundation
 
-enum SearchForReadersException: OmniException {
-  static var mess: String = "Couldnt find mobile readers"
-
-  case noMobileReaderAvailable
-}
-
 class SearchForReaders {
   var mobileReaderDriverRepository: MobileReaderDriverRepository
   var args: [String: Any]
@@ -23,7 +17,7 @@ class SearchForReaders {
     self.args = args
   }
 
-  func start(completion: @escaping ([MobileReader]) -> Void, failure: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping ([MobileReader]) -> Void, failure: @escaping (StaxException) -> Void) {
     mobileReaderDriverRepository.getInitializedDrivers { (drivers) in
       guard !drivers.isEmpty else {
         failure(SearchForReadersException.noMobileReaderAvailable)

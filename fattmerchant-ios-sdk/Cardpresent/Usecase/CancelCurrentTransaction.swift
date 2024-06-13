@@ -8,23 +8,6 @@
 
 import Foundation
 
-enum CancelCurrentTransactionException: OmniException {
-  static var mess: String = "Could not cancel current transaction"
-
-  case noTransactionToCancel
-  case unknown
-
-  var detail: String? {
-    switch self {
-    case .noTransactionToCancel:
-      return "There is no transaction to cancel"
-
-    case .unknown:
-      return "Unkown error"
-    }
-  }
-}
-
 class CancelCurrentTransaction {
   internal var mobileReaderDriverRepository: MobileReaderDriverRepository
 
@@ -32,11 +15,11 @@ class CancelCurrentTransaction {
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
   }
 
-  func start(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
     mobileReaderDriverRepository.getInitializedDrivers { drivers in
       let semaphore: DispatchSemaphore? = DispatchSemaphore(value: 1)
       var success = true
-      var omniException: OmniException?
+      var omniException: StaxException?
 
       DispatchQueue.global(qos: .userInitiated).async {
         for driver in drivers {

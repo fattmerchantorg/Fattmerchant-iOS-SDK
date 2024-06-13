@@ -85,7 +85,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     let properties = CCParameters()
     properties.setValue(apiKey, forKey: CCParamApiKey)
     properties.setValue(appId, forKey: CCParamApplicationIdentifier)
-    properties.setValue(CCValueEnvironmentLive, forKey: CCParamEnvironment)
+    properties.setValue(CCValueEnvironmentTest, forKey: CCParamEnvironment)
     let setPropertiesResult = ChipDnaMobile.sharedInstance()?.setProperties(properties)
     if setPropertiesResult?[CCParamResult] != CCValueTrue {
       ChipDnaMobile.dispose(nil)
@@ -134,7 +134,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
     // Set the connection type to BT
     let params = CCParameters()
-    params[CCParamPinPadConnectionType] = CCValueBLE
+    // params[CCParamPinPadConnectionType] = CCValueBLE
     params[CCParamBLEScanTime] = "5"
 
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
@@ -155,10 +155,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
     let requestParams = CCParameters()
     requestParams[CCParamPinPadName] = reader.name
-    requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBluetooth
+    requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBLE
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
     didConnectAndConfigure = { connectedReader in
+      let status = ChipDnaMobile.sharedInstance().getStatus(nil)
       if let connectedReader = connectedReader, let serial = connectedReader.serialNumber {
         self.familiarSerialNumbers.append(serial)
       }
@@ -166,17 +167,17 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
     ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
     ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
-    ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
+    ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
   }
 
   /// Gets the connected MobileReader
   /// - Parameters:
   ///   - completion: the connected MobileReader, if any
   ///   - error: a block to run if anything goes wrong during the operation
-  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
+  func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (StaxException) -> Void) {
     // ChipDna must be initialized
     if !ChipDnaMobile.isInitialized() {
-      error(OmniGeneralException.uninitialized)
+      error(StaxGeneralException.uninitialized)
     }
 
     completion(ChipDnaDriver.connectedReader())
@@ -202,10 +203,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///   - reader: the MobileReader that is to be disconnected
   ///   - completion: a block to run once done. if disconnected, this receives true
   ///   - error: a block to run in anything goes wrong during the operation
-  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
     // ChipDna must be initialized
     if !ChipDnaMobile.isInitialized() {
-      error(OmniGeneralException.uninitialized)
+      error(StaxGeneralException.uninitialized)
     }
 
     ChipDnaMobile.dispose(nil)
@@ -301,7 +302,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
   }
 
-  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+  func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (StaxException) -> Void) {
     if let result = ChipDnaMobile.sharedInstance()?.terminateTransaction(nil) {
       if let success = result[CCParamResult], success == CCValueTrue {
         completion(true)
@@ -327,7 +328,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///   - completion: A block to run after the refund is complete
   ///   - refundAmount: The amount to be refunded. If nil is passed, the remaining amount will be refunded
   ///   - error: A block to run in case an error occurs
-  func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
+  func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (StaxException) -> Void) {
     // Get card ease reference. This is what we use to reference the transaction within NMI
     guard let cardEaseReference = extractCardEaseReference(from: transaction) else {
       error(RefundException.transactionNotRefundable(details: "Could not find user reference"))
@@ -399,6 +400,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       SelectablePinPad(name: pinPadName, connectionType: CCValueBluetooth)
     }
     availablePinPadsList?.append(contentsOf: btDevices ?? [])
+    
+    // USB
+    let usbDevices = (availablePinPadsDict[CCValueLightningUsb] as? [String])?.map { pinPadName in
+      SelectablePinPad(name: pinPadName, connectionType: CCValueLightningUsb)
+    }
+    availablePinPadsList?.append(contentsOf: usbDevices ?? [])
 
     return availablePinPadsList
   }

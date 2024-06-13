@@ -21,25 +21,13 @@
 #import <UIKit/UIKit.h>
 
 // ChipDNA
-#import "CCParameters.h"
-#import "DeviceStatus.h"
-#import "CCCardSchemeIdEnum.h"
-#import "UserNotification.h"
-#import "ReceiptField.h"
+#import "ChipDnaMobile.h"
 #import "ChipDnaMobileUtils.h"
 #import "ChipDnaMobileSerializer.h"
-#import "Currency.h"
-#import "PaymentPlatformStatus.h"
-#import "TmsStatus.h"
-#import "CardApplication.h"
-#import "TerminalStatus.h"
-#import "ErrorCodes.h"
 #import "TransactionUpdates.h"
-#import "CCCardHash.h"
-#import "JailbreakChecker.h"
-#import "ChipDnaMobile.h"
-#import "RequestQueueStatus.h"
-#import "VersionInformation.h"
+#import "CardApplication.h"
+#import "CCParameters.h"
+#import "ErrorCodes.h"
 // End ChipDNA
 
 //! Project version number for fattmerchant_ios_sdk.

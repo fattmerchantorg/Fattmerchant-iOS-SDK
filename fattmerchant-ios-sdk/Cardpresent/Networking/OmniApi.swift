@@ -13,25 +13,6 @@ class OmniApi {
 
   private let debug = false
 
-  enum OmniNetworkingException: OmniException {
-    case baseUrlNotFound
-    case couldNotParseResponse(String?)
-    case unknown(String?)
-
-    static var mess: String = "Omni Networking Exception"
-
-    var detail: String? {
-      switch self {
-      case .baseUrlNotFound:
-        return "Base Url Not Found"
-      case .couldNotParseResponse(let cause):
-        return cause
-      case .unknown(let cause):
-        return cause
-      }
-    }
-  }
-
   /// A Json encoder that should be used for encoding data to send to the Omni API
   func jsonEncoder() -> JSONEncoder {
     let encoder = JSONEncoder()
@@ -52,10 +33,10 @@ class OmniApi {
     }
   }
 
-  func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (OmniException) -> Void ) {
+  func getSelf(completion: @escaping (OmniSelf) -> Void, failure: @escaping (StaxException) -> Void ) {
     request(method: "get", urlString: "/self", completion: completion, failure: failure)
   }
-  func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (OmniException) -> Void) {
+  func getMobileReaderSettings(completion: @escaping (MobileReaderDetails) -> Void, failure: @escaping (StaxException) -> Void) {
     request(method: "get", urlString: MobileReaderDetails.resourceEndpoint(), completion: completion, failure: failure)
   }
 
@@ -68,7 +49,7 @@ class OmniApi {
   func postVoidOrRefund(transactionId: String,
                         total: String? = nil,
                         completion: @escaping (Transaction) -> Void,
-                        error: @escaping (OmniException) -> Void) {
+                        error: @escaping (StaxException) -> Void) {
     var body: Data?
     if let total = total {
       body = try? jsonEncoder().encode(["total": total])
@@ -96,12 +77,13 @@ class OmniApi {
     }
 
     log("------ HTTP REQUEST ------")
-    let client = Networking(baseUrl)
-    client.apiKey = apiKey
-
-    let request = client.urlRequest(path: "/transaction/\(id)/capture", body: body)
-
-    log("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
+    guard let client = Services.resolve(NetworkService.self) else {
+      failure("NetworkService not initialized")
+      return
+    }
+    let url = "\(baseUrl)/transactions/\(id)/capture"
+    
+    log("POST \(url)")
 
     if let body = body, let bodyString = String(data: body, encoding: .utf8) {
       log("REQUEST BODY:")
@@ -109,8 +91,7 @@ class OmniApi {
       log("")
     }
 
-    client.dataTask(request: request, method: "POST") { (success, obj) in
-
+    client.post(path: url, body: body) { (success, obj) in
       if let data = obj as? Data {
         if let dataString = String(data: data, encoding: .utf8) {
           self.log("RESPONSE:")
@@ -140,19 +121,19 @@ class OmniApi {
     }
   }
 
-  func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (OmniException) -> Void) where T: Codable {
+  func request<T>(method: String, urlString: String, body: Data? = nil, completion: @escaping (T) -> Void, failure: @escaping (StaxException) -> Void) where T: Codable {
     guard let baseUrl = environment.baseUrl() else {
-      failure(OmniNetworkingException.baseUrlNotFound)
+      failure(StaxNetworkingException.baseUrlNotFound)
       return
     }
 
     log("------ HTTP REQUEST ------")
-    let client = Networking(baseUrl)
-    client.apiKey = apiKey
-
-    let request = client.urlRequest(path: urlString, body: body)
-
-    log("\(request.httpMethod) \((request.url?.absoluteString) ?? "")")
+    guard let client = Services.resolve(NetworkService.self) else {
+      failure(StaxNetworkingException.serviceNotInitialized)
+      return
+    }
+    let url = "\(baseUrl)\(urlString)"
+    log("\(method) \(url)")
 
     if let body = body, let bodyString = String(data: body, encoding: .utf8) {
       log("REQUEST BODY:")
@@ -160,8 +141,8 @@ class OmniApi {
       log("")
     }
 
-    client.dataTask(request: request, method: method) { (_, obj) in
-
+    let request = client.generateURLRequest(url, HttpMethod.fromString(method), body)
+    client.fetch(request: request) { (_, obj) in
       if let data = obj as? Data {
         if let dataString = String(data: data, encoding: .utf8) {
           self.log("RESPONSE:")
@@ -175,7 +156,7 @@ class OmniApi {
           let model = try jsonDecoder.decode(T.self, from: data)
           completion(model)
         } catch {
-          var error: OmniException = OmniNetworkingException.couldNotParseResponse(nil)
+          var error: StaxException = StaxNetworkingException.couldNotParseResponse(nil)
 
           // When the API throws an error it, returns json in the following structure
           // {
@@ -188,10 +169,10 @@ class OmniApi {
             switch json {
             case let map as [String: [String]]:
               let errorStrings = map.values.flatMap {$0}
-              error = OmniNetworkingException.unknown(errorStrings.first ?? nil)
+              error = StaxNetworkingException.unknown(errorStrings.first ?? nil)
 
             case let arr as [String]:
-              error = OmniNetworkingException.unknown(arr.first ?? nil)
+              error = StaxNetworkingException.unknown(arr.first ?? nil)
 
             default: break
             }

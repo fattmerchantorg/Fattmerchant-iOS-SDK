@@ -8,12 +8,6 @@
 
 import Foundation
 
-enum VoidTransactionException: OmniException {
-  static var mess: String = "Could not capture funds"
-
-  case errorCapturing
-}
-
 class VoidTransaction {
 
   typealias Exception = RefundException
@@ -26,7 +20,7 @@ class VoidTransaction {
     self.omniApi = omniApi
   }
 
-  func start(completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (Transaction) -> Void, error: @escaping (StaxException) -> Void) {
     self.omniApi.request(method: "POST",
                          urlString: "/transaction/\(transactionId)/void",
                          completion: completion,

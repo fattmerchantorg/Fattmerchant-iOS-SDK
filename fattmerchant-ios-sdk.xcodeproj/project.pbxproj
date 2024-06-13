@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,36 +25,10 @@
 		594466B324A09D4C00C6CFD8 /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */; };
 		594466B424A09E4200C6CFD8 /* TransactionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59561817248C3FBD00E622B6 /* TransactionUpdate.swift */; };
 		59561818248C3FBD00E622B6 /* TransactionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59561817248C3FBD00E622B6 /* TransactionUpdate.swift */; };
-		596611A725E6CE8400AEDB2E /* UserNotificationListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596611A625E6CE8400AEDB2E /* UserNotificationListener.swift */; };
-		596611A825E6CE8400AEDB2E /* UserNotificationListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596611A625E6CE8400AEDB2E /* UserNotificationListener.swift */; };
+		596611A725E6CE8400AEDB2E /* UserNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596611A625E6CE8400AEDB2E /* UserNotificationDelegate.swift */; };
+		596611A825E6CE8400AEDB2E /* UserNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596611A625E6CE8400AEDB2E /* UserNotificationDelegate.swift */; };
 		596611AB25E6D19200AEDB2E /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596611A525E6CD7800AEDB2E /* UserNotification.swift */; };
 		596611AD25E6D19300AEDB2E /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596611A525E6CD7800AEDB2E /* UserNotification.swift */; };
-		5966543C25003B8800A56943 /* TmsStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542125003B8600A56943 /* TmsStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966543D25003B8800A56943 /* CCParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542225003B8600A56943 /* CCParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966543E25003B8800A56943 /* UserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542325003B8600A56943 /* UserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544025003B8800A56943 /* ChipDnaMobileSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542525003B8600A56943 /* ChipDnaMobileSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544125003B8800A56943 /* JailbreakChecker.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542625003B8600A56943 /* JailbreakChecker.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544225003B8800A56943 /* TerminalStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542725003B8600A56943 /* TerminalStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544325003B8800A56943 /* DeviceStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542825003B8600A56943 /* DeviceStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544425003B8800A56943 /* CCCardSchemeIdEnum.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542925003B8600A56943 /* CCCardSchemeIdEnum.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544525003B8800A56943 /* PaymentPlatformStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542A25003B8700A56943 /* PaymentPlatformStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544625003B8800A56943 /* RequestQueueStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542B25003B8700A56943 /* RequestQueueStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544725003B8800A56943 /* VersionInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542C25003B8700A56943 /* VersionInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544825003B8800A56943 /* CardApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542D25003B8700A56943 /* CardApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544925003B8800A56943 /* CCCardHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542E25003B8700A56943 /* CCCardHash.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544A25003B8800A56943 /* Currency.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966542F25003B8700A56943 /* Currency.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544B25003B8800A56943 /* ChipDnaMobileUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543025003B8700A56943 /* ChipDnaMobileUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544D25003B8800A56943 /* Merchant.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543225003B8700A56943 /* Merchant.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544E25003B8800A56943 /* ReceiptField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543325003B8700A56943 /* ReceiptField.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966544F25003B8800A56943 /* SOAP in Resources */ = {isa = PBXBuildFile; fileRef = 5966543425003B8700A56943 /* SOAP */; };
-		5966545025003B8800A56943 /* SQLCipher in Resources */ = {isa = PBXBuildFile; fileRef = 5966543525003B8700A56943 /* SQLCipher */; };
-		5966545125003B8800A56943 /* MerchantData.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543625003B8700A56943 /* MerchantData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966545225003B8800A56943 /* TransactionUpdates.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543725003B8700A56943 /* TransactionUpdates.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966545425003B8800A56943 /* ErrorCodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543925003B8800A56943 /* ErrorCodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966545525003B8800A56943 /* TransactionTypeIDEnum.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543A25003B8800A56943 /* TransactionTypeIDEnum.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5966545625003B8800A56943 /* ChipDnaMobile.h in Headers */ = {isa = PBXBuildFile; fileRef = 5966543B25003B8800A56943 /* ChipDnaMobile.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		596654572500406900A56943 /* libCardEaseXml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966542425003B8600A56943 /* libCardEaseXml.a */; };
-		596654582500406C00A56943 /* libChipDnaMobileAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5966543125003B8700A56943 /* libChipDnaMobileAPI.a */; };
 		597BEA48247FE205009319D6 /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */; };
 		597BEA4B2480C4C9009319D6 /* TransactionGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */; };
 		597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */; };
@@ -68,6 +42,101 @@
 		5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2652077B4EE004DDA9F /* BankHolderType.swift */; };
 		5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
 		59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */; };
+		A726F50E2C141350002532AB /* CardReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A726F50D2C141350002532AB /* CardReaderConnectionStatusDelegate.swift */; };
+		A726F50F2C141350002532AB /* CardReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A726F50D2C141350002532AB /* CardReaderConnectionStatusDelegate.swift */; };
+		A726F5112C18A112002532AB /* GetConnectedCardReaderJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A726F5102C18A112002532AB /* GetConnectedCardReaderJob.swift */; };
+		A726F5142C18B058002532AB /* DisconnectCardReaderJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A726F5132C18B058002532AB /* DisconnectCardReaderJob.swift */; };
+		A726F5172C18BB24002532AB /* CCParameters+TransactionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A726F5162C18BB24002532AB /* CCParameters+TransactionRequest.swift */; };
+		A726F5182C18BB24002532AB /* CCParameters+TransactionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A726F5162C18BB24002532AB /* CCParameters+TransactionRequest.swift */; };
+		A73613FB2C1A83C600359EC5 /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A73613D22C1A83C600359EC5 /* BBDevice-BT-3.27.0.xcframework */; };
+		A73613FC2C1A83C600359EC5 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A73613D32C1A83C600359EC5 /* BBDeviceOTA-1.6.13.xcframework */; };
+		A73613FD2C1A83C600359EC5 /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A73613D52C1A83C600359EC5 /* CHCVSParser-Licence.txt */; };
+		A73613FE2C1A83C600359EC5 /* SOAPDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613D62C1A83C600359EC5 /* SOAPDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73613FF2C1A83C600359EC5 /* SOAPEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613D72C1A83C600359EC5 /* SOAPEnums.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614002C1A83C600359EC5 /* SOAPExtendedTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613D82C1A83C600359EC5 /* SOAPExtendedTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614012C1A83C600359EC5 /* SOAPTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613D92C1A83C600359EC5 /* SOAPTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614022C1A83C600359EC5 /* SOAPTransactionHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613DA2C1A83C600359EC5 /* SOAPTransactionHistory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614032C1A83C600359EC5 /* SOAPTransactionStatistics.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613DB2C1A83C600359EC5 /* SOAPTransactionStatistics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614042C1A83C600359EC5 /* libsqlcipher-4.5.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A73613DD2C1A83C600359EC5 /* libsqlcipher-4.5.0.a */; };
+		A73614052C1A83C600359EC5 /* SQLCipher-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A73613DE2C1A83C600359EC5 /* SQLCipher-Licence.txt */; };
+		A73614062C1A83C600359EC5 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613DF2C1A83C600359EC5 /* sqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614072C1A83C600359EC5 /* CardApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E12C1A83C600359EC5 /* CardApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614082C1A83C600359EC5 /* CCCardHash.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E22C1A83C600359EC5 /* CCCardHash.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614092C1A83C600359EC5 /* CCCardSchemeIdEnum.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E32C1A83C600359EC5 /* CCCardSchemeIdEnum.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736140A2C1A83C600359EC5 /* CCParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E42C1A83C600359EC5 /* CCParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736140B2C1A83C600359EC5 /* ChipDnaMobile.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E52C1A83C600359EC5 /* ChipDnaMobile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736140C2C1A83C600359EC5 /* ChipDnaMobileSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E62C1A83C600359EC5 /* ChipDnaMobileSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736140D2C1A83C600359EC5 /* ChipDnaMobileUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E72C1A83C600359EC5 /* ChipDnaMobileUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736140E2C1A83C600359EC5 /* Currency.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E82C1A83C600359EC5 /* Currency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736140F2C1A83C600359EC5 /* DeviceStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613E92C1A83C600359EC5 /* DeviceStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614102C1A83C600359EC5 /* ErrorCodes.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613EA2C1A83C600359EC5 /* ErrorCodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614112C1A83C600359EC5 /* IDTech.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A73613EB2C1A83C600359EC5 /* IDTech.xcframework */; };
+		A73614122C1A83C600359EC5 /* JailbreakChecker.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613EC2C1A83C600359EC5 /* JailbreakChecker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614132C1A83C600359EC5 /* libCardEaseXml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A73613ED2C1A83C600359EC5 /* libCardEaseXml.a */; };
+		A73614142C1A83C600359EC5 /* libChipDnaMobileAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A73613EE2C1A83C600359EC5 /* libChipDnaMobileAPI.a */; };
+		A73614152C1A83C600359EC5 /* Merchant.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613EF2C1A83C600359EC5 /* Merchant.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614162C1A83C600359EC5 /* MerchantData.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F02C1A83C600359EC5 /* MerchantData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614172C1A83C600359EC5 /* PaymentPlatformStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F12C1A83C600359EC5 /* PaymentPlatformStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614182C1A83C600359EC5 /* ReceiptField.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F22C1A83C600359EC5 /* ReceiptField.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A73614192C1A83C600359EC5 /* RequestQueueStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F32C1A83C600359EC5 /* RequestQueueStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736141A2C1A83C600359EC5 /* TerminalStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F42C1A83C600359EC5 /* TerminalStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736141B2C1A83C600359EC5 /* TmsStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F52C1A83C600359EC5 /* TmsStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736141C2C1A83C600359EC5 /* TransactionTypeIDEnum.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F62C1A83C600359EC5 /* TransactionTypeIDEnum.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736141D2C1A83C600359EC5 /* TransactionUpdates.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F72C1A83C600359EC5 /* TransactionUpdates.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736141E2C1A83C600359EC5 /* UserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F82C1A83C600359EC5 /* UserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A736141F2C1A83C600359EC5 /* VersionInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = A73613F92C1A83C600359EC5 /* VersionInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A7A54DF12C18E09A00CC8B84 /* CancelCurrentCardReaderTransactionJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A54DF02C18E09A00CC8B84 /* CancelCurrentCardReaderTransactionJob.swift */; };
+		A7A54DF42C18E4AE00CC8B84 /* RefundCardReaderTransactionJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A54DF32C18E4AE00CC8B84 /* RefundCardReaderTransactionJob.swift */; };
+		A7CAB3502C0FC00B0053CE4A /* ServiceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB34F2C0FC00B0053CE4A /* ServiceLocator.swift */; };
+		A7CAB3542C0FC3AB0053CE4A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3532C0FC3AB0053CE4A /* NetworkService.swift */; };
+		A7CAB3562C0FC4920053CE4A /* ConcurrentNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3552C0FC4920053CE4A /* ConcurrentNetworkService.swift */; };
+		A7CAB3582C0FC49A0053CE4A /* CallbackNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3572C0FC49A0053CE4A /* CallbackNetworkService.swift */; };
+		A7CAB35A2C0FC5540053CE4A /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3592C0FC5540053CE4A /* HttpMethod.swift */; };
+		A7CAB35C2C1015730053CE4A /* NetworkService+URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB35B2C1015730053CE4A /* NetworkService+URLRequest.swift */; };
+		A7CAB3622C10B2CB0053CE4A /* CardReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3612C10B2CB0053CE4A /* CardReaderService.swift */; };
+		A7CAB3652C10B4D30053CE4A /* ConnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3642C10B4D30053CE4A /* ConnectMobileReaderException.swift */; };
+		A7CAB3672C10B52D0053CE4A /* InitializeDriversException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3662C10B52D0053CE4A /* InitializeDriversException.swift */; };
+		A7CAB3692C10B5560053CE4A /* TakeMobileReaderPaymentException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3682C10B5560053CE4A /* TakeMobileReaderPaymentException.swift */; };
+		A7CAB36B2C10B5760053CE4A /* TakePaymentException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB36A2C10B5760053CE4A /* TakePaymentException.swift */; };
+		A7CAB36D2C10B6240053CE4A /* SearchForReadersException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB36C2C10B6240053CE4A /* SearchForReadersException.swift */; };
+		A7CAB36F2C10B63E0053CE4A /* RefundException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB36E2C10B63E0053CE4A /* RefundException.swift */; };
+		A7CAB3712C10B6710053CE4A /* TokenizePaymentMethodException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3702C10B6710053CE4A /* TokenizePaymentMethodException.swift */; };
+		A7CAB3732C10B6950053CE4A /* GetConnectedMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3722C10B6950053CE4A /* GetConnectedMobileReaderException.swift */; };
+		A7CAB3752C10B6AC0053CE4A /* DisconnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3742C10B6AC0053CE4A /* DisconnectMobileReaderException.swift */; };
+		A7CAB3772C10B6E40053CE4A /* CancelCurrentTransactionException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3762C10B6E40053CE4A /* CancelCurrentTransactionException.swift */; };
+		A7CAB3792C10B7060053CE4A /* CapturePreauthTransactionException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3782C10B7060053CE4A /* CapturePreauthTransactionException.swift */; };
+		A7CAB37B2C10B71D0053CE4A /* VoidTransactionException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB37A2C10B71D0053CE4A /* VoidTransactionException.swift */; };
+		A7CAB37D2C10B7360053CE4A /* OmniNetworkingException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB37C2C10B7360053CE4A /* OmniNetworkingException.swift */; };
+		A7CAB37F2C10B7AE0053CE4A /* CreateCustomerException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB37E2C10B7AE0053CE4A /* CreateCustomerException.swift */; };
+		A7CAB3812C10B7C50053CE4A /* CreateInvoiceException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3802C10B7C50053CE4A /* CreateInvoiceException.swift */; };
+		A7CAB3832C10B7D70053CE4A /* CreatePaymentMethodException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3822C10B7D70053CE4A /* CreatePaymentMethodException.swift */; };
+		A7CAB3852C10B7F10053CE4A /* MobileReaderDriverException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3842C10B7F10053CE4A /* MobileReaderDriverException.swift */; };
+		A7CAB3872C10B8680053CE4A /* OmniInitializeException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3862C10B8680053CE4A /* OmniInitializeException.swift */; };
+		A7CAB3892C10B8790053CE4A /* OmniGeneralException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3882C10B8790053CE4A /* OmniGeneralException.swift */; };
+		A7CAB38B2C1355DA0053CE4A /* CardReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB38A2C1355DA0053CE4A /* CardReader.swift */; };
+		A7CAB38D2C1357D20053CE4A /* CardReaderConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB38C2C1357D20053CE4A /* CardReaderConnectionStatus.swift */; };
+		A7CAB38F2C1358510053CE4A /* Stax.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB38E2C1358510053CE4A /* Stax.swift */; };
+		A7CAB3922C135BDE0053CE4A /* StaxHttpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3912C135BDE0053CE4A /* StaxHttpService.swift */; };
+		A7CAB3942C135C740053CE4A /* StaxHttpService+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3932C135C740053CE4A /* StaxHttpService+JSON.swift */; };
+		A7CAB3962C135D8B0053CE4A /* StaxHttpServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3952C135D8B0053CE4A /* StaxHttpServiceImpl.swift */; };
+		A7CAB3982C1362630053CE4A /* OmniGeneralException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3882C10B8790053CE4A /* OmniGeneralException.swift */; };
+		A7CAB3992C13629B0053CE4A /* OmniInitializeException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3862C10B8680053CE4A /* OmniInitializeException.swift */; };
+		A7CAB39B2C1362B20053CE4A /* StaxException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB39A2C1362B20053CE4A /* StaxException.swift */; };
+		A7CAB39D2C13633F0053CE4A /* StaxGeneralException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB39C2C13633F0053CE4A /* StaxGeneralException.swift */; };
+		A7CAB39F2C1363680053CE4A /* StaxInitializeException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB39E2C1363680053CE4A /* StaxInitializeException.swift */; };
+		A7CAB3A12C1363830053CE4A /* StaxNetworkingException.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3A02C1363830053CE4A /* StaxNetworkingException.swift */; };
+		A7CAB3A42C1364890053CE4A /* StaxSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3A32C1364890053CE4A /* StaxSelf.swift */; };
+		A7CAB3A82C1368CC0053CE4A /* CardReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3A72C1368CC0053CE4A /* CardReaderDetails.swift */; };
+		A7CAB3AA2C1368FD0053CE4A /* NMIDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3A92C1368FD0053CE4A /* NMIDetails.swift */; };
+		A7CAB3AD2C136B870053CE4A /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3AC2C136B870053CE4A /* Job.swift */; };
+		A7CAB3B32C136D1B0053CE4A /* NmiCardReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3B22C136D1B0053CE4A /* NmiCardReaderService.swift */; };
+		A7CAB3B52C1382CE0053CE4A /* TokenizeCreditCardJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3B42C1382CE0053CE4A /* TokenizeCreditCardJob.swift */; };
+		A7CAB3B72C138B610053CE4A /* TokenizeBankAccountJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3B62C138B610053CE4A /* TokenizeBankAccountJob.swift */; };
+		A7CAB3B92C13930A0053CE4A /* PerformTransactionWithCardReaderJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3B82C13930A0053CE4A /* PerformTransactionWithCardReaderJob.swift */; };
+		A7CAB3BC2C139C7B0053CE4A /* NmiXmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3BB2C139C7B0053CE4A /* NmiXmlParser.swift */; };
+		A7CAB3BE2C13A0650053CE4A /* NmiTransactionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3BD2C13A0650053CE4A /* NmiTransactionListener.swift */; };
+		A7CAB3C02C13AF780053CE4A /* SearchForCardReadersJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3BF2C13AF780053CE4A /* SearchForCardReadersJob.swift */; };
+		A7CAB3C22C13AFF20053CE4A /* ConnectToCardReaderJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CAB3C12C13AFF20053CE4A /* ConnectToCardReaderJob.swift */; };
 		D702B7BD23C8D0DD00B8AB79 /* OmniApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */; };
 		D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25B2076BD68004DDA9F /* PaymentMethod.swift */; };
 		D702B7CD23C8F80200B8AB79 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25D2076BD73004DDA9F /* CreditCard.swift */; };
@@ -96,8 +165,8 @@
 		D765D46D23CC478000656040 /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D46B23CC478000656040 /* Invoice.swift */; };
 		D765D46F23CC488000656040 /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D46E23CC488000656040 /* Merchant.swift */; };
 		D765D47023CC488000656040 /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D46E23CC488000656040 /* Merchant.swift */; };
-		D765D47223CC49C800656040 /* Self.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D47123CC49C800656040 /* Self.swift */; };
-		D765D47323CC49C800656040 /* Self.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D47123CC49C800656040 /* Self.swift */; };
+		D765D47223CC49C800656040 /* OmniSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D47123CC49C800656040 /* OmniSelf.swift */; };
+		D765D47323CC49C800656040 /* OmniSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D47123CC49C800656040 /* OmniSelf.swift */; };
 		D765D47523CC4A1400656040 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D47423CC4A1400656040 /* Transaction.swift */; };
 		D765D47623CC4A1400656040 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D47423CC4A1400656040 /* Transaction.swift */; };
 		D765D47923CC4B1100656040 /* CustomerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D765D47823CC4B1100656040 /* CustomerRepository.swift */; };
@@ -185,7 +254,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		591B69D52638890A0078787B /* Embed Frameworks */ = {
+		A7CAB34D2C0FBEC30053CE4A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -211,33 +280,7 @@
 		594466B0249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatus.swift; sourceTree = "<group>"; };
 		59561817248C3FBD00E622B6 /* TransactionUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUpdate.swift; sourceTree = "<group>"; };
 		596611A525E6CD7800AEDB2E /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
-		596611A625E6CE8400AEDB2E /* UserNotificationListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationListener.swift; sourceTree = "<group>"; };
-		5966542125003B8600A56943 /* TmsStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmsStatus.h; sourceTree = "<group>"; };
-		5966542225003B8600A56943 /* CCParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCParameters.h; sourceTree = "<group>"; };
-		5966542325003B8600A56943 /* UserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNotification.h; sourceTree = "<group>"; };
-		5966542425003B8600A56943 /* libCardEaseXml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCardEaseXml.a; sourceTree = "<group>"; };
-		5966542525003B8600A56943 /* ChipDnaMobileSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobileSerializer.h; sourceTree = "<group>"; };
-		5966542625003B8600A56943 /* JailbreakChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JailbreakChecker.h; sourceTree = "<group>"; };
-		5966542725003B8600A56943 /* TerminalStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerminalStatus.h; sourceTree = "<group>"; };
-		5966542825003B8600A56943 /* DeviceStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceStatus.h; sourceTree = "<group>"; };
-		5966542925003B8600A56943 /* CCCardSchemeIdEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCCardSchemeIdEnum.h; sourceTree = "<group>"; };
-		5966542A25003B8700A56943 /* PaymentPlatformStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentPlatformStatus.h; sourceTree = "<group>"; };
-		5966542B25003B8700A56943 /* RequestQueueStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestQueueStatus.h; sourceTree = "<group>"; };
-		5966542C25003B8700A56943 /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
-		5966542D25003B8700A56943 /* CardApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardApplication.h; sourceTree = "<group>"; };
-		5966542E25003B8700A56943 /* CCCardHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCCardHash.h; sourceTree = "<group>"; };
-		5966542F25003B8700A56943 /* Currency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Currency.h; sourceTree = "<group>"; };
-		5966543025003B8700A56943 /* ChipDnaMobileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobileUtils.h; sourceTree = "<group>"; };
-		5966543125003B8700A56943 /* libChipDnaMobileAPI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libChipDnaMobileAPI.a; sourceTree = "<group>"; };
-		5966543225003B8700A56943 /* Merchant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Merchant.h; sourceTree = "<group>"; };
-		5966543325003B8700A56943 /* ReceiptField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceiptField.h; sourceTree = "<group>"; };
-		5966543425003B8700A56943 /* SOAP */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SOAP; sourceTree = "<group>"; };
-		5966543525003B8700A56943 /* SQLCipher */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SQLCipher; sourceTree = "<group>"; };
-		5966543625003B8700A56943 /* MerchantData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantData.h; sourceTree = "<group>"; };
-		5966543725003B8700A56943 /* TransactionUpdates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionUpdates.h; sourceTree = "<group>"; };
-		5966543925003B8800A56943 /* ErrorCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCodes.h; sourceTree = "<group>"; };
-		5966543A25003B8800A56943 /* TransactionTypeIDEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionTypeIDEnum.h; sourceTree = "<group>"; };
-		5966543B25003B8800A56943 /* ChipDnaMobile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobile.h; sourceTree = "<group>"; };
+		596611A625E6CE8400AEDB2E /* UserNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationDelegate.swift; sourceTree = "<group>"; };
 		597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUpdateDelegate.swift; sourceTree = "<group>"; };
 		597BEA4A2480C4C9009319D6 /* TransactionGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionGateway.swift; sourceTree = "<group>"; };
 		597BEA4C2480D892009319D6 /* ChipDnaXMLTransactionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaXMLTransactionParser.swift; sourceTree = "<group>"; };
@@ -250,6 +293,98 @@
 		5993C2652077B4EE004DDA9F /* BankHolderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankHolderType.swift; sourceTree = "<group>"; };
 		5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodType.swift; sourceTree = "<group>"; };
 		59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentTests.swift; sourceTree = "<group>"; };
+		A726F50D2C141350002532AB /* CardReaderConnectionStatusDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardReaderConnectionStatusDelegate.swift; sourceTree = "<group>"; };
+		A726F5102C18A112002532AB /* GetConnectedCardReaderJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedCardReaderJob.swift; sourceTree = "<group>"; };
+		A726F5132C18B058002532AB /* DisconnectCardReaderJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisconnectCardReaderJob.swift; sourceTree = "<group>"; };
+		A726F5162C18BB24002532AB /* CCParameters+TransactionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CCParameters+TransactionRequest.swift"; sourceTree = "<group>"; };
+		A73613D22C1A83C600359EC5 /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
+		A73613D32C1A83C600359EC5 /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
+		A73613D52C1A83C600359EC5 /* CHCVSParser-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHCVSParser-Licence.txt"; sourceTree = "<group>"; };
+		A73613D62C1A83C600359EC5 /* SOAPDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPDelegate.h; sourceTree = "<group>"; };
+		A73613D72C1A83C600359EC5 /* SOAPEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPEnums.h; sourceTree = "<group>"; };
+		A73613D82C1A83C600359EC5 /* SOAPExtendedTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPExtendedTransaction.h; sourceTree = "<group>"; };
+		A73613D92C1A83C600359EC5 /* SOAPTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPTransaction.h; sourceTree = "<group>"; };
+		A73613DA2C1A83C600359EC5 /* SOAPTransactionHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPTransactionHistory.h; sourceTree = "<group>"; };
+		A73613DB2C1A83C600359EC5 /* SOAPTransactionStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPTransactionStatistics.h; sourceTree = "<group>"; };
+		A73613DD2C1A83C600359EC5 /* libsqlcipher-4.5.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libsqlcipher-4.5.0.a"; sourceTree = "<group>"; };
+		A73613DE2C1A83C600359EC5 /* SQLCipher-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SQLCipher-Licence.txt"; sourceTree = "<group>"; };
+		A73613DF2C1A83C600359EC5 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		A73613E12C1A83C600359EC5 /* CardApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardApplication.h; sourceTree = "<group>"; };
+		A73613E22C1A83C600359EC5 /* CCCardHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCCardHash.h; sourceTree = "<group>"; };
+		A73613E32C1A83C600359EC5 /* CCCardSchemeIdEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCCardSchemeIdEnum.h; sourceTree = "<group>"; };
+		A73613E42C1A83C600359EC5 /* CCParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCParameters.h; sourceTree = "<group>"; };
+		A73613E52C1A83C600359EC5 /* ChipDnaMobile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobile.h; sourceTree = "<group>"; };
+		A73613E62C1A83C600359EC5 /* ChipDnaMobileSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobileSerializer.h; sourceTree = "<group>"; };
+		A73613E72C1A83C600359EC5 /* ChipDnaMobileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChipDnaMobileUtils.h; sourceTree = "<group>"; };
+		A73613E82C1A83C600359EC5 /* Currency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Currency.h; sourceTree = "<group>"; };
+		A73613E92C1A83C600359EC5 /* DeviceStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceStatus.h; sourceTree = "<group>"; };
+		A73613EA2C1A83C600359EC5 /* ErrorCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCodes.h; sourceTree = "<group>"; };
+		A73613EB2C1A83C600359EC5 /* IDTech.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = IDTech.xcframework; sourceTree = "<group>"; };
+		A73613EC2C1A83C600359EC5 /* JailbreakChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JailbreakChecker.h; sourceTree = "<group>"; };
+		A73613ED2C1A83C600359EC5 /* libCardEaseXml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCardEaseXml.a; sourceTree = "<group>"; };
+		A73613EE2C1A83C600359EC5 /* libChipDnaMobileAPI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libChipDnaMobileAPI.a; sourceTree = "<group>"; };
+		A73613EF2C1A83C600359EC5 /* Merchant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Merchant.h; sourceTree = "<group>"; };
+		A73613F02C1A83C600359EC5 /* MerchantData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantData.h; sourceTree = "<group>"; };
+		A73613F12C1A83C600359EC5 /* PaymentPlatformStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentPlatformStatus.h; sourceTree = "<group>"; };
+		A73613F22C1A83C600359EC5 /* ReceiptField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceiptField.h; sourceTree = "<group>"; };
+		A73613F32C1A83C600359EC5 /* RequestQueueStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestQueueStatus.h; sourceTree = "<group>"; };
+		A73613F42C1A83C600359EC5 /* TerminalStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerminalStatus.h; sourceTree = "<group>"; };
+		A73613F52C1A83C600359EC5 /* TmsStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmsStatus.h; sourceTree = "<group>"; };
+		A73613F62C1A83C600359EC5 /* TransactionTypeIDEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionTypeIDEnum.h; sourceTree = "<group>"; };
+		A73613F72C1A83C600359EC5 /* TransactionUpdates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionUpdates.h; sourceTree = "<group>"; };
+		A73613F82C1A83C600359EC5 /* UserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNotification.h; sourceTree = "<group>"; };
+		A73613F92C1A83C600359EC5 /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
+		A7A54DF02C18E09A00CC8B84 /* CancelCurrentCardReaderTransactionJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentCardReaderTransactionJob.swift; sourceTree = "<group>"; };
+		A7A54DF32C18E4AE00CC8B84 /* RefundCardReaderTransactionJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundCardReaderTransactionJob.swift; sourceTree = "<group>"; };
+		A7CAB34F2C0FC00B0053CE4A /* ServiceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceLocator.swift; sourceTree = "<group>"; };
+		A7CAB3532C0FC3AB0053CE4A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		A7CAB3552C0FC4920053CE4A /* ConcurrentNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentNetworkService.swift; sourceTree = "<group>"; };
+		A7CAB3572C0FC49A0053CE4A /* CallbackNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbackNetworkService.swift; sourceTree = "<group>"; };
+		A7CAB3592C0FC5540053CE4A /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
+		A7CAB35B2C1015730053CE4A /* NetworkService+URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+URLRequest.swift"; sourceTree = "<group>"; };
+		A7CAB3612C10B2CB0053CE4A /* CardReaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardReaderService.swift; sourceTree = "<group>"; };
+		A7CAB3642C10B4D30053CE4A /* ConnectMobileReaderException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectMobileReaderException.swift; sourceTree = "<group>"; };
+		A7CAB3662C10B52D0053CE4A /* InitializeDriversException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeDriversException.swift; sourceTree = "<group>"; };
+		A7CAB3682C10B5560053CE4A /* TakeMobileReaderPaymentException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentException.swift; sourceTree = "<group>"; };
+		A7CAB36A2C10B5760053CE4A /* TakePaymentException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePaymentException.swift; sourceTree = "<group>"; };
+		A7CAB36C2C10B6240053CE4A /* SearchForReadersException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForReadersException.swift; sourceTree = "<group>"; };
+		A7CAB36E2C10B63E0053CE4A /* RefundException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundException.swift; sourceTree = "<group>"; };
+		A7CAB3702C10B6710053CE4A /* TokenizePaymentMethodException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizePaymentMethodException.swift; sourceTree = "<group>"; };
+		A7CAB3722C10B6950053CE4A /* GetConnectedMobileReaderException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedMobileReaderException.swift; sourceTree = "<group>"; };
+		A7CAB3742C10B6AC0053CE4A /* DisconnectMobileReaderException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisconnectMobileReaderException.swift; sourceTree = "<group>"; };
+		A7CAB3762C10B6E40053CE4A /* CancelCurrentTransactionException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransactionException.swift; sourceTree = "<group>"; };
+		A7CAB3782C10B7060053CE4A /* CapturePreauthTransactionException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreauthTransactionException.swift; sourceTree = "<group>"; };
+		A7CAB37A2C10B71D0053CE4A /* VoidTransactionException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidTransactionException.swift; sourceTree = "<group>"; };
+		A7CAB37C2C10B7360053CE4A /* OmniNetworkingException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniNetworkingException.swift; sourceTree = "<group>"; };
+		A7CAB37E2C10B7AE0053CE4A /* CreateCustomerException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCustomerException.swift; sourceTree = "<group>"; };
+		A7CAB3802C10B7C50053CE4A /* CreateInvoiceException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInvoiceException.swift; sourceTree = "<group>"; };
+		A7CAB3822C10B7D70053CE4A /* CreatePaymentMethodException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePaymentMethodException.swift; sourceTree = "<group>"; };
+		A7CAB3842C10B7F10053CE4A /* MobileReaderDriverException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDriverException.swift; sourceTree = "<group>"; };
+		A7CAB3862C10B8680053CE4A /* OmniInitializeException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniInitializeException.swift; sourceTree = "<group>"; };
+		A7CAB3882C10B8790053CE4A /* OmniGeneralException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniGeneralException.swift; sourceTree = "<group>"; };
+		A7CAB38A2C1355DA0053CE4A /* CardReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardReader.swift; sourceTree = "<group>"; };
+		A7CAB38C2C1357D20053CE4A /* CardReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardReaderConnectionStatus.swift; sourceTree = "<group>"; };
+		A7CAB38E2C1358510053CE4A /* Stax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stax.swift; sourceTree = "<group>"; };
+		A7CAB3912C135BDE0053CE4A /* StaxHttpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxHttpService.swift; sourceTree = "<group>"; };
+		A7CAB3932C135C740053CE4A /* StaxHttpService+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StaxHttpService+JSON.swift"; sourceTree = "<group>"; };
+		A7CAB3952C135D8B0053CE4A /* StaxHttpServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxHttpServiceImpl.swift; sourceTree = "<group>"; };
+		A7CAB39A2C1362B20053CE4A /* StaxException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxException.swift; sourceTree = "<group>"; };
+		A7CAB39C2C13633F0053CE4A /* StaxGeneralException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxGeneralException.swift; sourceTree = "<group>"; };
+		A7CAB39E2C1363680053CE4A /* StaxInitializeException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxInitializeException.swift; sourceTree = "<group>"; };
+		A7CAB3A02C1363830053CE4A /* StaxNetworkingException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxNetworkingException.swift; sourceTree = "<group>"; };
+		A7CAB3A32C1364890053CE4A /* StaxSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxSelf.swift; sourceTree = "<group>"; };
+		A7CAB3A72C1368CC0053CE4A /* CardReaderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardReaderDetails.swift; sourceTree = "<group>"; };
+		A7CAB3A92C1368FD0053CE4A /* NMIDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMIDetails.swift; sourceTree = "<group>"; };
+		A7CAB3AC2C136B870053CE4A /* Job.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
+		A7CAB3B22C136D1B0053CE4A /* NmiCardReaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NmiCardReaderService.swift; sourceTree = "<group>"; };
+		A7CAB3B42C1382CE0053CE4A /* TokenizeCreditCardJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizeCreditCardJob.swift; sourceTree = "<group>"; };
+		A7CAB3B62C138B610053CE4A /* TokenizeBankAccountJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizeBankAccountJob.swift; sourceTree = "<group>"; };
+		A7CAB3B82C13930A0053CE4A /* PerformTransactionWithCardReaderJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformTransactionWithCardReaderJob.swift; sourceTree = "<group>"; };
+		A7CAB3BB2C139C7B0053CE4A /* NmiXmlParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NmiXmlParser.swift; sourceTree = "<group>"; };
+		A7CAB3BD2C13A0650053CE4A /* NmiTransactionListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NmiTransactionListener.swift; sourceTree = "<group>"; };
+		A7CAB3BF2C13AF780053CE4A /* SearchForCardReadersJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForCardReadersJob.swift; sourceTree = "<group>"; };
+		A7CAB3C12C13AFF20053CE4A /* ConnectToCardReaderJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectToCardReaderJob.swift; sourceTree = "<group>"; };
+		A7E1BD142BD84F9A00B41A9C /* IDTech.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = IDTech.xcframework; path = "fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/IDTech.xcframework"; sourceTree = "<group>"; };
 		D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniApi.swift; sourceTree = "<group>"; };
 		D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaDriver.swift; sourceTree = "<group>"; };
 		D71B6F92239E9892007FB7C4 /* chipdna-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "chipdna-bridging-header.h"; path = "fattmerchant-ios-sdk/chipdna-bridging-header.h"; sourceTree = SOURCE_ROOT; };
@@ -265,7 +400,7 @@
 		D765D46823CC467100656040 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		D765D46B23CC478000656040 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
 		D765D46E23CC488000656040 /* Merchant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Merchant.swift; sourceTree = "<group>"; };
-		D765D47123CC49C800656040 /* Self.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Self.swift; sourceTree = "<group>"; };
+		D765D47123CC49C800656040 /* OmniSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniSelf.swift; sourceTree = "<group>"; };
 		D765D47423CC4A1400656040 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		D765D47823CC4B1100656040 /* CustomerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerRepository.swift; sourceTree = "<group>"; };
 		D765D47B23CCBB0500656040 /* ModelRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRepository.swift; sourceTree = "<group>"; };
@@ -333,13 +468,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
+				A73613FC2C1A83C600359EC5 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */,
+				A73614112C1A83C600359EC5 /* IDTech.xcframework in Frameworks */,
+				A73614132C1A83C600359EC5 /* libCardEaseXml.a in Frameworks */,
+				A73614042C1A83C600359EC5 /* libsqlcipher-4.5.0.a in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
+				A73614142C1A83C600359EC5 /* libChipDnaMobileAPI.a in Frameworks */,
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
 				D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */,
-				596654572500406900A56943 /* libCardEaseXml.a in Frameworks */,
-				596654582500406C00A56943 /* libChipDnaMobileAPI.a in Frameworks */,
+				A73613FB2C1A83C600359EC5 /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,14 +514,21 @@
 		591C2092206EB12F00C848DA /* fattmerchant-ios-sdk */ = {
 			isa = PBXGroup;
 			children = (
-				593A7FD52468788000D78874 /* Utils */,
 				D71B6F8F239E9702007FB7C4 /* Cardpresent */,
+				A7CAB35F2C10ABA40053CE4A /* Delegates */,
+				A7CAB3632C10B4760053CE4A /* Exceptions */,
+				A7CAB3AB2C136B730053CE4A /* Jobs */,
 				5993C2F6207D0402004DDA9F /* Models */,
+				A7CAB3512C0FC0F00053CE4A /* Services */,
+				593A7FD52468788000D78874 /* Utils */,
+				A7CAB3482C0FBE100053CE4A /* Vendor */,
 				591C2094206EB12F00C848DA /* Info.plist */,
 				D71B6F92239E9892007FB7C4 /* chipdna-bridging-header.h */,
 				D78FA92F240EACA200398D81 /* Fattmerchant.h */,
 				D78FA92D240EAC4200398D81 /* fattmerchant_ios_sdk.h */,
 				5993C2592076BD16004DDA9F /* Networking.swift */,
+				A7CAB34F2C0FC00B0053CE4A /* ServiceLocator.swift */,
+				A7CAB38E2C1358510053CE4A /* Stax.swift */,
 			);
 			path = "fattmerchant-ios-sdk";
 			sourceTree = "<group>";
@@ -406,8 +552,9 @@
 		593A7FD52468788000D78874 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				D71DDE7D28979D9F00D4C42E /* String+Blank.swift */,
 				593A7FD6246878B700D78874 /* AsyncFilter.swift */,
+				D7B7113A23D63B0D00EF98DB /* Environment.swift */,
+				D71DDE7D28979D9F00D4C42E /* String+Blank.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -432,6 +579,7 @@
 		5993C2F6207D0402004DDA9F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A7CAB3A22C1364760053CE4A /* Legacy */,
 				5993C25B2076BD68004DDA9F /* PaymentMethod.swift */,
 				5993C25D2076BD73004DDA9F /* CreditCard.swift */,
 				5993C2632077A687004DDA9F /* BankAccount.swift */,
@@ -441,15 +589,229 @@
 				D765D46823CC467100656040 /* Model.swift */,
 				D765D46B23CC478000656040 /* Invoice.swift */,
 				D765D46E23CC488000656040 /* Merchant.swift */,
-				D765D47123CC49C800656040 /* Self.swift */,
 				D765D47423CC4A1400656040 /* Transaction.swift */,
-				D765D47E23CCBBFD00656040 /* OmniException.swift */,
 				D79308A323D0A8B10066FCA2 /* MobileReader.swift */,
 				D783DABF2449E905007C0A17 /* ChargeRequest.swift */,
-				46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */,
 				46231C5A24DAF4A500A06E1B /* CatalogItem.swift */,
+				A7CAB3A32C1364890053CE4A /* StaxSelf.swift */,
+				A7CAB3A72C1368CC0053CE4A /* CardReaderDetails.swift */,
+				A7CAB3A92C1368FD0053CE4A /* NMIDetails.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		A73613D42C1A83C600359EC5 /* BBPOSFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A73613D22C1A83C600359EC5 /* BBDevice-BT-3.27.0.xcframework */,
+				A73613D32C1A83C600359EC5 /* BBDeviceOTA-1.6.13.xcframework */,
+			);
+			path = BBPOSFrameworks;
+			sourceTree = "<group>";
+		};
+		A73613DC2C1A83C600359EC5 /* SOAP */ = {
+			isa = PBXGroup;
+			children = (
+				A73613D52C1A83C600359EC5 /* CHCVSParser-Licence.txt */,
+				A73613D62C1A83C600359EC5 /* SOAPDelegate.h */,
+				A73613D72C1A83C600359EC5 /* SOAPEnums.h */,
+				A73613D82C1A83C600359EC5 /* SOAPExtendedTransaction.h */,
+				A73613D92C1A83C600359EC5 /* SOAPTransaction.h */,
+				A73613DA2C1A83C600359EC5 /* SOAPTransactionHistory.h */,
+				A73613DB2C1A83C600359EC5 /* SOAPTransactionStatistics.h */,
+			);
+			path = SOAP;
+			sourceTree = "<group>";
+		};
+		A73613E02C1A83C600359EC5 /* SQLCipher */ = {
+			isa = PBXGroup;
+			children = (
+				A73613DD2C1A83C600359EC5 /* libsqlcipher-4.5.0.a */,
+				A73613DE2C1A83C600359EC5 /* SQLCipher-Licence.txt */,
+				A73613DF2C1A83C600359EC5 /* sqlite3.h */,
+			);
+			path = SQLCipher;
+			sourceTree = "<group>";
+		};
+		A73613FA2C1A83C600359EC5 /* ChipDnaMobile */ = {
+			isa = PBXGroup;
+			children = (
+				A73613D42C1A83C600359EC5 /* BBPOSFrameworks */,
+				A73613DC2C1A83C600359EC5 /* SOAP */,
+				A73613E02C1A83C600359EC5 /* SQLCipher */,
+				A73613E12C1A83C600359EC5 /* CardApplication.h */,
+				A73613E22C1A83C600359EC5 /* CCCardHash.h */,
+				A73613E32C1A83C600359EC5 /* CCCardSchemeIdEnum.h */,
+				A73613E42C1A83C600359EC5 /* CCParameters.h */,
+				A73613E52C1A83C600359EC5 /* ChipDnaMobile.h */,
+				A73613E62C1A83C600359EC5 /* ChipDnaMobileSerializer.h */,
+				A73613E72C1A83C600359EC5 /* ChipDnaMobileUtils.h */,
+				A73613E82C1A83C600359EC5 /* Currency.h */,
+				A73613E92C1A83C600359EC5 /* DeviceStatus.h */,
+				A73613EA2C1A83C600359EC5 /* ErrorCodes.h */,
+				A73613EB2C1A83C600359EC5 /* IDTech.xcframework */,
+				A73613EC2C1A83C600359EC5 /* JailbreakChecker.h */,
+				A73613ED2C1A83C600359EC5 /* libCardEaseXml.a */,
+				A73613EE2C1A83C600359EC5 /* libChipDnaMobileAPI.a */,
+				A73613EF2C1A83C600359EC5 /* Merchant.h */,
+				A73613F02C1A83C600359EC5 /* MerchantData.h */,
+				A73613F12C1A83C600359EC5 /* PaymentPlatformStatus.h */,
+				A73613F22C1A83C600359EC5 /* ReceiptField.h */,
+				A73613F32C1A83C600359EC5 /* RequestQueueStatus.h */,
+				A73613F42C1A83C600359EC5 /* TerminalStatus.h */,
+				A73613F52C1A83C600359EC5 /* TmsStatus.h */,
+				A73613F62C1A83C600359EC5 /* TransactionTypeIDEnum.h */,
+				A73613F72C1A83C600359EC5 /* TransactionUpdates.h */,
+				A73613F82C1A83C600359EC5 /* UserNotification.h */,
+				A73613F92C1A83C600359EC5 /* VersionInformation.h */,
+			);
+			path = ChipDnaMobile;
+			sourceTree = "<group>";
+		};
+		A7A54DF22C18E48000CC8B84 /* CardReader */ = {
+			isa = PBXGroup;
+			children = (
+				A7A54DF02C18E09A00CC8B84 /* CancelCurrentCardReaderTransactionJob.swift */,
+				A7CAB3C12C13AFF20053CE4A /* ConnectToCardReaderJob.swift */,
+				A726F5132C18B058002532AB /* DisconnectCardReaderJob.swift */,
+				A726F5102C18A112002532AB /* GetConnectedCardReaderJob.swift */,
+				A7CAB3BF2C13AF780053CE4A /* SearchForCardReadersJob.swift */,
+				A7CAB3B82C13930A0053CE4A /* PerformTransactionWithCardReaderJob.swift */,
+				A7A54DF32C18E4AE00CC8B84 /* RefundCardReaderTransactionJob.swift */,
+			);
+			path = CardReader;
+			sourceTree = "<group>";
+		};
+		A7CAB3482C0FBE100053CE4A /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				A73613FA2C1A83C600359EC5 /* ChipDnaMobile */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		A7CAB3512C0FC0F00053CE4A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A7CAB3602C10B2BA0053CE4A /* CardReader */,
+				A7CAB3522C0FC39D0053CE4A /* Networking */,
+				A7CAB3902C135BB80053CE4A /* StaxHttp */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A7CAB3522C0FC39D0053CE4A /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				A7CAB3592C0FC5540053CE4A /* HttpMethod.swift */,
+				A7CAB3532C0FC3AB0053CE4A /* NetworkService.swift */,
+				A7CAB3572C0FC49A0053CE4A /* CallbackNetworkService.swift */,
+				A7CAB3552C0FC4920053CE4A /* ConcurrentNetworkService.swift */,
+				A7CAB35B2C1015730053CE4A /* NetworkService+URLRequest.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		A7CAB35F2C10ABA40053CE4A /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				A726F50D2C141350002532AB /* CardReaderConnectionStatusDelegate.swift */,
+				594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */,
+				597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */,
+				596611A625E6CE8400AEDB2E /* UserNotificationDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		A7CAB3602C10B2BA0053CE4A /* CardReader */ = {
+			isa = PBXGroup;
+			children = (
+				A7CAB3BA2C139C660053CE4A /* Util */,
+				A7CAB38A2C1355DA0053CE4A /* CardReader.swift */,
+				A7CAB38C2C1357D20053CE4A /* CardReaderConnectionStatus.swift */,
+				A7CAB3612C10B2CB0053CE4A /* CardReaderService.swift */,
+				A7CAB3B22C136D1B0053CE4A /* NmiCardReaderService.swift */,
+			);
+			path = CardReader;
+			sourceTree = "<group>";
+		};
+		A7CAB3632C10B4760053CE4A /* Exceptions */ = {
+			isa = PBXGroup;
+			children = (
+				A7CAB3972C1362590053CE4A /* Legacy */,
+				A7CAB3762C10B6E40053CE4A /* CancelCurrentTransactionException.swift */,
+				A7CAB3782C10B7060053CE4A /* CapturePreauthTransactionException.swift */,
+				A7CAB3642C10B4D30053CE4A /* ConnectMobileReaderException.swift */,
+				A7CAB37E2C10B7AE0053CE4A /* CreateCustomerException.swift */,
+				A7CAB3802C10B7C50053CE4A /* CreateInvoiceException.swift */,
+				A7CAB3822C10B7D70053CE4A /* CreatePaymentMethodException.swift */,
+				A7CAB3742C10B6AC0053CE4A /* DisconnectMobileReaderException.swift */,
+				A7CAB3722C10B6950053CE4A /* GetConnectedMobileReaderException.swift */,
+				A7CAB3662C10B52D0053CE4A /* InitializeDriversException.swift */,
+				A7CAB3842C10B7F10053CE4A /* MobileReaderDriverException.swift */,
+				A7CAB36E2C10B63E0053CE4A /* RefundException.swift */,
+				A7CAB36C2C10B6240053CE4A /* SearchForReadersException.swift */,
+				A7CAB39A2C1362B20053CE4A /* StaxException.swift */,
+				A7CAB39C2C13633F0053CE4A /* StaxGeneralException.swift */,
+				A7CAB3682C10B5560053CE4A /* TakeMobileReaderPaymentException.swift */,
+				A7CAB36A2C10B5760053CE4A /* TakePaymentException.swift */,
+				A7CAB3702C10B6710053CE4A /* TokenizePaymentMethodException.swift */,
+				A7CAB37A2C10B71D0053CE4A /* VoidTransactionException.swift */,
+				A7CAB39E2C1363680053CE4A /* StaxInitializeException.swift */,
+				A7CAB3A02C1363830053CE4A /* StaxNetworkingException.swift */,
+			);
+			path = Exceptions;
+			sourceTree = "<group>";
+		};
+		A7CAB3902C135BB80053CE4A /* StaxHttp */ = {
+			isa = PBXGroup;
+			children = (
+				A7CAB3912C135BDE0053CE4A /* StaxHttpService.swift */,
+				A7CAB3932C135C740053CE4A /* StaxHttpService+JSON.swift */,
+				A7CAB3952C135D8B0053CE4A /* StaxHttpServiceImpl.swift */,
+			);
+			path = StaxHttp;
+			sourceTree = "<group>";
+		};
+		A7CAB3972C1362590053CE4A /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				D765D47E23CCBBFD00656040 /* OmniException.swift */,
+				A7CAB3882C10B8790053CE4A /* OmniGeneralException.swift */,
+				A7CAB3862C10B8680053CE4A /* OmniInitializeException.swift */,
+				A7CAB37C2C10B7360053CE4A /* OmniNetworkingException.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
+		A7CAB3A22C1364760053CE4A /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */,
+				D765D47123CC49C800656040 /* OmniSelf.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
+		A7CAB3AB2C136B730053CE4A /* Jobs */ = {
+			isa = PBXGroup;
+			children = (
+				A7A54DF22C18E48000CC8B84 /* CardReader */,
+				A7CAB3AC2C136B870053CE4A /* Job.swift */,
+				A7CAB3B62C138B610053CE4A /* TokenizeBankAccountJob.swift */,
+				A7CAB3B42C1382CE0053CE4A /* TokenizeCreditCardJob.swift */,
+			);
+			path = Jobs;
+			sourceTree = "<group>";
+		};
+		A7CAB3BA2C139C660053CE4A /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				A7CAB3BD2C13A0650053CE4A /* NmiTransactionListener.swift */,
+				A7CAB3BB2C139C7B0053CE4A /* NmiXmlParser.swift */,
+				A726F5162C18BB24002532AB /* CCParameters+TransactionRequest.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 		D702B7BB23C8CDE400B8AB79 /* Networking */ = {
@@ -457,7 +819,6 @@
 			children = (
 				D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */,
 				D79308D323D24B680066FCA2 /* Endpoints.swift */,
-				D7B7113A23D63B0D00EF98DB /* Environment.swift */,
 				D781037E23D9F85100256F2F /* PaginatedData.swift */,
 			);
 			path = Networking;
@@ -466,6 +827,7 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7E1BD142BD84F9A00B41A9C /* IDTech.xcframework */,
 				D793091523D2568D0066FCA2 /* MediaPlayer.framework */,
 				D793091123D256690066FCA2 /* CoreBluetooth.framework */,
 				D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */,
@@ -491,49 +853,12 @@
 				D765D47723CC4AFF00656040 /* Repository */,
 				D765D48223CE419700656040 /* JSON */,
 				D765D48123CD00C800656040 /* Data */,
-				D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */,
 				D79308A623D0A9050066FCA2 /* MobileReaderDriver.swift */,
 				D79308AF23D0AA9A0066FCA2 /* TransactionType.swift */,
 				D79308C623D1045C0066FCA2 /* Omni.swift */,
 				D78FA931240EF48B00398D81 /* SignatureProviding.swift */,
-				597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */,
-				594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */,
-				596611A625E6CE8400AEDB2E /* UserNotificationListener.swift */,
 			);
 			path = Cardpresent;
-			sourceTree = "<group>";
-		};
-		D71B6F94239E98B5007FB7C4 /* ChipDnaMobile */ = {
-			isa = PBXGroup;
-			children = (
-				5966542D25003B8700A56943 /* CardApplication.h */,
-				5966542E25003B8700A56943 /* CCCardHash.h */,
-				5966542925003B8600A56943 /* CCCardSchemeIdEnum.h */,
-				5966542225003B8600A56943 /* CCParameters.h */,
-				5966543B25003B8800A56943 /* ChipDnaMobile.h */,
-				5966542525003B8600A56943 /* ChipDnaMobileSerializer.h */,
-				5966543025003B8700A56943 /* ChipDnaMobileUtils.h */,
-				5966542F25003B8700A56943 /* Currency.h */,
-				5966542825003B8600A56943 /* DeviceStatus.h */,
-				5966543925003B8800A56943 /* ErrorCodes.h */,
-				5966542625003B8600A56943 /* JailbreakChecker.h */,
-				5966542425003B8600A56943 /* libCardEaseXml.a */,
-				5966543125003B8700A56943 /* libChipDnaMobileAPI.a */,
-				5966543225003B8700A56943 /* Merchant.h */,
-				5966543625003B8700A56943 /* MerchantData.h */,
-				5966542A25003B8700A56943 /* PaymentPlatformStatus.h */,
-				5966543325003B8700A56943 /* ReceiptField.h */,
-				5966542B25003B8700A56943 /* RequestQueueStatus.h */,
-				5966543425003B8700A56943 /* SOAP */,
-				5966543525003B8700A56943 /* SQLCipher */,
-				5966542725003B8600A56943 /* TerminalStatus.h */,
-				5966542125003B8600A56943 /* TmsStatus.h */,
-				5966543A25003B8800A56943 /* TransactionTypeIDEnum.h */,
-				5966543725003B8700A56943 /* TransactionUpdates.h */,
-				5966542325003B8600A56943 /* UserNotification.h */,
-				5966542C25003B8700A56943 /* VersionInformation.h */,
-			);
-			path = ChipDnaMobile;
 			sourceTree = "<group>";
 		};
 		D760D82D23D885120075057C /* Raw Json */ = {
@@ -661,30 +986,37 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5966543E25003B8800A56943 /* UserNotification.h in Headers */,
+				A73614002C1A83C600359EC5 /* SOAPExtendedTransaction.h in Headers */,
+				A73614172C1A83C600359EC5 /* PaymentPlatformStatus.h in Headers */,
+				A73614062C1A83C600359EC5 /* sqlite3.h in Headers */,
+				A73614122C1A83C600359EC5 /* JailbreakChecker.h in Headers */,
+				A73614082C1A83C600359EC5 /* CCCardHash.h in Headers */,
+				A736141B2C1A83C600359EC5 /* TmsStatus.h in Headers */,
+				A73613FF2C1A83C600359EC5 /* SOAPEnums.h in Headers */,
+				A736140F2C1A83C600359EC5 /* DeviceStatus.h in Headers */,
+				A73614102C1A83C600359EC5 /* ErrorCodes.h in Headers */,
+				A73614072C1A83C600359EC5 /* CardApplication.h in Headers */,
+				A736140E2C1A83C600359EC5 /* Currency.h in Headers */,
+				A73613FE2C1A83C600359EC5 /* SOAPDelegate.h in Headers */,
+				A73614162C1A83C600359EC5 /* MerchantData.h in Headers */,
+				A73614192C1A83C600359EC5 /* RequestQueueStatus.h in Headers */,
+				A736141A2C1A83C600359EC5 /* TerminalStatus.h in Headers */,
+				A73614012C1A83C600359EC5 /* SOAPTransaction.h in Headers */,
+				A736141D2C1A83C600359EC5 /* TransactionUpdates.h in Headers */,
+				A736140C2C1A83C600359EC5 /* ChipDnaMobileSerializer.h in Headers */,
+				A73614032C1A83C600359EC5 /* SOAPTransactionStatistics.h in Headers */,
+				A736141E2C1A83C600359EC5 /* UserNotification.h in Headers */,
+				A736140D2C1A83C600359EC5 /* ChipDnaMobileUtils.h in Headers */,
+				A736141F2C1A83C600359EC5 /* VersionInformation.h in Headers */,
+				A73614152C1A83C600359EC5 /* Merchant.h in Headers */,
+				A73614092C1A83C600359EC5 /* CCCardSchemeIdEnum.h in Headers */,
+				A736141C2C1A83C600359EC5 /* TransactionTypeIDEnum.h in Headers */,
+				A73614182C1A83C600359EC5 /* ReceiptField.h in Headers */,
+				A736140A2C1A83C600359EC5 /* CCParameters.h in Headers */,
+				A736140B2C1A83C600359EC5 /* ChipDnaMobile.h in Headers */,
+				A73614022C1A83C600359EC5 /* SOAPTransactionHistory.h in Headers */,
 				D78FA930240EACA200398D81 /* Fattmerchant.h in Headers */,
-				5966545425003B8800A56943 /* ErrorCodes.h in Headers */,
-				5966544025003B8800A56943 /* ChipDnaMobileSerializer.h in Headers */,
-				5966545625003B8800A56943 /* ChipDnaMobile.h in Headers */,
-				5966544925003B8800A56943 /* CCCardHash.h in Headers */,
-				5966545125003B8800A56943 /* MerchantData.h in Headers */,
-				5966544825003B8800A56943 /* CardApplication.h in Headers */,
-				5966544425003B8800A56943 /* CCCardSchemeIdEnum.h in Headers */,
-				5966544D25003B8800A56943 /* Merchant.h in Headers */,
 				D71B6F93239E9892007FB7C4 /* chipdna-bridging-header.h in Headers */,
-				5966544325003B8800A56943 /* DeviceStatus.h in Headers */,
-				5966544125003B8800A56943 /* JailbreakChecker.h in Headers */,
-				5966543D25003B8800A56943 /* CCParameters.h in Headers */,
-				5966544625003B8800A56943 /* RequestQueueStatus.h in Headers */,
-				5966544A25003B8800A56943 /* Currency.h in Headers */,
-				5966544225003B8800A56943 /* TerminalStatus.h in Headers */,
-				5966544E25003B8800A56943 /* ReceiptField.h in Headers */,
-				5966544B25003B8800A56943 /* ChipDnaMobileUtils.h in Headers */,
-				5966545525003B8800A56943 /* TransactionTypeIDEnum.h in Headers */,
-				5966543C25003B8800A56943 /* TmsStatus.h in Headers */,
-				5966544525003B8800A56943 /* PaymentPlatformStatus.h in Headers */,
-				5966544725003B8800A56943 /* VersionInformation.h in Headers */,
-				5966545225003B8800A56943 /* TransactionUpdates.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,7 +1032,7 @@
 				591C208B206EB12F00C848DA /* Sources */,
 				591C208C206EB12F00C848DA /* Frameworks */,
 				591C208E206EB12F00C848DA /* Resources */,
-				591B69D52638890A0078787B /* Embed Frameworks */,
+				A7CAB34D2C0FBEC30053CE4A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -773,8 +1105,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5966545025003B8800A56943 /* SQLCipher in Resources */,
-				5966544F25003B8800A56943 /* SOAP in Resources */,
+				A73614052C1A83C600359EC5 /* SQLCipher-Licence.txt in Resources */,
+				A73613FD2C1A83C600359EC5 /* CHCVSParser-Licence.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,66 +1146,120 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7801BF0241F256A00A93001 /* ModelRepository+EndpointDefaultImpl.swift in Sources */,
+				A7CAB3AA2C1368FD0053CE4A /* NMIDetails.swift in Sources */,
 				D79308B323D0AAD00066FCA2 /* MobileReaderDriverRepository.swift in Sources */,
 				597BEA48247FE205009319D6 /* TransactionUpdateDelegate.swift in Sources */,
 				D73BBCF5244D7F380052B525 /* DisconnectMobileReader.swift in Sources */,
 				D73BBCF2244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */,
-				596611A725E6CE8400AEDB2E /* UserNotificationListener.swift in Sources */,
+				596611A725E6CE8400AEDB2E /* UserNotificationDelegate.swift in Sources */,
+				A7CAB3852C10B7F10053CE4A /* MobileReaderDriverException.swift in Sources */,
+				A7CAB3502C0FC00B0053CE4A /* ServiceLocator.swift in Sources */,
 				D71B6F91239E971A007FB7C4 /* ChipDnaDriver.swift in Sources */,
+				A7CAB36D2C10B6240053CE4A /* SearchForReadersException.swift in Sources */,
+				A7CAB3A42C1364890053CE4A /* StaxSelf.swift in Sources */,
+				A7CAB3BC2C139C7B0053CE4A /* NmiXmlParser.swift in Sources */,
 				D765D46F23CC488000656040 /* Merchant.swift in Sources */,
+				A7A54DF42C18E4AE00CC8B84 /* RefundCardReaderTransactionJob.swift in Sources */,
 				D79308BB23D0ADEF0066FCA2 /* InitializeDrivers.swift in Sources */,
 				D765D47923CC4B1100656040 /* CustomerRepository.swift in Sources */,
+				A7CAB36B2C10B5760053CE4A /* TakePaymentException.swift in Sources */,
 				D79308AD23D0AA230066FCA2 /* TransactionResult.swift in Sources */,
 				D79308A423D0A8B10066FCA2 /* MobileReader.swift in Sources */,
+				A7CAB3652C10B4D30053CE4A /* ConnectMobileReaderException.swift in Sources */,
 				593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */,
+				A7CAB37B2C10B71D0053CE4A /* VoidTransactionException.swift in Sources */,
+				A7CAB3772C10B6E40053CE4A /* CancelCurrentTransactionException.swift in Sources */,
 				46231C5B24DAF4A500A06E1B /* CatalogItem.swift in Sources */,
+				A7CAB38F2C1358510053CE4A /* Stax.swift in Sources */,
 				D765D47523CC4A1400656040 /* Transaction.swift in Sources */,
+				A7CAB3962C135D8B0053CE4A /* StaxHttpServiceImpl.swift in Sources */,
 				D7A28D612433E2CA00FC8872 /* TakePayment.swift in Sources */,
+				A7CAB3B32C136D1B0053CE4A /* NmiCardReaderService.swift in Sources */,
 				D79308C723D1045C0066FCA2 /* Omni.swift in Sources */,
+				A7CAB3672C10B52D0053CE4A /* InitializeDriversException.swift in Sources */,
 				596611AB25E6D19200AEDB2E /* UserNotification.swift in Sources */,
 				5993C25E2076BD73004DDA9F /* CreditCard.swift in Sources */,
+				A726F5112C18A112002532AB /* GetConnectedCardReaderJob.swift in Sources */,
 				D79308BE23D0AF3D0066FCA2 /* TakeMobileReaderPayment.swift in Sources */,
+				A726F5142C18B058002532AB /* DisconnectCardReaderJob.swift in Sources */,
+				A7CAB3832C10B7D70053CE4A /* CreatePaymentMethodException.swift in Sources */,
 				594466AB249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */,
+				A7CAB39D2C13633F0053CE4A /* StaxGeneralException.swift in Sources */,
+				A7CAB3542C0FC3AB0053CE4A /* NetworkService.swift in Sources */,
+				A7CAB3582C0FC49A0053CE4A /* CallbackNetworkService.swift in Sources */,
 				D79308A723D0A9050066FCA2 /* MobileReaderDriver.swift in Sources */,
 				594466B1249E993C00C6CFD8 /* MobileReaderConnectionStatus.swift in Sources */,
+				A7CAB3622C10B2CB0053CE4A /* CardReaderService.swift in Sources */,
 				D79308D023D22D900066FCA2 /* ChipDnaTransactionListener.swift in Sources */,
+				A7CAB38D2C1357D20053CE4A /* CardReaderConnectionStatus.swift in Sources */,
+				A7CAB3A82C1368CC0053CE4A /* CardReaderDetails.swift in Sources */,
 				D765D49923CFC22600656040 /* PaymentMethodRepository.swift in Sources */,
+				A726F50E2C141350002532AB /* CardReaderConnectionStatusDelegate.swift in Sources */,
 				D78FA932240EF48B00398D81 /* SignatureProviding.swift in Sources */,
 				D79308D423D24B680066FCA2 /* Endpoints.swift in Sources */,
+				A7CAB3872C10B8680053CE4A /* OmniInitializeException.swift in Sources */,
+				A726F5172C18BB24002532AB /* CCParameters+TransactionRequest.swift in Sources */,
+				A7CAB39F2C1363680053CE4A /* StaxInitializeException.swift in Sources */,
+				A7CAB3812C10B7C50053CE4A /* CreateInvoiceException.swift in Sources */,
 				D765D47C23CCBB0500656040 /* ModelRepository.swift in Sources */,
+				A7CAB3752C10B6AC0053CE4A /* DisconnectMobileReaderException.swift in Sources */,
 				5993C2642077A687004DDA9F /* BankAccount.swift in Sources */,
+				A7CAB3B52C1382CE0053CE4A /* TokenizeCreditCardJob.swift in Sources */,
 				D7A28D642436278600FC8872 /* TokenizePaymentMethod.swift in Sources */,
+				A7CAB38B2C1355DA0053CE4A /* CardReader.swift in Sources */,
+				A7CAB3562C0FC4920053CE4A /* ConcurrentNetworkService.swift in Sources */,
 				597BEA4B2480C4C9009319D6 /* TransactionGateway.swift in Sources */,
+				A7CAB3BE2C13A0650053CE4A /* NmiTransactionListener.swift in Sources */,
+				A7A54DF12C18E09A00CC8B84 /* CancelCurrentCardReaderTransactionJob.swift in Sources */,
 				D783DAC02449E905007C0A17 /* ChargeRequest.swift in Sources */,
 				D765D46923CC467100656040 /* Model.swift in Sources */,
 				D7801BF4241F26E200A93001 /* ModelRepository+DefaultImpl.swift in Sources */,
 				5993C25A2076BD16004DDA9F /* Networking.swift in Sources */,
+				A7CAB37F2C10B7AE0053CE4A /* CreateCustomerException.swift in Sources */,
 				D79308D223D22F480066FCA2 /* ChipDnaTransactionUserReference.swift in Sources */,
+				A7CAB35A2C0FC5540053CE4A /* HttpMethod.swift in Sources */,
 				D79308C123D0E0B40066FCA2 /* SearchForReaders.swift in Sources */,
 				D79308B023D0AA9A0066FCA2 /* TransactionType.swift in Sources */,
 				D765D48423CE41A500656040 /* JSONValue.swift in Sources */,
+				A7CAB3C02C13AF780053CE4A /* SearchForCardReadersJob.swift in Sources */,
+				A7CAB3892C10B8790053CE4A /* OmniGeneralException.swift in Sources */,
 				D765D49F23CFCA1400656040 /* Amount.swift in Sources */,
 				D765D49623CFC1A000656040 /* InvoiceRepository.swift in Sources */,
 				5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */,
 				D71DDE7E28979D9F00D4C42E /* String+Blank.swift in Sources */,
-				D765D47223CC49C800656040 /* Self.swift in Sources */,
+				D765D47223CC49C800656040 /* OmniSelf.swift in Sources */,
 				D79308CB23D229420066FCA2 /* ChipDnaUtils.swift in Sources */,
 				D7E15C5626577CFA006D4EE7 /* CapturePreauthTransaction.swift in Sources */,
+				A7CAB3A12C1363830053CE4A /* StaxNetworkingException.swift in Sources */,
+				A7CAB3B92C13930A0053CE4A /* PerformTransactionWithCardReaderJob.swift in Sources */,
+				A7CAB36F2C10B63E0053CE4A /* RefundException.swift in Sources */,
+				A7CAB3732C10B6950053CE4A /* GetConnectedMobileReaderException.swift in Sources */,
 				D7C17B2C23EA00EB0031D9BB /* MockDriver.swift in Sources */,
 				D765D46C23CC478000656040 /* Invoice.swift in Sources */,
 				D765D47F23CCBBFD00656040 /* OmniException.swift in Sources */,
 				D7E15C5926578C6E006D4EE7 /* VoidTransaction.swift in Sources */,
 				D79308C423D0E3C90066FCA2 /* RefundMobileReaderTransaction.swift in Sources */,
+				A7CAB37D2C10B7360053CE4A /* OmniNetworkingException.swift in Sources */,
 				5993C25C2076BD68004DDA9F /* PaymentMethod.swift in Sources */,
+				A7CAB3692C10B5560053CE4A /* TakeMobileReaderPaymentException.swift in Sources */,
 				46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */,
+				A7CAB35C2C1015730053CE4A /* NetworkService+URLRequest.swift in Sources */,
+				A7CAB3792C10B7060053CE4A /* CapturePreauthTransactionException.swift in Sources */,
 				D79308AA23D0A9FB0066FCA2 /* TransactionRequest.swift in Sources */,
 				D79308B823D0AC3A0066FCA2 /* ConnectMobileReader.swift in Sources */,
+				A7CAB39B2C1362B20053CE4A /* StaxException.swift in Sources */,
 				597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */,
 				D781037F23D9F85100256F2F /* PaginatedData.swift in Sources */,
 				D765D46623CC465800656040 /* Customer.swift in Sources */,
+				A7CAB3942C135C740053CE4A /* StaxHttpService+JSON.swift in Sources */,
+				A7CAB3AD2C136B870053CE4A /* Job.swift in Sources */,
 				D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */,
+				A7CAB3922C135BDE0053CE4A /* StaxHttpService.swift in Sources */,
 				594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
+				A7CAB3B72C138B610053CE4A /* TokenizeBankAccountJob.swift in Sources */,
 				5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */,
+				A7CAB3712C10B6710053CE4A /* TokenizePaymentMethodException.swift in Sources */,
+				A7CAB3C22C13AFF20053CE4A /* ConnectToCardReaderJob.swift in Sources */,
 				D765D49C23CFC32200656040 /* TransactionRepository.swift in Sources */,
 				59561818248C3FBD00E622B6 /* TransactionUpdate.swift in Sources */,
 				D702B7BD23C8D0DD00B8AB79 /* OmniApi.swift in Sources */,
@@ -886,7 +1272,7 @@
 			files = (
 				D765D48823CE422400656040 /* JSONValueTest.swift in Sources */,
 				D760D82A23D884680075057C /* CustomerJson.swift in Sources */,
-				596611A825E6CE8400AEDB2E /* UserNotificationListener.swift in Sources */,
+				596611A825E6CE8400AEDB2E /* UserNotificationDelegate.swift in Sources */,
 				D765D4A023CFCA1400656040 /* Amount.swift in Sources */,
 				D783DAC42449F35E007C0A17 /* TakePaymentTests.swift in Sources */,
 				594466AF249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
@@ -911,6 +1297,7 @@
 				D73BBCF3244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */,
 				D702B7CD23C8F80200B8AB79 /* CreditCard.swift in Sources */,
 				46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */,
+				A726F5182C18BB24002532AB /* CCParameters+TransactionRequest.swift in Sources */,
 				D7692F1923E4B00500CB0954 /* OmniTest.swift in Sources */,
 				D781038023D9F85100256F2F /* PaginatedData.swift in Sources */,
 				D79308D523D24C880066FCA2 /* Endpoints.swift in Sources */,
@@ -931,12 +1318,15 @@
 				D7801C01241F35FE00A93001 /* MockOmniApi.swift in Sources */,
 				D765D46A23CC467100656040 /* Model.swift in Sources */,
 				D7C17B2623E4BA200031D9BB /* RefundMobileReaderTransaction.swift in Sources */,
+				A726F50F2C141350002532AB /* CardReaderConnectionStatusDelegate.swift in Sources */,
 				597BEA4E2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */,
 				D7C17B2223E4BA200031D9BB /* ConnectMobileReader.swift in Sources */,
+				A7CAB3992C13629B0053CE4A /* OmniInitializeException.swift in Sources */,
 				D702B7CF23C8F80200B8AB79 /* BankHolderType.swift in Sources */,
 				D765D48523CE41A500656040 /* JSONValue.swift in Sources */,
+				A7CAB3982C1362630053CE4A /* OmniGeneralException.swift in Sources */,
 				D702B7D023C8F80200B8AB79 /* PaymentMethodType.swift in Sources */,
-				D765D47323CC49C800656040 /* Self.swift in Sources */,
+				D765D47323CC49C800656040 /* OmniSelf.swift in Sources */,
 				D73BBCF9244D81210052B525 /* DisconnectMobileReader.swift in Sources */,
 				593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */,
 				D760D82F23D885250075057C /* TransactionJson.swift in Sources */,
@@ -1020,7 +1410,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lz";
@@ -1080,11 +1469,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-lz";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1096,8 +1485,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CURRENT_PROJECT_VERSION = 18;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = DYRYDWJYX5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1108,17 +1499,26 @@
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher",
 				);
 				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1130,8 +1530,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CURRENT_PROJECT_VERSION = 18;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = DYRYDWJYX5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1142,17 +1544,26 @@
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
-					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile/SQLCipher",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile",
+					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher",
 				);
 				MARKETING_VERSION = "2.2.1-beta";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
@@ -1168,7 +1579,11 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = fattmerchant_ios_sdkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
@@ -1177,6 +1592,10 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdkTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1191,7 +1610,11 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = fattmerchant_ios_sdkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Cardpresent/ChipDnaMobile",
@@ -1200,6 +1623,10 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdkTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

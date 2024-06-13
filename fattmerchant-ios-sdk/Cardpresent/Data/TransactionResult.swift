@@ -12,7 +12,7 @@ import Foundation
 ///
 /// This object contains necessary data about the transaction that occured, such as how much money was
 /// collected and details about the payment method used
-struct TransactionResult {
+public struct TransactionResult {
 
   var request: TransactionRequest?
 
@@ -78,4 +78,16 @@ struct TransactionResult {
   /// In Omni, this is typically used to show an error describing what went wrong with the transaction. For example,
   /// "Insufficient Funds"
   internal var message: String?
+  
+  public func getLastFour() -> String? {
+    guard
+      let maskedCardNumber = self.maskedPan,
+      maskedCardNumber.count > 4,
+      let lastFourIndex = maskedCardNumber.index(maskedCardNumber.endIndex, offsetBy: -4, limitedBy: maskedCardNumber.startIndex)
+    else {
+      return nil
+    }
+
+    return String(maskedCardNumber.suffix(from: lastFourIndex))
+  }
 }

@@ -8,12 +8,6 @@
 
 import Foundation
 
-enum GetConnectedMobileReaderException: OmniException {
-  static var mess: String = "Could not get connected mobile reader"
-
-  case noReaderAvailable
-}
-
 class GetConnectedMobileReader {
   var mobileReaderDriverRepository: MobileReaderDriverRepository
 
@@ -21,7 +15,7 @@ class GetConnectedMobileReader {
     self.mobileReaderDriverRepository = mobileReaderDriverRepository
   }
 
-  func start(completion: @escaping (MobileReader?) -> Void, failure: @escaping (OmniException) -> Void) {
+  func start(completion: @escaping (MobileReader?) -> Void, failure: @escaping (StaxException) -> Void) {
     mobileReaderDriverRepository.getInitializedDrivers { drivers in
       guard let driver = drivers.first else {
         failure(GetConnectedMobileReaderException.noReaderAvailable)
