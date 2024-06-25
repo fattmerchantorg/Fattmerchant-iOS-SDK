@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
   s.swift_versions = ['5']  
   s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
-  s.exclude_files = "fattmerchant-ios-sdk/Vendor/IDtech.xcframework/**.*.h"
+  s.exclude_files = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDtech.xcframework/**.*.h"
   s.library = 'sqlite3'
   s.frameworks = 
     'UIKit',
