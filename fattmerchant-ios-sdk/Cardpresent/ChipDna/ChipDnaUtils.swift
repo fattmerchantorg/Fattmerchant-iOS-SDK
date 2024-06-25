@@ -70,28 +70,28 @@ extension UserNotification {
   init?(chipDnaUserNotification: String) {
     switch chipDnaUserNotification {
 
-    case UserNotificationTryCardAgain:
+    case "UserNotificationTryCardAgain":
       self = UserNotification.TryCardAgain
 
-    case UserNotificationChipReadErrorApplicationNotSupportedPleaseRetry:
+    case "UserNotificationChipReadErrorApplicationNotSupportedPleaseRetry":
       self = UserNotification.ChipReadErrorApplicationNotSupportedPleaseRetry
 
-    case UserNotificationICCFallforward:
+    case "UserNotificationICCFallforward":
       self = UserNotification.FallforwardInsertCard
 
-    case UserNotificationICCMSRFallforward:
+    case "UserNotificationICCMSRFallforward":
       self = UserNotification.FallforwardInsertSwipeCard
 
-    case UserNotificationMSRFallback:
+    case "UserNotificationMSRFallback":
       self = UserNotification.FallbackSwipeCard
 
-    case UserNotificationMSRFallforward:
+    case "UserNotificationMSRFallforward":
       self = UserNotification.FallforwardSwipeCard
 
-    case UserNotificationPresentOnlyOneCard:
+    case "UserNotificationPresentOnlyOneCard":
       self = UserNotification.PresentOneCardOnly
 
-    case UserNotificationReferToDevice:
+    case "UserNotificationReferToDevice":
       self = UserNotification.ReferToDevice
 
     default:

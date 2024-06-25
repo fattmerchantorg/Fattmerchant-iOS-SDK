@@ -450,9 +450,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
   @objc func onConfigurationUpdate(parameters: CCParameters) {
-    if
-      let str = parameters[CCParamConfigurationUpdate],
-      let status = MobileReaderConnectionStatus(chipDnaConfigurationUpdate: str) {
+    if let str = parameters[CCParamConfigurationUpdate], let status = MobileReaderConnectionStatus(chipDnaConfigurationUpdate: str) {
       mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: status)
     }
   }
