@@ -32,10 +32,8 @@ Pod::Spec.new do |s|
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libCardEaseXml.a',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDTech.xcframework',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDevice.xcframework/ios-arm64/libBBDevice-BT-3.27.0.a',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDevice.xcframework/ios-arm64_x86_64-simulator/libBBDevice-BT-3.27.0.a',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDeviceOTA.xcframework/ios-arm64/libBBDeviceOTA-1.6.13.a'
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDeviceOTA.xcframework/ios-arm64_x86_64-simulator/libBBDeviceOTA-1.6.13.a'
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDevice.xcframework/**/*.a',
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDeviceOTA.xcframework/**/*.a'
   s.pod_target_xcconfig = { 
     'ENABLE_BITCODE' => 'NO',
     'OTHER_LDFLAGS' => '-lz',
