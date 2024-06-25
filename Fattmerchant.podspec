@@ -35,7 +35,8 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 
     'ENABLE_BITCODE' => 'NO',
     'OTHER_LDFLAGS' => '-lz',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
+    'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/Fattmerchant/fattmerchant-ios-sdk/Vendor/ChipDnaMobile'
   }
   s.user_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
