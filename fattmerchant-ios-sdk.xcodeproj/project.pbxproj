@@ -78,7 +78,6 @@
 		D702B7D023C8F80200B8AB79 /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
 		D702B7D123C8F80200B8AB79 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2592076BD16004DDA9F /* Networking.swift */; };
 		D71B6F91239E971A007FB7C4 /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
-		D71B6F93239E9892007FB7C4 /* chipdna-bridging-header.h in Headers */ = {isa = PBXBuildFile; fileRef = D71B6F92239E9892007FB7C4 /* chipdna-bridging-header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D71DDE7E28979D9F00D4C42E /* String+Blank.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71DDE7D28979D9F00D4C42E /* String+Blank.swift */; };
 		D71DDE7F28979D9F00D4C42E /* String+Blank.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71DDE7D28979D9F00D4C42E /* String+Blank.swift */; };
 		D73BBCF2244D697F0052B525 /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73BBCF1244D697F0052B525 /* GetConnectedMobileReader.swift */; };
@@ -687,7 +686,6 @@
 				5966544825003B8800A56943 /* CardApplication.h in Headers */,
 				5966544425003B8800A56943 /* CCCardSchemeIdEnum.h in Headers */,
 				5966544D25003B8800A56943 /* Merchant.h in Headers */,
-				D71B6F93239E9892007FB7C4 /* chipdna-bridging-header.h in Headers */,
 				5966544325003B8800A56943 /* DeviceStatus.h in Headers */,
 				5966544125003B8800A56943 /* JailbreakChecker.h in Headers */,
 				5966543D25003B8800A56943 /* CCParameters.h in Headers */,
