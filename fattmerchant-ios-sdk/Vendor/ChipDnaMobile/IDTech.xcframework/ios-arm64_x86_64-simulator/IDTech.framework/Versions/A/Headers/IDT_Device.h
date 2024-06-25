@@ -19,8 +19,10 @@
     #import <UIKit/UIKit.h>
     #import <CoreBluetooth/CoreBluetooth.h>
 #if !TARGET_IPHONE_SIMULATOR
+#ifndef NOUNIMAG
 #import "UniPay.h"
 #import "uniMag.h"
+#endif
 #endif
 
 #endif
@@ -267,11 +269,17 @@
     id<IDT_Device_Delegate> bypassDelegate;
 }
 #else
+#ifndef NOUNIMAG
 @interface IDT_Device : NSObject<EAAccessoryDelegate, NSStreamDelegate,UniPay_Delegate,CBCentralManagerDelegate, CBPeripheralDelegate, UIAlertViewDelegate>{
     id<IDT_Device_Delegate> delegate;
     id<IDT_Device_Delegate> delegate2;
     id<IDT_Device_Delegate> bypassDelegate;
-	
+#else
+    @interface IDT_Device : NSObject<EAAccessoryDelegate, NSStreamDelegate,CBCentralManagerDelegate, CBPeripheralDelegate, UIAlertViewDelegate>{
+        id<IDT_Device_Delegate> delegate;
+        id<IDT_Device_Delegate> delegate2;
+        id<IDT_Device_Delegate> bypassDelegate;
+#endif
 }
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) CBPeripheral *bleDevice;
