@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
     'ExternalAccessory',
     'CoreBluetooth',
     'AudioToolbox',
-    'Framework',
+    'Framework'
   s.vendored_libraries = 
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libChipDnaMobileAPI.a',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libCardEaseXml.a',
