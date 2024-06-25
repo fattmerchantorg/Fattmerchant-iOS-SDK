@@ -87,6 +87,7 @@ public class Omni: NSObject {
   internal var paymentMethodRepository: PaymentMethodRepository!
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
   internal var merchant: Merchant?
+  internal var accessoryHelper: AccessoryHelper?
   
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
@@ -102,6 +103,8 @@ public class Omni: NSObject {
   
   /// Receives notifications about reader connection events
   public weak var mobileReaderConnectionUpdateDelegate: MobileReaderConnectionStatusDelegate?
+  
+  public weak var usbAccessoryDelegate: UsbAccessoryDelegate?
   
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
@@ -147,6 +150,12 @@ public class Omni: NSObject {
     guard let appId = params.appId, params.apiKey != nil else {
       error(OmniInitializeException.missingInitializationDetails)
       return
+    }
+    
+    // Setup USB Delegate
+    if let delegate = usbAccessoryDelegate {
+      accessoryHelper = AccessoryHelper(delegate: delegate)
+      AccessoryHelper.isIdTechConnected()
     }
     
     omniApi.apiKey = params.apiKey

@@ -9,7 +9,7 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
+class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
 
   var omni: Omni?
   var lastPreauthTransaction: Transaction? = nil
@@ -77,6 +77,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     omni?.transactionUpdateDelegate = self
     omni?.userNotificationDelegate = self
     omni?.mobileReaderConnectionUpdateDelegate = self
+    omni?.usbAccessoryDelegate = self
 
     log("Attempting initalization...")
 
@@ -322,6 +323,14 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   func onUserNotification(userNotification: UserNotification) {
     self.log(userNotification)
+  }
+  
+  func onUsbAccessoryConnected() {
+    self.log("Accessory Connected")
+  }
+  
+  func onUsbAccessoryDisconnected() {
+    self.log("Accessory Disconnected")
   }
 
   // MARK: Logging
