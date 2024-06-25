@@ -79,6 +79,11 @@
 		A7AF20A32C2B2CF500DA07DE /* TransactionUpdates.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AF207D2C2B2CF500DA07DE /* TransactionUpdates.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7AF20A42C2B2CF500DA07DE /* UserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AF207E2C2B2CF500DA07DE /* UserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7AF20A52C2B2CF500DA07DE /* VersionInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AF207F2C2B2CF500DA07DE /* VersionInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A7F595852C2B454A00033492 /* AccessoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595842C2B454A00033492 /* AccessoryHelper.swift */; };
+		A7F595862C2B454A00033492 /* AccessoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595842C2B454A00033492 /* AccessoryHelper.swift */; };
+		A7F595882C2B466500033492 /* UsbAccessoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595872C2B466500033492 /* UsbAccessoryDelegate.swift */; };
+		A7F595892C2B466500033492 /* UsbAccessoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595872C2B466500033492 /* UsbAccessoryDelegate.swift */; };
+		A7F5958A2C2B485B00033492 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */; };
 		D702B7BD23C8D0DD00B8AB79 /* OmniApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */; };
 		D702B7CC23C8F80200B8AB79 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25B2076BD68004DDA9F /* PaymentMethod.swift */; };
 		D702B7CD23C8F80200B8AB79 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C25D2076BD73004DDA9F /* CreditCard.swift */; };
@@ -271,6 +276,8 @@
 		A7AF207D2C2B2CF500DA07DE /* TransactionUpdates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionUpdates.h; sourceTree = "<group>"; };
 		A7AF207E2C2B2CF500DA07DE /* UserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNotification.h; sourceTree = "<group>"; };
 		A7AF207F2C2B2CF500DA07DE /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
+		A7F595842C2B454A00033492 /* AccessoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryHelper.swift; sourceTree = "<group>"; };
+		A7F595872C2B466500033492 /* UsbAccessoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsbAccessoryDelegate.swift; sourceTree = "<group>"; };
 		D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniApi.swift; sourceTree = "<group>"; };
 		D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaDriver.swift; sourceTree = "<group>"; };
 		D71DDE7D28979D9F00D4C42E /* String+Blank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Blank.swift"; sourceTree = "<group>"; };
@@ -363,6 +370,7 @@
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
 				D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */,
 				A7AF20812C2B2CF500DA07DE /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
+				A7F5958A2C2B485B00033492 /* ExternalAccessory.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +438,7 @@
 			children = (
 				D71DDE7D28979D9F00D4C42E /* String+Blank.swift */,
 				593A7FD6246878B700D78874 /* AsyncFilter.swift */,
+				A7F595842C2B454A00033492 /* AccessoryHelper.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -596,6 +605,7 @@
 				597BEA47247FE205009319D6 /* TransactionUpdateDelegate.swift */,
 				594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */,
 				596611A625E6CE8400AEDB2E /* UserNotificationListener.swift */,
+				A7F595872C2B466500033492 /* UsbAccessoryDelegate.swift */,
 			);
 			path = Cardpresent;
 			sourceTree = "<group>";
@@ -938,10 +948,12 @@
 				46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */,
 				D79308AA23D0A9FB0066FCA2 /* TransactionRequest.swift in Sources */,
 				D79308B823D0AC3A0066FCA2 /* ConnectMobileReader.swift in Sources */,
+				A7F595882C2B466500033492 /* UsbAccessoryDelegate.swift in Sources */,
 				597BEA4D2480D892009319D6 /* ChipDnaXMLTransactionParser.swift in Sources */,
 				D781037F23D9F85100256F2F /* PaginatedData.swift in Sources */,
 				D765D46623CC465800656040 /* Customer.swift in Sources */,
 				D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */,
+				A7F595852C2B454A00033492 /* AccessoryHelper.swift in Sources */,
 				594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
 				5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */,
 				D765D49C23CFC32200656040 /* TransactionRepository.swift in Sources */,
@@ -973,6 +985,7 @@
 				D765D47623CC4A1400656040 /* Transaction.swift in Sources */,
 				596611AD25E6D19300AEDB2E /* UserNotification.swift in Sources */,
 				D79308A823D0A9050066FCA2 /* MobileReaderDriver.swift in Sources */,
+				A7F595892C2B466500033492 /* UsbAccessoryDelegate.swift in Sources */,
 				594466B324A09D4C00C6CFD8 /* TransactionUpdateDelegate.swift in Sources */,
 				D7C17B2423E4BA200031D9BB /* TakeMobileReaderPayment.swift in Sources */,
 				D79308AE23D0AA230066FCA2 /* TransactionResult.swift in Sources */,
@@ -1026,6 +1039,7 @@
 				597BEA5324851BA9009319D6 /* ChipDnaTransctionXMLResponse.swift in Sources */,
 				D7D2C51E23F203F8001733A2 /* RefundMobileReaderTransactionTests.swift in Sources */,
 				D79308A023D0A1B50066FCA2 /* AmountTests.swift in Sources */,
+				A7F595862C2B454A00033492 /* AccessoryHelper.swift in Sources */,
 				46231C5C24DAF4A500A06E1B /* CatalogItem.swift in Sources */,
 				D7692F1A23E4B03200CB0954 /* Omni.swift in Sources */,
 				D765D49D23CFC32200656040 /* TransactionRepository.swift in Sources */,
