@@ -18,7 +18,9 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5']  
   s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
   s.public_header_files = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/*.h"
-  s.preserve_paths = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks"
+  s.preserve_paths = 
+    "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDTech.xcframework",
+    "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks"
   s.library = 'sqlite3'
   s.frameworks = 
     'UIKit',
