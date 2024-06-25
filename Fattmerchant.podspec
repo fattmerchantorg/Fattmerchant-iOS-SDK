@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5']  
   s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
   s.public_header_files = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/*.h"
+  s.preserve_paths = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks"
   s.library = 'sqlite3'
   s.frameworks = 
     'UIKit',
@@ -32,8 +33,8 @@ Pod::Spec.new do |s|
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libCardEaseXml.a',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDTech.xcframework',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDevice.xcframework/**/*.a',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBDeviceOTA.xcframework/**/*.a'
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDevice.xcframework',
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPODFrameworks/BBDeviceOTA.xcframework'
   s.pod_target_xcconfig = { 
     'ENABLE_BITCODE' => 'NO',
     'OTHER_LDFLAGS' => '-lz',
