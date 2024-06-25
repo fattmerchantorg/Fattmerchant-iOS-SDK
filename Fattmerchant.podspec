@@ -33,15 +33,15 @@ Pod::Spec.new do |s|
   s.vendored_libraries = 
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libChipDnaMobileAPI.a',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libCardEaseXml.a',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a',
+    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a'
+  s.vendored_frameworks =
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDTech.xcframework',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPODFrameworks/BBDeviceOTA-1.6.13.xcframework'
   s.pod_target_xcconfig = { 
     'ENABLE_BITCODE' => 'NO',
     'OTHER_LDFLAGS' => '-lz',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
-    'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/Fattmerchant/fattmerchant-ios-sdk/Vendor/ChipDnaMobile'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
   }
   s.user_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
