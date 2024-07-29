@@ -206,6 +206,8 @@ extern NSString * const FailedToRetrieveFirmwareUpdateSessionKeys;  /**< The ses
 extern NSString * const FirmwareUpdateSessionKeyInvalid;            /**< The session key for the firmware update is invalid. */
 extern NSString * const FirmwareFileParsingFailed;                  /**< Failed to parse firmware file. */
 extern NSString * const FirmwareFileDataMissing;                    /**< The firmware file is missing data required for the firmware update. */
+extern NSString * const FirmwareFileIncompatible;                   /**< The firmware file version on TMS is incompatible with the device. */
+
 
 extern NSString * const TransactionFinishedObserverRequired;        /**< Method required at least one observer for transaction finished events. @see ChipDnaMobile#addTransactionFinishedTarget:action:*/
 extern NSString * const SignatureVerificationObserverRequired;      /**< Method required at least one observer for signature verfication events. @see ChipDnaMobile#addSignatureVerificationTarget:action:*/
@@ -302,7 +304,9 @@ extern NSString * const DelayOnlineProcessingSupportedFormatError;           /**
 extern NSString * const XmlEncryptionCertificateFormatError;                 /**< There is a format error with XmlEncryptionCertificate*/
 extern NSString * const CertificationIdentifierFormatError;                  /**< There is a format error with CertificationIdentifier*/
 extern NSString * const BbposTmsConfigurationFormatError;                    /**< There is a format error with BBPosTmsConfiguration*/
+extern NSString * const CardRemovalNotificationFormatError;                  /**< There is a format error with CardRemovalNotification*/
 extern NSString * const SpeedOptimisationFeaturesSupportedFormatError;       /**< There is a format error with SpeedOptimisationFeaturesSupported*/
+extern NSString * const CollisionDetectionRateFormatError;                   /**< There is a format error with CollisionDetectionRate*/
 /**
  * @}
  */

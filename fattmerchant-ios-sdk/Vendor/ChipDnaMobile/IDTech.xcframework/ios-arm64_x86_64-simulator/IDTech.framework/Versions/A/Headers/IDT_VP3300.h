@@ -13,6 +13,8 @@
 /** Protocol methods established for IDT_VP3300 class  **/
 @protocol IDT_VP3300_Delegate <NSObject>
 @optional
+
+-(void) bleStatus:(BLE_MSG)status; //!<Fires status messages during the BLE connection/verification process;
 -(void) deviceConnected; //!<Fires when device connects.  If a connection is established before the delegate is established (no delegate to send initial connection notification to), this method will fire upon establishing the delegate.
 -(void) deviceDisconnected; //!<Fires when device disconnects.
 - (void) plugStatusChange:(BOOL)deviceInserted; //!<Monitors the headphone jack for device insertion/removal.
@@ -2328,5 +2330,41 @@ Forces the device to reader attached state.
 
 -(RETURN_CODE)  device_syncTime;
 
+/**
+* Request Remote Key Injection Gen4
+    
+*
+Attempts to perform a Remote Key Injection with IDTech's RKI servers.
+*
+*@param isTest True = Test/Demo Key, False = Production/Live Key
+*@param keyName Request specific key to load.  Passing nil will request default key associated with device serial number
+ *@param isForeGround TRUE = run sync on main UI thread, FALSE = run async on background thread (no UI blocking)
+
+    
+* @return RETURN_CODE:
+- 0x0000: Success: no error - RETURN_CODE_DO_SUCCESS
+- 0x0001: Disconnect: no response from reader - RETURN_CODE_ERR_DISCONNECT
+- 0x0002: Invalid Response: invalid response data - RETURN_CODE_ERR_CMD_RESPONSE
+- 0x0003: Timeout: time out for task or CMD - RETURN_CODE_ERR_TIMEDOUT
+- 0x0004: Invalid Parameter: wrong parameter - RETURN_CODE_ERR_INVALID_PARAMETER
+- 0x0005: MSR Busy: SDK is doing MSR or ICC task - RETURN_CODE_SDK_BUSY_MSR
+- 0x0006: PINPad Busy:  SDK is doing PINPad task - RETURN_CODE_SDK_BUSY_PINPAD
+- 0x0100 through 0xFFFF refer to IDT_VP3300::device_getResponseCodeString:()
+    
+*/
+-(RETURN_CODE) device_remoteKeyInjection:(bool)isTest keyName:(NSString*)keyName isForeground:(bool)isForeGround;
+
+
+/**
+* BLE Connect Attempt
+    
+*
+Attempts to connect to a BLE device uisng a BLE_MSG as parameters.
+*
+*@param BLE_MSG Data parameters for the connection
+
+*/
+
+-(bool) bleConnect:(IDTech_BLE*)data;
 
 @end

@@ -13,6 +13,9 @@
 /** Protocol methods established for IDT_NEO2 class  **/
 @protocol IDT_NEO2_Delegate <NSObject>
 @optional
+
+-(void) bleStatus:(BLE_MSG)status; //!<Fires status messages during the BLE connection/verification process;
+
 -(void) deviceConnected; //!<Fires when device connects.  If a connection is established before the delegate is established (no delegate to send initial connection notification to), this method will fire upon establishing the delegate.
 -(void) deviceDisconnected; //!<Fires when device disconnects.
 - (void) dataInOutMonitor:(NSData*)data  incoming:(BOOL)isIncoming; //!<All incoming/outgoing data going to the device can be monitored through this delegate.
@@ -27,7 +30,7 @@
 //!<- <c>TRUE</c> specifies data being received from the device,
 //!<- <c>FALSE</c> indicates data being sent to the device.
 //!< @param timestamp The timestamp of the data
-
+-(void)promptBLEtoEA; //!<Prompts the user if they would want to change to EA device from BLE
 
 - (void) swipeMSRData:(IDTMSRData*)cardData;//!<Receives card data from MSR swipe.
 //!< @param cardData Captured card data from MSR swipe
@@ -3427,7 +3430,60 @@ The RRC Disonnect command allows a host to terminate the RRC connection to a rea
 */
 + (NSString*) createFastEMVData:(IDTEMVData*)emvData;
 
+/**
+ * Enable External Accessory Heartbeat
+ *
+ * Enables/Disables External Accessory Hearbeat.  On by default.
+ * When enabled, SDK will send a keep-alive command to device in repeating interval.  Default is 10 seconds.
+
+ */
+-(void) enableHeartbeat:(bool)enable;
 
 
+/**
+ * External Accessory Heartbeat Interval
+ *
+ * Sets the External Accessory heartbeat interval, in seconds.  10 seconds is default.
+
+ */
+-(void) heartbeatInterval:(float)heartbeatInterval;
+
+/**
+* Request Remote Key Injection Gen4
+    
+*
+Attempts to perform a Remote Key Injection with IDTech's RKI servers.
+*
+*@param isTest True = Test/Demo Key, False = Production/Live Key
+*@param keyName Request specific key to load.  Passing nil will request default key associated with device serial number
+ *@param isForeGround TRUE = run sync on main UI thread, FALSE = run async on background thread (no UI blocking)
+
+    
+* @return RETURN_CODE:
+- 0x0000: Success: no error - RETURN_CODE_DO_SUCCESS
+- 0x0001: Disconnect: no response from reader - RETURN_CODE_ERR_DISCONNECT
+- 0x0002: Invalid Response: invalid response data - RETURN_CODE_ERR_CMD_RESPONSE
+- 0x0003: Timeout: time out for task or CMD - RETURN_CODE_ERR_TIMEDOUT
+- 0x0004: Invalid Parameter: wrong parameter - RETURN_CODE_ERR_INVALID_PARAMETER
+- 0x0005: MSR Busy: SDK is doing MSR or ICC task - RETURN_CODE_SDK_BUSY_MSR
+- 0x0006: PINPad Busy:  SDK is doing PINPad task - RETURN_CODE_SDK_BUSY_PINPAD
+- 0x0100 through 0xFFFF refer to IDT_VP3300::device_getResponseCodeString:()
+    
+*/
+-(RETURN_CODE) device_remoteKeyInjection:(bool)isTest keyName:(NSString*)keyName isForeground:(bool)isForeGround;
+
+
+
+/**
+* BLE Connect Attempt
+    
+*
+Attempts to connect to a BLE device uisng a BLE_MSG as parameters.
+*
+*@param BLE_MSG Data parameters for the connection
+
+*/
+
+-(bool) bleConnect:(IDTech_BLE*)data;
 
 @end
