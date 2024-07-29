@@ -520,6 +520,16 @@ extern NSString * const CCInitialisationException;
  */
 -(CCParameters *)deleteFailedOfflineRequest:(CCParameters *)request;
 
+/**
+ * Disconnects the currently connected PINpad. The PINpad will only be disconnected if the device is not busy.
+ *
+ * To receive updates on the current connection status of the PIN pad observers can be added using the {@link ChipDnaMobile#addDeviceUpdateTarget:action: addDeviceUpdateTarget} method. Observers will receive a {@link CCParameters} collection which will contain a {@link CCParameters#CCParamDeviceStatusUpdate CCParamDeviceStatusUpdate} item with a serialized {@link DeviceStatus} object value.
+ *
+ * @param request Currently not used, can be set to nil.
+ * @return parameter collection containing {@link CCParameters#CCParamResult CCParamResult} and if applicable {@link CCParameters#CCParamErrors CCParamErrors}.
+ */
+-(CCParameters *)disconnect:(CCParameters *)request;
+
 #pragma mark - Observer management
 
 /**

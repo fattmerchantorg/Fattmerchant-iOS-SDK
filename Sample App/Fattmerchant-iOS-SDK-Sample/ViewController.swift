@@ -80,7 +80,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
     omni?.usbAccessoryDelegate = self
 
     log("Attempting initalization...")
-
+    
     // Initialize Omni
     omni?.initialize(params: initParams(), completion: {
       self.initializeButton.isHidden = true

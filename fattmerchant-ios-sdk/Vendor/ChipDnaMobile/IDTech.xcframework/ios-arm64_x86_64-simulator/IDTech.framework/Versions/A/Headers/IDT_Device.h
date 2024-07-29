@@ -24,23 +24,23 @@
 #import "uniMag.h"
 #endif
 #endif
-
 #endif
 
 
 #import "IDTMSRData.h"
 #import "APDUResponse.h"
 #import "IDTEMVData.h"
+#import "IDTEMVData.h"
 
-#import "IDTCommon.h"
-
-
+#import "IDTech_BLE.h"
 
 
 /** Protocol methods established for IDT_Device class  **/
 @protocol IDT_Device_Delegate <NSObject>
 
 @optional
+
+-(void) bleStatus:(BLE_MSG)status; //!<Fires status messages during the BLE connection/verification process;
 
 -(void) updateStatus:(PK_STATUS_Type)type currentBlock:(int)currentBlock totalBlocks:(int)totalBlocks error:(RETURN_CODE)error;//!<Reports PK Update status.
 //!< @param type The stage of the PK update
@@ -112,6 +112,13 @@
  */
 
 - (void) bluetoothDeviceNames:(NSArray*)names;
+
+/**
+ Prompt for changing from BLE to External Accessory
+ When an external accessory is connected via USB-C or Lightning, a prompt needs to be shown to approve moving connection over
+ */
+-(void)promptBLEtoEA;
+
 
 /**
  Contactless Event
@@ -8226,5 +8233,63 @@ Perform functions a Felica Card Poll
 + (void) setExternalAccessoryProtocol:(NSString*)newValue;
 
 +(NSData*) getLastData;
++(NSArray*) getProtocolStrings;
++(void) disconnectFromEA;
++(void) connectToEA:(NSString*)prot;
+
+
+/**
+ * Enable External Accessory Heartbeat
+ *
+ * Enables/Disables External Accessory Hearbeat.  On by default.
+ * When enabled, SDK will send a keep-alive command to device in repeating interval.  Default is 10 seconds.
+
+ */
+-(void) enableHeartbeat:(bool)enable;
+
+
+/**
+ * External Accessory Heartbeat Interval
+ *
+ * Sets the External Accessory heartbeat interval, in seconds.  10 seconds is default.
+
+ */
+-(void) heartbeatInterval:(float)heartbeatInterval;
+    
+ /**
+ * Request Remote Key Injection Gen4
+     
+ *
+ Attempts to perform a Remote Key Injection with IDTech's RKI servers.
+ *
+ *@param isTest True = Test/Demo Key, False = Production/Live Key
+  *@param keyName Request specific key to load.  Passing nil will request default key associated with device serial number
+  *@param isForeGround TRUE = run sync on main UI thread, FALSE = run async on background thread (no UI blocking)
+
+ * @return RETURN_CODE:
+ - 0x0000: Success: no error - RETURN_CODE_DO_SUCCESS
+ - 0x0001: Disconnect: no response from reader - RETURN_CODE_ERR_DISCONNECT
+ - 0x0002: Invalid Response: invalid response data - RETURN_CODE_ERR_CMD_RESPONSE
+ - 0x0003: Timeout: time out for task or CMD - RETURN_CODE_ERR_TIMEDOUT
+ - 0x0004: Invalid Parameter: wrong parameter - RETURN_CODE_ERR_INVALID_PARAMETER
+ - 0x0005: MSR Busy: SDK is doing MSR or ICC task - RETURN_CODE_SDK_BUSY_MSR
+ - 0x0006: PINPad Busy:  SDK is doing PINPad task - RETURN_CODE_SDK_BUSY_PINPAD
+ - 0x0100 through 0xFFFF refer to IDT_VP3300::device_getResponseCodeString:()
+     
+*/
+-(RETURN_CODE) device_remoteKeyInjection:(bool)isTest keyName:(NSString*)keyName isForeground:(bool)isForeGround;
+
+    
+    /**
+    * BLE Connect Attempt
+        
+    *
+    Attempts to connect to a BLE device uisng a BLE_MSG as parameters.
+    *
+    *@param BLE_MSG Data parameters for the connection
+
+   */
+    
+-(bool) bleConnect:(IDTech_BLE*)data;
 
 @end
