@@ -9,7 +9,7 @@
 import UIKit
 import Fattmerchant
 
-class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
+class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryDelegate, MobileReaderConnectionStatusDelegate, UserNotificationDelegate {
 
   var omni: Omni?
   var lastPreauthTransaction: Transaction? = nil
@@ -62,6 +62,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    log("Commit Hash: \(Bundle.main.commitHash ?? "undefined")")
     initializeOmni()
     totalTextInput.delegate = self
 
@@ -77,9 +78,10 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
     omni?.transactionUpdateDelegate = self
     omni?.userNotificationDelegate = self
     omni?.mobileReaderConnectionUpdateDelegate = self
+    omni?.usbAccessoryDelegate = self
 
     log("Attempting initalization...")
-
+    
     // Initialize Omni
     omni?.initialize(params: initParams(), completion: {
       self.initializeButton.isHidden = true
@@ -313,7 +315,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
   }
 
   fileprivate func initParams() -> Omni.InitParams {
-    return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
+    return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.LIVE)
   }
 
   func onTransactionUpdate(transactionUpdate: TransactionUpdate) {
@@ -322,6 +324,14 @@ class ViewController: UIViewController, TransactionUpdateDelegate, MobileReaderC
 
   func onUserNotification(userNotification: UserNotification) {
     self.log(userNotification)
+  }
+  
+  func onUsbAccessoryConnected() {
+    self.log("Accessory Connected")
+  }
+  
+  func onUsbAccessoryDisconnected() {
+    self.log("Accessory Disconnected")
   }
 
   // MARK: Logging

@@ -134,7 +134,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
     // Set the connection type to BT
     let params = CCParameters()
-    params[CCParamPinPadConnectionType] = CCValueBLE
+    // params[CCParamPinPadConnectionType] = CCValueBLE
     params[CCParamBLEScanTime] = "5"
 
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
@@ -155,10 +155,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
     let requestParams = CCParameters()
     requestParams[CCParamPinPadName] = reader.name
-    requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBluetooth
+    requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBLE
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
     didConnectAndConfigure = { connectedReader in
+      let status = ChipDnaMobile.sharedInstance().getStatus(nil)
       if let connectedReader = connectedReader, let serial = connectedReader.serialNumber {
         self.familiarSerialNumbers.append(serial)
       }
@@ -166,7 +167,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     }
     ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
     ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
-    ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
+    ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
   }
 
   /// Gets the connected MobileReader
@@ -378,7 +379,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
   fileprivate func deserializeAvailablePinPads(pinPadsXml: String) -> [SelectablePinPad]? {
-    var availablePinPadsList: [SelectablePinPad]?
+    var availablePinPadsList: [SelectablePinPad]
 
     guard
       let availablePinPadsDict = ChipDnaMobileSerializer.deserializeAvailablePinPadsString(pinPadsXml) as? [String: Any] else {
@@ -392,15 +393,39 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     let bleDevices = (availablePinPadsDict[CCValueBLE] as? [String])?.map { pinPadName in
       SelectablePinPad(name: pinPadName, connectionType: CCValueBLE)
     }
-    availablePinPadsList?.append(contentsOf: bleDevices ?? [])
+    availablePinPadsList.append(contentsOf: bleDevices ?? [])
 
     // Add Bluetooth devices
     let btDevices = (availablePinPadsDict[CCValueBluetooth] as? [String])?.map { pinPadName in
       SelectablePinPad(name: pinPadName, connectionType: CCValueBluetooth)
     }
-    availablePinPadsList?.append(contentsOf: btDevices ?? [])
+    availablePinPadsList.append(contentsOf: btDevices ?? [])
+    
+    // USB
+    let usbDevices = (availablePinPadsDict[CCValueLightningUsb] as? [String])?.map { pinPadName in
+      SelectablePinPad(name: pinPadName, connectionType: CCValueLightningUsb)
+    }
+    availablePinPadsList.append(contentsOf: usbDevices ?? [])
 
-    return availablePinPadsList
+    // Known PinPad Filter
+    var known: [SelectablePinPad] = []
+    for pad in availablePinPadsList {
+      if isKnownPinPad(pad.name) {
+        known.append(pad)
+      }
+    }
+
+    return known
+  }
+  
+  private func isKnownPinPad(_ pad: String) -> Bool {
+    let known = ["IDTECH", "CHB"]
+    for pre in known {
+      if !pad.uppercased().hasPrefix(pre) {
+        return false
+      }
+    }
+    return true
   }
 
   // MARK: - ChipDna Listeners
@@ -443,9 +468,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
   @objc func onConfigurationUpdate(parameters: CCParameters) {
-    if
-      let str = parameters[CCParamConfigurationUpdate],
-      let status = MobileReaderConnectionStatus(chipDnaConfigurationUpdate: str) {
+    if let str = parameters[CCParamConfigurationUpdate], let status = MobileReaderConnectionStatus(chipDnaConfigurationUpdate: str) {
       mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: status)
     }
   }
