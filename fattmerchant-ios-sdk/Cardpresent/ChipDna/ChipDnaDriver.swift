@@ -379,7 +379,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
   fileprivate func deserializeAvailablePinPads(pinPadsXml: String) -> [SelectablePinPad]? {
-    var availablePinPadsList: [SelectablePinPad]?
+    var availablePinPadsList: [SelectablePinPad]
 
     guard
       let availablePinPadsDict = ChipDnaMobileSerializer.deserializeAvailablePinPadsString(pinPadsXml) as? [String: Any] else {
@@ -393,21 +393,39 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     let bleDevices = (availablePinPadsDict[CCValueBLE] as? [String])?.map { pinPadName in
       SelectablePinPad(name: pinPadName, connectionType: CCValueBLE)
     }
-    availablePinPadsList?.append(contentsOf: bleDevices ?? [])
+    availablePinPadsList.append(contentsOf: bleDevices ?? [])
 
     // Add Bluetooth devices
     let btDevices = (availablePinPadsDict[CCValueBluetooth] as? [String])?.map { pinPadName in
       SelectablePinPad(name: pinPadName, connectionType: CCValueBluetooth)
     }
-    availablePinPadsList?.append(contentsOf: btDevices ?? [])
+    availablePinPadsList.append(contentsOf: btDevices ?? [])
     
     // USB
     let usbDevices = (availablePinPadsDict[CCValueLightningUsb] as? [String])?.map { pinPadName in
       SelectablePinPad(name: pinPadName, connectionType: CCValueLightningUsb)
     }
-    availablePinPadsList?.append(contentsOf: usbDevices ?? [])
+    availablePinPadsList.append(contentsOf: usbDevices ?? [])
 
-    return availablePinPadsList
+    // Known PinPad Filter
+    var known: [SelectablePinPad] = []
+    for pad in availablePinPadsList {
+      if isKnownPinPad(pad.name) {
+        known.append(pad)
+      }
+    }
+
+    return known
+  }
+  
+  private func isKnownPinPad(_ pad: String) -> Bool {
+    let known = ["IDTECH", "CHB"]
+    for pre in known {
+      if !pad.uppercased().hasPrefix(pre) {
+        return false
+      }
+    }
+    return true
   }
 
   // MARK: - ChipDna Listeners
