@@ -16,6 +16,8 @@
 		51F3C61D2CF5EC5900F37F19 /* libBBDeviceOTA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C6162CF5EB8E00F37F19 /* libBBDeviceOTA.a */; };
 		51F3C6202CF5F02100F37F19 /* libBBDeviceOTA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61F2CF5F02100F37F19 /* libBBDeviceOTA.a */; };
 		51F3C6212CF5F02100F37F19 /* libBBDeviceBT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61E2CF5F02100F37F19 /* libBBDeviceBT.a */; };
+		51F3C6222CF5F1CE00F37F19 /* libBBDeviceBT.a in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61E2CF5F02100F37F19 /* libBBDeviceBT.a */; };
+		51F3C6232CF5F1D900F37F19 /* libBBDeviceOTA.a in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61F2CF5F02100F37F19 /* libBBDeviceOTA.a */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
 		593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
 		593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
@@ -208,6 +210,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				51F3C6232CF5F1D900F37F19 /* libBBDeviceOTA.a in Embed Frameworks */,
+				51F3C6222CF5F1CE00F37F19 /* libBBDeviceBT.a in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -219,7 +223,6 @@
 		46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDetails.swift; sourceTree = "<group>"; };
 		51F3C6162CF5EB8E00F37F19 /* libBBDeviceOTA.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBBDeviceOTA.a; path = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libBBDeviceOTA.a"; sourceTree = "<group>"; };
 		51F3C6172CF5EB8E00F37F19 /* libBBDeviceBT.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBBDeviceBT.a; path = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libBBDeviceBT.a"; sourceTree = "<group>"; };
-		51F3C61A2CF5EC0D00F37F19 /* libBBDevice-BT-3.27.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libBBDevice-BT-3.27.0.a"; path = "../BBPOSFrameworks/BBDevice-BT-3.27.xcframework/ios-arm64/libBBDevice-BT-3.27.0.a"; sourceTree = "<group>"; };
 		51F3C61E2CF5F02100F37F19 /* libBBDeviceBT.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBBDeviceBT.a; sourceTree = "<group>"; };
 		51F3C61F2CF5F02100F37F19 /* libBBDeviceOTA.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBBDeviceOTA.a; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -584,7 +587,6 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				51F3C61A2CF5EC0D00F37F19 /* libBBDevice-BT-3.27.0.a */,
 				51F3C6172CF5EB8E00F37F19 /* libBBDeviceBT.a */,
 				51F3C6162CF5EB8E00F37F19 /* libBBDeviceOTA.a */,
 				D793091523D2568D0066FCA2 /* MediaPlayer.framework */,
