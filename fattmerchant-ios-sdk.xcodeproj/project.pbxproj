@@ -358,12 +358,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
+				A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework in Frameworks */,
 				A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.xcframework in Frameworks */,
+				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				A74B23C92C58095D003FAD5E /* libChipDnaMobileAPI.a in Frameworks */,
 				A74B23C82C58095D003FAD5E /* libCardEaseXml.a in Frameworks */,
-				A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				A74B23C62C58095D003FAD5E /* IDTech.xcframework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
