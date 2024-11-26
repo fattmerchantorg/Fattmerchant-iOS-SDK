@@ -42,8 +42,8 @@
 		5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2652077B4EE004DDA9F /* BankHolderType.swift */; };
 		5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
 		59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */; };
-		A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */; };
-		A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */; };
+		A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.xcframework */; };
+		A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework */; };
 		A74B23B22C58095D003FAD5E /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */; };
 		A74B23B32C58095D003FAD5E /* SOAPDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A74B238B2C58095D003FAD5E /* SOAPDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A74B23B42C58095D003FAD5E /* SOAPEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = A74B238C2C58095D003FAD5E /* SOAPEnums.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -239,8 +239,8 @@
 		5993C2652077B4EE004DDA9F /* BankHolderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankHolderType.swift; sourceTree = "<group>"; };
 		5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodType.swift; sourceTree = "<group>"; };
 		59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentTests.swift; sourceTree = "<group>"; };
-		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
-		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
+		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.xcframework"; sourceTree = "<group>"; };
+		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.xcframework"; sourceTree = "<group>"; };
 		A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHCVSParser-Licence.txt"; sourceTree = "<group>"; };
 		A74B238B2C58095D003FAD5E /* SOAPDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPDelegate.h; sourceTree = "<group>"; };
 		A74B238C2C58095D003FAD5E /* SOAPEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPEnums.h; sourceTree = "<group>"; };
@@ -359,11 +359,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
-				A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
+				A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.xcframework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				A74B23C92C58095D003FAD5E /* libChipDnaMobileAPI.a in Frameworks */,
 				A74B23C82C58095D003FAD5E /* libCardEaseXml.a in Frameworks */,
-				A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */,
+				A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				A74B23C62C58095D003FAD5E /* IDTech.xcframework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
@@ -486,8 +486,8 @@
 		A74B23892C58095D003FAD5E /* BBPOSFrameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */,
-				A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */,
+				A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.xcframework */,
+				A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework */,
 			);
 			path = BBPOSFrameworks;
 			sourceTree = "<group>";
