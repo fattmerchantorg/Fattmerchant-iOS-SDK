@@ -12,6 +12,12 @@
 		46231C5D24DAFF8100A06E1B /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
+		51F3C61C2CF5EC5900F37F19 /* libBBDeviceBT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C6172CF5EB8E00F37F19 /* libBBDeviceBT.a */; };
+		51F3C61D2CF5EC5900F37F19 /* libBBDeviceOTA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C6162CF5EB8E00F37F19 /* libBBDeviceOTA.a */; };
+		51F3C6202CF5F02100F37F19 /* libBBDeviceOTA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61F2CF5F02100F37F19 /* libBBDeviceOTA.a */; };
+		51F3C6212CF5F02100F37F19 /* libBBDeviceBT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61E2CF5F02100F37F19 /* libBBDeviceBT.a */; };
+		51F3C6222CF5F1CE00F37F19 /* libBBDeviceBT.a in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61E2CF5F02100F37F19 /* libBBDeviceBT.a */; };
+		51F3C6232CF5F1D900F37F19 /* libBBDeviceOTA.a in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51F3C61F2CF5F02100F37F19 /* libBBDeviceOTA.a */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
 		593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
 		593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
@@ -42,8 +48,6 @@
 		5993C2662077B4EE004DDA9F /* BankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2652077B4EE004DDA9F /* BankHolderType.swift */; };
 		5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */; };
 		59F1FF3F24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */; };
-		A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */; };
-		A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */; };
 		A74B23B22C58095D003FAD5E /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */; };
 		A74B23B32C58095D003FAD5E /* SOAPDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A74B238B2C58095D003FAD5E /* SOAPDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A74B23B42C58095D003FAD5E /* SOAPEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = A74B238C2C58095D003FAD5E /* SOAPEnums.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -206,6 +210,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				51F3C6232CF5F1D900F37F19 /* libBBDeviceOTA.a in Embed Frameworks */,
+				51F3C6222CF5F1CE00F37F19 /* libBBDeviceBT.a in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,6 +221,10 @@
 /* Begin PBXFileReference section */
 		46231C5A24DAF4A500A06E1B /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
 		46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDetails.swift; sourceTree = "<group>"; };
+		51F3C6162CF5EB8E00F37F19 /* libBBDeviceOTA.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBBDeviceOTA.a; path = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libBBDeviceOTA.a"; sourceTree = "<group>"; };
+		51F3C6172CF5EB8E00F37F19 /* libBBDeviceBT.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBBDeviceBT.a; path = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libBBDeviceBT.a"; sourceTree = "<group>"; };
+		51F3C61E2CF5F02100F37F19 /* libBBDeviceBT.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBBDeviceBT.a; sourceTree = "<group>"; };
+		51F3C61F2CF5F02100F37F19 /* libBBDeviceOTA.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBBDeviceOTA.a; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C2094206EB12F00C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -239,8 +249,8 @@
 		5993C2652077B4EE004DDA9F /* BankHolderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankHolderType.swift; sourceTree = "<group>"; };
 		5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodType.swift; sourceTree = "<group>"; };
 		59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentTests.swift; sourceTree = "<group>"; };
-		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
-		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
+		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.xcframework"; sourceTree = "<group>"; };
+		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.xcframework"; sourceTree = "<group>"; };
 		A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHCVSParser-Licence.txt"; sourceTree = "<group>"; };
 		A74B238B2C58095D003FAD5E /* SOAPDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPDelegate.h; sourceTree = "<group>"; };
 		A74B238C2C58095D003FAD5E /* SOAPEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SOAPEnums.h; sourceTree = "<group>"; };
@@ -358,17 +368,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51F3C61C2CF5EC5900F37F19 /* libBBDeviceBT.a in Frameworks */,
+				51F3C61D2CF5EC5900F37F19 /* libBBDeviceOTA.a in Frameworks */,
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
-				A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				A74B23C92C58095D003FAD5E /* libChipDnaMobileAPI.a in Frameworks */,
 				A74B23C82C58095D003FAD5E /* libCardEaseXml.a in Frameworks */,
-				A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				A74B23C62C58095D003FAD5E /* IDTech.xcframework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
 				D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */,
+				51F3C6202CF5F02100F37F19 /* libBBDeviceOTA.a in Frameworks */,
+				51F3C6212CF5F02100F37F19 /* libBBDeviceBT.a in Frameworks */,
 				A7F5958A2C2B485B00033492 /* ExternalAccessory.framework in Frameworks */,
 				A74B23B92C58095D003FAD5E /* libsqlcipher-4.5.0.a in Frameworks */,
 			);
@@ -486,8 +498,8 @@
 		A74B23892C58095D003FAD5E /* BBPOSFrameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */,
-				A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */,
+				A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.xcframework */,
+				A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.xcframework */,
 			);
 			path = BBPOSFrameworks;
 			sourceTree = "<group>";
@@ -519,6 +531,8 @@
 		A74B23AF2C58095D003FAD5E /* ChipDnaMobile */ = {
 			isa = PBXGroup;
 			children = (
+				51F3C61E2CF5F02100F37F19 /* libBBDeviceBT.a */,
+				51F3C61F2CF5F02100F37F19 /* libBBDeviceOTA.a */,
 				A74B23892C58095D003FAD5E /* BBPOSFrameworks */,
 				A74B23912C58095D003FAD5E /* SOAP */,
 				A74B23952C58095D003FAD5E /* SQLCipher */,
@@ -573,6 +587,8 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				51F3C6172CF5EB8E00F37F19 /* libBBDeviceBT.a */,
+				51F3C6162CF5EB8E00F37F19 /* libBBDeviceOTA.a */,
 				D793091523D2568D0066FCA2 /* MediaPlayer.framework */,
 				D793091123D256690066FCA2 /* CoreBluetooth.framework */,
 				D793090F23D2565D0066FCA2 /* ExternalAccessory.framework */,
