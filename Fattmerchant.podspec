@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Fattmerchant'
-  s.version = '2.4.0'
+  s.version = '2.4.1'
   s.license = {
     :type => 'Apache License, Version 2.0',
     :text => "© #{ Date.today.year } Fattmerchant, inc"

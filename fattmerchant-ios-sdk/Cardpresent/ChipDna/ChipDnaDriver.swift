@@ -421,11 +421,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   private func isKnownPinPad(_ pad: String) -> Bool {
     let known = ["IDTECH", "CHB"]
     for pre in known {
-      if !pad.uppercased().hasPrefix(pre) {
-        return false
+      if pad.uppercased().hasPrefix(pre) {
+        return true
       }
     }
-    return true
+    return false
   }
 
   // MARK: - ChipDna Listeners
