@@ -57,6 +57,10 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
   @IBAction func onCancelTransactionButtonPress(_ sender: UIButton) {
     self.cancelTransaction()
   }
+  
+  @IBAction func onInitializeEphemeral(_ sender: UIButton) {
+    
+  }
 
   let apiKey = ""
 
@@ -93,7 +97,53 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
       }
       self.log(error)
     })
+  }
+  
+  fileprivate func initializeEphemeralOmni() async throws {
+    // instantiate Omni and store somewhere
+    omni = Omni()
+    omni?.signatureProvider = SignatureViewController()
+    omni?.transactionUpdateDelegate = self
+    omni?.userNotificationDelegate = self
+    omni?.mobileReaderConnectionUpdateDelegate = self
+    omni?.usbAccessoryDelegate = self
 
+    log("Attempting initalization with token...")
+    
+    // Make a request to the Ephemeral API
+    guard let url = URL(string: "https://apiprod.fattlabs.com/ephemeral") else {
+      throw URLError(.badURL)
+    }
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+    request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+    request.timeoutInterval = 5
+    
+    let (data, response) = try await URLSession.shared.data(for: request)
+    guard let http = response as? HTTPURLResponse else {
+      throw URLError(.badServerResponse)
+    }
+    
+    // Get the `token` property from the API
+    guard let json = try JSONSerialization.jsonObject(with: data) as? [String:Any] else {
+      throw URLError(.cannotParseResponse)
+    }
+    guard let token = json["token"] as? String else {
+      throw URLError(.cannotParseResponse)
+    }
+    
+    // Use the token to Initialize Omni
+    omni?.initialize(params: initParams(token: token), completion: {
+      self.initializeButton.isHidden = true
+      self.log("Initialized with token")
+    }, error: { (error) in
+      if let initialized = self.omni?.isInitialized, initialized {
+        self.initializeButton.isHidden = true
+        self.log("Initialized with token")
+      }
+      self.log(error)
+    })
   }
 
   fileprivate func chooseTransaction(from transactions: [Transaction], completion: @escaping (Transaction) -> Void) {
@@ -314,8 +364,8 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
     return formatter.string(from: Date())
   }
 
-  fileprivate func initParams() -> Omni.InitParams {
-    return Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.LIVE)
+  fileprivate func initParams(token: String? = nil) -> Omni.InitParams {
+    return Omni.InitParams(appId: "fmiossample", apiKey: token ?? apiKey, environment: Environment.LIVE)
   }
 
   func onTransactionUpdate(transactionUpdate: TransactionUpdate) {

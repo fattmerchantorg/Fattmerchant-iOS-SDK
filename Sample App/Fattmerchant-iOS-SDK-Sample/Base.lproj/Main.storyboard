@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,15 +18,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="$0.01" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="1qI-CY-jqr">
-                                <rect key="frame" x="0.0" y="64" width="414" height="46"/>
+                                <rect key="frame" x="0.0" y="68" width="414" height="46"/>
                                 <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="38"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="52l-64-EqX">
-                                <rect key="frame" x="20" y="130" width="374" height="732"/>
+                                <rect key="frame" x="20" y="134" width="374" height="728"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="KoI-Tz-bhx">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="888"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="930"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Su6-lv-kN3">
                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="300"/>
@@ -41,36 +41,43 @@
                                                 <rect key="frame" x="0.0" y="312" width="374" height="30"/>
                                                 <state key="normal" title="Initialize"/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXo-M4-aSr">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kDL-7Q-QQQ">
                                                 <rect key="frame" x="0.0" y="354" width="374" height="30"/>
+                                                <state key="normal" title="Initialize w/Ephemeral Token"/>
+                                                <connections>
+                                                    <action selector="onInitializeEphemeral:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6uZ-0c-ZeK"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXo-M4-aSr">
+                                                <rect key="frame" x="0.0" y="396" width="374" height="30"/>
                                                 <state key="normal" title="Connect Reader"/>
                                                 <connections>
                                                     <action selector="onConnectReaderButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uqJ-mx-nM9"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gbd-Sh-FGn" userLabel="Disconnect Reader Button">
-                                                <rect key="frame" x="0.0" y="396" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="438" width="374" height="30"/>
                                                 <state key="normal" title="Disconnect Reader"/>
                                                 <connections>
                                                     <action selector="onDisconnectButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cLM-Mz-LB4"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Prp-xT-ZQb" userLabel="Get Reader Info">
-                                                <rect key="frame" x="0.0" y="438" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="480" width="374" height="30"/>
                                                 <state key="normal" title="Get Reader Info"/>
                                                 <connections>
                                                     <action selector="onGetReaderInfoButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="12R-5b-O8s"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WRt-g0-2qt">
-                                                <rect key="frame" x="0.0" y="480" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="522" width="374" height="30"/>
                                                 <state key="normal" title="Refund Payment"/>
                                                 <connections>
                                                     <action selector="onRefundPaymentButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p63-gv-Dcc"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zqO-4j-eIJ">
-                                                <rect key="frame" x="0.0" y="522" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="564" width="374" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                 <state key="normal" title="Take Payment with Reader"/>
                                                 <connections>
@@ -78,7 +85,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hiy-wA-OMP">
-                                                <rect key="frame" x="0.0" y="564" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="606" width="374" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                 <state key="normal" title="Capture Last Transaction"/>
                                                 <connections>
@@ -86,7 +93,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0a-nS-HrI">
-                                                <rect key="frame" x="0.0" y="606" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="648" width="374" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                 <state key="normal" title="Preauth Payment with Reader"/>
                                                 <connections>
@@ -94,42 +101,42 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qj5-x3-oKS">
-                                                <rect key="frame" x="0.0" y="648" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="690" width="374" height="30"/>
                                                 <state key="normal" title="Void Last Transaction"/>
                                                 <connections>
                                                     <action selector="onVoidLastTransactionButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nie-zu-ZHU"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SdI-bW-DBU">
-                                                <rect key="frame" x="0.0" y="690" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="732" width="374" height="30"/>
                                                 <state key="normal" title="Cancel transaction"/>
                                                 <connections>
                                                     <action selector="onCancelTransactionButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="R6b-SB-YAh"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RZc-Dd-cS0">
-                                                <rect key="frame" x="0.0" y="732" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="774" width="374" height="30"/>
                                                 <state key="normal" title="Tokenize Card"/>
                                                 <connections>
                                                     <action selector="tokenizeCard" destination="BYZ-38-t0r" eventType="touchUpInside" id="aPt-g1-Tzg"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vzx-Gr-Zuf">
-                                                <rect key="frame" x="0.0" y="774" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="816" width="374" height="30"/>
                                                 <state key="normal" title="Tokenize Bank Account"/>
                                                 <connections>
                                                     <action selector="tokenizeBankAccount" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Oh-OE-vXa"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Rk-MT-FlI">
-                                                <rect key="frame" x="0.0" y="816" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="858" width="374" height="30"/>
                                                 <state key="normal" title="Take Payment with Card"/>
                                                 <connections>
                                                     <action selector="payWithCard" destination="BYZ-38-t0r" eventType="touchUpInside" id="IbF-0F-Am9"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eOl-2C-891">
-                                                <rect key="frame" x="0.0" y="858" width="374" height="30"/>
+                                                <rect key="frame" x="0.0" y="900" width="374" height="30"/>
                                                 <state key="normal" title="Take Payment with Bank Account"/>
                                                 <connections>
                                                     <action selector="payWithBankAccount" destination="BYZ-38-t0r" eventType="touchUpInside" id="SQs-Gk-YXX"/>
