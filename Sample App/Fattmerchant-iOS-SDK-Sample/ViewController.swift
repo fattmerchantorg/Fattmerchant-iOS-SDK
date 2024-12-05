@@ -59,7 +59,9 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
   }
   
   @IBAction func onInitializeEphemeral(_ sender: UIButton) {
-    
+    Task {
+      try await self.initializeEphemeralOmni()
+    }
   }
 
   let apiKey = ""
