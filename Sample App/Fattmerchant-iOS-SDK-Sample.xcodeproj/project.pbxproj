@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A7AF203F2C2B2AF600DA07DE /* Fattmerchant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B7113623D58D7F00EF98DB /* Fattmerchant.framework */; };
-		A7AF20402C2B2AF600DA07DE /* Fattmerchant.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D7B7113623D58D7F00EF98DB /* Fattmerchant.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D7720E1F2412F53A0064DBDC /* SignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7720E1E2412F53A0064DBDC /* SignatureViewController.swift */; };
 		D781037D23D959FA00256F2F /* TransactionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */; };
 		D781038223DA472400256F2F /* MobileReaderPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D781038123DA472400256F2F /* MobileReaderPickerController.swift */; };
@@ -26,7 +24,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A7AF20402C2B2AF600DA07DE /* Fattmerchant.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -44,7 +41,6 @@
 		D7B7112023D58C4B00EF98DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7B7112323D58C4B00EF98DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D7B7112523D58C4B00EF98DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D7B7113623D58D7F00EF98DB /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +48,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7AF203F2C2B2AF600DA07DE /* Fattmerchant.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,7 +64,6 @@
 		D7B7110D23D58C4A00EF98DB = {
 			isa = PBXGroup;
 			children = (
-				D7B7113623D58D7F00EF98DB /* Fattmerchant.framework */,
 				D7B7111823D58C4A00EF98DB /* Fattmerchant-iOS-SDK-Sample */,
 				D7B7111723D58C4A00EF98DB /* Products */,
 				A7AF203E2C2B2AF600DA07DE /* Frameworks */,
