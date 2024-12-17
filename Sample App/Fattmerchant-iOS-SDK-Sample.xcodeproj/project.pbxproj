@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A762721D2D1202D600AE1475 /* Fattmerchant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A762721C2D1202D600AE1475 /* Fattmerchant.framework */; };
+		A762721E2D1202D600AE1475 /* Fattmerchant.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A762721C2D1202D600AE1475 /* Fattmerchant.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D7720E1F2412F53A0064DBDC /* SignatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7720E1E2412F53A0064DBDC /* SignatureViewController.swift */; };
 		D781037D23D959FA00256F2F /* TransactionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */; };
 		D781038223DA472400256F2F /* MobileReaderPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D781038123DA472400256F2F /* MobileReaderPickerController.swift */; };
@@ -24,6 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A762721E2D1202D600AE1475 /* Fattmerchant.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -31,6 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A762721C2D1202D600AE1475 /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7720E1E2412F53A0064DBDC /* SignatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureViewController.swift; sourceTree = "<group>"; };
 		D781037C23D959FA00256F2F /* TransactionPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPickerViewController.swift; sourceTree = "<group>"; };
 		D781038123DA472400256F2F /* MobileReaderPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderPickerController.swift; sourceTree = "<group>"; };
@@ -48,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A762721D2D1202D600AE1475 /* Fattmerchant.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +62,7 @@
 		A7AF203E2C2B2AF600DA07DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A762721C2D1202D600AE1475 /* Fattmerchant.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

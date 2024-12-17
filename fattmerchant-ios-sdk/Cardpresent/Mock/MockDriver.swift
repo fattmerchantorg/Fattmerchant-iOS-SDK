@@ -12,11 +12,11 @@ class MockDriver: MobileReaderDriver {
 
   weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
 
-  var reader: MobileReader? = MobileReader(name: "Reader",
-                            firmwareVersion: "FakeFirmwareVersion",
-                            make: "FakeMake",
-                            model: "FakeModel",
-                            serialNumber: "FakeSerialNumber")
+  var reader: MobileReader? = MobileReader(name: "MockedReader-0000",
+                            firmwareVersion: "MockFirmwareVersion-0000",
+                            make: "MockMake-Manufacturer",
+                            model: "MockModel-MD000",
+                            serialNumber: "MockSerialNumber-0000-0000")
 
   /// Set this to false to simulate a busy mobile reader
   var readyToTakePayment = true
