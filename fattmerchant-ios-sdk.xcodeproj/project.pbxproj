@@ -86,7 +86,6 @@
 		A76272322D1210D200AE1475 /* StaxNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76272312D1210D200AE1475 /* StaxNetworkError.swift */; };
 		A76272342D12141100AE1475 /* StaxCustomerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76272332D12141100AE1475 /* StaxCustomerRepository.swift */; };
 		A76272362D12145C00AE1475 /* StaxCustomerRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76272352D12145C00AE1475 /* StaxCustomerRepositoryImpl.swift */; };
-		A76272392D12168300AE1475 /* StaxCustomerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76272382D12168300AE1475 /* StaxCustomerRequest.swift */; };
 		A762723B2D12168B00AE1475 /* StaxCustomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A762723A2D12168B00AE1475 /* StaxCustomer.swift */; };
 		A762723D2D1216E500AE1475 /* StaxValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A762723C2D1216E500AE1475 /* StaxValidationError.swift */; };
 		A7F595852C2B454A00033492 /* AccessoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595842C2B454A00033492 /* AccessoryHelper.swift */; };
@@ -293,7 +292,6 @@
 		A76272312D1210D200AE1475 /* StaxNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxNetworkError.swift; sourceTree = "<group>"; };
 		A76272332D12141100AE1475 /* StaxCustomerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxCustomerRepository.swift; sourceTree = "<group>"; };
 		A76272352D12145C00AE1475 /* StaxCustomerRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxCustomerRepositoryImpl.swift; sourceTree = "<group>"; };
-		A76272382D12168300AE1475 /* StaxCustomerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxCustomerRequest.swift; sourceTree = "<group>"; };
 		A762723A2D12168B00AE1475 /* StaxCustomer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxCustomer.swift; sourceTree = "<group>"; };
 		A762723C2D1216E500AE1475 /* StaxValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxValidationError.swift; sourceTree = "<group>"; };
 		A7F595842C2B454A00033492 /* AccessoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryHelper.swift; sourceTree = "<group>"; };
@@ -483,12 +481,12 @@
 		5993C2F6207D0402004DDA9F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D765D46523CC465800656040 /* Customer.swift */,
 				5993C25B2076BD68004DDA9F /* PaymentMethod.swift */,
 				5993C25D2076BD73004DDA9F /* CreditCard.swift */,
 				5993C2632077A687004DDA9F /* BankAccount.swift */,
 				5993C2652077B4EE004DDA9F /* BankHolderType.swift */,
 				5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */,
-				D765D46523CC465800656040 /* Customer.swift */,
 				D765D46823CC467100656040 /* Model.swift */,
 				D765D46B23CC478000656040 /* Invoice.swift */,
 				D765D46E23CC488000656040 /* Merchant.swift */,
@@ -620,7 +618,6 @@
 		A76272282D120F1D00AE1475 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A76272372D12167900AE1475 /* Requests */,
 				A762723A2D12168B00AE1475 /* StaxCustomer.swift */,
 			);
 			path = Models;
@@ -640,14 +637,6 @@
 				A76272352D12145C00AE1475 /* StaxCustomerRepositoryImpl.swift */,
 			);
 			path = Implementations;
-			sourceTree = "<group>";
-		};
-		A76272372D12167900AE1475 /* Requests */ = {
-			isa = PBXGroup;
-			children = (
-				A76272382D12168300AE1475 /* StaxCustomerRequest.swift */,
-			);
-			path = Requests;
 			sourceTree = "<group>";
 		};
 		A7CAB3482C0FBE100053CE4A /* Vendor */ = {
@@ -1046,7 +1035,6 @@
 				D765D46623CC465800656040 /* Customer.swift in Sources */,
 				D7B7113B23D63B0D00EF98DB /* Environment.swift in Sources */,
 				A7F595852C2B454A00033492 /* AccessoryHelper.swift in Sources */,
-				A76272392D12168300AE1475 /* StaxCustomerRequest.swift in Sources */,
 				A762722C2D120F6500AE1475 /* StaxHttpClient.swift in Sources */,
 				A76272342D12141100AE1475 /* StaxCustomerRepository.swift in Sources */,
 				594466AE249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift in Sources */,
@@ -1185,7 +1173,7 @@
 				DEVELOPMENT_TEAM = DYRYDWJYX5;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1250,7 +1238,7 @@
 				DEVELOPMENT_TEAM = DYRYDWJYX5;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1301,7 +1289,7 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher",
 				);
 				MARKETING_VERSION = "2.2.1-beta";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
@@ -1346,7 +1334,7 @@
 					"$(PROJECT_DIR)/fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher",
 				);
 				MARKETING_VERSION = "2.2.1-beta";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fattmerchant.fattmerchant-ios-sdk";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
