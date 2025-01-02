@@ -2,7 +2,7 @@ import Foundation
 
 /// A client for making HTTP requests to the Stax API.
 /// Handles both modern async/await and legacy callback-based networking depending on iOS version.
-final class StaxHttpClient {
+final class StaxHttpClient: Sendable {
   private let baseURL: URL
   private let session: URLSession = .shared
   private let decoder: JSONDecoder = .init()
