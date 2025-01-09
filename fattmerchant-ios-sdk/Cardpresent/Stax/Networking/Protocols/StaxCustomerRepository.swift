@@ -5,6 +5,11 @@ public protocol StaxCustomerRepository {
   /// - Returns: The customer if found.
   /// - Throws: StaxNetworkError if the request fails.
   func getCustomer(id: String) async throws -> StaxCustomer
+  
+  /// Retrives an array of `StaxPaymentMethod` by the `StaxCustomer` ID.
+  /// - Parameter id: The unique identifier of the customer.
+  /// - Returns: An array of `StaxPaymentMethod` objects associated with the `StaxCustomer`
+  func getPaymentMethodsForCustomer(id: String) async throws -> [StaxPaymentMethod]
 
   /// Creates a new customer.
   /// - Parameter request: The customer details to create.

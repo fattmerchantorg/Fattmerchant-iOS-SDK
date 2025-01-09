@@ -14,6 +14,14 @@ final class StaxCustomerRepositoryImpl: StaxCustomerRepository {
     return try await httpClient.perform(request)
   }
     
+  func getPaymentMethodsForCustomer(id: String) async throws -> [StaxPaymentMethod] {
+    let request = StaxApiRequest<[StaxPaymentMethod]>(
+      path: "/customer/\(id)/payment-method",
+      method: .get
+    )
+    return try await httpClient.perform(request)
+  }
+  
   func createCustomer(_ request: StaxCustomer) async throws -> StaxCustomer {
     let request = StaxApiRequest<StaxCustomer>(
       path: "/customer",

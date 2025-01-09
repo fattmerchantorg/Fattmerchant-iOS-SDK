@@ -83,7 +83,7 @@ public struct StaxInvoice: Codable {
     Update(invoice: self)
   }
   
-  /// Wrapper for handling customer updates with explicit mutability
+  /// Wrapper for handling invoice updates with explicit mutability
   @dynamicMemberLookup
   public struct Update {
     private var invoice: StaxInvoice
