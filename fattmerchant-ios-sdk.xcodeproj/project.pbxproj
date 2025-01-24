@@ -13,8 +13,6 @@
 		466BBA5424E7676C00EAEBBB /* ChipDnaDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B6F90239E971A007FB7C4 /* ChipDnaDriver.swift */; };
 		46C3ECC724CF551F005B4790 /* MobileReaderDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C3ECC624CF551F005B4790 /* MobileReaderDetails.swift */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
-		593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
-		593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FD6246878B700D78874 /* AsyncFilter.swift */; };
 		593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FDA2468956000D78874 /* AsyncFilterTests.swift */; };
 		594466AB249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */; };
 		594466AC249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */; };
@@ -79,6 +77,8 @@
 		A74B23D22C58095D003FAD5E /* TransactionUpdates.h in Headers */ = {isa = PBXBuildFile; fileRef = A74B23AC2C58095D003FAD5E /* TransactionUpdates.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A74B23D32C58095D003FAD5E /* UserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = A74B23AD2C58095D003FAD5E /* UserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A74B23D42C58095D003FAD5E /* VersionInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = A74B23AE2C58095D003FAD5E /* VersionInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A770BAD42D43FFF7005D4897 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A770BAD32D43FFF4005D4897 /* AsyncFilter.swift */; };
+		A770BAD52D43FFF7005D4897 /* AsyncFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A770BAD32D43FFF4005D4897 /* AsyncFilter.swift */; };
 		A7F595852C2B454A00033492 /* AccessoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595842C2B454A00033492 /* AccessoryHelper.swift */; };
 		A7F595862C2B454A00033492 /* AccessoryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595842C2B454A00033492 /* AccessoryHelper.swift */; };
 		A7F595882C2B466500033492 /* UsbAccessoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F595872C2B466500033492 /* UsbAccessoryDelegate.swift */; };
@@ -219,7 +219,6 @@
 		591C2094206EB12F00C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C20A3206EB26700C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		593A7FD6246878B700D78874 /* AsyncFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilter.swift; sourceTree = "<group>"; };
 		593A7FDA2468956000D78874 /* AsyncFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilterTests.swift; sourceTree = "<group>"; };
 		594466AA249C5BDC00C6CFD8 /* CancelCurrentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransaction.swift; sourceTree = "<group>"; };
 		594466AD249E94F800C6CFD8 /* MobileReaderConnectionStatusDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatusDelegate.swift; sourceTree = "<group>"; };
@@ -276,6 +275,7 @@
 		A74B23AC2C58095D003FAD5E /* TransactionUpdates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionUpdates.h; sourceTree = "<group>"; };
 		A74B23AD2C58095D003FAD5E /* UserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNotification.h; sourceTree = "<group>"; };
 		A74B23AE2C58095D003FAD5E /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
+		A770BAD32D43FFF4005D4897 /* AsyncFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilter.swift; sourceTree = "<group>"; };
 		A7F595842C2B454A00033492 /* AccessoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryHelper.swift; sourceTree = "<group>"; };
 		A7F595872C2B466500033492 /* UsbAccessoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsbAccessoryDelegate.swift; sourceTree = "<group>"; };
 		D702B7BC23C8D0DD00B8AB79 /* OmniApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniApi.swift; sourceTree = "<group>"; };
@@ -436,9 +436,9 @@
 		593A7FD52468788000D78874 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				D71DDE7D28979D9F00D4C42E /* String+Blank.swift */,
-				593A7FD6246878B700D78874 /* AsyncFilter.swift */,
 				A7F595842C2B454A00033492 /* AccessoryHelper.swift */,
+				A770BAD32D43FFF4005D4897 /* AsyncFilter.swift */,
+				D71DDE7D28979D9F00D4C42E /* String+Blank.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -905,7 +905,6 @@
 				D765D47923CC4B1100656040 /* CustomerRepository.swift in Sources */,
 				D79308AD23D0AA230066FCA2 /* TransactionResult.swift in Sources */,
 				D79308A423D0A8B10066FCA2 /* MobileReader.swift in Sources */,
-				593A7FD7246878B700D78874 /* AsyncFilter.swift in Sources */,
 				46231C5B24DAF4A500A06E1B /* CatalogItem.swift in Sources */,
 				D765D47523CC4A1400656040 /* Transaction.swift in Sources */,
 				D7A28D612433E2CA00FC8872 /* TakePayment.swift in Sources */,
@@ -934,6 +933,7 @@
 				D765D48423CE41A500656040 /* JSONValue.swift in Sources */,
 				D765D49F23CFCA1400656040 /* Amount.swift in Sources */,
 				D765D49623CFC1A000656040 /* InvoiceRepository.swift in Sources */,
+				A770BAD42D43FFF7005D4897 /* AsyncFilter.swift in Sources */,
 				5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */,
 				D71DDE7E28979D9F00D4C42E /* String+Blank.swift in Sources */,
 				D765D47223CC49C800656040 /* Self.swift in Sources */,
@@ -1021,7 +1021,6 @@
 				D702B7D023C8F80200B8AB79 /* PaymentMethodType.swift in Sources */,
 				D765D47323CC49C800656040 /* Self.swift in Sources */,
 				D73BBCF9244D81210052B525 /* DisconnectMobileReader.swift in Sources */,
-				593A7FD8246878B700D78874 /* AsyncFilter.swift in Sources */,
 				D760D82F23D885250075057C /* TransactionJson.swift in Sources */,
 				D765D46D23CC478000656040 /* Invoice.swift in Sources */,
 				593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */,
@@ -1042,6 +1041,7 @@
 				A7F595862C2B454A00033492 /* AccessoryHelper.swift in Sources */,
 				46231C5C24DAF4A500A06E1B /* CatalogItem.swift in Sources */,
 				D7692F1A23E4B03200CB0954 /* Omni.swift in Sources */,
+				A770BAD52D43FFF7005D4897 /* AsyncFilter.swift in Sources */,
 				D765D49D23CFC32200656040 /* TransactionRepository.swift in Sources */,
 				D760D82823D87F5D0075057C /* InvoiceJson.swift in Sources */,
 				D71DDE7F28979D9F00D4C42E /* String+Blank.swift in Sources */,
@@ -1193,7 +1193,7 @@
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1238,7 +1238,7 @@
 				);
 				INFOPLIST_FILE = "fattmerchant-ios-sdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

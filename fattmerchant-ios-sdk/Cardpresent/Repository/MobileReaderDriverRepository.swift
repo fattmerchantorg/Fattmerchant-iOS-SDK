@@ -32,7 +32,16 @@ class MobileReaderDriverRepository {
 
   /// Gets the MobileReaderDrivers which have been initialized
   func getInitializedDrivers(completion: @escaping ([MobileReaderDriver]) -> Void) {
-    filter(items: allDrivers(), predicate: { $0.isInitialized }, completion: completion)
+    allDrivers().filterAsync(predicate: { driver in
+      AsyncStream { continuation in
+        driver.isInitialized { result in
+          continuation.yield(result)
+          continuation.finish()
+        }
+      }
+    }) { filtered in
+      completion(filtered)
+    }
   }
 
   func getDriverFor(transaction: Transaction, completion: (MobileReaderDriver?) -> Void) {
