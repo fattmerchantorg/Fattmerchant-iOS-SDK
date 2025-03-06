@@ -1,8 +1,8 @@
 /// Implementation of CustomerRepository that communicates with the Stax API.
 final class StaxCustomerRepositoryImpl: StaxCustomerRepository {
-  private let httpClient: StaxHttpClient
+  private let httpClient: StaxHttpClientProtocol
     
-  init(httpClient: StaxHttpClient) {
+  init(httpClient: StaxHttpClientProtocol) {
     self.httpClient = httpClient
   }
     

@@ -1,3 +1,5 @@
+import Foundation
+
 /// Represents a invoice in the Stax API.
 public struct StaxInvoice: Codable {
   /// Unique identifier for the invoice

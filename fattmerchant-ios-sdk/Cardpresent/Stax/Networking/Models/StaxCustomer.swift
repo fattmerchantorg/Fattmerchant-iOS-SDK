@@ -1,3 +1,5 @@
+import Foundation
+
 /// Represents a customer in the Stax API.
 /// At least one of: firstname, lastname, email, or company must be provided.
 public struct StaxCustomer: Codable {

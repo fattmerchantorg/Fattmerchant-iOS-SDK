@@ -1,3 +1,5 @@
+import Foundation
+
 public struct StaxPaymentMethod: Codable {
 
   public let id: String?

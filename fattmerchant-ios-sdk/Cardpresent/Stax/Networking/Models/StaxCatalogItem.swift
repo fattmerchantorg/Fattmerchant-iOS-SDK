@@ -1,3 +1,5 @@
+import Foundation
+
 public struct StaxCatalogItem: Codable {
   public let id: String?
   public let userId: String?
