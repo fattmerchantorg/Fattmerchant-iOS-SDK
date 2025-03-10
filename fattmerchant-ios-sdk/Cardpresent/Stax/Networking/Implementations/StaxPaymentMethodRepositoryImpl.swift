@@ -1,8 +1,8 @@
 /// Implementation ofPaymentMethodRepository that communicates with the Stax API.
 final class StaxPaymentMethodRepositoryImpl: StaxPaymentMethodRepository {
-  private let httpClient: StaxHttpClient
+  private let httpClient: StaxHttpClientProtocol
     
-  init(httpClient: StaxHttpClient) {
+  init(httpClient: StaxHttpClientProtocol) {
     self.httpClient = httpClient
   }
   

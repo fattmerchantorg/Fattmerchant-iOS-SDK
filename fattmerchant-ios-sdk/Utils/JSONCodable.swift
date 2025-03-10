@@ -1,4 +1,4 @@
-public enum JSONCodable: Codable {
+public enum JSONCodable: Codable, Equatable {
   case string(String)
   case int(Int)
   case double(Double)
