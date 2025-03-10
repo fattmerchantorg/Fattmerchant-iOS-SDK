@@ -120,6 +120,8 @@
 		A73000EA2D7A274100E9BBAA /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5993C2592076BD16004DDA9F /* Networking.swift */; };
 		A73000F02D7A295500E9BBAA /* StaxHttpClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73000EF2D7A294D00E9BBAA /* StaxHttpClientProtocol.swift */; };
 		A73000F12D7A295500E9BBAA /* StaxHttpClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73000EF2D7A294D00E9BBAA /* StaxHttpClientProtocol.swift */; };
+		A73001162D7F564300E9BBAA /* StaxTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73001152D7F563D00E9BBAA /* StaxTransaction.swift */; };
+		A73001172D7F564300E9BBAA /* StaxTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73001152D7F563D00E9BBAA /* StaxTransaction.swift */; };
 		A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */; };
 		A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */; };
 		A74B23B22C58095D003FAD5E /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */; };
@@ -281,6 +283,7 @@
 		5993C2672077B6B6004DDA9F /* PaymentMethodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodType.swift; sourceTree = "<group>"; };
 		59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentTests.swift; sourceTree = "<group>"; };
 		A73000EF2D7A294D00E9BBAA /* StaxHttpClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxHttpClientProtocol.swift; sourceTree = "<group>"; };
+		A73001152D7F563D00E9BBAA /* StaxTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxTransaction.swift; sourceTree = "<group>"; };
 		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
 		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
 		A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHCVSParser-Licence.txt"; sourceTree = "<group>"; };
@@ -690,6 +693,7 @@
 				A762723A2D12168B00AE1475 /* StaxCustomer.swift */,
 				A770BAAE2D272FC1005D4897 /* StaxInvoice.swift */,
 				A770BAB52D304810005D4897 /* StaxPaymentMethod.swift */,
+				A73001152D7F563D00E9BBAA /* StaxTransaction.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1136,6 +1140,7 @@
 				5993C2682077B6B6004DDA9F /* PaymentMethodType.swift in Sources */,
 				A770BAD22D305DD7005D4897 /* StaxCatalogRepositoryImpl.swift in Sources */,
 				D71DDE7E28979D9F00D4C42E /* String+Blank.swift in Sources */,
+				A73001162D7F564300E9BBAA /* StaxTransaction.swift in Sources */,
 				D765D47223CC49C800656040 /* Self.swift in Sources */,
 				D79308CB23D229420066FCA2 /* ChipDnaUtils.swift in Sources */,
 				D7E15C5626577CFA006D4EE7 /* CapturePreauthTransaction.swift in Sources */,
@@ -1190,6 +1195,7 @@
 				A73000962D7A274100E9BBAA /* StaxInvoiceStatus.swift in Sources */,
 				A73000972D7A274100E9BBAA /* StaxPaymentMethodType.swift in Sources */,
 				A73000982D7A274100E9BBAA /* StaxCatalogItem.swift in Sources */,
+				A73001172D7F564300E9BBAA /* StaxTransaction.swift in Sources */,
 				A73000992D7A274100E9BBAA /* StaxCustomer.swift in Sources */,
 				A730009A2D7A274100E9BBAA /* StaxInvoice.swift in Sources */,
 				A730009B2D7A274100E9BBAA /* StaxPaymentMethod.swift in Sources */,
