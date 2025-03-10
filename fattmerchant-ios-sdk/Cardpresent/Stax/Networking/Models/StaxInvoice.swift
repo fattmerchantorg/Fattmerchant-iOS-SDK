@@ -19,13 +19,12 @@ public struct StaxInvoice: Codable {
   public let totalPaid: Double?
   public let url: String?
   public let meta: JSONCodable?
-  public let dueAt: String?
-  public let sentAt: String?
-  public let paidAt: String?
-  public let viewedAt: String?
-  public let createdAt: String?
-  public let updatedAt: String?
-  public let deletedAt: String?
+  public let dueAt: Date?
+  public let sentAt: Date?
+  public let paidAt: Date?
+  public let viewedAt: Date?
+  public let createdAt: Date?
+  public let updatedAt: Date?
   
   private enum CodingKeys: String, CodingKey {
     case id
@@ -50,7 +49,54 @@ public struct StaxInvoice: Codable {
     case viewedAt = "viewed_at"
     case createdAt = "created_at"
     case updatedAt = "updated_at"
-    case deletedAt = "deleted_at"
+  }
+  
+  public init(
+    id: String? = nil,
+    userId: String? = nil,
+    customerId: String? = nil,
+    merchantId: String? = nil,
+    paymentMethodId: String? = nil,
+    scheduleId: String? = nil,
+    balanceDue: Double? = nil,
+    isMerchantPresent: Bool? = nil,
+    isWebpayment: Bool? = nil,
+    hasPaymentAttemptFailed: Bool? = nil,
+    paymentAttemptMessage: String? = nil,
+    status: StaxInvoiceStatus? = nil,
+    total: Double? = nil,
+    totalPaid: Double? = nil,
+    url: String? = nil,
+    meta: JSONCodable? = nil,
+    dueAt: Date? = nil,
+    sentAt: Date? = nil,
+    paidAt: Date? = nil,
+    viewedAt: Date? = nil,
+    createdAt: Date? = nil,
+    updatedAt: Date? = nil
+  ) {
+    self.id = id
+    self.userId = userId
+    self.customerId = customerId
+    self.merchantId = merchantId
+    self.paymentMethodId = paymentMethodId
+    self.scheduleId = scheduleId
+    self.balanceDue = balanceDue
+    self.isMerchantPresent = isMerchantPresent
+    self.isWebpayment = isWebpayment
+    self.hasPaymentAttemptFailed = hasPaymentAttemptFailed
+    self.paymentAttemptMessage = paymentAttemptMessage
+    self.status = status
+    self.total = total
+    self.totalPaid = totalPaid
+    self.url = url
+    self.meta = meta
+    self.dueAt = dueAt
+    self.sentAt = sentAt
+    self.paidAt = paidAt
+    self.viewedAt = viewedAt
+    self.createdAt = createdAt
+    self.updatedAt = updatedAt
   }
   
   private init(from existing: StaxInvoice, changes: [String: Any]) {
@@ -70,13 +116,12 @@ public struct StaxInvoice: Codable {
     self.totalPaid = (changes["totalPaid"] as? Double) ?? existing.totalPaid
     self.url = (changes["url"] as? String) ?? existing.url
     self.meta = (changes["meta"] as? JSONCodable) ?? existing.meta
-    self.dueAt = (changes["dueAt"] as? String) ?? existing.dueAt
+    self.dueAt = (changes["dueAt"] as? Date) ?? existing.dueAt
     self.sentAt = existing.sentAt
     self.paidAt = existing.paidAt
     self.viewedAt = existing.viewedAt
     self.createdAt = existing.createdAt
     self.updatedAt = existing.updatedAt
-    self.deletedAt = existing.deletedAt
   }
   
   /// Creates a `StaxInvoice.Update` instance with mutable properties.

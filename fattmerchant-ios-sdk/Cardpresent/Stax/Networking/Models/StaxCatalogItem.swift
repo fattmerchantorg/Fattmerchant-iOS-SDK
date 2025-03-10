@@ -17,7 +17,6 @@ public struct StaxCatalogItem: Codable {
   public let meta: JSONCodable?
   public let createdAt: Date?
   public let updatedAt: Date?
-  public let deletedAt: Date?
   
   private enum CodingKeys: String, CodingKey {
     case id
@@ -36,7 +35,42 @@ public struct StaxCatalogItem: Codable {
     case meta
     case createdAt = "created_at"
     case updatedAt = "updated_at"
-    case deletedAt = "deleted_at"
+  }
+  
+  public init (
+    id: String? = nil,
+    userId: String? = nil,
+    merchantId: String? = nil,
+    item: String? = nil,
+    code: String? = nil,
+    category: String? = nil,
+    details: String? = nil,
+    isActive: Bool? = nil,
+    isTaxable: Bool? = nil,
+    isService: Bool? = nil,
+    isDiscount: Bool? = nil,
+    price: Double? = nil,
+    amountInStock: Int? = nil,
+    meta: JSONCodable? = nil,
+    createdAt: Date? = nil,
+    updatedAt: Date? = nil
+  ) {
+    self.id = id
+    self.userId = userId
+    self.merchantId = merchantId
+    self.item = item
+    self.code = code
+    self.category = category
+    self.details = details
+    self.isActive = isActive
+    self.isTaxable = isTaxable
+    self.isService = isService
+    self.isDiscount = isDiscount
+    self.price = price
+    self.amountInStock = amountInStock
+    self.meta = meta
+    self.createdAt = createdAt
+    self.updatedAt = updatedAt
   }
   
   private init(from existing: StaxCatalogItem, changes: [String: Any]) {
@@ -56,7 +90,6 @@ public struct StaxCatalogItem: Codable {
     self.meta = (changes["meta"] as? JSONCodable) ?? existing.meta
     self.createdAt = existing.createdAt
     self.updatedAt = existing.updatedAt
-    self.deletedAt = existing.deletedAt
   }
   
   /// Creates a `StaxCatalogItem.Update` instance with mutable properties.

@@ -122,6 +122,8 @@
 		A73000F12D7A295500E9BBAA /* StaxHttpClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73000EF2D7A294D00E9BBAA /* StaxHttpClientProtocol.swift */; };
 		A73001162D7F564300E9BBAA /* StaxTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73001152D7F563D00E9BBAA /* StaxTransaction.swift */; };
 		A73001172D7F564300E9BBAA /* StaxTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73001152D7F563D00E9BBAA /* StaxTransaction.swift */; };
+		A730011B2D7F5B8B00E9BBAA /* StaxInvoiceRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A730011A2D7F5B8400E9BBAA /* StaxInvoiceRepositoryImpl.swift */; };
+		A730011C2D7F5B8B00E9BBAA /* StaxInvoiceRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A730011A2D7F5B8400E9BBAA /* StaxInvoiceRepositoryImpl.swift */; };
 		A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */; };
 		A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */; };
 		A74B23B22C58095D003FAD5E /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */; };
@@ -284,6 +286,7 @@
 		59F1FF3E24742F3F00019E06 /* TakeMobileReaderPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPaymentTests.swift; sourceTree = "<group>"; };
 		A73000EF2D7A294D00E9BBAA /* StaxHttpClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxHttpClientProtocol.swift; sourceTree = "<group>"; };
 		A73001152D7F563D00E9BBAA /* StaxTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxTransaction.swift; sourceTree = "<group>"; };
+		A730011A2D7F5B8400E9BBAA /* StaxInvoiceRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxInvoiceRepositoryImpl.swift; sourceTree = "<group>"; };
 		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
 		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
 		A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHCVSParser-Licence.txt"; sourceTree = "<group>"; };
@@ -715,6 +718,7 @@
 			children = (
 				A770BAD12D305DD0005D4897 /* StaxCatalogRepositoryImpl.swift */,
 				A76272352D12145C00AE1475 /* StaxCustomerRepositoryImpl.swift */,
+				A730011A2D7F5B8400E9BBAA /* StaxInvoiceRepositoryImpl.swift */,
 				A770BAC92D305637005D4897 /* StaxPaymentMethodRepositoryImpl.swift */,
 			);
 			path = Implementations;
@@ -1130,6 +1134,7 @@
 				D7801BF4241F26E200A93001 /* ModelRepository+DefaultImpl.swift in Sources */,
 				A770BAC62D3053E1005D4897 /* StaxBankAccountType.swift in Sources */,
 				5993C25A2076BD16004DDA9F /* Networking.swift in Sources */,
+				A730011C2D7F5B8B00E9BBAA /* StaxInvoiceRepositoryImpl.swift in Sources */,
 				D79308D223D22F480066FCA2 /* ChipDnaTransactionUserReference.swift in Sources */,
 				D79308C123D0E0B40066FCA2 /* SearchForReaders.swift in Sources */,
 				D79308B023D0AA9A0066FCA2 /* TransactionType.swift in Sources */,
@@ -1224,6 +1229,7 @@
 				A73000B22D7A274100E9BBAA /* VoidTransaction.swift in Sources */,
 				A73000B32D7A274100E9BBAA /* OmniApi.swift in Sources */,
 				A73000B42D7A274100E9BBAA /* Endpoints.swift in Sources */,
+				A730011B2D7F5B8B00E9BBAA /* StaxInvoiceRepositoryImpl.swift in Sources */,
 				A73000B52D7A274100E9BBAA /* Environment.swift in Sources */,
 				A73000B62D7A274100E9BBAA /* PaginatedData.swift in Sources */,
 				A73000B72D7A274100E9BBAA /* ChipDnaDriver.swift in Sources */,

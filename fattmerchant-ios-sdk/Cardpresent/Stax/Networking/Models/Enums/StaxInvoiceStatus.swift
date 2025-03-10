@@ -1,10 +1,10 @@
-public enum StaxInvoiceStatus: String, Codable {
-  case void = "VOID"
-  case deleted = "DELETED"
-  case draft = "DRAFT"
-  case sent = "SENT"
-  case viewed = "VIEWED"
-  case paid = "PAID"
-  case partial = "PARTIALLY APPLIED"
-  case attempted = "ATTEMPTED"
+public enum StaxInvoiceStatus: String, CaseIterable, Codable {
+  case void = "void"
+  case deleted = "deleted"
+  case draft = "draft"
+  case sent = "sent"
+  case viewed = "viewed"
+  case paid = "paid"
+  case partial = "partial"
+  case attempted = "attempted"
 }
