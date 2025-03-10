@@ -225,7 +225,7 @@ final class StaxPaymentMethodTests: XCTestCase {
     let updatedPaymentMethod = update.apply()
     
     // Verify changes
-    XCTAssertEqual(updatedPaymentMethod.nickname, "New Business Card") // This test will fail as nickname isn't included in changes array
+    XCTAssertEqual(updatedPaymentMethod.nickname, "New Business Card")
     XCTAssertEqual(updatedPaymentMethod.isDefault, 1)
     XCTAssertEqual(updatedPaymentMethod.personName, "Jane Smith")
     XCTAssertEqual(updatedPaymentMethod.address1, "456 New St")

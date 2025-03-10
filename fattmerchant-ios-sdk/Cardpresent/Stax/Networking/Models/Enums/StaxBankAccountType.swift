@@ -1,4 +1,4 @@
 public enum StaxBankAccountType: String, Codable {
-  case savings = "SAVINGS"
-  case checking = "CHECKING"
+  case savings = "savings"
+  case checking = "checking"
 }

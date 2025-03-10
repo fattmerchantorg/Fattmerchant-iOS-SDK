@@ -6,7 +6,7 @@ public struct StaxPaymentMethod: Codable {
   public let customerId: String?
   public let merchantId: String?
   public let userId: String?
-  public let nickname: String?
+  public var nickname: String?
   public let isDefault: Int?
   public let method: StaxPaymentMethodType?
   public let meta: JSONCodable?
@@ -132,11 +132,12 @@ public struct StaxPaymentMethod: Codable {
     self.bankType = (changes["bankType"] as? StaxBankAccountType) ?? existing.bankType
     self.bankHolderType = (changes["bankHolderType"] as? StaxBankHolderType) ?? existing.bankHolderType
     self.address1 = (changes["address1"] as? String) ?? existing.address1
-    self.address2 = (changes["address2"] as? String) ?? existing.address1
+    self.address2 = (changes["address2"] as? String) ?? existing.address2
     self.addressCity = (changes["addressCity"] as? String) ?? existing.addressCity
     self.addressState = (changes["addressState"] as? String) ?? existing.addressState
     self.addressZip = (changes["addressZip"] as? String) ?? existing.addressZip
     self.addressCountry = (changes["addressCountry"] as? String) ?? existing.addressCountry
+    self.nickname = (changes["nickname"] as? String) ?? existing.nickname
     self.purgedAt = existing.purgedAt
     self.createdAt = existing.createdAt
     self.updatedAt = existing.updatedAt
@@ -181,6 +182,7 @@ public struct StaxPaymentMethod: Codable {
         case "addressState": return paymentMethod.addressState
         case "addressZip": return paymentMethod.addressZip
         case "addressCountry": return paymentMethod.addressCountry
+        case "nickname": return paymentMethod.nickname
         default: return nil
       }
     }

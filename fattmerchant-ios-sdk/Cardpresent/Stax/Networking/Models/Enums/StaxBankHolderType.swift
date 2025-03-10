@@ -1,4 +1,4 @@
 public enum StaxBankHolderType: String, Codable {
-  case business = "BUSINESS"
-  case personal = "PERSONAL"
+  case business = "business"
+  case personal = "personal"
 }
