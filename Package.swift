@@ -30,7 +30,8 @@ let package = Package(
       .target(
         name: "Fattmerchant",
         path: "fattmerchant-ios-sdk",
-        sources: ["Utils", "Cardpresent", "Models", "Networking.swift"]
+        sources: ["Utils", "Cardpresent", "Models", "Networking.swift"],
+        publicHeadersPath: "fattmerchant-ios-sdk"
       ),
     ],
     cLanguageStandard: .c11,
