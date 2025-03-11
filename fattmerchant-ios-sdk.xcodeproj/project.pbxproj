@@ -275,6 +275,8 @@
 		A74B23AC2C58095D003FAD5E /* TransactionUpdates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionUpdates.h; sourceTree = "<group>"; };
 		A74B23AD2C58095D003FAD5E /* UserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNotification.h; sourceTree = "<group>"; };
 		A74B23AE2C58095D003FAD5E /* VersionInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInformation.h; sourceTree = "<group>"; };
+		A75B4E892D7FC72A0052D597 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		A75B4E8A2D7FC7420052D597 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		A770BAD32D43FFF4005D4897 /* AsyncFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilter.swift; sourceTree = "<group>"; };
 		A7F595842C2B454A00033492 /* AccessoryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryHelper.swift; sourceTree = "<group>"; };
 		A7F595872C2B466500033492 /* UsbAccessoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsbAccessoryDelegate.swift; sourceTree = "<group>"; };
@@ -387,6 +389,7 @@
 		591C2086206EB12F00C848DA = {
 			isa = PBXGroup;
 			children = (
+				A75B4E892D7FC72A0052D597 /* Package.swift */,
 				591C2092206EB12F00C848DA /* fattmerchant-ios-sdk */,
 				591C20A0206EB26700C848DA /* fattmerchant_ios_sdkTests */,
 				591C2091206EB12F00C848DA /* Products */,
@@ -519,6 +522,7 @@
 		A74B23AF2C58095D003FAD5E /* ChipDnaMobile */ = {
 			isa = PBXGroup;
 			children = (
+				A75B4E8A2D7FC7420052D597 /* module.modulemap */,
 				A74B23892C58095D003FAD5E /* BBPOSFrameworks */,
 				A74B23912C58095D003FAD5E /* SOAP */,
 				A74B23952C58095D003FAD5E /* SQLCipher */,

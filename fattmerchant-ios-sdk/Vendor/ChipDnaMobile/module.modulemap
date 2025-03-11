@@ -1,0 +1,5 @@
+module ChipDnaMobile {
+  umbrella header "ChipDnaMobile.h"
+  link "libCardEaseXML"
+  link "libChipDnaMobileAPI"
+}
