@@ -488,16 +488,22 @@ class TakeMobileReaderPayment {
   }
 
   fileprivate func availableMobileReaderDriver(_ repo: MobileReaderDriverRepository, _ failure: @escaping (OmniException) -> Void, _ completion: @escaping (MobileReaderDriver) -> Void) {
-    repo.getInitializedDrivers { initializedDrivers in
-      // Get drivers that are ready for payment
-      filter(items: initializedDrivers, predicate: { $0.isReadyToTakePayment }, completion: { driversReadyForPayment in
-        guard let driver = driversReadyForPayment.first else {
+    repo.getInitializedDrivers { drivers in
+      
+      drivers.filterAsync(predicate: { driver in
+        AsyncStream { continuation in
+          driver.isReadyToTakePayment { result in
+            continuation.yield(result)
+            continuation.finish()
+          }
+        }
+      }) { filtered in
+        guard let driver = filtered.first else {
           failure(TakeMobileReaderPaymentException.mobileReaderNotFound)
           return
         }
-
         completion(driver)
-      })
+      }
     }
   }
 }

@@ -68,7 +68,6 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    log("Commit Hash: \(Bundle.main.commitHash ?? "undefined")")
     initializeOmni()
     totalTextInput.delegate = self
 

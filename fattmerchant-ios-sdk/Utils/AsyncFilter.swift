@@ -1,97 +1,25 @@
-//
-//  AsyncFilter.swift
-//  fattmerchant-ios-sdk
-//
-//  Created by Tulio Troncoso on 5/10/20.
-//  Copyright © 2020 Fattmerchant. All rights reserved.
-//
-
-import Foundation
-
-/// Filters `items` by executing async function `predicate` on each item
-///
-/// This is useful when you need a list filtered, but the decision to filter an item out is an asynchronous one. Think
-/// about filtering a list of random emails to ones that actually exist. You'd need to actually send an email, an
-/// async operation, and see if it gets delivered. Only after knowing if its been delivered can you say that you want it
-/// in the list
-/// - Parameters:
-///   - items: the items to filter
-///
-///   - predicate: a function that takes a single item and returns a function that takes a completion block. This
-///   completion block takes a Bool and returns Void. The value passed to the completion block will be the deciding
-///   factor in whether or not the item gets filtered out.
-///
-///   - completion: a function that gets the list of filtered items
-public func filter<T>(items: [T], predicate: @escaping (T) -> (@escaping (Bool) -> Void) -> Void, completion: @escaping ([T]) -> Void) {
-  guard !items.isEmpty else {
-    completion(items)
-    return
-  }
-
-  DispatchQueue.global(qos: .default).async {
-    var result: [T] = []
-    let dispatchGroup = DispatchGroup()
-    let semaphore = DispatchSemaphore(value: 1)
-
-    items.forEach { item in
-      dispatchGroup.enter()
-      let addToListIfSuccessful = { (success: Bool) in
-        if success {
-          semaphore.wait()
-          result.append(item)
-          semaphore.signal()
+extension Array {
+  /// Allows a predicate that contains an `AsyncStream<Bool>` to return a callback with the result.
+  /// Useful for legacy Stax callback code; allowing us to not deal with `DispatchQueue` directly.
+  /// - Parameters:
+  ///   - predicate: A function that contains an `AsyncStream<Bool>` that is evaluated to filter down.
+  ///   - completion: A callback function that contains the filtered array.
+  func filterAsync(
+    predicate: @escaping (Element) -> AsyncStream<Bool>,
+    completion: @escaping ([Element]) -> Void
+  ) {
+    // Start a `Task` to allow this chunk to be asynchronous
+    Task {
+      var filtered: [Element] = []
+      for item in self {
+        for await value in predicate(item) {
+          if value {
+            filtered.append(item)
+          }
+          break
         }
-        dispatchGroup.leave()
       }
-
-      predicate(item)(addToListIfSuccessful)
+      completion(filtered)
     }
-
-    dispatchGroup.wait()
-    completion(result)
-  }
-}
-
-/// Filters `items` by executing async function `predicate` on each item
-///
-/// This is useful when you need a list filtered, but the decision to filter an item out is an asynchronous one. Think
-/// about filtering a list of random emails to ones that actually exist. You'd need to actually send an email, an
-/// async operation, and see if it gets delivered. Only after knowing if its been delivered can you say that you want it
-/// in the list
-/// - Parameters:
-///   - items: the items to filter
-///
-///   - predicate: a function that takes a single item and a completion block. This completion block takes a Bool and
-///   returns Void. The value passed to the completion block will be the deciding factor in whether or not the item gets
-///   filtered out.
-///
-///   - completion: a function that gets the list of filtered items
-public func filter<T>(items: [T], predicate: @escaping (T, @escaping (Bool) -> Void) -> Void, completion: @escaping ([T]) -> Void) {
-  guard !items.isEmpty else {
-    completion(items)
-    return
-  }
-
-  DispatchQueue.global(qos: .default).async {
-    var result: [T] = []
-    let dispatchGroup = DispatchGroup()
-    let semaphore = DispatchSemaphore(value: 1)
-
-    items.forEach { item in
-      dispatchGroup.enter()
-      let addToListIfSuccessful = { (success: Bool) in
-        if success {
-          semaphore.wait()
-          result.append(item)
-          semaphore.signal()
-        }
-        dispatchGroup.leave()
-      }
-
-      predicate(item, addToListIfSuccessful)
-    }
-
-    dispatchGroup.wait()
-    completion(result)
   }
 }

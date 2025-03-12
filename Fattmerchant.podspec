@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Fattmerchant'
-  s.version = '2.4.1'
+  s.version = '2.4.2'
   s.license = {
     :type => 'Apache License, Version 2.0',
     :text => "© #{ Date.today.year } Fattmerchant, inc"
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
     :git => 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git',
     :branch => "release/#{s.version}"
   }
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
   s.swift_versions = ['5']  
   s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
   s.public_header_files = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/*.h"

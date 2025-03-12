@@ -107,7 +107,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D7B7112823D58C4B00EF98DB /* Build configuration list for PBXNativeTarget "Fattmerchant-iOS-SDK-Sample" */;
 			buildPhases = (
-				A74B23D72C651E78003FAD5E /* ShellScript */,
 				D7B7111223D58C4A00EF98DB /* Sources */,
 				D7B7111323D58C4A00EF98DB /* Frameworks */,
 				D7B7111423D58C4A00EF98DB /* Resources */,
@@ -167,26 +166,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		A74B23D72C651E78003FAD5E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GitCommitHash $COMMIT_HASH\" \"${INFOPLIST_FILE}\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D7B7111223D58C4A00EF98DB /* Sources */ = {
