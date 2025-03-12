@@ -28,25 +28,26 @@ class MockDriver: MobileReaderDriver {
 
   static var source: String = "MOCKSOURCE"
 
-  static var omniRefundsSupported: Bool = false
+  static var isStaxRefundsSupported: Bool = false
 
   func isReadyToTakePayment(completion: (Bool) -> Void) {
     completion(readyToTakePayment)
   }
 
-  func initialize(args: [String: Any], completion: (Bool) -> Void) {
-    if let nmiArgs = args["nmi"] as? NMIDetails {
-      return completion(!nmiArgs.securityKey.isEmpty)
-    } else {
-      return completion(false)
+  func initialize(args: MobileReaderDriverInitializationArgs, completion: (Bool) -> Void) {
+    if let args = args as? ChipDnaInitializationArgs {
+      completion(!args.keys.securityKey.isEmpty)
+      return
     }
+    
+    completion(false)
   }
 
   func isInitialized(completion: @escaping (Bool) -> Void) {
     completion(isInitialized)
   }
 
-  func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
+  func searchForReaders(args: MobileReaderDriverSearchArgs?, completion: @escaping ([MobileReader]) -> Void) {
     completion([reader!])
   }
 
@@ -62,7 +63,7 @@ class MockDriver: MobileReaderDriver {
     completion(reader)
   }
 
-  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+  func disconnect(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
     completion(true)
   }
 

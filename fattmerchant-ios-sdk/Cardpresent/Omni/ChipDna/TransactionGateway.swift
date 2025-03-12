@@ -1,11 +1,3 @@
-//
-//  TransactionGateway.swift
-//  Fattmerchant
-//
-//  Created by Tulio Troncoso on 5/29/20.
-//  Copyright © 2020 Fattmerchant. All rights reserved.
-//
-
 import Foundation
 
 /// Communicates with Transaction Gateway via the Direct Post API

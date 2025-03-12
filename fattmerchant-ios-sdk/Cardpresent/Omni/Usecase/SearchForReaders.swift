@@ -35,7 +35,7 @@ class SearchForReaders {
 
       drivers.forEach { driver in
         dispatchGroup?.enter()
-        driver.searchForReaders(args: self.args) { readers in
+        driver.searchForReaders(args: nil) { readers in
           allReaders.append(contentsOf: readers)
           dispatchGroup?.leave()
         }

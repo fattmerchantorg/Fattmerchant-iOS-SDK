@@ -1,31 +1,13 @@
-//
-//  ChipDnaDriver.swift
-//  Fattmerchant
-//
-//  Created by Tulio Troncoso on 12/9/19.
-//  Copyright © 2019 Fattmerchant. All rights reserved.
-//
+#if targetEnvironment(simulator)
+#else
 
 import Foundation
 
-#if targetEnvironment(simulator)
-
-#else
 class ChipDnaDriver: NSObject, MobileReaderDriver {
-
-  struct SelectablePinPad {
-    var name: String
-    var connectionType: String
-  }
-
-  /// The place where the transactions take place
+  static var isStaxRefundsSupported: Bool = true
   static var source: String = "NMI"
 
-  static var omniRefundsSupported: Bool = true
-
-  enum PinPadManufacturer: String {
-    case Miura, BBPOS
-  }
+  var familiarSerialNumbers: [String] = []
 
   weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
 
@@ -33,45 +15,40 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   fileprivate var chipDnaTransactionListener = ChipDnaTransactionListener()
 
   /// A block to run after self deserializes a list of SelectablePinPads from the result of ChipDna availablePinPads
-  fileprivate var didFindAvailablePinPads: (([SelectablePinPad]) -> Void)?
+  fileprivate var onAvailablePinPadsCallback: (([SelectablePinPad]) -> Void)?
 
-  /// A block to run after self receives the connect and configure callback from ChipDna
-  fileprivate var didConnectAndConfigure: ((MobileReader?) -> Void)?
+  /// Runs after `connectAndConfigure` finishes.
+  fileprivate var onConnectAndConfigureCallback: ((MobileReader?) -> Void)?
 
-  var familiarSerialNumbers: [String] = []
-
-  /// A key used to communicate with TransactionGateway
-  fileprivate var securityKey: String = ""
-
-  /// This is the data that we will need in order to initialize ChipDna again if something happens at runtime.
-  ///
-  /// For example, if the user wants to disconnect a reader, we have to use the ChipDnaMobile.dispose() method. This
-  /// method uninitializes the SDK and we have to initialize again if we want to reconnect a reader. When we want to
-  /// reconnect, we use these args
-  fileprivate var initArgs: [String: Any] = [:]
-
-  /// Attempts to initialize the ChipDNA SDK
-  ///
-  /// - Parameters:
-  ///   - args: a Dictionary containing the necessary things to initialize the sdk.
-  ///   - completion: a block to run once initialization is complete. The block will receive the value 'true' if initialization was successful, false otherwise
-  func initialize(args: [String: Any], completion: (Bool) -> Void) {
+  /// The ChipDna init params passed in the `initialize` function.
+  fileprivate var initializationArgs: ChipDnaInitializationArgs?
+  
+  /// Gets the connected MobileReader
+  /// - Note: This is blocking, and will fail silently if no reader is found
+  /// - Returns: The connected mobile reader, if any
+  internal static func getConnectedReader() -> MobileReader? {
     guard
-      let appId = args["appId"] as? String,
-      let nmiDetails = args["nmi"] as? NMIDetails,
-      !nmiDetails.securityKey.isEmpty
-      else {
-        ChipDnaMobile.dispose(nil)
-        completion(false)
-        return
+      let status = ChipDnaMobile.sharedInstance()?.getStatus(nil),
+      let deviceStatusXml = status[CCParamDeviceStatus],
+      let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
+      deviceStatus.deviceStatus == DeviceStatusEnum.connected else {
+      return nil
     }
-    let apiKey = nmiDetails.securityKey
 
-    // Store the apiKey and the init args for later use
-    securityKey = apiKey
-    initArgs = args
+    return MobileReader.from(status: deviceStatus)
+  }
+  
+  /// Attempts to initialize the ChipDNA SDK
+  /// - Parameter args:A `ChipDnaInitializationArgs` object that contains the required security keys.
+  /// - Parameter completion: A `(Bool) -> Void` callback containing whether the initialization was successful.
+  func initialize(args: MobileReaderDriverInitializationArgs, completion: @escaping (Bool) -> Void) {
+    guard let args = args as? ChipDnaInitializationArgs, !args.keys.securityKey.isEmpty else {
+      ChipDnaMobile.dispose(nil)
+      completion(false)
+      return
+    }
 
-    // Initialize
+    // Initialize the ChipDna SDK
     let parameters = CCParameters()
     parameters.setValue("password", forKey: CCParamPassword)
     parameters.setValue(CCValueTrue, forKey: CCParamAutoConfirm)
@@ -81,10 +58,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       return
     }
 
-    // Set creds
+    // Set ChipDna for production with merchant's API key
     let properties = CCParameters()
-    properties.setValue(apiKey, forKey: CCParamApiKey)
-    properties.setValue(appId, forKey: CCParamApplicationIdentifier)
+    properties.setValue(args.keys.securityKey, forKey: CCParamApiKey)
+    properties.setValue(args.appId, forKey: CCParamApplicationIdentifier)
     properties.setValue(CCValueEnvironmentLive, forKey: CCParamEnvironment)
     let setPropertiesResult = ChipDnaMobile.sharedInstance()?.setProperties(properties)
     if setPropertiesResult?[CCParamResult] != CCValueTrue {
@@ -93,124 +70,100 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       return
     }
 
+    // Initialized! Store the `initializationArgs` for later
+    initializationArgs = args
     completion(true)
   }
 
+  /// Returns `true` if the ChipDna SDK is initialized.
+  /// - Parameter completion: A `(Bool) -> Void` callback containing whether the ChipDna SDK is initialized.
   func isInitialized(completion: @escaping (Bool) -> Void) {
     completion(ChipDnaMobile.isInitialized())
   }
 
-  /// Checks if ChipDna is ready to take a payment
-  ///
-  /// - Parameters:
-  ///   - completion: a block to execute once this operation is complete. Receives `true` if ChipDna is ready to take payment, `false` otherwise
+  /// Returns `true` if ChipDna is ready to take a payment
+  /// - Parameter completion: a `(Bool) -> Void` callback that returns `true` if ChipDna is ready to take payment
   func isReadyToTakePayment(completion: (Bool) -> Void) {
-    // ChipDna must be initialized
+    // If ChipDna is not initialized, return `false`
     if !ChipDnaMobile.isInitialized() {
-      completion(false)
-    }
-
-    // Ensure device is connected and terminal is enabled
-    guard
-      let status = ChipDnaMobile.sharedInstance()?.getStatus(nil),
-      let deviceStatusXml = status[CCParamDeviceStatus],
-      let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
-      deviceStatus.deviceStatus == DeviceStatusEnum.connected,
-
-      let terminalStatusXml = status[CCParamTerminalStatus],
-      let terminalStatus = ChipDnaMobileSerializer.deserializeTerminalStatus(terminalStatusXml),
-      terminalStatus.enabled
-
-      else {
       completion(false)
       return
     }
 
-    completion(true)
+    if ChipDnaMobile.isDeviceConnected && ChipDnaMobile.isTerminalStatusEnabled {
+      completion(true)
+    } else {
+      completion(false)
+    }
   }
 
-  /// Searches for available mobile readers
-  func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void) {
-
-    // Set the connection type to BT
+  /// Searches for available `MobileReader` devices to connect to.
+  /// - Parameter args: A `ChipDnaSearchArgs` object that contains the allowed search types.
+  /// - Parameter completion: A `[MobileReader] -> Void` callback that contains the found `MobileReader` objects.
+  func searchForReaders(args: MobileReaderDriverSearchArgs?, completion: @escaping ([MobileReader]) -> Void) {
+    // TODO: Allow scans for only USB, BLE, or BT based on args
+    
+    // Scan everything for 5 seconds
     let params = CCParameters()
-    // params[CCParamPinPadConnectionType] = CCValueBLE
     params[CCParamBLEScanTime] = "5"
 
+    // Set the callback to contain this function's completion parameter
+    onAvailablePinPadsCallback = { availablePinPads in
+      let readers = availablePinPads.map({ MobileReader.from(pinPad: $0) })
+      completion(readers)
+    }
+    
+    // Remove extraneous listeners, and search for available pin pads.
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
     ChipDnaMobile.addAvailablePinPadsTarget(self, action: #selector(onAvailablePinPads(parameters:)))
-    didFindAvailablePinPads = { pinPads in
-      completion(pinPads.map({ MobileReader.from(pinPad: $0) }))
-    }
-
     ChipDnaMobile.sharedInstance()?.getAvailablePinPads(params)
   }
 
-  /// Connects the mobile reader and prepares it for use
-  ///
-  /// - Parameters:
-  ///   - reader: a MobileReader to connect
-  ///   - completion: a block to run once the MobileReader is connected. If successfully connected, the block will
-  ///   receive the `MobileReader`. Otherwise, it will receive nil
+  /// Connects to a specific `MobileReader` devices to connect to.
+  /// - Parameter args: A `ChipDnaSearchArgs` object that contains the allowed search types.
+  /// - Parameter completion: A `[MobileReader] -> Void` callback that contains the found `MobileReader` objects.
   func connect(reader: MobileReader, completion: @escaping (MobileReader?) -> Void) {
     let requestParams = CCParameters()
     requestParams[CCParamPinPadName] = reader.name
     requestParams[CCParamPinPadConnectionType] = reader.connectionType ?? CCValueBLE
-    ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
-    ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
-    didConnectAndConfigure = { connectedReader in
-      let status = ChipDnaMobile.sharedInstance().getStatus(nil)
+    
+    onConnectAndConfigureCallback = { connectedReader in
+      let _ = ChipDnaMobile.sharedInstance().getStatus(nil)
       if let connectedReader = connectedReader, let serial = connectedReader.serialNumber {
         self.familiarSerialNumbers.append(serial)
       }
       completion(connectedReader)
     }
+    
+    ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
+    ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
     ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
     ChipDnaMobile.addDeviceUpdateTarget(self, action: #selector(onDeviceUpdate(parameters:)))
     ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
   }
 
   /// Gets the connected MobileReader
-  /// - Parameters:
-  ///   - completion: the connected MobileReader, if any
-  ///   - error: a block to run if anything goes wrong during the operation
+  /// - Parameter completion: A `(MobileReader?) -> Void` callback that contains the `MobileReader` if connected; `nil` if not.
+  /// - Parameter error: A `(OmniException) -> Void` callback that contains an `OmniException` if one occurred.
   func getConnectedReader(completion: (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
-    // ChipDna must be initialized
     if !ChipDnaMobile.isInitialized() {
       error(OmniGeneralException.uninitialized)
     }
 
-    completion(ChipDnaDriver.connectedReader())
+    completion(ChipDnaDriver.getConnectedReader())
   }
 
-  /// Gets the connected MobileReader
-  /// - Note: This is blocking, and will fail silently if no reader is found
-  /// - Returns: The connected mobile reader, if any
-  internal static func connectedReader() -> MobileReader? {
-    guard
-      let status = ChipDnaMobile.sharedInstance()?.getStatus(nil),
-      let deviceStatusXml = status[CCParamDeviceStatus],
-      let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
-      deviceStatus.deviceStatus == DeviceStatusEnum.connected else {
-      return nil
-    }
-
-    return MobileReader.from(deviceStatus: deviceStatus)
-  }
-
-  /// Attempts to disconnect a connected MobileReader
-  /// - Parameters:
-  ///   - reader: the MobileReader that is to be disconnected
-  ///   - completion: a block to run once done. if disconnected, this receives true
-  ///   - error: a block to run in anything goes wrong during the operation
-  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    // ChipDna must be initialized
+  /// Attempts to disconnect the actively connected `MobileReader`
+  /// - Parameter completion: A `(Bool) -> Void` callback containing the result of the disconnection.
+  /// - Parameter error: A `(OmniException) -> Void` callback containing an `OmniException` if one occured.
+  func disconnect(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
     if !ChipDnaMobile.isInitialized() {
       error(OmniGeneralException.uninitialized)
     }
 
+    // Re-initializing the ChipDnaMobile SDK disconnects everything, so that works.
     ChipDnaMobile.dispose(nil)
-    initialize(args: initArgs, completion: completion)
+    initialize(args: initializationArgs!, completion: completion)
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
@@ -254,7 +207,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       }
 
       // Get more details about the transaction since ChipDna doesn't get everything
-      TransactionGateway.getTransactionCcExpiration(securityKey: self.securityKey,
+      TransactionGateway.getTransactionCcExpiration(securityKey: self.initializationArgs!.keys.securityKey,
                                                     transactionId: result[CCParamTransactionId] ?? "") { ccExpiration in
         transactionResult.cardExpiration = ccExpiration
         completion(transactionResult)
@@ -330,7 +283,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   ///   - error: A block to run in case an error occurs
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void) {
     // Get card ease reference. This is what we use to reference the transaction within NMI
-    guard let cardEaseReference = extractCardEaseReference(from: transaction) else {
+    guard let cardEaseReference = transaction.cardEaseReference else {
       error(RefundException.transactionNotRefundable(details: "Could not find user reference"))
       return
     }
@@ -368,14 +321,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       transactionResult.transactionSource = receiptData?["TRANSACTION_SOURCE"]?.value
       completion(transactionResult)
     }
-  }
-
-  fileprivate func extractCardEaseReference(from transaction: Transaction) -> String? {
-    return transaction.meta?["cardEaseReference"]
-  }
-
-  fileprivate func extractUserReference(from transaction: Transaction) -> String? {
-    return transaction.meta?["nmiUserRef"]
   }
 
   fileprivate func deserializeAvailablePinPads(pinPadsXml: String) -> [SelectablePinPad]? {
@@ -433,38 +378,30 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   @objc public func onAvailablePinPads(parameters: CCParameters) {
     ChipDnaMobile.removeAvailablePinPadsTarget(self)
 
-    // Make sure that there is a job for this to do after serialization
-    guard let completion = didFindAvailablePinPads else {
-      return
-    }
+    guard let onAvailablePinPadsCallback = onAvailablePinPadsCallback else { return }
 
     // Attempt deserialization
     guard
       let availablePinPadsXml = parameters[CCParamAvailablePinPads],
       let pinPads = deserializeAvailablePinPads(pinPadsXml: availablePinPadsXml)
     else {
-      completion([])
+      onAvailablePinPadsCallback([])
       return
     }
 
-    completion(pinPads)
+    onAvailablePinPadsCallback(pinPads)
   }
 
   @objc func onConnectAndConfigure(parameters: CCParameters) {
     ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
 
-    // Make sure someone is listening to the callback
-    guard let didConnectAndConfigure = didConnectAndConfigure else {
-      return
-    }
-
-    // If no reader was connected, pass nil
+    guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback else { return }
     if parameters[CCParamResult] != CCValueTrue {
-      didConnectAndConfigure(nil)
+      onConnectAndConfigureCallback(nil)
     }
 
     // Figure out the reader details and pass them along
-    didConnectAndConfigure(ChipDnaDriver.connectedReader())
+    onConnectAndConfigureCallback(ChipDnaDriver.getConnectedReader())
   }
 
   @objc func onConfigurationUpdate(parameters: CCParameters) {
@@ -477,7 +414,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
     if
       let deviceStatusXml = parameters[CCParamDeviceStatusUpdate],
       let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(deviceStatusXml),
-      let status = MobileReaderConnectionStatus(chipDnaDeviceStatus: deviceStatus) {
+      let status = MobileReaderConnectionStatus(chipDnaDeviceStatus: deviceStatus)
+    {
       mobileReaderConnectionStatusDelegate?.mobileReaderConnectionStatusUpdate(status: status)
     }
   }

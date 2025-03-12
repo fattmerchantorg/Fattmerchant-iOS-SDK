@@ -1,16 +1,8 @@
-//
-//  ChipDnaTransactionListener.swift
-//  Fattmerchant
-//
-//  Created by Tulio Troncoso on 1/17/20.
-//  Copyright © 2020 Fattmerchant. All rights reserved.
-//
+#if targetEnvironment(simulator)
+#else
 
 import Foundation
 
-#if targetEnvironment(simulator)
-
-#else
 class ChipDnaTransactionListener: NSObject {
 
   /// Called when ChipDna finishes a transaction
@@ -26,9 +18,11 @@ class ChipDnaTransactionListener: NSObject {
   weak var userNotificationDelegate: UserNotificationDelegate?
 
   /// Makes this listener bind to the transaction events ChipDna emits
-  func bindToChipDna(signatureProvider: SignatureProviding? = nil,
-                     transactionUpdateDelegate: TransactionUpdateDelegate? = nil,
-                     userNotificationDelegate: UserNotificationDelegate? = nil) {
+  func bindToChipDna(
+    signatureProvider: SignatureProviding? = nil,
+    transactionUpdateDelegate: TransactionUpdateDelegate? = nil,
+    userNotificationDelegate: UserNotificationDelegate? = nil
+  ) {
     ChipDnaMobile.addTransactionUpdateTarget(self, action: #selector(onTransactionUpdate(parameters:)))
     ChipDnaMobile.addTransactionFinishedTarget(self, action: #selector(onTransactionFinished(parameters:)))
     ChipDnaMobile.addDeferredAuthorizationTarget(self, action: #selector(onDeferredAuthorization(parameters:)))

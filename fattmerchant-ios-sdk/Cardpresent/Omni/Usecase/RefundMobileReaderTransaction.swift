@@ -77,7 +77,7 @@ class RefundMobileReaderTransaction {
       }
 
       // If omni can do the refund, then we should call out to Omni to do it
-      if type(of: driver).omniRefundsSupported {
+      if type(of: driver).isStaxRefundsSupported {
         self.omniApi.request(method: "post",
                         urlString: "/transaction/\(transactionId)/void-or-refund", body: nil,
                         completion: completion, failure: failure)

@@ -34,7 +34,7 @@ protocol MobileReaderDriver {
   ///
   /// - Returns: True when Omni should handle the void/refund logic. False when the driver itself should handle the
   /// refund directly with the vendor.
-  static var omniRefundsSupported: Bool { get }
+  static var isStaxRefundsSupported: Bool { get }
 
   /// A list of serial numbers that this driver has previously connected to
   var familiarSerialNumbers: [String] { get set }
@@ -43,13 +43,13 @@ protocol MobileReaderDriver {
 
   func isReadyToTakePayment(completion: (Bool) -> Void)
 
-  func initialize(args: [String: Any], completion: @escaping (Bool) -> Void)
+  func initialize(args: MobileReaderDriverInitializationArgs, completion: @escaping (Bool) -> Void)
 
   /// Checks if the receiver has been initialized
   /// - Parameter completion: Receives true when MobileReaderDriver is initialized. False otherwise
   func isInitialized(completion: @escaping (Bool) -> Void)
 
-  func searchForReaders(args: [String: Any], completion: @escaping ([MobileReader]) -> Void)
+  func searchForReaders(args: MobileReaderDriverSearchArgs?, completion: @escaping ([MobileReader]) -> Void)
 
   /// Connects the given MobileReader
   /// - Parameters:
@@ -65,7 +65,7 @@ protocol MobileReaderDriver {
 
   func cancelCurrentTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
 
-  func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
+  func disconnect(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void)
 
   func refund(transaction: Transaction, refundAmount: Amount?, completion: @escaping (TransactionResult) -> Void, error: @escaping (OmniException) -> Void)
 

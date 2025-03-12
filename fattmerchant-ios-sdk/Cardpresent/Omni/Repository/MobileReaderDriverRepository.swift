@@ -10,29 +10,22 @@ import Foundation
 
 class MobileReaderDriverRepository {
 
-  #if targetEnvironment(simulator)
-  var driver = MockDriver()
-
-  func allDrivers() -> [MockDriver] {
-    return [driver]
+  func all() -> [MobileReaderDriver] {
+    #if targetEnvironment(simulator)
+      return [MockDriver()]
+    #else
+      return [ChipDnaDriver()]
+    #endif
   }
-
-  #else
-  var chipDnaDriver = ChipDnaDriver()
-
-  func allDrivers() -> [MobileReaderDriver] {
-    return [chipDnaDriver]
-  }
-  #endif
 
   /// Gets all MobileReaderDrivers
-  func getDrivers(completion: ([MobileReaderDriver]) -> Void) {
-    completion(allDrivers())
+  func getDrivers() -> [MobileReaderDriver] {
+    return all()
   }
 
   /// Gets the MobileReaderDrivers which have been initialized
   func getInitializedDrivers(completion: @escaping ([MobileReaderDriver]) -> Void) {
-    allDrivers().filterAsync(predicate: { driver in
+    all().filterAsync(predicate: { driver in
       AsyncStream { continuation in
         driver.isInitialized { result in
           continuation.yield(result)
@@ -51,7 +44,7 @@ class MobileReaderDriverRepository {
     }
 
     // Find the driver that has the source matching the transaction
-    let driverWithMatchingSource = allDrivers().first { driver in
+    let driverWithMatchingSource = all().first { driver in
       let driverSource = type(of: driver).source
       let transactionSource = transaction.source
       return transactionSource?.contains(driverSource) == true

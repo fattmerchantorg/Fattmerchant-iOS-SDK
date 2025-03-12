@@ -235,7 +235,7 @@ class TakeMobileReaderPayment {
     // This is extremely important because it prevents a user from attempting a refund via the VT or the Omni API that
     // could never work. The reason it won't work is because Omni doesn't have a deep integration with all of our
     // third party vendors, such as AnywhereCommerce.
-    if !type(of: driver).omniRefundsSupported {
+    if !type(of: driver).isStaxRefundsSupported {
       transactionToCreate.isRefundable = false
       transactionToCreate.isVoidable = false
     }
