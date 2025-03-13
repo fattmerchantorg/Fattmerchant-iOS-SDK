@@ -17,7 +17,6 @@
 		A7434F3C2D81D5F20035250C /* MobileReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F0F2D81D5F20035250C /* MobileReaderConnectionStatusDelegate.swift */; };
 		A7434F3D2D81D5F20035250C /* StaxPaymentMethodRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1B2D81D5F20035250C /* StaxPaymentMethodRepositoryImpl.swift */; };
 		A7434F3E2D81D5F20035250C /* StaxValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F372D81D5F20035250C /* StaxValidationError.swift */; };
-		A7434F3F2D81D5F20035250C /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */; };
 		A7434F402D81D5F20035250C /* StaxCreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F242D81D5F20035250C /* StaxCreditCard.swift */; };
 		A7434F412D81D5F20035250C /* UserNotificationListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F162D81D5F20035250C /* UserNotificationListener.swift */; };
 		A7434F422D81D5F20035250C /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EEE2D81D5F20035250C /* UserNotification.swift */; };
@@ -85,7 +84,6 @@
 		A7434F852D81D5F20035250C /* MobileReaderConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F0F2D81D5F20035250C /* MobileReaderConnectionStatusDelegate.swift */; };
 		A7434F862D81D5F20035250C /* StaxPaymentMethodRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1B2D81D5F20035250C /* StaxPaymentMethodRepositoryImpl.swift */; };
 		A7434F872D81D5F20035250C /* StaxValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F372D81D5F20035250C /* StaxValidationError.swift */; };
-		A7434F882D81D5F20035250C /* GetConnectedMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */; };
 		A7434F892D81D5F20035250C /* StaxCreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F242D81D5F20035250C /* StaxCreditCard.swift */; };
 		A7434F8A2D81D5F20035250C /* UserNotificationListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F162D81D5F20035250C /* UserNotificationListener.swift */; };
 		A7434F8B2D81D5F20035250C /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EEE2D81D5F20035250C /* UserNotification.swift */; };
@@ -308,7 +306,6 @@
 		A7434F002D81D5F20035250C /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
 		A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransaction.swift; sourceTree = "<group>"; };
 		A7434F032D81D5F20035250C /* CapturePreauthTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreauthTransaction.swift; sourceTree = "<group>"; };
-		A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedMobileReader.swift; sourceTree = "<group>"; };
 		A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundMobileReaderTransaction.swift; sourceTree = "<group>"; };
 		A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPayment.swift; sourceTree = "<group>"; };
 		A7434F0B2D81D5F20035250C /* TakePayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePayment.swift; sourceTree = "<group>"; };
@@ -622,7 +619,6 @@
 			children = (
 				A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */,
 				A7434F032D81D5F20035250C /* CapturePreauthTransaction.swift */,
-				A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */,
 				A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */,
 				A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */,
 				A7434F0B2D81D5F20035250C /* TakePayment.swift */,
@@ -1110,7 +1106,6 @@
 				A7434F852D81D5F20035250C /* MobileReaderConnectionStatusDelegate.swift in Sources */,
 				A7434F862D81D5F20035250C /* StaxPaymentMethodRepositoryImpl.swift in Sources */,
 				A7434F872D81D5F20035250C /* StaxValidationError.swift in Sources */,
-				A7434F882D81D5F20035250C /* GetConnectedMobileReader.swift in Sources */,
 				A7434F892D81D5F20035250C /* StaxCreditCard.swift in Sources */,
 				A7434F8A2D81D5F20035250C /* UserNotificationListener.swift in Sources */,
 				A7434F8B2D81D5F20035250C /* UserNotification.swift in Sources */,
@@ -1232,7 +1227,6 @@
 				A74350562D820D2B0035250C /* MobileReaderDriverInitializationArgs.swift in Sources */,
 				A7434FDD2D81D6140035250C /* AccessoryHelper.swift in Sources */,
 				A74350362D8208B70035250C /* SelectablePinPad.swift in Sources */,
-				A7434F3F2D81D5F20035250C /* GetConnectedMobileReader.swift in Sources */,
 				A7434F402D81D5F20035250C /* StaxCreditCard.swift in Sources */,
 				A7434F412D81D5F20035250C /* UserNotificationListener.swift in Sources */,
 				A7434F422D81D5F20035250C /* UserNotification.swift in Sources */,
