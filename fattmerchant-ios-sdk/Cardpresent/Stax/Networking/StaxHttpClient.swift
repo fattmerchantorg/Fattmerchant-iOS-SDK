@@ -6,12 +6,19 @@ final class StaxHttpClient: Sendable {
   private let baseURL: URL
   private let session: URLSession = .shared
   private let decoder: JSONDecoder = .init()
+  private let defaultHeaders: [String: String]
 
   /// Creates a new Stax HTTP client.
   /// - Parameter baseURL: The base URL for the Stax API.
-  init(baseURL: URL) {
+  /// - Parameter apiKey: The Stax API key.
+  init(baseURL: URL, apiKey: String) {
     self.baseURL = baseURL
     self.decoder.keyDecodingStrategy = .convertFromSnakeCase
+    self.defaultHeaders = [
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer \(apiKey)"
+    ]
   }
 
   /// Performs an HTTP request and decodes the response into the specified type.
@@ -103,6 +110,10 @@ final class StaxHttpClient: Sendable {
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = request.method.rawValue
 
+    defaultHeaders.forEach { key, value in
+      urlRequest.setValue(value, forHTTPHeaderField: key)
+    }
+    
     request.headers?.forEach { key, value in
       urlRequest.setValue(value, forHTTPHeaderField: key)
     }
