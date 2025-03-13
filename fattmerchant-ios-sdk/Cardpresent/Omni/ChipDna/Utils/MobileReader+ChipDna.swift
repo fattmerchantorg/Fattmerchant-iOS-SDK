@@ -5,7 +5,7 @@ extension MobileReader {
   
   static func from(pinPad: SelectablePinPad) -> MobileReader {
     let reader = MobileReader(name: pinPad.name)
-    reader.connectionType = pinPad.connectionType
+    // reader.connectionType = pinPad.connectionType
     return reader
   }
 

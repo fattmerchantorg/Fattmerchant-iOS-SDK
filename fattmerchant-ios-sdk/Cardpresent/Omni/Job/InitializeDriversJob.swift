@@ -1,4 +1,4 @@
-class InitializeDriversJob: Job {
+actor InitializeDriversJob: Job {
   typealias ResultType = Void
   
   var args: MobileReaderDriverInitializationArgs
