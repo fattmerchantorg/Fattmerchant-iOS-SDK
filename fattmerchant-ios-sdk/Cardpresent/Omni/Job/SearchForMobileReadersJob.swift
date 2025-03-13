@@ -1,4 +1,4 @@
-actor SearchForReadersJob: Job {
+actor SearchForMobileReadersJob: Job {
   var args: MobileReaderDriverSearchArgs
   
   init(args: MobileReaderDriverSearchArgs) {

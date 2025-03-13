@@ -377,7 +377,7 @@ public class Omni: NSObject {
     let args = ChipDnaSearchArgs(allowed: [.ble, .bt, .usb])
     #endif
     
-    let job = SearchForReadersJob(args: args)
+    let job = SearchForMobileReadersJob(args: args)
     
     Task {
       let result = await job.start()
@@ -410,20 +410,21 @@ public class Omni: NSObject {
   ///   - reader: The MobileReader to connect
   ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
   ///   - error: A block to call if this operation fails
-  @available (*, deprecated, message: "Please use the connect method that provides error handling")
+  @available(*, deprecated, message: "Please use the connect method that provides error handling")
   public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping () -> Void) {
     guard mobileReaderDriversInitialized else {
       return error()
     }
     
-    let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository,
-                                   mobileReader: reader,
-                                   mobileReaderConnectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
-    task.start(onConnected: { connectedReader in
-      completion(connectedReader)
-    }, onFailed: { _ in
-      error()
-    })
+    let job = ConnectToMobileReaderJob(reader: reader, connectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
+
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let reader): self.preferredQueue.async { completion(reader) }
+        case .failure( _): self.preferredQueue.async { error() }
+      }
+    }
   }
   
   /// Attempts to connect to the given MobileReader
@@ -437,19 +438,15 @@ public class Omni: NSObject {
       return error(OmniGeneralException.uninitialized)
     }
     
-    let task = ConnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository,
-                                   mobileReader: reader,
-                                   mobileReaderConnectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
-    task.start(onConnected: { connectedReader in
-      self.preferredQueue.async {
-        completion(connectedReader)
+    let job = ConnectToMobileReaderJob(reader: reader, connectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
+
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let reader): self.preferredQueue.async { completion(reader) }
+        case .failure(let fail): self.preferredQueue.async { error(fail) }
       }
-    }, onFailed: { exception in
-      self.preferredQueue.async {
-        error(exception)
-      }
-    })
-    
+    }
   }
   
   /// Attempts to disconnect the given MobileReader
