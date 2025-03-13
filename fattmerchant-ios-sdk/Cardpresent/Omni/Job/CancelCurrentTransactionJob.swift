@@ -2,7 +2,7 @@ actor CancelCurrentTransactionJob: Job {
   typealias ResultType = Bool
 
   func start() async -> JobResult<Bool> {
-    guard var driver = MobileReaderDriverRepository.shared.getDrivers().first else {
+    guard let driver = MobileReaderDriverRepository.shared.getDrivers().first else {
       return JobResult.failure(CancelCurrentTransactionException.unknown)
     }
 

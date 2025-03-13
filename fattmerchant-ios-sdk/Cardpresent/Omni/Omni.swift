@@ -88,105 +88,48 @@ public class Omni: NSObject {
   ///   - completion: a completion block to run once finished
   ///   - error: an error block to run in case something goes wrong
   public func initialize(params: InitParams, completion: @Sendable @escaping () -> Void, error: @escaping (OmniException) -> Void) {
-    guard let appId = params.appId, params.apiKey != nil else {
+    guard let appId = params.appId, let apiKey = params.apiKey else {
       error(OmniInitializeException.missingInitializationDetails)
       return
-    }
-    
-    // Setup USB Delegate
-    if let delegate = usbAccessoryDelegate {
-      accessoryHelper = AccessoryHelper(delegate: delegate)
-      AccessoryHelper.isIdTechConnected()
     }
     
     omniApi.apiKey = params.apiKey
     omniApi.environment = params.environment
     initRepos(omniApi: omniApi)
     
-    // Verify the apikey corresponds to a real merchant
-    omniApi.getSelf(completion: { myself in
-      
-      guard let merchant = myself.merchant else {
+    initializeUsbDelegate()
+    
+    Task {
+      // Get "/self" and "/team/gateway/hardware/mobile" settings from API
+      let auth = await getStaxSelf(apiKey)
+      guard let merchant = auth?.merchant else {
         error(OmniNetworkingException.couldNotGetMerchantDetails)
         return
       }
       
-      // Assign merchant to self
-      self.merchant = merchant
-      
-      // A dict that contains the initialization details for the drivers
-      var args: [String: Any] = [ "appId": appId ]
-      
-      // Eagerly try to fill out the mobile reader settings from the merchant options.
-      // The getMobileReaderSettings step will override these if successful, but if that step fails to grab the
-      // settings from the gateways, then at least we have these as a fallback.
-      // NMI
-      if let emvPassword = merchant.emvPassword() {
-        args["nmi"] = NMIDetails(securityKey: emvPassword)
+      let readerAuth = await getMobileReaderAuthDetails(apiKey)
+      guard let readerAuth = readerAuth, let nmiKeys = readerAuth.nmi else {
+        error(OmniInitializeException.missingMobileReaderCredentials)
+        return
       }
       
-      // Try to get the details from the merchant gateways. This *should* rewrite the args dict
-      self.omniApi.getMobileReaderSettings(completion: { mrDetails in
-        if let nmiDetails = mrDetails.nmi {
-          args.updateValue(nmiDetails, forKey: "nmi")
-        }
+      // Set the InitArgs based on environment type
+      #if targetEnvironment(simulator)
+      let initArgs = MockInitializationArgs(appId: params.appId)
+      #else
+      let initArgs = ChipDnaInitializationArgs(appId: appId, keys: nmiKeys)
+      #endif
 
-        // Check if there are creds for NMI
-        if args["nmi"] == nil {
-          self.preferredQueue.async {
-            completion()
-          }
-          return
-        }
-
-        //
-        if (args["nmi"] as? NMIDetails)?.securityKey.isBlank() ?? true {
-          self.preferredQueue.async {
-            completion()
-          }
-          return
-        }
-        
-        Task {
-          #if targetEnvironment(simulator)
-          let initArgs = MockInitializationArgs(appId: params.appId)
-          #else
-          let appId = params.appId!
-          let keys = args["nmi"] as! NMIDetails
-          let initArgs = ChipDnaInitializationArgs(appId: appId, keys: keys)
-          #endif
-          
-          let result = await InitializeDriversJob(args: initArgs).start()
-          switch result {
-          case .success:
-            self.mobileReaderDriversInitialized = true
-            self.preferredQueue.async(execute: completion)
-          case .failure(let fail):
-            self.mobileReaderDriversInitialized = true
-            error(fail)
-          }
-        }
-      }, failure: { _ in
-
-        /*
-        // If the call to merchant gateways fails, try to init with the merchant options anyways
-        if args["nmi"] == nil {
-          self.preferredQueue.async {
-            self.mobileReaderDriversInitialized = true
-            error(OmniInitializeException.missingMobileReaderCredentials)
-          }
-          return
-        }
-        InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
-          self.mobileReaderDriversInitialized = true
-          self.preferredQueue.async(execute: completion)
-        }, failure: { _ in
-          self.mobileReaderDriversInitialized = true
-          error(OmniInitializeException.invalidMobileReaderCredentials)
-        })
-         */
-      })
-    }, failure: error)
+      let result = await InitializeDriversJob(args: initArgs).start()
+      switch result {
+      case .success:
+        self.mobileReaderDriversInitialized = true
+        self.preferredQueue.async(execute: completion)
+      case .failure(let fail):
+        self.mobileReaderDriversInitialized = true
+        error(fail)
+      }
+    }
   }
   
   /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
@@ -291,13 +234,25 @@ public class Omni: NSObject {
   ///   - amount: the amount that you want to capture. If nil, then the original transaction amount will be captured
   ///   - completion: Called when the operation is complete successfully. Receives a Transaction
   ///   - error: Receives any errors that happened while attempting the operation
-  public func capturePreauthTransaction(transactionId: String,
-                                        amount: Amount?,
-                                        completion: @escaping (Transaction) -> Void,
-                                        error: @escaping (OmniException) -> Void) {
+  public func capturePreauthTransaction(
+    transactionId: String,
+    amount: Amount?,
+    completion: @escaping (StaxTransaction) -> Void,
+    error: @escaping (OmniException) -> Void
+  ) {
+    guard let apiKey = omniApi.apiKey else {
+      error(OmniInitializeException.missingInitializationDetails)
+      return
+    }
     
-    let job = CapturePreauthTransaction(transactionId: transactionId, captureAmount: amount, omniApi: omniApi)
-    job.start(completion: completion, error: error)
+    let job = CapturePreauthTransactionJob(transactionId: transactionId, token: apiKey,amount: amount)
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let transaction): completion(transaction)
+        case .failure(let fail): error(fail )
+      }
+    }
   }
   
   /// Voids a transaction
@@ -486,5 +441,54 @@ public class Omni: NSObject {
       }
       completion(transactions)
     }), error: error)
+  }
+  
+  fileprivate func initializeUsbDelegate() {
+    if let delegate = usbAccessoryDelegate {
+      accessoryHelper = AccessoryHelper(delegate: delegate)
+      let _ = AccessoryHelper.isIdTechConnected()
+    }
+  }
+  
+  fileprivate func getStaxSelf(_ apiKey: String) async -> StaxSelf? {
+    let url = URL(string: "https://apiprod.fattlabs.com")!
+    let client = StaxHttpClient(baseURL: url)
+    let request = StaxApiRequest<StaxSelf>(
+      path: "/self",
+      method: .get,
+      headers: [
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer \(apiKey)"
+      ]
+    )
+
+    do {
+      let response = try await client.perform(request)
+      return response
+    } catch {
+      return nil
+    }
+  }
+  
+  fileprivate func getMobileReaderAuthDetails(_ apiKey: String) async -> MobileReaderDetails? {
+    let url = URL(string: "https://apiprod.fattlabs.com")!
+    let client = StaxHttpClient(baseURL: url)
+    let request = StaxApiRequest<MobileReaderDetails>(
+      path: "/team/gateway/hardware/mobile",
+      method: .get,
+      headers: [
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer \(apiKey)"
+      ]
+    )
+    
+    do {
+      let response = try await client.perform(request)
+      return response
+    } catch {
+      return nil
+    }
   }
 }

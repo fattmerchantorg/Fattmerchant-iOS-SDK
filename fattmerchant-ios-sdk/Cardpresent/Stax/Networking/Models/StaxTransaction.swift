@@ -127,6 +127,9 @@ public struct StaxTransaction: Codable {
 
   /// Currency used for the transaction
   public let currency: Currency?
+  
+  /// Child transactions
+  public let childCaptures: [StaxTransaction]?
     
   /// Types of transactions supported by the Stax API
   public enum TransactionType: String, Codable {

@@ -11,7 +11,6 @@ final class StaxHttpClient: Sendable {
   /// - Parameter baseURL: The base URL for the Stax API.
   init(baseURL: URL) {
     self.baseURL = baseURL
-    self.decoder.keyDecodingStrategy = .convertFromSnakeCase
   }
 
   /// Performs an HTTP request and decodes the response into the specified type.

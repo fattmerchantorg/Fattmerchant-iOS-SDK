@@ -18,11 +18,11 @@ struct StaxApiRequest<Response: Decodable> {
   
   /// Optional body data to be encoded as JSON and sent with the request.
   /// Will be automatically encoded using `JSONEncoder`.
-  let body: Encodable?
+  var body: Encodable?
   
   /// Optional HTTP headers to be included with the request.
   /// Content-Type will be automatically set to application/json when a body is present.
-  let headers: [String: String]?
+  var headers: [String: String]?
   
   /// Creates a new API request.
   /// - Parameters:
