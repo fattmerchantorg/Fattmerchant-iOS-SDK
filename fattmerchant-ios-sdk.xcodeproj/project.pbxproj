@@ -29,7 +29,6 @@
 		A7434F482D81D5F20035250C /* ModelRepository+DefaultImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFD2D81D5F20035250C /* ModelRepository+DefaultImpl.swift */; };
 		A7434F492D81D5F20035250C /* StaxCustomerRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F192D81D5F20035250C /* StaxCustomerRepositoryImpl.swift */; };
 		A7434F4A2D81D5F20035250C /* ModelRepository+EndpointDefaultImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFE2D81D5F20035250C /* ModelRepository+EndpointDefaultImpl.swift */; };
-		A7434F4B2D81D5F20035250C /* DisconnectMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F052D81D5F20035250C /* DisconnectMobileReader.swift */; };
 		A7434F4C2D81D5F20035250C /* InvoiceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFA2D81D5F20035250C /* InvoiceRepository.swift */; };
 		A7434F4D2D81D5F20035250C /* TransactionGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EE82D81D5F20035250C /* TransactionGateway.swift */; };
 		A7434F4E2D81D5F20035250C /* MobileReaderConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EEA2D81D5F20035250C /* MobileReaderConnectionStatus.swift */; };
@@ -98,7 +97,6 @@
 		A7434F912D81D5F20035250C /* ModelRepository+DefaultImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFD2D81D5F20035250C /* ModelRepository+DefaultImpl.swift */; };
 		A7434F922D81D5F20035250C /* StaxCustomerRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F192D81D5F20035250C /* StaxCustomerRepositoryImpl.swift */; };
 		A7434F932D81D5F20035250C /* ModelRepository+EndpointDefaultImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFE2D81D5F20035250C /* ModelRepository+EndpointDefaultImpl.swift */; };
-		A7434F942D81D5F20035250C /* DisconnectMobileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F052D81D5F20035250C /* DisconnectMobileReader.swift */; };
 		A7434F952D81D5F20035250C /* InvoiceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFA2D81D5F20035250C /* InvoiceRepository.swift */; };
 		A7434F962D81D5F20035250C /* TransactionGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EE82D81D5F20035250C /* TransactionGateway.swift */; };
 		A7434F972D81D5F20035250C /* MobileReaderConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EEA2D81D5F20035250C /* MobileReaderConnectionStatus.swift */; };
@@ -310,7 +308,6 @@
 		A7434F002D81D5F20035250C /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
 		A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransaction.swift; sourceTree = "<group>"; };
 		A7434F032D81D5F20035250C /* CapturePreauthTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreauthTransaction.swift; sourceTree = "<group>"; };
-		A7434F052D81D5F20035250C /* DisconnectMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisconnectMobileReader.swift; sourceTree = "<group>"; };
 		A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedMobileReader.swift; sourceTree = "<group>"; };
 		A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundMobileReaderTransaction.swift; sourceTree = "<group>"; };
 		A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPayment.swift; sourceTree = "<group>"; };
@@ -625,7 +622,6 @@
 			children = (
 				A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */,
 				A7434F032D81D5F20035250C /* CapturePreauthTransaction.swift */,
-				A7434F052D81D5F20035250C /* DisconnectMobileReader.swift */,
 				A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */,
 				A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */,
 				A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */,
@@ -1127,7 +1123,6 @@
 				A7434F912D81D5F20035250C /* ModelRepository+DefaultImpl.swift in Sources */,
 				A7434F922D81D5F20035250C /* StaxCustomerRepositoryImpl.swift in Sources */,
 				A7434F932D81D5F20035250C /* ModelRepository+EndpointDefaultImpl.swift in Sources */,
-				A7434F942D81D5F20035250C /* DisconnectMobileReader.swift in Sources */,
 				A74350372D8208B70035250C /* SelectablePinPad.swift in Sources */,
 				A7434F952D81D5F20035250C /* InvoiceRepository.swift in Sources */,
 				A7434F962D81D5F20035250C /* TransactionGateway.swift in Sources */,
@@ -1249,7 +1244,6 @@
 				A7434F482D81D5F20035250C /* ModelRepository+DefaultImpl.swift in Sources */,
 				A7434F492D81D5F20035250C /* StaxCustomerRepositoryImpl.swift in Sources */,
 				A7434F4A2D81D5F20035250C /* ModelRepository+EndpointDefaultImpl.swift in Sources */,
-				A7434F4B2D81D5F20035250C /* DisconnectMobileReader.swift in Sources */,
 				A7434F4C2D81D5F20035250C /* InvoiceRepository.swift in Sources */,
 				A7434F4D2D81D5F20035250C /* TransactionGateway.swift in Sources */,
 				A7434F4E2D81D5F20035250C /* MobileReaderConnectionStatus.swift in Sources */,

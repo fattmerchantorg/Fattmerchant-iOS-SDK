@@ -380,7 +380,6 @@ public class Omni: NSObject {
     #endif
     
     let job = SearchForMobileReadersJob(args: args)
-    
     Task {
       let result = await job.start()
       switch result {
@@ -400,7 +399,6 @@ public class Omni: NSObject {
     }
     
     let job = GetConnectedMobileReaderJob()
-
     Task {
       let result = await job.start()
       switch result {
@@ -423,7 +421,6 @@ public class Omni: NSObject {
     }
     
     let job = ConnectToMobileReaderJob(reader: reader, connectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
-
     Task {
       let result = await job.start()
       switch result {
@@ -445,7 +442,6 @@ public class Omni: NSObject {
     }
     
     let job = ConnectToMobileReaderJob(reader: reader, connectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
-
     Task {
       let result = await job.start()
       switch result {
@@ -466,12 +462,14 @@ public class Omni: NSObject {
       return error(OmniGeneralException.uninitialized)
     }
     
-    let task = DisconnectMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository, mobileReader: reader)
-    task.start(completion: { success in
-      self.preferredQueue.async { completion(success) }
-    }, failure: ({ exception in
-      self.preferredQueue.async { error(exception) }
-    }))
+    let job = DisconnectMobileReaderJob()
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let result): self.preferredQueue.async { completion(result) }
+        case .failure(let fail): self.preferredQueue.async { error(fail) }
+      }
+    }
   }
   
   /// Retrieves a list of the most recent mobile reader transactions from Omni
