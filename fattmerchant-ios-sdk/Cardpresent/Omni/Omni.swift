@@ -163,11 +163,12 @@ public class Omni: NSObject {
             self.preferredQueue.async(execute: completion)
           case .failure(let fail):
             self.mobileReaderDriversInitialized = true
-            error(fail as! OmniException)
+            error(fail)
           }
         }
       }, failure: { _ in
 
+        /*
         // If the call to merchant gateways fails, try to init with the merchant options anyways
         if args["nmi"] == nil {
           self.preferredQueue.async {
@@ -183,6 +184,7 @@ public class Omni: NSObject {
           self.mobileReaderDriversInitialized = true
           error(OmniInitializeException.invalidMobileReaderCredentials)
         })
+         */
       })
     }, failure: error)
   }
