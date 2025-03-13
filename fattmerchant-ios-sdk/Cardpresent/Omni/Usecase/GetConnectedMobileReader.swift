@@ -8,12 +8,6 @@
 
 import Foundation
 
-enum GetConnectedMobileReaderException: OmniException {
-  static var mess: String = "Could not get connected mobile reader"
-
-  case noReaderAvailable
-}
-
 class GetConnectedMobileReader {
   var mobileReaderDriverRepository: MobileReaderDriverRepository
 

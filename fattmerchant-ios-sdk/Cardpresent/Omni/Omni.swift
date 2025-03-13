@@ -397,11 +397,15 @@ public class Omni: NSObject {
       return error(OmniGeneralException.uninitialized)
     }
     
-    GetConnectedMobileReader(mobileReaderDriverRepository: mobileReaderDriverRepository).start(completion: { reader in
-      self.preferredQueue.async { completion(reader) }
-    }, failure: ({ exception in
-      self.preferredQueue.async { error(exception) }
-    }))
+    let job = GetConnectedMobileReaderJob()
+
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let reader): self.preferredQueue.async { completion(reader) }
+        case .failure(let fail): self.preferredQueue.async { error(fail) }
+      }
+    }
   }
   
   /// Attempts to connect to the given MobileReader
