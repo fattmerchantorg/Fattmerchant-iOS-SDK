@@ -324,16 +324,14 @@ public class Omni: NSObject {
       return error(OmniGeneralException.uninitialized)
     }
     
-    let job = CancelCurrentTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository)
-    job.start(completion: { success in
-      self.preferredQueue.async {
-        completion(success)
+    let job = CancelCurrentTransactionJob()
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let result): self.preferredQueue.async { completion(result) }
+        case .failure(let fail): self.preferredQueue.async { error(fail) }
       }
-    }, error: { err in
-      self.preferredQueue.async {
-        error(err)
-      }
-    })
+    }
   }
   
   /// Refunds the given transaction and returns a new Transaction that represents the refund in Omni

@@ -1,2 +1,1 @@
-protocol MobileReaderDriverInitializationArgs {
-}
+protocol MobileReaderDriverInitializationArgs {}

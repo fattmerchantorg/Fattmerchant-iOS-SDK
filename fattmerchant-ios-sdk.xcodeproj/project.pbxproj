@@ -52,7 +52,6 @@
 		A7434F622D81D5F20035250C /* ChipDnaTransactionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EE42D81D5F20035250C /* ChipDnaTransactionListener.swift */; };
 		A7434F632D81D5F20035250C /* StaxApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F332D81D5F20035250C /* StaxApiRequest.swift */; };
 		A7434F642D81D5F20035250C /* PaymentMethodRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFF2D81D5F20035250C /* PaymentMethodRepository.swift */; };
-		A7434F652D81D5F20035250C /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */; };
 		A7434F662D81D5F20035250C /* StaxBankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1E2D81D5F20035250C /* StaxBankHolderType.swift */; };
 		A7434F682D81D5F20035250C /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F112D81D5F20035250C /* Omni.swift */; };
 		A7434F692D81D5F20035250C /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F002D81D5F20035250C /* TransactionRepository.swift */; };
@@ -61,7 +60,6 @@
 		A7434F6D2D81D5F20035250C /* StaxInvoiceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1F2D81D5F20035250C /* StaxInvoiceStatus.swift */; };
 		A7434F6E2D81D5F20035250C /* RefundMobileReaderTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */; };
 		A7434F6F2D81D5F20035250C /* StaxCatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F272D81D5F20035250C /* StaxCatalogItem.swift */; };
-		A7434F702D81D5F20035250C /* TransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F132D81D5F20035250C /* TransactionType.swift */; };
 		A7434F712D81D5F20035250C /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F142D81D5F20035250C /* TransactionUpdateDelegate.swift */; };
 		A7434F722D81D5F20035250C /* StaxHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F342D81D5F20035250C /* StaxHttpClient.swift */; };
 		A7434F732D81D5F20035250C /* JSONValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EF02D81D5F20035250C /* JSONValue.swift */; };
@@ -119,7 +117,6 @@
 		A7434FAB2D81D5F20035250C /* ChipDnaTransactionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EE42D81D5F20035250C /* ChipDnaTransactionListener.swift */; };
 		A7434FAC2D81D5F20035250C /* StaxApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F332D81D5F20035250C /* StaxApiRequest.swift */; };
 		A7434FAD2D81D5F20035250C /* PaymentMethodRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EFF2D81D5F20035250C /* PaymentMethodRepository.swift */; };
-		A7434FAE2D81D5F20035250C /* CancelCurrentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */; };
 		A7434FAF2D81D5F20035250C /* StaxBankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1E2D81D5F20035250C /* StaxBankHolderType.swift */; };
 		A7434FB12D81D5F20035250C /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F112D81D5F20035250C /* Omni.swift */; };
 		A7434FB22D81D5F20035250C /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F002D81D5F20035250C /* TransactionRepository.swift */; };
@@ -128,7 +125,6 @@
 		A7434FB62D81D5F20035250C /* StaxInvoiceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1F2D81D5F20035250C /* StaxInvoiceStatus.swift */; };
 		A7434FB72D81D5F20035250C /* RefundMobileReaderTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */; };
 		A7434FB82D81D5F20035250C /* StaxCatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F272D81D5F20035250C /* StaxCatalogItem.swift */; };
-		A7434FB92D81D5F20035250C /* TransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F132D81D5F20035250C /* TransactionType.swift */; };
 		A7434FBA2D81D5F20035250C /* TransactionUpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F142D81D5F20035250C /* TransactionUpdateDelegate.swift */; };
 		A7434FBB2D81D5F20035250C /* StaxHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F342D81D5F20035250C /* StaxHttpClient.swift */; };
 		A7434FBC2D81D5F20035250C /* JSONValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434EF02D81D5F20035250C /* JSONValue.swift */; };
@@ -304,7 +300,6 @@
 		A7434EFE2D81D5F20035250C /* ModelRepository+EndpointDefaultImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelRepository+EndpointDefaultImpl.swift"; sourceTree = "<group>"; };
 		A7434EFF2D81D5F20035250C /* PaymentMethodRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodRepository.swift; sourceTree = "<group>"; };
 		A7434F002D81D5F20035250C /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
-		A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelCurrentTransaction.swift; sourceTree = "<group>"; };
 		A7434F032D81D5F20035250C /* CapturePreauthTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreauthTransaction.swift; sourceTree = "<group>"; };
 		A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundMobileReaderTransaction.swift; sourceTree = "<group>"; };
 		A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPayment.swift; sourceTree = "<group>"; };
@@ -315,7 +310,6 @@
 		A7434F102D81D5F20035250C /* MobileReaderDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDriver.swift; sourceTree = "<group>"; };
 		A7434F112D81D5F20035250C /* Omni.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Omni.swift; sourceTree = "<group>"; };
 		A7434F122D81D5F20035250C /* SignatureProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureProviding.swift; sourceTree = "<group>"; };
-		A7434F132D81D5F20035250C /* TransactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
 		A7434F142D81D5F20035250C /* TransactionUpdateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionUpdateDelegate.swift; sourceTree = "<group>"; };
 		A7434F152D81D5F20035250C /* UsbAccessoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsbAccessoryDelegate.swift; sourceTree = "<group>"; };
 		A7434F162D81D5F20035250C /* UserNotificationListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationListener.swift; sourceTree = "<group>"; };
@@ -617,7 +611,6 @@
 		A7434F0E2D81D5F20035250C /* Usecase */ = {
 			isa = PBXGroup;
 			children = (
-				A7434F022D81D5F20035250C /* CancelCurrentTransaction.swift */,
 				A7434F032D81D5F20035250C /* CapturePreauthTransaction.swift */,
 				A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */,
 				A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */,
@@ -644,7 +637,6 @@
 				A7434F102D81D5F20035250C /* MobileReaderDriver.swift */,
 				A7434F112D81D5F20035250C /* Omni.swift */,
 				A7434F122D81D5F20035250C /* SignatureProviding.swift */,
-				A7434F132D81D5F20035250C /* TransactionType.swift */,
 				A7434F142D81D5F20035250C /* TransactionUpdateDelegate.swift */,
 				A7434F152D81D5F20035250C /* UsbAccessoryDelegate.swift */,
 				A7434F162D81D5F20035250C /* UserNotificationListener.swift */,
@@ -1164,7 +1156,6 @@
 				A7434FAB2D81D5F20035250C /* ChipDnaTransactionListener.swift in Sources */,
 				A7434FAC2D81D5F20035250C /* StaxApiRequest.swift in Sources */,
 				A7434FAD2D81D5F20035250C /* PaymentMethodRepository.swift in Sources */,
-				A7434FAE2D81D5F20035250C /* CancelCurrentTransaction.swift in Sources */,
 				A7434FAF2D81D5F20035250C /* StaxBankHolderType.swift in Sources */,
 				A7434FB12D81D5F20035250C /* Omni.swift in Sources */,
 				A7434FB22D81D5F20035250C /* TransactionRepository.swift in Sources */,
@@ -1173,7 +1164,6 @@
 				A7434FB62D81D5F20035250C /* StaxInvoiceStatus.swift in Sources */,
 				A7434FB72D81D5F20035250C /* RefundMobileReaderTransaction.swift in Sources */,
 				A7434FB82D81D5F20035250C /* StaxCatalogItem.swift in Sources */,
-				A7434FB92D81D5F20035250C /* TransactionType.swift in Sources */,
 				A7434FBA2D81D5F20035250C /* TransactionUpdateDelegate.swift in Sources */,
 				A7434FBB2D81D5F20035250C /* StaxHttpClient.swift in Sources */,
 				A7434FBC2D81D5F20035250C /* JSONValue.swift in Sources */,
@@ -1278,7 +1268,6 @@
 				A7434F622D81D5F20035250C /* ChipDnaTransactionListener.swift in Sources */,
 				A7434F632D81D5F20035250C /* StaxApiRequest.swift in Sources */,
 				A7434F642D81D5F20035250C /* PaymentMethodRepository.swift in Sources */,
-				A7434F652D81D5F20035250C /* CancelCurrentTransaction.swift in Sources */,
 				A7434F662D81D5F20035250C /* StaxBankHolderType.swift in Sources */,
 				A7434F682D81D5F20035250C /* Omni.swift in Sources */,
 				A7434F692D81D5F20035250C /* TransactionRepository.swift in Sources */,
@@ -1288,7 +1277,6 @@
 				A7434F6E2D81D5F20035250C /* RefundMobileReaderTransaction.swift in Sources */,
 				A7434F6F2D81D5F20035250C /* StaxCatalogItem.swift in Sources */,
 				A743505D2D82136D0035250C /* MobileReaderDriverSearchArgs.swift in Sources */,
-				A7434F702D81D5F20035250C /* TransactionType.swift in Sources */,
 				A7434F712D81D5F20035250C /* TransactionUpdateDelegate.swift in Sources */,
 				A7434F722D81D5F20035250C /* StaxHttpClient.swift in Sources */,
 				A7434F732D81D5F20035250C /* JSONValue.swift in Sources */,
