@@ -1,16 +1,82 @@
-//
-//  TakeMobileReaderPayment.swift
-//  fattmerchant-ios-sdk
-//
-//  Created by Tulio Troncoso on 1/16/20.
-//  Copyright © 2020 Fattmerchant. All rights reserved.
-//
-
 import Foundation
 
 
-class TakeMobileReaderPayment {
 
+class Foo {
+  
+  func doApiCall() async {
+    let client = StaxHttpClient(baseURL: <#T##URL#>, apiKey: "BearerToken/JWT/AuthWhatever")
+    let invoiceRepository = StaxInvoiceRepositoryImpl(httpClient: client)
+    invoiceRepository.getInvoice(id: "invoice-id")
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+actor TakeMobileReaderPaymentJob: Job {
+  
+  typealias ResultType = StaxTransaction
+  
+  private var apiKey: String
+  private var client: StaxHttpClient
+  private var request: TransactionRequest
+  private var signatureProvider: SignatureProviding?
+  private weak var transactionUpdateDelegate: TransactionUpdateDelegate?
+  private weak var userNotificationDelegate: UserNotificationDelegate?
+  
+  init(
+    apiKey: String,
+    request: TransactionRequest,
+    signatureProvider: SignatureProviding? = nil,
+    transactionUpdateDelegate: TransactionUpdateDelegate? = nil,
+    userNotificationDelegate: UserNotificationDelegate? = nil
+  ) {
+    self.apiKey = apiKey
+    self.request = request
+    self.signatureProvider = signatureProvider
+    self.transactionUpdateDelegate = transactionUpdateDelegate
+    self.userNotificationDelegate = userNotificationDelegate
+    
+    let url = URL(string: "https://apiprod.fattlabs.com")!
+    self.client = StaxHttpClient(baseURL: url)
+  }
+  
+  func start() async -> JobResult<StaxTransaction> {
+    <#code#>
+  }
+  
+  fileprivate getOrCreateInvoice(id: String?) async -> StaxInvoice {
+    let invoiceRepository = StaxInvoiceRepositoryImpl(httpClient: client)
+    
+    if let id = id {
+      // GET
+      let invoice = try? await invoiceRepository.getInvoice(id: id)
+    } else {
+      // CREATE
+    }
+  }
+*/
+  /*
   typealias Exception = TakeMobileReaderPaymentException
 
   var mobileReaderDriverRepository: MobileReaderDriverRepository
@@ -458,4 +524,5 @@ class TakeMobileReaderPayment {
       }
     }
   }
+   */
 }

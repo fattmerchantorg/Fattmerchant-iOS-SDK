@@ -452,15 +452,10 @@ public class Omni: NSObject {
   
   fileprivate func getStaxSelf(_ apiKey: String) async -> StaxSelf? {
     let url = URL(string: "https://apiprod.fattlabs.com")!
-    let client = StaxHttpClient(baseURL: url)
+    let client = StaxHttpClient(baseURL: url, apiKey: apiKey)
     let request = StaxApiRequest<StaxSelf>(
       path: "/self",
-      method: .get,
-      headers: [
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer \(apiKey)"
-      ]
+      method: .get
     )
 
     do {
