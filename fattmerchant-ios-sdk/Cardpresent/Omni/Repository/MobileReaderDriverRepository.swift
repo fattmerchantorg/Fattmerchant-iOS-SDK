@@ -1,14 +1,9 @@
-//
-//  MobileReaderDriverRepository.swift
-//  fattmerchant-ios-sdk
-//
-//  Created by Tulio Troncoso on 1/16/20.
-//  Copyright © 2020 Fattmerchant. All rights reserved.
-//
-
 import Foundation
 
 class MobileReaderDriverRepository {
+  
+  static let shared = MobileReaderDriverRepository()
+  
 
   func all() -> [MobileReaderDriver] {
     #if targetEnvironment(simulator)
@@ -35,6 +30,20 @@ class MobileReaderDriverRepository {
     }) { filtered in
       completion(filtered)
     }
+  }
+  
+  func getInitializedDrivers() async -> [MobileReaderDriver] {
+    // This code assumes only 1 driver, which is the case with NMI
+    let driver = all().first!
+    let isInitialized = await withCheckedContinuation { continuation in
+      driver.isInitialized { continuation.resume(returning: $0) }
+    }
+    
+    if isInitialized {
+      return [driver]
+    }
+    
+    return []
   }
 
   func getDriverFor(transaction: Transaction, completion: (MobileReaderDriver?) -> Void) {

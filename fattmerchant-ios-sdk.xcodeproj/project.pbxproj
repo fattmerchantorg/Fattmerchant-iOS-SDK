@@ -59,7 +59,6 @@
 		A7434F662D81D5F20035250C /* StaxBankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1E2D81D5F20035250C /* StaxBankHolderType.swift */; };
 		A7434F682D81D5F20035250C /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F112D81D5F20035250C /* Omni.swift */; };
 		A7434F692D81D5F20035250C /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F002D81D5F20035250C /* TransactionRepository.swift */; };
-		A7434F6A2D81D5F20035250C /* SearchForReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F092D81D5F20035250C /* SearchForReaders.swift */; };
 		A7434F6B2D81D5F20035250C /* VoidTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F0D2D81D5F20035250C /* VoidTransaction.swift */; };
 		A7434F6C2D81D5F20035250C /* TokenizePaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F0C2D81D5F20035250C /* TokenizePaymentMethod.swift */; };
 		A7434F6D2D81D5F20035250C /* StaxInvoiceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1F2D81D5F20035250C /* StaxInvoiceStatus.swift */; };
@@ -131,7 +130,6 @@
 		A7434FAF2D81D5F20035250C /* StaxBankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1E2D81D5F20035250C /* StaxBankHolderType.swift */; };
 		A7434FB12D81D5F20035250C /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F112D81D5F20035250C /* Omni.swift */; };
 		A7434FB22D81D5F20035250C /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F002D81D5F20035250C /* TransactionRepository.swift */; };
-		A7434FB32D81D5F20035250C /* SearchForReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F092D81D5F20035250C /* SearchForReaders.swift */; };
 		A7434FB42D81D5F20035250C /* VoidTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F0D2D81D5F20035250C /* VoidTransaction.swift */; };
 		A7434FB52D81D5F20035250C /* TokenizePaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F0C2D81D5F20035250C /* TokenizePaymentMethod.swift */; };
 		A7434FB62D81D5F20035250C /* StaxInvoiceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7434F1F2D81D5F20035250C /* StaxInvoiceStatus.swift */; };
@@ -321,7 +319,6 @@
 		A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConnectedMobileReader.swift; sourceTree = "<group>"; };
 		A7434F072D81D5F20035250C /* InitializeDrivers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeDrivers.swift; sourceTree = "<group>"; };
 		A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundMobileReaderTransaction.swift; sourceTree = "<group>"; };
-		A7434F092D81D5F20035250C /* SearchForReaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForReaders.swift; sourceTree = "<group>"; };
 		A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMobileReaderPayment.swift; sourceTree = "<group>"; };
 		A7434F0B2D81D5F20035250C /* TakePayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePayment.swift; sourceTree = "<group>"; };
 		A7434F0C2D81D5F20035250C /* TokenizePaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizePaymentMethod.swift; sourceTree = "<group>"; };
@@ -456,6 +453,8 @@
 		A74350382D8209630035250C /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		A743505E2D8213940035250C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		A74350802D8225050035250C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
+		A74350932D822E420035250C /* Job */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Job; sourceTree = "<group>"; };
+		A74350B52D8279F40035250C /* Exception */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Exception; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -637,7 +636,6 @@
 				A7434F062D81D5F20035250C /* GetConnectedMobileReader.swift */,
 				A7434F072D81D5F20035250C /* InitializeDrivers.swift */,
 				A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */,
-				A7434F092D81D5F20035250C /* SearchForReaders.swift */,
 				A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */,
 				A7434F0B2D81D5F20035250C /* TakePayment.swift */,
 				A7434F0C2D81D5F20035250C /* TokenizePaymentMethod.swift */,
@@ -649,6 +647,8 @@
 		A7434F172D81D5F20035250C /* Omni */ = {
 			isa = PBXGroup;
 			children = (
+				A74350B52D8279F40035250C /* Exception */,
+				A74350932D822E420035250C /* Job */,
 				A7434EE92D81D5F20035250C /* ChipDna */,
 				A7434EEF2D81D5F20035250C /* Data */,
 				A7434EF12D81D5F20035250C /* JSON */,
@@ -1001,6 +1001,8 @@
 				A74350382D8209630035250C /* Utils */,
 				A743505E2D8213940035250C /* Data */,
 				A74350802D8225050035250C /* Data */,
+				A74350932D822E420035250C /* Job */,
+				A74350B52D8279F40035250C /* Exception */,
 			);
 			name = Fattmerchant;
 			productName = "fattmerchant-ios-sdk";
@@ -1023,6 +1025,8 @@
 				A74350382D8209630035250C /* Utils */,
 				A743505E2D8213940035250C /* Data */,
 				A74350802D8225050035250C /* Data */,
+				A74350932D822E420035250C /* Job */,
+				A74350B52D8279F40035250C /* Exception */,
 			);
 			name = FattmerchantTests;
 			productName = fattmerchant_ios_sdkTests;
@@ -1183,7 +1187,6 @@
 				A7434FAF2D81D5F20035250C /* StaxBankHolderType.swift in Sources */,
 				A7434FB12D81D5F20035250C /* Omni.swift in Sources */,
 				A7434FB22D81D5F20035250C /* TransactionRepository.swift in Sources */,
-				A7434FB32D81D5F20035250C /* SearchForReaders.swift in Sources */,
 				A7434FB42D81D5F20035250C /* VoidTransaction.swift in Sources */,
 				A7434FB52D81D5F20035250C /* TokenizePaymentMethod.swift in Sources */,
 				A7434FB62D81D5F20035250C /* StaxInvoiceStatus.swift in Sources */,
@@ -1302,7 +1305,6 @@
 				A7434F662D81D5F20035250C /* StaxBankHolderType.swift in Sources */,
 				A7434F682D81D5F20035250C /* Omni.swift in Sources */,
 				A7434F692D81D5F20035250C /* TransactionRepository.swift in Sources */,
-				A7434F6A2D81D5F20035250C /* SearchForReaders.swift in Sources */,
 				A7434F6B2D81D5F20035250C /* VoidTransaction.swift in Sources */,
 				A7434F6C2D81D5F20035250C /* TokenizePaymentMethod.swift in Sources */,
 				A7434F6D2D81D5F20035250C /* StaxInvoiceStatus.swift in Sources */,

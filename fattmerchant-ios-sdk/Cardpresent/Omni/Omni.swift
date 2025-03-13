@@ -1,62 +1,4 @@
-//
-//  Omni.swift
-//  fattmerchant-ios-sdk
-//
-//  Created by Tulio Troncoso on 1/16/20.
-//  Copyright © 2020 Fattmerchant. All rights reserved.
-//
 import Foundation
-
-enum OmniNetworkingException: OmniException {
-  case couldNotGetMerchantDetails
-  case couldNotGetPaginatedTransactions
-  
-  static var mess: String = "Omni Networking Exception"
-  
-  var detail: String? {
-    switch self {
-      case .couldNotGetMerchantDetails:
-        return "Could not get merchant details from Omni"
-        
-      case .couldNotGetPaginatedTransactions:
-        return "Could not get paginated transactions"
-    }
-  }
-}
-
-public enum OmniInitializeException: OmniException {
-  case missingInitializationDetails
-  case mobileReaderPaymentsNotConfigured
-  case missingMobileReaderCredentials
-  case invalidMobileReaderCredentials
-
-  public static var mess: String = "Omni Initialization Exception"
-
-  public var detail: String? {
-    switch self {
-      case .missingInitializationDetails:
-        return "Missing initialization details"
-      case .mobileReaderPaymentsNotConfigured:
-        return "Your account is not configured to accept mobile reader payments"
-      case .missingMobileReaderCredentials:
-        return "Your account does not have mobile reader credentials"
-      case .invalidMobileReaderCredentials:
-        return "Your account has invalid mobile reader credentials"
-    }
-  }
-}
-
-public enum OmniGeneralException: OmniException {
-  case uninitialized
-  public static var mess: String = "Omni General Error"
-  
-  public var detail: String? {
-    switch self {
-      case .uninitialized:
-        return "Omni has not been initialized yet"
-    }
-  }
-}
 
 /**
  Handles cardpresent payments
@@ -145,7 +87,7 @@ public class Omni: NSObject {
   ///   - params: an instance of InitParams which contains all necessary information to initialize omni
   ///   - completion: a completion block to run once finished
   ///   - error: an error block to run in case something goes wrong
-  public func initialize(params: InitParams, completion: @escaping () -> Void, error: @escaping (OmniException) -> Void) {
+  public func initialize(params: InitParams, completion: @Sendable @escaping () -> Void, error: @escaping (OmniException) -> Void) {
     guard let appId = params.appId, params.apiKey != nil else {
       error(OmniInitializeException.missingInitializationDetails)
       return
@@ -204,14 +146,26 @@ public class Omni: NSObject {
           }
           return
         }
-
-        InitializeDrivers(mobileReaderDriverRepository: self.mobileReaderDriverRepository, args: args).start(completion: { _ in
-          self.mobileReaderDriversInitialized = true
-          self.preferredQueue.async(execute: completion)
-        }, failure: { _ in
-          self.mobileReaderDriversInitialized = true
-          error(OmniInitializeException.invalidMobileReaderCredentials)
-        })
+        
+        Task {
+          #if targetEnvironment(simulator)
+          let initArgs = MockInitializationArgs(appId: params.appId)
+          #else
+          let appId = params.appId!
+          let keys = args["nmi"] as! NMIDetails
+          let initArgs = ChipDnaInitializationArgs(appId: appId, keys: keys)
+          #endif
+          
+          let result = await InitializeDriversJob(args: initArgs).start()
+          switch result {
+          case .success:
+            self.mobileReaderDriversInitialized = true
+            self.preferredQueue.async(execute: completion)
+          case .failure(let fail):
+            self.mobileReaderDriversInitialized = true
+            error(fail as! OmniException)
+          }
+        }
       }, failure: { _ in
 
         // If the call to merchant gateways fails, try to init with the merchant options anyways
@@ -417,11 +371,21 @@ public class Omni: NSObject {
       return error(OmniGeneralException.uninitialized)
     }
     
-    SearchForReaders(mobileReaderDriverRepository: mobileReaderDriverRepository, args: [:]).start(completion: { (readers) in
-      self.preferredQueue.async { completion(readers) }
-    }, failure: ({ exception in
-      self.preferredQueue.async { error(exception) }
-    }))
+    #if targetEnvironment(simulator)
+    let args = MockSearchArgs()
+    #else
+    let args = ChipDnaSearchArgs(allowed: [.ble, .bt, .usb])
+    #endif
+    
+    let job = SearchForReadersJob(args: args)
+    
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let readers): self.preferredQueue.async { completion(readers) }
+        case .failure(let fail): self.preferredQueue.async { error(fail) }
+      }
+    }
   }
   
   /// Returns the connected mobile reader
