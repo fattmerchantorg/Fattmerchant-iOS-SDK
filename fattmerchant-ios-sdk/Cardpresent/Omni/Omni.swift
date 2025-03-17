@@ -151,17 +151,31 @@ public class Omni: NSObject {
     self.initialize(args: args, completion: completion, error: error)
   }
   
-  /// Creates a `PaymentMethod` out of a `BankAccount` object for reuse with Omni
-  /// - Parameters:
-  ///   - bankAccount: Contains the details of the payment method to tokenize
-  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
-  ///   - error: Receives any errors that happened while attempting the operation
+  /// Creates a `PaymentMethod` out of a `BankAccount` object for reuse with Stax Pay.
+  /// - Parameter bankAccount: Contains the `BankAccount` details to tokenize with Stax Pay.
+  /// - Parameter completion: A `(PaymentMethod) -> Void` callback run after the bank has been tokenized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
   @available(*, deprecated, message: "Deprecated in favor of the `tokenizeBankAccount` function.")
   public func tokenize(_ bankAccount: BankAccount, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
     TokenizePaymentMethod(customerRepository: customerRepository,
                           paymentMethodRepository: paymentMethodRepository,
                           bankAccount: bankAccount
     ).start(completion: completion, failure: error)
+  }
+  
+  /// Creates a `PaymentMethod` out of a `BankAccount` object for reuse with Stax Pay.
+  /// - Parameter bankAccount: Contains the `BankAccount` details to tokenize with Stax Pay.
+  /// - Parameter completion: A `(PaymentMethod) -> Void` callback run after the bank has been tokenized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
+  @available(*, deprecated, message: "Deprecated in favor of the `tokenizeBankAccount` function.")
+  public func tokenize(bankAccount: BankAccount, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    let job = TokenizePaymentMethod(
+      customerRepository: customerRepository,
+      paymentMethodRepository: paymentMethodRepository,
+      bankAccount: bankAccount
+    )
+    
+    job.start(completion: completion, failure: error)
   }
   
   /// Creates a `StaxPaymentMethod` out of a `StaxBankAccount` object for reuse with Stax Pay.
@@ -184,17 +198,31 @@ public class Omni: NSObject {
     }
   }
   
-  /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
-  /// - Parameters:
-  ///   - creditCard: Contains the details of the payment method to tokenize
-  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
-  ///   - error: Receives any errors that happened while attempting the operation
+  /// Creates a `PaymentMethod` out of a `CreditCard` object for reuse with Stax Pay.
+  /// - Parameter creditCard: Contains the `CreditCard` object to tokenize
+  /// - Parameter completion: A `(PaymentMethod) -> Void` callback run after the bank has been tokenized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
   @available(*, deprecated, message: "Deprecated in favor of the `tokenizeCreditCard` function.")
   public func tokenize(_ creditCard: CreditCard, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
     TokenizePaymentMethod(customerRepository: customerRepository,
                           paymentMethodRepository: paymentMethodRepository,
                           creditCard: creditCard
     ).start(completion: completion, failure: error)
+  }
+  
+  /// Creates a `PaymentMethod` out of a `CreditCard` object for reuse with Stax Pay.
+  /// - Parameter card: Contains the `CreditCard` object to tokenize
+  /// - Parameter completion: A `(PaymentMethod) -> Void` callback run after the bank has been tokenized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
+  @available(*, deprecated, message: "Deprecated in favor of the `tokenizeCreditCard` function.")
+  public func tokenize(card: CreditCard, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    let job = TokenizePaymentMethod(
+      customerRepository: customerRepository,
+      paymentMethodRepository: paymentMethodRepository,
+      creditCard: card
+    )
+    
+    job.start(completion: completion, failure: error)
   }
   
   /// Creates a `StaxPaymentMethod` out of a `StaxCreditCard` object for reuse with Stax Pay.
@@ -227,38 +255,6 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
   
-  /// Creates a Fattmerchant PaymentMethod out of the given CreditCard
-  ///
-  /// - Parameters:
-  ///   - card: The CreditCard to be tokenized
-  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
-  ///   - error: Receives any errors that happened while attempting the operation
-  public func tokenize(card: CreditCard, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
-    let job = TokenizePaymentMethod(
-      customerRepository: customerRepository,
-      paymentMethodRepository: paymentMethodRepository,
-      creditCard: card
-    )
-    
-    job.start(completion: completion, failure: error)
-  }
-  
-  /// Creates a Fattmerchant PaymentMethod out of the given BankAccount
-  ///
-  /// - Parameters:
-  ///   - bankAccount: The BankAccount to be tokenized
-  ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
-  ///   - error: Receives any errors that happened while attempting the operation
-  public func tokenize(bankAccount: BankAccount, completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
-    let job = TokenizePaymentMethod(
-      customerRepository: customerRepository,
-      paymentMethodRepository: paymentMethodRepository,
-      bankAccount: bankAccount
-    )
-    
-    job.start(completion: completion, failure: error)
-  }
-  
   /// Captures a mobile reader transaction
   ///
   /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called. This
@@ -288,24 +284,34 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
   
-  /// Captures a previously-authorized transaction
-  ///
-  /// - Parameters:
-  ///   - transactionId: The id of the transaction you want to capture
-  ///   - amount: the amount that you want to capture. If nil, then the original transaction amount will be captured
-  ///   - completion: Called when the operation is complete successfully. Receives a Transaction
-  ///   - error: Receives any errors that happened while attempting the operation
+  /// Captures a previously-authorized `Transaction`.
+  /// - Parameter transactionId: The ID of the `Transaction` you want to capture.
+  /// - Parameter amount: The `Amount` that you want to capture. If `nil`, then the total pre-authorized amount will be captured.
+  /// - Parameter completion: A `(Transaction) -> Void` callback run after transaction has finished.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when capturing
+  @available(*, deprecated, message: "Deprecated in favor of the `capturePreAuthTransaction` function.")
   public func capturePreauthTransaction(
+    transactionId: String,
+    amount: Amount? = nil,
+    completion: @escaping (Transaction) -> Void,
+    error: @escaping (OmniException) -> Void
+  ) {
+    
+    let job = CapturePreauthTransaction(transactionId: transactionId, captureAmount: amount, omniApi: omniApi)
+    job.start(completion: completion, error: error)
+  }
+  
+  /// Captures a previously-authorized `StaxTransaction`.
+  /// - Parameter transactionId: The ID of the `StaxTransaction` you want to capture.
+  /// - Parameter amount: The `Amount` that you want to capture. If `nil`, then the total pre-authorized amount will be captured.
+  /// - Parameter completion: A `(StaxTransaction) -> Void` callback run after transaction has finished.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when capturing
+  public func capturePreAuthTransaction(
     transactionId: String,
     amount: Amount?,
     completion: @escaping (StaxTransaction) -> Void,
     error: @escaping (OmniException) -> Void
   ) {
-    guard let apiKey = omniApi.apiKey else {
-      error(OmniInitializeException.missingInitializationDetails)
-      return
-    }
-    
     guard let client = staxHttpClient else {
       error(OmniGeneralException.uninitialized)
       return

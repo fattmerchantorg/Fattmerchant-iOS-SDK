@@ -179,6 +179,8 @@
 		A743527B2D8894BD0035250C /* InitializationArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74352792D8894B80035250C /* InitializationArgs.swift */; };
 		A743527D2D8896890035250C /* Omni+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743527C2D8896860035250C /* Omni+Async.swift */; };
 		A743527E2D8896890035250C /* Omni+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743527C2D8896860035250C /* Omni+Async.swift */; };
+		A74352972D88B5F50035250C /* CapturePreauthTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */; };
+		A74352982D88B5F50035250C /* CapturePreauthTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */; };
 		A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */; };
 		A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */; };
 		A74B23B22C58095D003FAD5E /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */; };
@@ -347,6 +349,7 @@
 		A74351412D828F240035250C /* StaxSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaxSelf.swift; sourceTree = "<group>"; };
 		A74352792D8894B80035250C /* InitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationArgs.swift; sourceTree = "<group>"; };
 		A743527C2D8896860035250C /* Omni+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Omni+Async.swift"; sourceTree = "<group>"; };
+		A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreauthTransaction.swift; sourceTree = "<group>"; };
 		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
 		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
 		A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHCVSParser-Licence.txt"; sourceTree = "<group>"; };
@@ -569,6 +572,7 @@
 		A7434F0E2D81D5F20035250C /* Usecase */ = {
 			isa = PBXGroup;
 			children = (
+				A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */,
 				A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */,
 				A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */,
 				A7434F0B2D81D5F20035250C /* TakePayment.swift */,
@@ -1113,6 +1117,7 @@
 				A74351432D828F260035250C /* StaxSelf.swift in Sources */,
 				A7434FC02D81D5F20035250C /* StaxTransaction.swift in Sources */,
 				A7434FC12D81D5F20035250C /* StaxNetworkError.swift in Sources */,
+				A74352982D88B5F50035250C /* CapturePreauthTransaction.swift in Sources */,
 				A7434FC22D81D5F20035250C /* ModelRepository.swift in Sources */,
 				A7434FC32D81D5F20035250C /* TransactionResult.swift in Sources */,
 				A7434FC42D81D5F20035250C /* MobileReaderDriverRepository.swift in Sources */,
@@ -1153,6 +1158,7 @@
 				D7801BFF241F303600A93001 /* MockPaymentMethodRepository.swift in Sources */,
 				A7434F3B2D81D5F20035250C /* OmniApi.swift in Sources */,
 				A74351362D828D910035250C /* StaxTippingSettings.swift in Sources */,
+				A74352972D88B5F50035250C /* CapturePreauthTransaction.swift in Sources */,
 				A7434F3D2D81D5F20035250C /* StaxPaymentMethodRepositoryImpl.swift in Sources */,
 				A7434F3E2D81D5F20035250C /* StaxValidationError.swift in Sources */,
 				A7434FD92D81D6140035250C /* AsyncFilter.swift in Sources */,

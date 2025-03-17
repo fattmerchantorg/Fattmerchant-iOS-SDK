@@ -41,4 +41,20 @@ extension Omni {
       case .failure(let fail): throw fail
     }
   }
+  
+  /// Captures a previously-authorized `StaxTransaction`.
+  /// - Parameter transactionId: The ID of the `StaxTransaction` you want to capture.
+  /// - Parameter amount: The `Amount` that you want to capture. If `nil`, then the total pre-authorized amount will be captured.
+  /// - Parameter completion: A `(StaxTransaction) -> Void` callback run after transaction has finished.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when capturing
+  public func capturePreAuthTransaction(transactionId: String, amount: Amount? = nil) async throws -> StaxTransaction {
+    guard let client = staxHttpClient else { throw OmniGeneralException.uninitialized; }
+    
+    let job = CapturePreAuthTransactionJob(transactionId: transactionId, client: client, amount: amount)
+    let result = await job.start()
+    switch result {
+      case .success(let transaction): return transaction
+      case .failure(let fail): throw fail
+    }
+  }
 }
