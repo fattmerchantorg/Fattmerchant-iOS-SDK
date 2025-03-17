@@ -1,16 +1,18 @@
-//
-//  VoidTransaction.swift
-//  fattmerchant-ios-sdk
-//
-//  Created by Tulio Troncoso on 5/21/21.
-//  Copyright © 2021 Fattmerchant. All rights reserved.
-//
-
 import Foundation
 
-
-
-class VoidTransaction {
+/*
+actor VoidTransactionJob: Job {
+  typealias ResultType = StaxTransaction
+  
+  private let transactionId: String
+  
+  init(transactionId: String) {
+    self.transactionId = transactionId
+  }
+  
+  func start() async -> JobResult<StaxTransaction> {
+    
+  }
 
   typealias Exception = RefundException
 
@@ -28,5 +30,6 @@ class VoidTransaction {
                          completion: completion,
                          failure: error)
   }
+ }
+*/
 
-}

@@ -88,6 +88,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
     log("Attempting initalization...")
     
     // Initialize Omni
+    /*
     omni?.initialize(params: initParams(), completion: {
       self.initializeButton.isHidden = true
       self.log("Initialized")
@@ -98,6 +99,21 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
       }
       self.log(error)
     })
+     */
+    
+    Task { @MainActor in
+      do {
+        try await omni?.initialize(args: InitializationArgs(applicationId: "fmiossample", ephemeralToken: apiKey))
+        self.initializeButton.isHidden = true
+        self.log("Initialized (async)")
+      } catch {
+        if let initialized = self.omni?.isInitialized, initialized {
+          self.initializeButton.isHidden = true
+          self.log("Initialized")
+        }
+        self.log(error as! any OmniException)
+      }
+    }
   }
   
   fileprivate func initializeEphemeralOmni() async throws {
@@ -247,6 +263,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
 
   @IBAction fileprivate func tokenizeCard() {
     self.log("Attempting CNP Tokenization")
+    /*
     var card = CreditCard.testCreditCard()
     card.personName = "Test Creditcard"
     omni?.tokenize(card, { (paymentMethod) in
@@ -255,10 +272,30 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
     }, error: { (err) in
       self.log(err)
     })
+     */
+    
+    do {
+      let card = try StaxCreditCard(
+        cardholder: "Benji Man",
+        number: "4111111111111111",
+        expiry: "1230",
+        address: StaxAddress(zip: "55555")
+      )
+      
+      omni?.tokenizeCreditCard(card, { paymentMethod in
+        self.log("Created PaymentMethod Successfully (Card)")
+        self.log(paymentMethod.id ?? "Unknown ID")
+      }, error: { exception in
+        self.log(exception)
+      })
+    } catch {
+      self.log(error as! OmniException)
+    }
   }
 
   @IBAction fileprivate func tokenizeBankAccount() {
     self.log("Attempting CNP Tokenization")
+    /*
     let bank = BankAccount.testBankAccount()
     omni?.tokenize(bank, { (paymentMethod) in
       self.log("Created PaymentMethod Successfully")
@@ -266,6 +303,27 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
     }, error: { (err) in
       self.log(err)
     })
+     */
+    
+    do {
+      let bank = try StaxBankAccount(
+        accountHolderName: "Benji Man",
+        bankType: .savings,
+        bankHolderType: .business,
+        accountNumber: "9876543210",
+        routingNumber: "021000021",
+        address: StaxAddress(zip: "55555")
+      )
+      
+      omni?.tokenizeBankAccount(bank, completion: { paymentMethod in
+        self.log("Created PaymentMethod Successfully (Bank)")
+        self.log(paymentMethod.id ?? "Unknown ID")
+      }, error: { exception in
+        self.log(exception)
+      })
+    } catch {
+      self.log(error as! OmniException)
+    }
   }
 
   fileprivate func createTransactionRequest() -> TransactionRequest {

@@ -3,30 +3,30 @@ import Foundation
 public struct StaxPaymentMethod: Codable {
 
   public let id: String?
-  public let customerId: String?
-  public let merchantId: String?
-  public let userId: String?
+  public var customerId: String?
+  public var merchantId: String?
+  public var userId: String?
   public var nickname: String?
-  public let isDefault: Int?
-  public let method: StaxPaymentMethodType?
-  public let meta: JSONCodable?
-  public let binType: String?
-  public let personName: String?
-  public let cardType: String?
-  public let cardLastFour: String?
-  public let cardExpiry: String?
-  public let bankName: String?
-  public let bankType: StaxBankAccountType?
-  public let bankHolderType: StaxBankHolderType?
-  public let address1: String?
-  public let address2: String?
-  public let addressCity: String?
-  public let addressState: String?
-  public let addressZip: String?
-  public let addressCountry: String?
-  public let purgedAt: Date?
-  public let createdAt: Date?
-  public let updatedAt: Date?
+  public var isDefault: Int?
+  public var method: StaxPaymentMethodType?
+  public var meta: JSONCodable?
+  public var binType: String?
+  public var personName: String?
+  public var cardType: String?
+  public var cardNumber: String?
+  public var cardLastFour: String?
+  public var cardExpiry: String?
+  public var bankName: String?
+  public var bankAccount: String?
+  public var bankRouting: String?
+  public var bankType: StaxBankAccountType?
+  public var bankHolderType: StaxBankHolderType?
+  public var address1: String?
+  public var address2: String?
+  public var addressCity: String?
+  public var addressState: String?
+  public var addressZip: String?
+  public var addressCountry: String?
   
   private enum CodingKeys: String, CodingKey {
     case id
@@ -40,9 +40,12 @@ public struct StaxPaymentMethod: Codable {
     case binType = "bin_type"
     case personName = "person_name"
     case cardType = "card_type"
+    case cardNumber = "card_number"
     case cardLastFour = "card_last_four"
     case cardExpiry = "card_exp"
     case bankName = "bank_note"
+    case bankAccount = "bank_account"
+    case bankRouting = "bank_routing"
     case bankHolderType = "bank_holder_type"
     case bankType = "bank_type"
     case address1 = "address_1"
@@ -51,9 +54,6 @@ public struct StaxPaymentMethod: Codable {
     case addressState = "address_state"
     case addressZip = "address_zip"
     case addressCountry = "address_country"
-    case purgedAt = "purged_at"
-    case createdAt = "created_at"
-    case updatedAt = "updated_at"
   }
   
   public init(
@@ -68,9 +68,12 @@ public struct StaxPaymentMethod: Codable {
     binType: String? = nil,
     personName: String? = nil,
     cardType: String? = nil,
+    cardNumber: String? = nil,
     cardLastFour: String? = nil,
     cardExpiry: String? = nil,
     bankName: String? = nil,
+    bankAccount: String? = nil,
+    bankRouting: String? = nil,
     bankType: StaxBankAccountType? = nil,
     bankHolderType: StaxBankHolderType? = nil,
     address1: String? = nil,
@@ -78,10 +81,7 @@ public struct StaxPaymentMethod: Codable {
     addressCity: String? = nil,
     addressState: String? = nil,
     addressZip: String? = nil,
-    addressCountry: String? = nil,
-    purgedAt: Date? = nil,
-    createdAt: Date? = nil,
-    updatedAt: Date? = nil
+    addressCountry: String? = nil
   ) {
     self.id = id
     self.customerId = customerId
@@ -94,9 +94,12 @@ public struct StaxPaymentMethod: Codable {
     self.binType = binType
     self.personName = personName
     self.cardType = cardType
+    self.cardNumber = cardNumber
     self.cardLastFour = cardLastFour
     self.cardExpiry = cardExpiry
     self.bankName = bankName
+    self.bankAccount = bankAccount
+    self.bankRouting = bankRouting
     self.bankType = bankType
     self.bankHolderType = bankHolderType
     self.address1 = address1
@@ -105,9 +108,6 @@ public struct StaxPaymentMethod: Codable {
     self.addressState = addressState
     self.addressZip = addressZip
     self.addressCountry = addressCountry
-    self.purgedAt = purgedAt
-    self.createdAt = createdAt
-    self.updatedAt = updatedAt
   }
   
   /// Creates a `StaxPaymentMethod` instance from an existing `StaxPaymentMethod` and mutable properties.
@@ -138,9 +138,6 @@ public struct StaxPaymentMethod: Codable {
     self.addressZip = (changes["addressZip"] as? String) ?? existing.addressZip
     self.addressCountry = (changes["addressCountry"] as? String) ?? existing.addressCountry
     self.nickname = (changes["nickname"] as? String) ?? existing.nickname
-    self.purgedAt = existing.purgedAt
-    self.createdAt = existing.createdAt
-    self.updatedAt = existing.updatedAt
   }
   
   /// Creates a `StaxPaymentMethod.Update` instance with mutable properties.

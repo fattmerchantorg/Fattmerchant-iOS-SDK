@@ -1,29 +1,23 @@
 import Foundation
 
-actor CapturePreauthTransactionJob: Job {
+actor CapturePreAuthTransactionJob: Job {
   typealias ResultType = StaxTransaction
   
   private var transactionId: String
   private var amount: Amount?
-  private var token: String
+  private var client: StaxHttpClientProtocol
 
-  init(transactionId: String, token: String, amount: Amount? = nil) {
+  init(transactionId: String, client: StaxHttpClientProtocol, amount: Amount? = nil) {
     self.transactionId = transactionId
     self.amount = amount
-    self.token = token
+    self.client = client
   }
   
   func start() async -> JobResult<StaxTransaction> {
     // As of 3/13/25, this code should only be hit by NMI since that's the only mobile gateway people use.
     // With only NMI in mind, we can hit the Stax API to handle this request
-    let baseUrl = URL(string: "https://apiprod.fattlabs.com")!
-    let client = StaxHttpClient(baseURL: baseUrl, apiKey: token)
-    var request = StaxApiRequest<StaxTransaction>(
-      path: "/transaction/\(transactionId)/capture",
-      method: .post
-    )
-    
-    // Set request body if Amount is passed in
+    let path = "/transaction/\(transactionId)/capture"
+    var request = StaxApiRequest<StaxTransaction>(path: path, method: .post)
     if let amount = amount, let body = try? JSONEncoder().encode(["total": amount.dollars()]) {
       request.body = body
     }

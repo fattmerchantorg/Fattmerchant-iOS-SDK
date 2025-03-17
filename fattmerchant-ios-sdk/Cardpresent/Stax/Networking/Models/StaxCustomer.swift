@@ -62,12 +62,11 @@ public struct StaxCustomer: Codable {
   
   /// References to child customers that were merged into this one
   public let childMerges: [String]?
+
   
-  /// Timestamp when the customer was created
-  public let createdAt: Date?
-  
-  /// Timestamp when the customer was last updated
-  public let updatedAt: Date?
+  public var name: String {
+    return "\(firstname ?? "") \(lastname ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+  }
   
   private enum CodingKeys: String, CodingKey {
     case id
@@ -90,8 +89,18 @@ public struct StaxCustomer: Codable {
     case hasAddress = "has_address"
     case parentMerge = "parent_merge"
     case childMerges = "child_merges"
-    case createdAt = "created_at"
-    case updatedAt = "updated_at"
+  }
+  
+  public static func from(name: String) -> StaxCustomer {
+    var first = ""
+    var last = ""
+    var names = name.split(separator: " ")
+    if !names.isEmpty {
+      first = String(names.removeFirst())
+      last = names.joined(separator: " ")
+    }
+    
+    return StaxCustomer(firstname: first, lastname: last)
   }
   
   /// Creates a `StaxCustomer` instance. All of the fields are optional, but you may encounter
@@ -136,9 +145,7 @@ public struct StaxCustomer: Codable {
     allowInvoiceCreditCardPayments: Bool? = nil,
     hasAddress: Bool? = nil,
     parentMerge: String? = nil,
-    childMerges: [String]? = nil,
-    createdAt: Date? = nil,
-    updatedAt: Date? = nil
+    childMerges: [String]? = nil
   ) {
     self.id = nil
     self.firstname = firstname
@@ -160,8 +167,6 @@ public struct StaxCustomer: Codable {
     self.hasAddress = hasAddress
     self.parentMerge = parentMerge
     self.childMerges = childMerges
-    self.createdAt = createdAt
-    self.updatedAt = updatedAt
   }
   
   /// Creates a `StaxCustomer` instance from an existing customer and mutable properties.
@@ -189,8 +194,6 @@ public struct StaxCustomer: Codable {
     self.hasAddress = existing.hasAddress
     self.parentMerge = existing.parentMerge
     self.childMerges = existing.childMerges
-    self.createdAt = existing.createdAt
-    self.updatedAt = existing.updatedAt
   }
   
   /// Creates a `StaxCustomer.Update` instance with mutable properties.

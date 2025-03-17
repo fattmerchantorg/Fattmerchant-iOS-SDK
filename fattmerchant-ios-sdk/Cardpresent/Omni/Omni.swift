@@ -19,6 +19,7 @@ import Foundation
  Once initialized, you can call its methods like `getAvailableReaders` and `takeMobileReaderTransaction`
  */
 public class Omni: NSObject {
+  internal var staxHttpClient: StaxHttpClientProtocol? = nil
   
   internal var mobileReaderDriversInitialized: Bool = false
   internal var omniApi = OmniApi()
@@ -27,8 +28,10 @@ public class Omni: NSObject {
   internal var customerRepository: CustomerRepository!
   internal var paymentMethodRepository: PaymentMethodRepository!
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
-  internal var merchant: Merchant?
   internal var accessoryHelper: AccessoryHelper?
+  
+  
+  
   
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
@@ -48,6 +51,7 @@ public class Omni: NSObject {
   public weak var usbAccessoryDelegate: UsbAccessoryDelegate?
   
   /// Contains all the data necessary to initialize `Omni`
+  @available(*, deprecated, message: "Deprecated in favor of `InitializationArgs`.")
   public struct InitParams {
     /// An id for your application
     public var appId: String?
@@ -70,7 +74,7 @@ public class Omni: NSObject {
     }
   }
   
-  fileprivate func initRepos(omniApi: OmniApi) {
+  internal func initRepos(omniApi: OmniApi) {
     transactionRepository = TransactionRepository(omniApi: omniApi)
     invoiceRepository = InvoiceRepository(omniApi: omniApi)
     customerRepository = CustomerRepository(omniApi: omniApi)
@@ -82,42 +86,42 @@ public class Omni: NSObject {
     return mobileReaderDriversInitialized
   }
   
-  /// Used to initialize the Omni object
-  /// - Parameters:
-  ///   - params: an instance of InitParams which contains all necessary information to initialize omni
-  ///   - completion: a completion block to run once finished
-  ///   - error: an error block to run in case something goes wrong
-  public func initialize(params: InitParams, completion: @Sendable @escaping () -> Void, error: @escaping (OmniException) -> Void) {
-    guard let appId = params.appId, let apiKey = params.apiKey else {
-      error(OmniInitializeException.missingInitializationDetails)
-      return
-    }
+  /// Setup and prepare the `Omni` instance.
+  /// - Parameter args: The `InitializationArgs` required for bootstrapping the SDK.
+  /// - Parameter completion: A `() -> Void` callback run after the SDK is initialized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when initializing.
+  public func initialize(args: InitializationArgs, completion: @Sendable @escaping () -> Void, error: @escaping (OmniException) -> Void) {
+    let apiKey = args.ephemeralToken
     
-    omniApi.apiKey = params.apiKey
-    omniApi.environment = params.environment
+    omniApi.apiKey = args.ephemeralToken
+    omniApi.environment = .LIVE
     initRepos(omniApi: omniApi)
     
     initializeUsbDelegate()
     
     Task {
+      let url = URL(string: "https://apiprod.fattlabs.com")!
+      self.staxHttpClient = StaxHttpClient(baseURL: url, apiKey: apiKey)
+      
       // Get "/self" and "/team/gateway/hardware/mobile" settings from API
-      let auth = await getStaxSelf(apiKey)
-      guard let merchant = auth?.merchant else {
+      guard let auth = try? await getStaxSelf(apiKey), (auth?.merchant) != nil else {
         error(OmniNetworkingException.couldNotGetMerchantDetails)
         return
       }
       
-      let readerAuth = await getMobileReaderAuthDetails(apiKey)
-      guard let readerAuth = readerAuth, let nmiKeys = readerAuth.nmi else {
+      guard
+        let details = try? await getMobileReaderAuthDetails(apiKey),
+        let nmiKeys = details?.nmi
+      else {
         error(OmniInitializeException.missingMobileReaderCredentials)
         return
       }
       
       // Set the InitArgs based on environment type
       #if targetEnvironment(simulator)
-      let initArgs = MockInitializationArgs(appId: params.appId)
+      let initArgs = MockInitializationArgs(appId: args.applicationId)
       #else
-      let initArgs = ChipDnaInitializationArgs(appId: appId, keys: nmiKeys)
+      let initArgs = ChipDnaInitializationArgs(appId: args.applicationId, keys: nmiKeys)
       #endif
 
       let result = await InitializeDriversJob(args: initArgs).start()
@@ -132,11 +136,27 @@ public class Omni: NSObject {
     }
   }
   
-  /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
+  /// Setup and prepare the `Omni` instance.
+  /// - Parameter params: The `InitParams` required for bootstrapping the SDK.
+  /// - Parameter completion: A `() -> Void` callback run after the SDK is initialized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when initializing.
+  @available(*, deprecated, message: "Deprecated in favor of the `initialize` with `InitializationArgs`.")
+  public func initialize(params: InitParams, completion: @Sendable @escaping () -> Void, error: @escaping (OmniException) -> Void) {
+    guard let appId = params.appId, let apiKey = params.apiKey else {
+      error(OmniInitializeException.missingInitializationDetails)
+      return
+    }
+
+    let args = InitializationArgs(applicationId: appId, ephemeralToken: apiKey)
+    self.initialize(args: args, completion: completion, error: error)
+  }
+  
+  /// Creates a `PaymentMethod` out of a `BankAccount` object for reuse with Omni
   /// - Parameters:
-  ///   - creditCard: Contains the details of the payment method to tokenize
+  ///   - bankAccount: Contains the details of the payment method to tokenize
   ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
   ///   - error: Receives any errors that happened while attempting the operation
+  @available(*, deprecated, message: "Deprecated in favor of the `tokenizeBankAccount` function.")
   public func tokenize(_ bankAccount: BankAccount, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
     TokenizePaymentMethod(customerRepository: customerRepository,
                           paymentMethodRepository: paymentMethodRepository,
@@ -144,16 +164,57 @@ public class Omni: NSObject {
     ).start(completion: completion, failure: error)
   }
   
+  /// Creates a `StaxPaymentMethod` out of a `StaxBankAccount` object for reuse with Stax Pay.
+  /// - Parameter bank: Contains the `StaxBankAccount` details to tokenize with Stax Pay.
+  /// - Parameter completion: A `(StaxPaymentMethod) -> Void` callback run after the bank has been tokenized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
+  public func tokenizeBankAccount(_ bank: StaxBankAccount, completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    guard let client = staxHttpClient else {
+      error(OmniGeneralException.uninitialized)
+      return
+    }
+    
+    let job = TokenizeBankAccountJob(bank: bank, client: client)
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let tokenized): completion(tokenized)
+        case .failure(let fail): error(fail )
+      }
+    }
+  }
+  
   /// Creates a PaymentMethod out of a CreditCard object for reuse with Omni
   /// - Parameters:
   ///   - creditCard: Contains the details of the payment method to tokenize
   ///   - completion: Called when the operation is completed successfully. Receives a PaymentMethod
   ///   - error: Receives any errors that happened while attempting the operation
+  @available(*, deprecated, message: "Deprecated in favor of the `tokenizeCreditCard` function.")
   public func tokenize(_ creditCard: CreditCard, _ completion: @escaping (PaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
     TokenizePaymentMethod(customerRepository: customerRepository,
                           paymentMethodRepository: paymentMethodRepository,
                           creditCard: creditCard
     ).start(completion: completion, failure: error)
+  }
+  
+  /// Creates a `StaxPaymentMethod` out of a `StaxCreditCard` object for reuse with Stax Pay.
+  /// - Parameter card: Contains the `StaxCreditCard` object to tokenize
+  /// - Parameter completion: A `(StaxPaymentMethod) -> Void` callback run after the bank has been tokenized.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
+  public func tokenizeCreditCard(_ card: StaxCreditCard, _ completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
+    guard let client = staxHttpClient else {
+      error(OmniGeneralException.uninitialized)
+      return
+    }
+    
+    let job = TokenizeCreditCardJob(card: card, client: client)
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let tokenized): completion(tokenized)
+        case .failure(let fail): error(fail )
+      }
+    }
   }
   
   /// Captures a transaction without a mobile reader
@@ -245,7 +306,13 @@ public class Omni: NSObject {
       return
     }
     
-    let job = CapturePreauthTransactionJob(transactionId: transactionId, token: apiKey,amount: amount)
+    guard let client = staxHttpClient else {
+      error(OmniGeneralException.uninitialized)
+      return
+    }
+    
+    let job = CapturePreAuthTransactionJob(transactionId: transactionId, client: client, amount: amount)
+
     Task {
       let result = await job.start()
       switch result {
@@ -443,40 +510,31 @@ public class Omni: NSObject {
     }), error: error)
   }
   
-  fileprivate func initializeUsbDelegate() {
+  internal func initializeUsbDelegate() {
     if let delegate = usbAccessoryDelegate {
       accessoryHelper = AccessoryHelper(delegate: delegate)
       let _ = AccessoryHelper.isIdTechConnected()
     }
   }
   
-  fileprivate func getStaxSelf(_ apiKey: String) async -> StaxSelf? {
-    let url = URL(string: "https://apiprod.fattlabs.com")!
-    let client = StaxHttpClient(baseURL: url, apiKey: apiKey)
-    let request = StaxApiRequest<StaxSelf>(
-      path: "/self",
-      method: .get
-    )
+  internal func getStaxSelf(_ apiKey: String) async throws -> StaxSelf? {
+    guard let client = staxHttpClient else { throw OmniGeneralException.uninitialized; }
 
     do {
-      let response = try await client.perform(request)
-      return response
+      let request = StaxApiRequest<StaxSelf>(path: "/self", method: .get)
+      return try await client.perform(request)
     } catch {
       return nil
     }
   }
   
-  fileprivate func getMobileReaderAuthDetails(_ apiKey: String) async -> MobileReaderDetails? {
-    let url = URL(string: "https://apiprod.fattlabs.com")!
-    let client = StaxHttpClient(baseURL: url, apiKey: apiKey)
-    let request = StaxApiRequest<MobileReaderDetails>(
-      path: "/team/gateway/hardware/mobile",
-      method: .get
-    )
+  internal func getMobileReaderAuthDetails(_ apiKey: String) async throws -> MobileReaderDetails? {
+    guard let client = staxHttpClient else { throw OmniGeneralException.uninitialized; }
     
     do {
-      let response = try await client.perform(request)
-      return response
+      let path = "/team/gateway/hardware/mobile"
+      let request = StaxApiRequest<MobileReaderDetails>(path: path, method: .get)
+      return try await client.perform(request)
     } catch {
       return nil
     }

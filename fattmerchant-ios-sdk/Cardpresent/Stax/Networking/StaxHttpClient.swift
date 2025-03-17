@@ -117,7 +117,9 @@ final class StaxHttpClient: Sendable {
     }
 
     if let body = request.body {
-      urlRequest.httpBody = try JSONEncoder().encode(body)
+      let encoder = JSONEncoder()
+      encoder.keyEncodingStrategy = .convertToSnakeCase
+      urlRequest.httpBody = try encoder.encode(body)
       urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
     }
 
