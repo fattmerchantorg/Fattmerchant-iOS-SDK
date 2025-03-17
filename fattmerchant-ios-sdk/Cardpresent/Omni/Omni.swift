@@ -30,9 +30,6 @@ public class Omni: NSObject {
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
   internal var accessoryHelper: AccessoryHelper?
   
-  
-  
-  
   /// The queue that Omni should use to communicate back with its listeners
   public var preferredQueue: DispatchQueue = DispatchQueue.main
   
@@ -143,8 +140,7 @@ public class Omni: NSObject {
   @available(*, deprecated, message: "Deprecated in favor of the `initialize` with `InitializationArgs`.")
   public func initialize(params: InitParams, completion: @Sendable @escaping () -> Void, error: @escaping (OmniException) -> Void) {
     guard let appId = params.appId, let apiKey = params.apiKey else {
-      error(OmniInitializeException.missingInitializationDetails)
-      return
+      return error(OmniInitializeException.missingInitializationDetails)
     }
 
     let args = InitializationArgs(applicationId: appId, ephemeralToken: apiKey)
@@ -183,10 +179,7 @@ public class Omni: NSObject {
   /// - Parameter completion: A `(StaxPaymentMethod) -> Void` callback run after the bank has been tokenized.
   /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
   public func tokenizeBankAccount(_ bank: StaxBankAccount, completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
-    guard let client = staxHttpClient else {
-      error(OmniGeneralException.uninitialized)
-      return
-    }
+    guard let client = staxHttpClient else { return error(OmniGeneralException.uninitialized); }
     
     let job = TokenizeBankAccountJob(bank: bank, client: client)
     Task {
@@ -230,10 +223,7 @@ public class Omni: NSObject {
   /// - Parameter completion: A `(StaxPaymentMethod) -> Void` callback run after the bank has been tokenized.
   /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when tokenizing.
   public func tokenizeCreditCard(_ card: StaxCreditCard, _ completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (OmniException) -> Void) {
-    guard let client = staxHttpClient else {
-      error(OmniGeneralException.uninitialized)
-      return
-    }
+    guard let client = staxHttpClient else { return error(OmniGeneralException.uninitialized); }
     
     let job = TokenizeCreditCardJob(card: card, client: client)
     Task {
@@ -265,9 +255,7 @@ public class Omni: NSObject {
   ///   - completion: Called when the operation is complete successfully. Receives a Transaction
   ///   - error: Receives any errors that happened while attempting the operation
   public func takeMobileReaderTransaction(request: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error(OmniGeneralException.uninitialized)
-    }
+    guard isInitialized else { return error(OmniGeneralException.uninitialized); }
 
     let job: TakeMobileReaderPayment = TakeMobileReaderPayment(
       mobileReaderDriverRepository: mobileReaderDriverRepository,
@@ -312,13 +300,9 @@ public class Omni: NSObject {
     completion: @escaping (StaxTransaction) -> Void,
     error: @escaping (OmniException) -> Void
   ) {
-    guard let client = staxHttpClient else {
-      error(OmniGeneralException.uninitialized)
-      return
-    }
+    guard let client = staxHttpClient else { return error(OmniGeneralException.uninitialized); }
     
     let job = CapturePreAuthTransactionJob(transactionId: transactionId, client: client, amount: amount)
-
     Task {
       let result = await job.start()
       switch result {
@@ -328,29 +312,46 @@ public class Omni: NSObject {
     }
   }
   
-  /// Voids a transaction
-  ///
-  /// - Parameters:
-  ///   - transactionId: The id of the transaction you want to void
-  ///   - completion: Called when the operation is complete successfully. Receives a Transaction
-  ///   - error: Receives any errors that happened while attempting the operation
-  public func voidTransaction(transactionId: String,
-                              completion: @escaping (Transaction) -> Void,
-                              error: @escaping (OmniException) -> Void) {
+  /// Voids a `Transaction` via the Stax Pay API.
+  /// - Parameter transactionId: The id of the `Transaction` you want to void.
+  /// - Parameter completion: A `(Transaction) -> Void` callback run after transaction has finished.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when voiding.
+  @available(*, deprecated, message: "Deprecated in favor of the `voidTransaction` function with `StaxTransaction` as return type.")
+  public func voidTransaction(
+    transactionId: String,
+    completion: @escaping (Transaction) -> Void,
+    error: @escaping (OmniException) -> Void
+  ) {
     let job = VoidTransaction(transactionId: transactionId, omniApi: omniApi)
     job.start(completion: completion, error: error)
   }
   
-  /// Cancels the current mobile reader transaction
-  ///
-  /// - Parameters:
-  ///   - completion: called when the operation is complete. Receives true when the transaction was cancelled. False
-  ///   otherwise
-  ///   - error: receives any errors that happened while attempting the operation
-  public func cancelMobileReaderTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error(OmniGeneralException.uninitialized)
+  /// Voids a `StaxTransaction` via the Stax Pay API.
+  /// - Parameter id: The id of the `StaxTransaction` you want to void.
+  /// - Parameter completion: A `(StaxTransaction) -> Void` callback run after transaction has finished.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when voiding.
+  public func voidTransaction(
+    id: String,
+    completion: @escaping (StaxTransaction) -> Void,
+    error: @escaping (OmniException) -> Void
+  ) {
+    guard let client = staxHttpClient else { return error(OmniGeneralException.uninitialized); }
+    
+    let job = VoidTransactionJob(id: id, client: client)
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let transaction): completion(transaction)
+        case .failure(let fail): error(fail )
+      }
     }
+  }
+  
+  /// Attempts to cancel the current transaction taken using a `MobileReader`.
+  /// - Parameter completion: A `(Bool) -> Void` callback run with the result of the cancelation.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when canceling.
+  public func cancelMobileReaderTransaction(completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
+    guard isInitialized else { return error(OmniGeneralException.uninitialized); }
     
     let job = CancelCurrentTransactionJob()
     Task {
@@ -369,9 +370,7 @@ public class Omni: NSObject {
   ///   - completion: Receives the Transaction that represents the refund in Omni
   ///   - error: Receives any errors that happened while attempting the operation
   public func refundMobileReaderTransaction(transaction: Transaction, refundAmount: Amount? = nil, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error(OmniGeneralException.uninitialized)
-    }
+    guard isInitialized else { return error(OmniGeneralException.uninitialized)}
     
     let job = RefundMobileReaderTransaction(mobileReaderDriverRepository: mobileReaderDriverRepository,
                                             transactionRepository: transactionRepository,
@@ -390,14 +389,11 @@ public class Omni: NSObject {
     refundMobileReaderTransaction(transaction: transaction, refundAmount: nil, completion: completion, error: error)
   }
   
-  /// Finds the available readers that Omni can connect to
-  /// - Parameters:
-  ///   - completion: Receives an array of MobileReaders that are available
-  ///   - error: Receives any errors that happened while attempting the operation
+  /// Finds all available `MobileReader` devices that can be connected to.
+  /// - Parameter completion: A `([MobileReader]) -> Void` callback run with the available `MobileReader` devices.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when searching.
   public func getAvailableReaders(completion: @escaping ([MobileReader]) -> Void, error: @escaping (OmniException) -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error(OmniGeneralException.uninitialized)
-    }
+    guard isInitialized else { return error(OmniGeneralException.uninitialized); }
     
     #if targetEnvironment(simulator)
     let args = MockSearchArgs()
@@ -415,14 +411,11 @@ public class Omni: NSObject {
     }
   }
   
-  /// Returns the connected mobile reader
-  /// - Parameters:
-  ///   - completion: Receives the connected mobile reader, if any
-  ///   - error: Receives any errors that happened while attempting the operation
+  /// Returns the connected `MobileReader`.
+  /// - Parameter completion: A `(MobileReader?) -> Void` callback containing the `MobileReader?` if connected; `nil` if not.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when getting the active device.
   public func getConnectedReader(completion: @escaping (MobileReader?) -> Void, error: @escaping (OmniException) -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error(OmniGeneralException.uninitialized)
-    }
+    guard isInitialized else { return error(OmniGeneralException.uninitialized); }
     
     let job = GetConnectedMobileReaderJob()
     Task {
@@ -442,9 +435,7 @@ public class Omni: NSObject {
   ///   - error: A block to call if this operation fails
   @available(*, deprecated, message: "Please use the connect method that provides error handling")
   public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping () -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error()
-    }
+    guard isInitialized else { return error(); }
     
     let job = ConnectToMobileReaderJob(reader: reader, connectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
     Task {
@@ -456,16 +447,12 @@ public class Omni: NSObject {
     }
   }
   
-  /// Attempts to connect to the given MobileReader
-  ///
-  /// - Parameters:
-  ///   - reader: The MobileReader to connect
-  ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
-  ///   - error: A block to call if this operation fails. Receives an OmniException
+  /// Attempts to connect to the provided `MobileReader`.
+  /// - Parameter reader: The `MobileReader` to connect to.
+  /// - Parameter completion: A `(MobileReader) -> Void` callback containing the `MobileReader` after connecting.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when connecting to the device.
   public func connect(reader: MobileReader, completion: @escaping (MobileReader) -> Void, error: @escaping (OmniException) -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error(OmniGeneralException.uninitialized)
-    }
+    guard isInitialized else { return error(OmniGeneralException.uninitialized); }
     
     let job = ConnectToMobileReaderJob(reader: reader, connectionStatusDelegate: mobileReaderConnectionUpdateDelegate)
     Task {
@@ -477,16 +464,12 @@ public class Omni: NSObject {
     }
   }
   
-  /// Attempts to disconnect the given MobileReader
-  ///
-  /// - Parameters:
-  ///   - reader: The MobileReader to disconnect
-  ///   - completion: A completion block to call once finished. It will receive the connected MobileReader
-  ///   - error: A block to call if this operation fails
+  /// Attempts to disconnect from the provided `MobileReader`
+  /// - Parameter reader: The `MobileReader` to disconnect from.
+  /// - Parameter completion: A `(Bool) -> Void` callback containing the `Bool` result after disconnecting.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when disconnecting to the device.
   public func disconnect(reader: MobileReader, completion: @escaping (Bool) -> Void, error: @escaping (OmniException) -> Void) {
-    guard mobileReaderDriversInitialized else {
-      return error(OmniGeneralException.uninitialized)
-    }
+    guard isInitialized else { return error(OmniGeneralException.uninitialized); }
     
     let job = DisconnectMobileReaderJob()
     Task {
