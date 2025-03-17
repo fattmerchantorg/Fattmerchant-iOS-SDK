@@ -47,6 +47,11 @@ public class Omni: NSObject {
   
   public weak var usbAccessoryDelegate: UsbAccessoryDelegate?
   
+  /// True when Omni is initialized. False otherwise
+  public var isInitialized: Bool {
+    return mobileReaderDriversInitialized
+  }
+  
   /// Contains all the data necessary to initialize `Omni`
   @available(*, deprecated, message: "Deprecated in favor of `InitializationArgs`.")
   public struct InitParams {
@@ -71,18 +76,6 @@ public class Omni: NSObject {
     }
   }
   
-  internal func initRepos(omniApi: OmniApi) {
-    transactionRepository = TransactionRepository(omniApi: omniApi)
-    invoiceRepository = InvoiceRepository(omniApi: omniApi)
-    customerRepository = CustomerRepository(omniApi: omniApi)
-    paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
-  }
-  
-  /// True when Omni is initialized. False otherwise
-  public var isInitialized: Bool {
-    return mobileReaderDriversInitialized
-  }
-  
   /// Setup and prepare the `Omni` instance.
   /// - Parameter args: The `InitializationArgs` required for bootstrapping the SDK.
   /// - Parameter completion: A `() -> Void` callback run after the SDK is initialized.
@@ -92,7 +85,11 @@ public class Omni: NSObject {
     
     omniApi.apiKey = args.ephemeralToken
     omniApi.environment = .LIVE
-    initRepos(omniApi: omniApi)
+    
+    transactionRepository = TransactionRepository(omniApi: omniApi)
+    invoiceRepository = InvoiceRepository(omniApi: omniApi)
+    customerRepository = CustomerRepository(omniApi: omniApi)
+    paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
     
     initializeUsbDelegate()
     
@@ -272,6 +269,29 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
   
+  public func newTakeMobileReaderTransaction(
+    request: TransactionRequest,
+    completion: @escaping (StaxTransaction) -> Void,
+    error: @escaping (OmniException) -> Void
+  ) {
+    guard let client = staxHttpClient else { return error(OmniGeneralException.uninitialized); }
+    
+    let job = TakeMobileReaderPaymentJob(
+      request: request,
+      client: client,
+      signatureProvider: signatureProvider,
+      transactionUpdateDelegate: transactionUpdateDelegate,
+      userNotificationDelegate: userNotificationDelegate
+    )
+    Task {
+      let result = await job.start()
+      switch result {
+        case .success(let transaction): completion(transaction)
+        case .failure(let fail): error(fail )
+      }
+    }
+  }
+  
   /// Captures a previously-authorized `Transaction`.
   /// - Parameter transactionId: The ID of the `Transaction` you want to capture.
   /// - Parameter amount: The `Amount` that you want to capture. If `nil`, then the total pre-authorized amount will be captured.
@@ -284,7 +304,6 @@ public class Omni: NSObject {
     completion: @escaping (Transaction) -> Void,
     error: @escaping (OmniException) -> Void
   ) {
-    
     let job = CapturePreauthTransaction(transactionId: transactionId, captureAmount: amount, omniApi: omniApi)
     job.start(completion: completion, error: error)
   }

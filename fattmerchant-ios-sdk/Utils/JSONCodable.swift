@@ -40,4 +40,9 @@ public enum JSONCodable: Codable, Equatable {
       case .null: try container.encodeNil()
     }
   }
+  
+  static func encode<T: Encodable>(_ value: T) throws -> JSONCodable {
+    let data = try JSONEncoder().encode(value)
+    return try JSONDecoder().decode(JSONCodable.self, from: data)
+  }
 }

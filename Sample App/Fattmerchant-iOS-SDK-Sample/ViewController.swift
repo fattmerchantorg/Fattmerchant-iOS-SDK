@@ -185,11 +185,11 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
   fileprivate func takePayment(preauth: Bool = false) {
     var req = createTransactionRequest()
     req.preauth = preauth
-    omni?.takeMobileReaderTransaction(request: req, completion: { transaction in
+    omni?.newTakeMobileReaderTransaction(request: req, completion: { transaction in
       self.log("Finished transaction successfully")
 
       if preauth {
-        self.lastPreauthTransaction = transaction
+        //self.lastPreauthTransaction = transaction
       }
     }, error: { error in
       self.log(error)
@@ -327,7 +327,13 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
   }
 
   fileprivate func createTransactionRequest() -> TransactionRequest {
-    var request = TransactionRequest(amount: getAmount())
+    var request = TransactionRequest(
+      amount: getAmount(),
+      invoiceLineItems: [
+        StaxCatalogItem(id: "78e874fa-3b98-4f58-8ad6-b1753d108957", item: "Banana", details: "A Banana", price: 2.00),
+        StaxCatalogItem(id: "97ef7059-b700-4921-8ba0-2d8fa3c58769", item: "Cookie", details: "A Cookie", price: 3.00)
+      ]
+    )
     return request
   }
 

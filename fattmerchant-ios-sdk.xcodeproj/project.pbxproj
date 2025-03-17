@@ -181,6 +181,8 @@
 		A743527E2D8896890035250C /* Omni+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743527C2D8896860035250C /* Omni+Async.swift */; };
 		A74352972D88B5F50035250C /* CapturePreauthTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */; };
 		A74352982D88B5F50035250C /* CapturePreauthTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */; };
+		A743529A2D88C19A0035250C /* TransactionRequest+StaxInvoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74352992D88C1950035250C /* TransactionRequest+StaxInvoice.swift */; };
+		A743529B2D88C19A0035250C /* TransactionRequest+StaxInvoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74352992D88C1950035250C /* TransactionRequest+StaxInvoice.swift */; };
 		A74B23B02C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */; };
 		A74B23B12C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */; };
 		A74B23B22C58095D003FAD5E /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */; };
@@ -350,6 +352,7 @@
 		A74352792D8894B80035250C /* InitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationArgs.swift; sourceTree = "<group>"; };
 		A743527C2D8896860035250C /* Omni+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Omni+Async.swift"; sourceTree = "<group>"; };
 		A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreauthTransaction.swift; sourceTree = "<group>"; };
+		A74352992D88C1950035250C /* TransactionRequest+StaxInvoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionRequest+StaxInvoice.swift"; sourceTree = "<group>"; };
 		A74B23872C58095D003FAD5E /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
 		A74B23882C58095D003FAD5E /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
 		A74B238A2C58095D003FAD5E /* CHCVSParser-Licence.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHCVSParser-Licence.txt"; sourceTree = "<group>"; };
@@ -528,6 +531,7 @@
 				A74350552D820D1D0035250C /* MobileReaderDriverInitializationArgs.swift */,
 				A743505B2D8213680035250C /* MobileReaderDriverSearchArgs.swift */,
 				A7434EEB2D81D5F20035250C /* TransactionRequest.swift */,
+				A74352992D88C1950035250C /* TransactionRequest+StaxInvoice.swift */,
 				A7434EEC2D81D5F20035250C /* TransactionResult.swift */,
 				A7434EED2D81D5F20035250C /* TransactionUpdate.swift */,
 				A7434EEE2D81D5F20035250C /* UserNotification.swift */,
@@ -1122,6 +1126,7 @@
 				A7434FC32D81D5F20035250C /* TransactionResult.swift in Sources */,
 				A7434FC42D81D5F20035250C /* MobileReaderDriverRepository.swift in Sources */,
 				A743513D2D828DAB0035250C /* StaxSurcharge.swift in Sources */,
+				A743529B2D88C19A0035250C /* TransactionRequest+StaxInvoice.swift in Sources */,
 				A7434FC52D81D5F20035250C /* StaxInvoiceRepositoryImpl.swift in Sources */,
 				A7434FC62D81D5F20035250C /* StaxCustomerRepository.swift in Sources */,
 				A7434FC72D81D5F20035250C /* PaginatedData.swift in Sources */,
@@ -1143,6 +1148,7 @@
 				D783DAC42449F35E007C0A17 /* TakePaymentTests.swift in Sources */,
 				D73BBCF7244D805C0052B525 /* DisconnectMobileReaderTests.swift in Sources */,
 				D7692F1923E4B00500CB0954 /* OmniTest.swift in Sources */,
+				A743529A2D88C19A0035250C /* TransactionRequest+StaxInvoice.swift in Sources */,
 				A74351422D828F260035250C /* StaxSelf.swift in Sources */,
 				A743527A2D8894BD0035250C /* InitializationArgs.swift in Sources */,
 				D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */,

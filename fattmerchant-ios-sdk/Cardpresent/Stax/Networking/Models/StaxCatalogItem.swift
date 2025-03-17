@@ -13,6 +13,7 @@ public struct StaxCatalogItem: Codable {
   public let isService: Bool?
   public let isDiscount: Bool?
   public let price: Double?
+  public let quantity: Int?
   public let amountInStock: Int?
   public let meta: JSONCodable?
   public let createdAt: Date?
@@ -31,6 +32,7 @@ public struct StaxCatalogItem: Codable {
     case isService = "is_service"
     case isDiscount = "is_discount"
     case price
+    case quantity
     case amountInStock = "in_stock"
     case meta
     case createdAt = "created_at"
@@ -50,6 +52,7 @@ public struct StaxCatalogItem: Codable {
     isService: Bool? = nil,
     isDiscount: Bool? = nil,
     price: Double? = nil,
+    quantity: Int? = nil,
     amountInStock: Int? = nil,
     meta: JSONCodable? = nil,
     createdAt: Date? = nil,
@@ -67,6 +70,7 @@ public struct StaxCatalogItem: Codable {
     self.isService = isService
     self.isDiscount = isDiscount
     self.price = price
+    self.quantity = quantity
     self.amountInStock = amountInStock
     self.meta = meta
     self.createdAt = createdAt
@@ -86,6 +90,7 @@ public struct StaxCatalogItem: Codable {
     self.isService = (changes["isService"] as? Bool) ?? existing.isService
     self.isDiscount = (changes["isDiscount"] as? Bool) ?? existing.isDiscount
     self.price = (changes["price"] as? Double) ?? existing.price
+    self.quantity = (changes["quantity"] as? Int) ?? existing.quantity
     self.amountInStock = (changes["amountInStock"] as? Int) ?? existing.amountInStock
     self.meta = (changes["meta"] as? JSONCodable) ?? existing.meta
     self.createdAt = existing.createdAt
@@ -125,6 +130,7 @@ public struct StaxCatalogItem: Codable {
         case "isService": return item.isService
         case "isDiscount": return item.isDiscount
         case "price": return item.price
+        case "quantity": return item.quantity
         case "amountInStock": return item.amountInStock
         case "meta": return item.meta
         default: return nil

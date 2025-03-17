@@ -38,6 +38,7 @@ public struct TransactionRequest {
   public var bankAccount: BankAccount?
 
   /// The `LineItem`s being passed to the transaction
+  @available(*, deprecated, renamed: "staxLineItems", message: "Prefer using staxLineItems")
   public var lineItems: [CatalogItem]?
   
   /// The `StaxCatalogItem` being passed into the transaction
