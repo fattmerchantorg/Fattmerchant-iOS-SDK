@@ -194,33 +194,34 @@ public struct StaxTransaction: Codable {
     case issuerAuthCode = "issuer_auth_code"
     case channel
     case currency
+    case childCaptures = "child_captures"
   }
     
   /// Creates a new `StaxTransaction` instance
   public init(
-    id: String?,
-    invoiceId: String?,
-    referenceId: String?,
-    recurringTransactionId: String?,
+    id: String? = nil,
+    invoiceId: String? = nil,
+    referenceId: String? = nil,
+    recurringTransactionId: String? = nil,
     authId: String? = nil,
-    type: TransactionType?,
+    type: TransactionType? = nil,
     source: String? = nil,
     sourceIp: String? = nil,
     isMerchantPresent: Bool? = nil,
-    merchantId: String?,
-    userId: String?,
-    customerId: String?,
+    merchantId: String? = nil,
+    userId: String? = nil,
+    customerId: String? = nil,
     paymentMethodId: String? = nil,
     isManual: Bool? = nil,
-    spreedlyToken: String?,
-    spreedlyResponse: String?,
-    success: Bool?,
+    spreedlyToken: String? = nil,
+    spreedlyResponse: String? = nil,
+    success: Bool? = nil,
     message: String? = nil,
-    meta: String?,
-    total: Double?,
-    method: String?,
-    preAuth: Bool?,
-    isCaptured: Bool?,
+    meta: String? = nil,
+    total: Double? = nil,
+    method: String? = nil,
+    preAuth: Bool? = nil,
+    isCaptured: Bool? = nil,
     lastFour: String? = nil,
     interchangeCode: String? = nil,
     interchangeFee: Double? = nil,
@@ -239,7 +240,8 @@ public struct StaxTransaction: Codable {
     gatewayId: String? = nil,
     issuerAuthCode: String? = nil,
     channel: String? = nil,
-    currency: Currency? = nil
+    currency: Currency? = nil,
+    childCaptures: [StaxTransaction]? = nil
   ) {
     self.id = id
     self.invoiceId = invoiceId
@@ -283,6 +285,7 @@ public struct StaxTransaction: Codable {
     self.method = method
     self.preAuth = preAuth
     self.isCaptured = isCaptured
+    self.childCaptures = childCaptures
   }
 }
 

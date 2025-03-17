@@ -26,7 +26,7 @@ import Foundation
 /// ## Paying a specific invoice
 /// If you want to associate the transaction with a specific invoice, include the id of the invoice in the
 /// `invoiceId` field
-public struct TransactionRequest {
+public struct StaxTransactionRequest {
 
   /// The `Amount` to be collected during the transaction
   public var amount: Amount
@@ -38,10 +38,7 @@ public struct TransactionRequest {
   public var bankAccount: BankAccount?
 
   /// The `LineItem`s being passed to the transaction
-  public var lineItems: [CatalogItem]?
-  
-  /// The `StaxCatalogItem` being passed into the transaction
-  public var staxLineItems: [StaxCatalogItem]?
+  public var lineItems: [StaxCatalogItem]?
 
   /// The subtotal of the transaction
   public var subtotal: Double?
@@ -149,19 +146,9 @@ public struct TransactionRequest {
   /// - Parameters:
   ///   - amount: The `Amount` to be collected during the transaction
   ///   - lineItems: A list of  `LineItem` that are attached to the transaction
-  @available(*, deprecated, message: "Use the initializer with `[StaxCatalogItem]` instead")
-  public init(amount: Amount, lineItems: [CatalogItem]?) {
+  public init(amount: Amount, lineItems: [StaxCatalogItem]?) {
     self.amount = amount
     self.lineItems = lineItems
-  }
-  
-  /// Initializes a TransactionRequest with the given amount and a list of line items
-  /// - Parameters:
-  ///   - amount: The `Amount` to be collected during the transaction
-  ///   - invoiceLineItems: A list of  `StaxLineItem` that are attached to the transaction
-  public init(amount: Amount, invoiceLineItems: [StaxCatalogItem]?) {
-    self.amount = amount
-    self.staxLineItems = invoiceLineItems
   }
 
   /// Initializes a TransactionRequest with the given amount and a list of line items
@@ -169,22 +156,10 @@ public struct TransactionRequest {
   ///   - amount: The `Amount` to be collected during the transaction
   ///   - card: A `CreditCard` to charge
   ///   - lineItems: A list of  `LineItem` that are attached to the transaction
-  @available(*, deprecated, message: "Use the initializer with `[StaxCatalogItem]` instead")
-  public init(amount: Amount, card: CreditCard, lineItems: [CatalogItem]?) {
+  public init(amount: Amount, card: CreditCard, lineItems: [StaxCatalogItem]?) {
     self.amount = amount
     self.card = card
     self.lineItems = lineItems
-  }
-  
-  /// Initializes a TransactionRequest with the given amount and a list of line items
-  /// - Parameters:
-  ///   - amount: The `Amount` to be collected during the transaction
-  ///   - card: A `CreditCard` to charge
-  ///   - invoiceLineItems: A list of  `LineItem` that are attached to the transaction
-  public init(amount: Amount, card: CreditCard, invoiceLineItems: [StaxCatalogItem]?) {
-    self.amount = amount
-    self.card = card
-    self.staxLineItems = invoiceLineItems
   }
 
   /// Initializes a TransactionRequest with the given amount, explicitly sets the tokenize value and a contains a list of line items
@@ -194,25 +169,10 @@ public struct TransactionRequest {
   ///   should be tokenized.
   ///   - card: A `CreditCard` to charge
   ///   - lineItems: A list of  `LineItem` that are attached to the transaction
-  @available(*, deprecated, message: "Use the initializer with `[StaxCatalogItem]` instead")
-  public init(amount: Amount, tokenize: Bool, card: CreditCard, lineItems: [CatalogItem]?) {
+  public init(amount: Amount, tokenize: Bool, card: CreditCard, lineItems: [StaxCatalogItem]?) {
     self.amount = amount
     self.tokenize = tokenize
     self.card = card
     self.lineItems = lineItems
-  }
-  
-  /// Initializes a TransactionRequest with the given amount, explicitly sets the tokenize value and a contains a list of line items
-  /// - Parameters:
-  ///   - amount: The `Amount` to be collected during the transaction
-  ///   - tokenize: A value that dictates whether or not the payment method used in the transaction
-  ///   should be tokenized.
-  ///   - card: A `CreditCard` to charge
-  ///   - invoiceLineItems: A list of  `LineItem` that are attached to the transaction
-  public init(amount: Amount, tokenize: Bool, card: CreditCard, invoiceLineItems: [StaxCatalogItem]?) {
-    self.amount = amount
-    self.tokenize = tokenize
-    self.card = card
-    self.staxLineItems = invoiceLineItems
   }
 }

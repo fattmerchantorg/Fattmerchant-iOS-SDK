@@ -468,15 +468,10 @@ public class Omni: NSObject {
   
   fileprivate func getMobileReaderAuthDetails(_ apiKey: String) async -> MobileReaderDetails? {
     let url = URL(string: "https://apiprod.fattlabs.com")!
-    let client = StaxHttpClient(baseURL: url)
+    let client = StaxHttpClient(baseURL: url, apiKey: apiKey)
     let request = StaxApiRequest<MobileReaderDetails>(
       path: "/team/gateway/hardware/mobile",
-      method: .get,
-      headers: [
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer \(apiKey)"
-      ]
+      method: .get
     )
     
     do {

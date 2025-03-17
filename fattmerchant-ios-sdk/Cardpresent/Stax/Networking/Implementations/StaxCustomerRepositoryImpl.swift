@@ -9,7 +9,7 @@ final class StaxCustomerRepositoryImpl: StaxCustomerRepository {
   func getCustomer(id: String) async throws -> StaxCustomer {
     let request = StaxApiRequest<StaxCustomer>(
       path: "/customer/\(id)",
-      method: .get,
+      method: .get
     )
     return try await httpClient.perform(request)
   }

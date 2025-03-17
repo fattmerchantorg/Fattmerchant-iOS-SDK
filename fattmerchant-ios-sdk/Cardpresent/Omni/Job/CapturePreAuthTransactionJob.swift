@@ -17,15 +17,10 @@ actor CapturePreauthTransactionJob: Job {
     // As of 3/13/25, this code should only be hit by NMI since that's the only mobile gateway people use.
     // With only NMI in mind, we can hit the Stax API to handle this request
     let baseUrl = URL(string: "https://apiprod.fattlabs.com")!
-    let client = StaxHttpClient(baseURL: baseUrl)
+    let client = StaxHttpClient(baseURL: baseUrl, apiKey: token)
     var request = StaxApiRequest<StaxTransaction>(
       path: "/transaction/\(transactionId)/capture",
-      method: .post,
-      headers: [
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer \(token)"
-      ]
+      method: .post
     )
     
     // Set request body if Amount is passed in

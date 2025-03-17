@@ -2,18 +2,6 @@ import Foundation
 
 
 
-class Foo {
-  
-  func doApiCall() async {
-    let client = StaxHttpClient(baseURL: <#T##URL#>, apiKey: "BearerToken/JWT/AuthWhatever")
-    let invoiceRepository = StaxInvoiceRepositoryImpl(httpClient: client)
-    invoiceRepository.getInvoice(id: "invoice-id")
-  }
-}
-
-
-
-
 
 
 
@@ -524,5 +512,6 @@ actor TakeMobileReaderPaymentJob: Job {
       }
     }
   }
-   */
+
 }
+   */
