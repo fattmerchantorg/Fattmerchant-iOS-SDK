@@ -78,7 +78,6 @@ public enum OmniGeneralException: OmniException {
  Once initialized, you can call its methods like `getAvailableReaders` and `takeMobileReaderTransaction`
  */
 public class Omni: NSObject {
-  
   internal var mobileReaderDriversInitialized: Bool = false
   internal var omniApi = OmniApi()
   internal var transactionRepository: TransactionRepository!
@@ -86,6 +85,10 @@ public class Omni: NSObject {
   internal var customerRepository: CustomerRepository!
   internal var paymentMethodRepository: PaymentMethodRepository!
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
+  internal var staxInvoiceRepository: StaxInvoiceRepository!
+  internal var StaxCatalogRepository: StaxCatalogRepository!
+  internal var StaxPaymentMethodRepository: StaxPaymentMethodRepository!
+  internal var StaxCustomerRepository: StaxCustomerRepository!
   internal var merchant: Merchant?
   internal var accessoryHelper: AccessoryHelper?
   
@@ -105,6 +108,7 @@ public class Omni: NSObject {
   public weak var mobileReaderConnectionUpdateDelegate: MobileReaderConnectionStatusDelegate?
   
   public weak var usbAccessoryDelegate: UsbAccessoryDelegate?
+    
   
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
@@ -121,6 +125,7 @@ public class Omni: NSObject {
     ///
     /// This is used for tokenizing and charging payment methods
     public var webpaymentsToken: String?
+      
     
     public init(appId: String, apiKey: String, environment: Environment = Environment.LIVE) {
       self.appId = appId
@@ -128,6 +133,8 @@ public class Omni: NSObject {
       self.environment = environment
     }
   }
+    
+  
   
   fileprivate func initRepos(omniApi: OmniApi) {
     transactionRepository = TransactionRepository(omniApi: omniApi)
@@ -135,7 +142,12 @@ public class Omni: NSObject {
     customerRepository = CustomerRepository(omniApi: omniApi)
     paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
   }
-  
+
+  fileprivate func initNewRepos(httpClient: StaxHttpClient) {
+     // Initialize the new repositories
+     staxInvoiceRepository = StaxInvoiceRepositoryImpl(httpClient: httpClient)
+  }
+   
   /// True when Omni is initialized. False otherwise
   public var isInitialized: Bool {
     return mobileReaderDriversInitialized
@@ -160,7 +172,10 @@ public class Omni: NSObject {
     
     omniApi.apiKey = params.apiKey
     omniApi.environment = params.environment
+    let baseUrl = URL(string: "https://apiprod.fattlabs.com")!
+    let httpClient = StaxHttpClient(baseURL: baseUrl, apiKey: params.apiKey!)
     initRepos(omniApi: omniApi)
+    initNewRepos(httpClient: httpClient)
     
     // Verify the apikey corresponds to a real merchant
     omniApi.getSelf(completion: { myself in
@@ -525,5 +540,79 @@ public class Omni: NSObject {
       completion(transactions)
     }), error: error)
   }
-  
+    
+    
+    
+   public func getInvoice(invoiceID: String, completion: @escaping (Result<StaxInvoice, Error>) -> Void) {
+       // Create a task to call the async method
+       Task {
+           do {
+               // Await the result of getInvoice(id:) method
+               let invoice = try await staxInvoiceRepository.getInvoice(id: invoiceID)
+               // If successful, invoke the completion handler with the invoice object
+               print(invoice)
+               completion(.success(invoice))
+           } catch {
+               // Handle error
+               print("Error:  \(error)")
+               completion(.failure(error))
+           }
+       }
+   }
+    
+    public func createInvoice(request: StaxInvoice, completion: @escaping (Result<StaxInvoice, Error>) -> Void) {
+        // Create a task to call the async method
+        Task {
+            do {
+                // Await the result of createInvoice(request:) method
+                let invoice = try await staxInvoiceRepository.createInvoice(request)
+                // If successful, invoke the completion handler with the invoice object
+                print(invoice)
+                completion(.success(invoice))
+            } catch {
+                // Handle error
+                print("Error: \(error)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    public func updateInvoice(id: String, update: StaxInvoice.Update, completion: @escaping (Result<StaxInvoice, Error>) -> Void) {
+        // Create a task to call the async method
+        Task {
+            do {
+                print(update)
+                // Await the result of updateInvoice(id:update:) method
+                let updatedInvoice = try await staxInvoiceRepository.updateInvoice(id: id, update: update)
+                // If successful, invoke the completion handler with the updated invoice object
+                print(updatedInvoice)
+                completion(.success(updatedInvoice))
+            } catch {
+                // Handle error
+                print("Error: \(error)")
+                completion(.failure(error))
+            }
+            
+        }
+    }
+    
+    public func deleteInvoice(id: String, apiKey: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        // Create a task to call the async method
+        Task {
+            do {
+                // Await the result of deleteInvoice(id:) method
+                try await staxInvoiceRepository.deleteInvoice(id: id)
+                // If successful, invoke the completion handler with a success result
+                print("Invoice deleted successfully")
+                completion(.success(()))
+            } catch {
+                // Handle error
+                print("Error: \(error)")
+                completion(.failure(error))
+            }
+        }
+    }
+
+
+
 }
