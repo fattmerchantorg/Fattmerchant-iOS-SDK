@@ -185,7 +185,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
   fileprivate func takePayment(preauth: Bool = false) {
     var req = createTransactionRequest()
     req.preauth = preauth
-    omni?.newTakeMobileReaderTransaction(request: req, completion: { transaction in
+    omni?.takeMobileReaderTransaction(request: req, completion: { transaction in
       self.log("Finished transaction successfully")
 
       if preauth {

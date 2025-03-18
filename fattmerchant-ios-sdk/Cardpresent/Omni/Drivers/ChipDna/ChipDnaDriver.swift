@@ -6,6 +6,9 @@ import Foundation
 class ChipDnaDriver: NSObject, MobileReaderDriver {
   static var isStaxRefundsSupported: Bool = true
   static var source: String = "NMI"
+  
+  /// The ChipDna init params passed in the `initialize` function.
+  private static var initializationArgs: ChipDnaInitializationArgs?
 
   var familiarSerialNumbers: [String] = []
 
@@ -19,9 +22,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
   /// Runs after `connectAndConfigure` finishes.
   fileprivate var onConnectAndConfigureCallback: ((MobileReader?) -> Void)?
-
-  /// The ChipDna init params passed in the `initialize` function.
-  fileprivate var initializationArgs: ChipDnaInitializationArgs?
   
   /// Gets the connected MobileReader
   /// - Note: This is blocking, and will fail silently if no reader is found
@@ -47,6 +47,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       completion(false)
       return
     }
+    
+    ChipDnaDriver.initializationArgs = args
 
     // Initialize the ChipDna SDK
     let parameters = CCParameters()
@@ -70,8 +72,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       return
     }
 
-    // Initialized! Store the `initializationArgs` for later
-    initializationArgs = args
+    // Initialized
     completion(true)
   }
 
@@ -163,7 +164,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
     // Re-initializing the ChipDnaMobile SDK disconnects everything, so that works.
     ChipDnaMobile.dispose(nil)
-    initialize(args: initializationArgs!, completion: completion)
+    initialize(args: ChipDnaDriver.initializationArgs!, completion: completion)
   }
 
   func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
@@ -207,8 +208,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       }
 
       // Get more details about the transaction since ChipDna doesn't get everything
-      TransactionGateway.getTransactionCcExpiration(securityKey: self.initializationArgs!.keys.securityKey,
-                                                    transactionId: result[CCParamTransactionId] ?? "") { ccExpiration in
+      TransactionGateway.getTransactionCcExpiration(
+        securityKey: Self.initializationArgs!.keys.securityKey,
+        transactionId: result[CCParamTransactionId] ?? ""
+      ) { ccExpiration in
         transactionResult.cardExpiration = ccExpiration
         completion(transactionResult)
       }
@@ -229,6 +232,23 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
 
     let params = CCParameters()
     params[CCParamUserReference] = userRef
+    DispatchQueue.global(qos: .userInitiated).async {
+      guard let result = ChipDnaMobile.sharedInstance()?.confirmTransaction(params) else {
+        return completion(false)
+      }
+
+      completion(result[CCParamTransactionResult] == CCValueApproved)
+    }
+  }
+  
+  func capture(_ transaction: StaxTransaction, completion: @escaping (Bool) -> Void) {
+    guard let meta = transaction.meta, let user: String = meta.string(at: "nmiUserRef") else {
+      completion(false)
+      return
+    }
+
+    let params = CCParameters()
+    params[CCParamUserReference] = user
     DispatchQueue.global(qos: .userInitiated).async {
       guard let result = ChipDnaMobile.sharedInstance()?.confirmTransaction(params) else {
         return completion(false)

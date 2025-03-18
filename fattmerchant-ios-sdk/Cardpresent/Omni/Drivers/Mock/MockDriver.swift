@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MockDriver: MobileReaderDriver {
+class MockDriver: MobileReaderDriver { 
 
   weak var mobileReaderConnectionStatusDelegate: MobileReaderConnectionStatusDelegate?
 

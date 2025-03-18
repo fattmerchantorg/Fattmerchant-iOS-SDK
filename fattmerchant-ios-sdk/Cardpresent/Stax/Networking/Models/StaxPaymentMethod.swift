@@ -2,7 +2,7 @@ import Foundation
 
 public struct StaxPaymentMethod: Codable {
 
-  public let id: String?
+  public var id: String?
   public var customerId: String?
   public var merchantId: String?
   public var userId: String?
@@ -27,6 +27,8 @@ public struct StaxPaymentMethod: Codable {
   public var addressState: String?
   public var addressZip: String?
   public var addressCountry: String?
+  public var tokenize: Bool?
+  internal var paymentToken: String?
   
   private enum CodingKeys: String, CodingKey {
     case id
@@ -54,6 +56,14 @@ public struct StaxPaymentMethod: Codable {
     case addressState = "address_state"
     case addressZip = "address_zip"
     case addressCountry = "address_country"
+    case tokenize
+    case paymentToken = "payment_token"
+  }
+  
+  public static func from(customer: StaxCustomer) -> StaxPaymentMethod {
+    var output = StaxPaymentMethod()
+    output.customerId = customer.id
+    return output
   }
   
   public init(
@@ -81,7 +91,9 @@ public struct StaxPaymentMethod: Codable {
     addressCity: String? = nil,
     addressState: String? = nil,
     addressZip: String? = nil,
-    addressCountry: String? = nil
+    addressCountry: String? = nil,
+    tokenize: Bool? = nil,
+    paymentToken: String? = nil
   ) {
     self.id = id
     self.customerId = customerId
@@ -108,6 +120,8 @@ public struct StaxPaymentMethod: Codable {
     self.addressState = addressState
     self.addressZip = addressZip
     self.addressCountry = addressCountry
+    self.tokenize = tokenize
+    self.paymentToken = paymentToken
   }
   
   /// Creates a `StaxPaymentMethod` instance from an existing `StaxPaymentMethod` and mutable properties.
@@ -138,6 +152,8 @@ public struct StaxPaymentMethod: Codable {
     self.addressZip = (changes["addressZip"] as? String) ?? existing.addressZip
     self.addressCountry = (changes["addressCountry"] as? String) ?? existing.addressCountry
     self.nickname = (changes["nickname"] as? String) ?? existing.nickname
+    self.tokenize = existing.tokenize
+    self.paymentToken = existing.paymentToken
   }
   
   /// Creates a `StaxPaymentMethod.Update` instance with mutable properties.

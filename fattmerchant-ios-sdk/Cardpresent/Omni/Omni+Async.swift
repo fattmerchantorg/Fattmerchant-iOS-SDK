@@ -42,6 +42,30 @@ extension Omni {
     }
   }
   
+  /// Uses the connected `MobileReader` to take a payment with the provided `TransactionRequest` object.
+  /// - Parameter request: A `TransactionRequest` object containing the details needed to make a payment.
+  /// - Throws: `OmniException` If there was a problem capturing the `StaxTransaction`.
+  /// - Returns: A `StaxTransaction`  with the result of the transaction.
+  /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called.
+  public func takeMobileReaderTransaction(with request: TransactionRequest) async throws -> StaxTransaction {
+    guard let client = staxHttpClient else { throw OmniGeneralException.uninitialized; }
+    
+    let job = TakeMobileReaderPaymentJob(
+      request: request,
+      client: client,
+      signatureProvider: signatureProvider,
+      transactionUpdateDelegate: transactionUpdateDelegate,
+      userNotificationDelegate: userNotificationDelegate
+    )
+
+    let result = await job.start()
+    switch result {
+      case .success(let transaction): return transaction
+      case .failure(let fail): throw fail
+    }
+  }
+
+  
   /// Captures a previously-authorized `StaxTransaction`.
   /// - Parameter transactionId: The ID of the `StaxTransaction` you want to capture.
   /// - Parameter amount: The `Amount` that you want to capture. If `nil`, then the total pre-authorized amount will be captured.

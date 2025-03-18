@@ -242,16 +242,17 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
   
-  /// Captures a mobile reader transaction
-  ///
-  /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called. This
-  /// object is responsible for providing a signature, in case one is required to complete the transaction
-  ///
-  /// - Parameters:
-  ///   - request: A request for a Transaction
-  ///   - completion: Called when the operation is complete successfully. Receives a Transaction
-  ///   - error: Receives any errors that happened while attempting the operation
-  public func takeMobileReaderTransaction(request: TransactionRequest, completion: @escaping (Transaction) -> Void, error: @escaping (OmniException) -> Void) {
+  /// Uses the connected `MobileReader` to take a payment with the provided `TransactionRequest` object.
+  /// - Parameter request: A `TransactionRequest` object containing the details needed to make a payment.
+  /// - Parameter completion: A `(Transaction) -> Void` callback run after the payment has been processed.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when processing.
+  /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called.
+  @available(*, deprecated, message: "Deprecated in favor of the `takeMobileReaderTransaction` function that returns `StaxTransaction`")
+  public func takeMobileReaderTransaction(
+    request: TransactionRequest,
+    completion: @escaping (Transaction) -> Void,
+    error: @escaping (OmniException) -> Void
+  ) {
     guard isInitialized else { return error(OmniGeneralException.uninitialized); }
 
     let job: TakeMobileReaderPayment = TakeMobileReaderPayment(
@@ -269,8 +270,13 @@ public class Omni: NSObject {
     job.start(completion: completion, failure: error)
   }
   
-  public func newTakeMobileReaderTransaction(
-    request: TransactionRequest,
+  /// Uses the connected `MobileReader` to take a payment with the provided `TransactionRequest` object.
+  /// - Parameter request: A `TransactionRequest` object containing the details needed to make a payment.
+  /// - Parameter completion: A `(StaxTransaction) -> Void` callback run after the payment has been processed.
+  /// - Parameter error: A `(OmniException) -> Void` error handler run if the SDK runs in to an error when processing.
+  /// - Note: `Omni` should be assigned a `SignatureProviding` object by the time this transaction is called.
+  public func takeMobileReaderTransaction(
+    with request: TransactionRequest,
     completion: @escaping (StaxTransaction) -> Void,
     error: @escaping (OmniException) -> Void
   ) {

@@ -12,6 +12,8 @@ actor TakeMobileReaderPaymentJob: Job {
   private weak var transactionUpdateDelegate: TransactionUpdateDelegate?
   private weak var userNotificationDelegate: UserNotificationDelegate?
   
+  fileprivate var result: TransactionResult? = nil
+
   init(
     request: TransactionRequest,
     client: StaxHttpClientProtocol,
@@ -33,8 +35,8 @@ actor TakeMobileReaderPaymentJob: Job {
     }
     
     do {
-      let invoice = try await getOrCreateInvoice(id: request.invoiceId)
-      let transactionResult = await withCheckedContinuation { continuation in
+      var invoice = try await getOrCreateInvoice(id: request.invoiceId)
+      result = await withCheckedContinuation { continuation in
         let req = self.request
         let sig = self.signatureProvider
         let del = self.transactionUpdateDelegate
@@ -43,13 +45,58 @@ actor TakeMobileReaderPaymentJob: Job {
           continuation.resume(returning: result)
         }
       }
-      let customer = try await createCustomer(from: transactionResult)
+
+      guard let result = result else {
+        throw TakeMobileReaderPaymentException.couldNotCreateInvoice(detail: nil)
+      }
+
+      let customer = try await createCustomer(from: result)
+      let paymentMethod = try await createPaymentMethod(from: customer, and: result)
+      invoice = try await updateInvoice(invoice, with: customer, and: paymentMethod)
       
+      let transaction = try await createTransaction(
+        driver: driver,
+        customer: customer,
+        invoice: invoice,
+        paymentMethod: paymentMethod
+      )
+      // Make sure the transaction from Stax has an id. This should be true pretty much all the time
+      guard transaction.id != nil else {
+        throw TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: nil)
+      }
+
+      // If the transaction is a pre-auth, then we don't need to capture it
+      if request.preauth {
+        return JobResult.success(transaction)
+      }
+
+      let isSuccessful = await withCheckedContinuation { continuation in
+        driver.capture(transaction) { isSuccessful in
+          continuation.resume(returning: isSuccessful)
+        }
+      }
+      
+      if isSuccessful {
+        return JobResult.success(transaction)
+      }
+      
+      // We couldn't capture the transaction. So mark it failed on Stax.
+      var failed = transaction
+      failed.success = false
+      failed.message = "Error capturing the transaction"
+
+      let request = StaxApiRequest<StaxTransaction>(path: "/transaction", method: .put, body: failed)
+      let _ = try await client.perform(request)
+      throw TakeMobileReaderPaymentException.couldNotCaptureTransaction
     } catch {
+      // Void the transaction in NMI and mark the JobResult as a failure
+      guard let result = result else { return JobResult.failure(error as! OmniException) }
+      await withCheckedContinuation { continuation in
+        driver.void(transactionResult: result, completion: { _ in continuation.resume(returning: ()) })
+      }
+      
       return JobResult.failure(error as! OmniException)
     }
-    
-    return JobResult.success(StaxTransaction())
   }
   
   fileprivate func getOrCreateInvoice(id: String?) async throws -> StaxInvoice {
@@ -93,42 +140,136 @@ actor TakeMobileReaderPaymentJob: Job {
     return try await customerRepository.createCustomer(request)
   }
   
-  fileprivate func createPaymentMethod(from customer: Customer, and result: TransactionResult) async throws -> StaxPaymentMethod {
-    // TODO: Modify this
-    /*
-    let paymentMethodToCreate = PaymentMethod(customer: customer)
+  fileprivate func createPaymentMethod(from customer: StaxCustomer, and result: TransactionResult) async throws -> StaxPaymentMethod {
+    guard let customerId = customer.id, !customerId.isEmpty else {
+      throw TakeMobileReaderPaymentException.couldNotCreatePaymentMethod(detail: "Customer ID is required")
+    }
+    
+    guard let lastFour = result.maskedPan?.suffix(4), lastFour.count == 4 else {
+      throw TakeMobileReaderPaymentException.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan")
+    }
+    
+    guard let type = result.cardType else {
+      throw TakeMobileReaderPaymentException.couldNotCreatePaymentMethod(detail: "Card type is required")
+    }
+    
+    var paymentMethod = StaxPaymentMethod.from(customer: customer)
+    paymentMethod.cardExpiry = result.cardExpiration
+    paymentMethod.method = .card
+    paymentMethod.cardType = type
+    paymentMethod.cardLastFour = String(lastFour)
+    paymentMethod.personName = customer.name
+    paymentMethod.tokenize = false
+    
+    // If there is a token, tokenize it with the POST /payment-method/token route
+    if let token = result.paymentToken, !token.isEmpty {
+      paymentMethod.paymentToken = token
+      let request = StaxApiRequest<StaxPaymentMethod>(path: "/payment-method/token", method: .post, body: paymentMethod)
+      return try await client.perform(request)
+    }
+    
+    // If there is no token, use the normal POST /payment-method route
+    let request = StaxApiRequest<StaxPaymentMethod>(path: "/payment-method", method: .post, body: paymentMethod)
+    return try await client.perform(request)
+  }
+  
+  fileprivate func updateInvoice(
+    _ invoice: StaxInvoice,
+    with customer: StaxCustomer,
+    and paymentMethod: StaxPaymentMethod
+  ) async throws -> StaxInvoice {
+    guard let id = invoice.id else {
+      throw TakeMobileReaderPaymentException.couldNotUpdateInvoice(detail: "Invoice ID is required")
+    }
+
+    guard let paymentMethodId = paymentMethod.id else {
+      throw TakeMobileReaderPaymentException.couldNotUpdateInvoice(detail: "Payment Method ID is required")
+    }
 
     guard let customerId = customer.id else {
-      failure(Exception.couldNotCreateCustomer(detail: "Customer id is required"))
-      return
+      throw TakeMobileReaderPaymentException.couldNotUpdateInvoice(detail: "Customer ID is required")
     }
 
-    guard let lastFour = getLastFour(for: result.maskedPan) else {
-      failure(Exception.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan"))
-      return
+    var update = invoice.updating()
+    update.customerId = customerId
+    update.paymentMethodId = paymentMethodId
+    
+    let invoiceRepository = StaxInvoiceRepositoryImpl(httpClient: client)
+    return try await invoiceRepository.updateInvoice(id: id, update: update)
+  }
+  
+  fileprivate func createTransaction(
+    driver: MobileReaderDriver,
+    customer: StaxCustomer,
+    invoice: StaxInvoice,
+    paymentMethod: StaxPaymentMethod
+  ) async throws -> StaxTransaction {
+
+    guard let paymentMethodId = paymentMethod.id else {
+      throw TakeMobileReaderPaymentException.couldNotUpdateInvoice(detail: "Payment Method ID is required")
     }
 
-    guard let cardType = result.cardType else {
-      failure(Exception.couldNotCreateCustomer(detail: "Card type is required"))
-      return
+    guard let lastFour = paymentMethod.cardLastFour else {
+      throw TakeMobileReaderPaymentException.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan")
+    }
+    
+    guard let customerId = customer.id else {
+      throw TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: "Customer id is required")
     }
 
-    paymentMethodToCreate.cardExp = result.cardExpiration
-    paymentMethodToCreate.customerId = customerId
-    paymentMethodToCreate.method = PaymentMethodType.card
-    paymentMethodToCreate.cardLastFour = lastFour
-    paymentMethodToCreate.cardType = cardType
-    paymentMethodToCreate.personName = "\(customer.firstname) \(customer.lastname)"
-    paymentMethodToCreate.tokenize = false
-    paymentMethodToCreate.paymentToken = result.paymentToken
-
-    // When the payment method was tokenized, we want to use the
-    // createTokenizedPaymentMethod method since it tells Omni to save the token
-    if paymentMethodToCreate.paymentToken != nil {
-      paymentMethodRepository.createTokenizedPaymentMethod(model: paymentMethodToCreate, completion: completion, error: failure)
-    } else {
-      paymentMethodRepository.create(model: paymentMethodToCreate, completion: completion, error: failure)
+    guard let invoiceId = invoice.id else {
+      throw TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: "Invoice id is required")
     }
-     */
+    
+    guard let result = result else {
+      throw TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: "No TransactionResult returned")
+    }
+
+    var gatewayResponseJson: JSONCodable = JSONCodable.null
+    if let authCode = result.authCode, result.source.lowercased() == "nmi" {
+      let gatewayResponse = [
+        "gateway_specific_response_fields": [
+          "nmi": [
+            "authcode": authCode
+          ]
+        ]
+      ]
+      gatewayResponseJson = (try? JSONCodable.encode(gatewayResponse)) ?? JSONCodable.null
+    }
+    
+    var transaction = StaxTransaction()
+    transaction.paymentMethodId = paymentMethodId
+    transaction.total = request.amount.dollars()
+    transaction.success = result.success ?? false
+    transaction.lastFour = lastFour
+    transaction.meta = result.createTransactionMeta()
+    transaction.type = .charge
+    transaction.method = "card"
+    transaction.source = "iOS|CPSDK|\(result.source)"
+    transaction.customerId = customerId
+    transaction.invoiceId = invoiceId
+    transaction.response = gatewayResponseJson
+    transaction.token = result.externalId
+    transaction.message = result.message
+
+    // Set the transaction to not refundable or voidable if the Omni backend cannot perform the refund
+    // This is extremely important because it prevents a user from attempting a refund via the VT or the Omni API that
+    // could never work. The reason it won't work is because Omni doesn't have a deep integration with all of our
+    // third party vendors, such as AnywhereCommerce.
+    if !type(of: driver).isStaxRefundsSupported {
+      transaction.isRefundable = false
+      transaction.isVoidable = false
+    }
+
+    // Mark the transaction as pre-auth, if necessary
+    if request.preauth {
+      transaction.type = .preAuth
+      transaction.preAuth = true
+      transaction.isCaptured = 0
+      transaction.isVoidable = true
+    }
+
+    let request = StaxApiRequest<StaxTransaction>(path: "/transaction", method: .post, body: transaction)
+    return try await client.perform(request)
   }
 }
