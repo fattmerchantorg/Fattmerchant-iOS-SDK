@@ -86,9 +86,9 @@ public class Omni: NSObject {
   internal var paymentMethodRepository: PaymentMethodRepository!
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
   internal var staxInvoiceRepository: StaxInvoiceRepository!
-  internal var StaxCatalogRepository: StaxCatalogRepository!
-  internal var StaxPaymentMethodRepository: StaxPaymentMethodRepository!
-  internal var StaxCustomerRepository: StaxCustomerRepository!
+  internal var staxCatalogRepository: StaxCatalogRepository!
+  internal var staxPaymentMethodRepository: StaxPaymentMethodRepository!
+  internal var staxCustomerRepository: StaxCustomerRepository!
   internal var merchant: Merchant?
   internal var accessoryHelper: AccessoryHelper?
   
@@ -144,8 +144,11 @@ public class Omni: NSObject {
   }
 
   fileprivate func initNewRepos(httpClient: StaxHttpClient) {
-     // Initialize the new repositories
-     staxInvoiceRepository = StaxInvoiceRepositoryImpl(httpClient: httpClient)
+    // Initialize the new repositories
+    staxInvoiceRepository = StaxInvoiceRepositoryImpl(httpClient: httpClient)
+    staxCatalogRepository = StaxCatalogRepositoryImpl(httpClient: httpClient)
+    staxCustomerRepository = StaxCustomerRepositoryImpl(httpClient: httpClient)
+    staxPaymentMethodRepository = StaxPaymentMethodRepositoryImpl(httpClient: httpClient)
   }
    
   /// True when Omni is initialized. False otherwise
@@ -541,77 +544,226 @@ public class Omni: NSObject {
     }), error: error)
   }
     
-    
-    
-   public func getInvoice(invoiceID: String, completion: @escaping (Result<StaxInvoice, Error>) -> Void) {
-       // Create a task to call the async method
-       Task {
-           do {
-               // Await the result of getInvoice(id:) method
-               let invoice = try await staxInvoiceRepository.getInvoice(id: invoiceID)
-               // If successful, invoke the completion handler with the invoice object
-               print(invoice)
-               completion(.success(invoice))
-           } catch {
-               // Handle error
-               print("Error:  \(error)")
-               completion(.failure(error))
-           }
-       }
-   }
-    
-    public func createInvoice(request: StaxInvoice, completion: @escaping (Result<StaxInvoice, Error>) -> Void) {
-        // Create a task to call the async method
+    public func getInvoice(invoiceID: String, completion: @escaping (StaxInvoice) -> Void, error: @escaping (Error) -> Void) {
         Task {
             do {
-                // Await the result of createInvoice(request:) method
+                let invoice = try await staxInvoiceRepository.getInvoice(id: invoiceID)
+                completion(invoice)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func createInvoice(request: StaxInvoice, completion: @escaping (StaxInvoice) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
                 let invoice = try await staxInvoiceRepository.createInvoice(request)
-                // If successful, invoke the completion handler with the invoice object
-                print(invoice)
-                completion(.success(invoice))
-            } catch {
-                // Handle error
-                print("Error: \(error)")
-                completion(.failure(error))
+                completion(invoice)
+            } catch let err {
+                error(err)
             }
         }
     }
-    
-    public func updateInvoice(id: String, update: StaxInvoice.Update, completion: @escaping (Result<StaxInvoice, Error>) -> Void) {
-        // Create a task to call the async method
+
+    public func updateInvoice(id: String, update: StaxInvoice.Update, completion: @escaping (StaxInvoice) -> Void, error: @escaping (Error) -> Void) {
         Task {
             do {
-                print(update)
-                // Await the result of updateInvoice(id:update:) method
                 let updatedInvoice = try await staxInvoiceRepository.updateInvoice(id: id, update: update)
-                // If successful, invoke the completion handler with the updated invoice object
-                print(updatedInvoice)
-                completion(.success(updatedInvoice))
-            } catch {
-                // Handle error
-                print("Error: \(error)")
-                completion(.failure(error))
+                completion(updatedInvoice)
+            } catch let err {
+                error(err)
             }
-            
+        }
+    }
+
+    public func deleteInvoice(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                try await staxInvoiceRepository.deleteInvoice(id: id)
+                completion()
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func getCatalogItem(id: String, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let item = try await staxCatalogRepository.getCatalogItem(id: id)
+                completion(item)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func getCatalogCodes(completion: @escaping ([String?]) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let codes = try await staxCatalogRepository.getCatalogCodes()
+                completion(codes)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func createCatalogItem(item: StaxCatalogItem, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let createdItem = try await staxCatalogRepository.createCatalogItem(item: item)
+                completion(createdItem)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func updateCatalogItem(id: String, update: StaxCatalogItem.Update, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let updatedItem = try await staxCatalogRepository.updateCatalogItem(id: id, update: update)
+                completion(updatedItem)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func incrementCatalogItemStock(id: String, amount: Int, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let updatedItem = try await staxCatalogRepository.incrementCatalogItemStock(id: id, amount: amount)
+                completion(updatedItem)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func decrementCatalogItemStock(id: String, amount: Int, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let updatedItem = try await staxCatalogRepository.decrementCatalogItemStock(id: id, amount: amount)
+                completion(updatedItem)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func deleteCatalogItem(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                try await staxCatalogRepository.deleteCatalogItem(id: id)
+                completion()
+            } catch let err {
+                error(err)
+            }
         }
     }
     
-    public func deleteInvoice(id: String, apiKey: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        // Create a task to call the async method
+    public func getCustomer(id: String, completion: @escaping (StaxCustomer) -> Void, error: @escaping (Error) -> Void) {
         Task {
             do {
-                // Await the result of deleteInvoice(id:) method
-                try await staxInvoiceRepository.deleteInvoice(id: id)
-                // If successful, invoke the completion handler with a success result
-                print("Invoice deleted successfully")
-                completion(.success(()))
-            } catch {
-                // Handle error
-                print("Error: \(error)")
-                completion(.failure(error))
+                let customer = try await staxCustomerRepository.getCustomer(id: id)
+                completion(customer)
+            } catch let err {
+                error(err)
             }
         }
     }
+
+    public func getPaymentMethodsForCustomer(id: String, completion: @escaping ([StaxPaymentMethod]) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let paymentMethods = try await staxCustomerRepository.getPaymentMethodsForCustomer(id: id)
+                completion(paymentMethods)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func createCustomer(request: StaxCustomer, completion: @escaping (StaxCustomer) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let createdCustomer = try await staxCustomerRepository.createCustomer(request)
+                completion(createdCustomer)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func updateCustomer(id: String, update: StaxCustomer.Update, completion: @escaping (StaxCustomer) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let updatedCustomer = try await staxCustomerRepository.updateCustomer(id: id, update: update)
+                completion(updatedCustomer)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func deleteCustomer(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                try await staxCustomerRepository.deleteCustomer(id: id)
+                completion()
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func getPaymentMethod(id: String, completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let paymentMethod = try await staxPaymentMethodRepository.getPaymentMethod(id: id)
+                completion(paymentMethod)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func getPaymentMethodSurcharge(id: String, dollars: Double, completion: @escaping (StaxSurchargeReview) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let surcharge = try await staxPaymentMethodRepository.getPaymentMethodSurcharge(id: id, dollars: dollars)
+                completion(surcharge)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func updatePaymentMethod(id: String, update: StaxPaymentMethod.Update, completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                let updatedPaymentMethod = try await staxPaymentMethodRepository.updatePaymentMethod(id: id, update: update)
+                completion(updatedPaymentMethod)
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
+    public func deletePaymentMethod(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+        Task {
+            do {
+                try await staxPaymentMethodRepository.deletePaymentMethod(id: id)
+                completion()
+            } catch let err {
+                error(err)
+            }
+        }
+    }
+
 
 
 
