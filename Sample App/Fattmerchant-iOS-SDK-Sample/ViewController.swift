@@ -64,7 +64,7 @@ class ViewController: UIViewController, TransactionUpdateDelegate, UsbAccessoryD
     }
   }
 
-  let apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnb2RVc2VyIjpmYWxzZSwibWVyY2hhbnQiOiI1ZjVkNGRkZi01N2E5LTQyMWMtOTMxMy0zMWI4ZDA5MTcyNjkiLCJzdWIiOiI4MmJlYzljMy0wMjU5LTQ1ZDQtYjk2Yi02ZTFmZTZhNTc5MDgiLCJicmFuZCI6ImZhdHRtZXJjaGFudCIsImlzcyI6Imh0dHA6Ly9hcGlwcm9kLmZhdHRsYWJzLmNvbS90ZWFtL2FwaWtleSIsImlhdCI6MTY2ODYyNTQ3MywiZXhwIjo0ODIyMjI1NDczLCJuYmYiOjE2Njg2MjU0NzMsImp0aSI6IlhqVmJBWFpjSnFBNkJGTnkiLCJhc3N1bWluZyI6ZmFsc2V9.zfu2HAyrZFb_Vmi7rptiuVFDEDEIrw2MCuORxk1XYBo"
+  let apiKey = ""
 
   override func viewDidLoad() {
     super.viewDidLoad()
