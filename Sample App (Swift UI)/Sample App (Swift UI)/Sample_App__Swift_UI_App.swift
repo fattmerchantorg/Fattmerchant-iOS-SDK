@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Fattmerchant
 
 @main
 struct Sample_App__Swift_UI_App: App {

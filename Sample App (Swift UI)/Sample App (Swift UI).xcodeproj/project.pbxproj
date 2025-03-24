@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		61D979962D91A86000CAE65E /* Fattmerchant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61D979942D91A86000CAE65E /* Fattmerchant.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		61D979832D8DE96000CAE65E /* Sample App (Swift UI).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sample App (Swift UI).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61D979942D91A86000CAE65E /* Fattmerchant.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61D979962D91A86000CAE65E /* Fattmerchant.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,6 +38,7 @@
 		61D9797A2D8DE96000CAE65E = {
 			isa = PBXGroup;
 			children = (
+				61D979952D91A86000CAE65E /* Frameworks */,
 				61D979852D8DE96000CAE65E /* Sample App (Swift UI) */,
 				61D979842D8DE96000CAE65E /* Products */,
 			);
@@ -43,6 +50,14 @@
 				61D979832D8DE96000CAE65E /* Sample App (Swift UI).app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		61D979952D91A86000CAE65E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				61D979942D91A86000CAE65E /* Fattmerchant.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
