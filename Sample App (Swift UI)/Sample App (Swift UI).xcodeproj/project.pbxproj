@@ -7,8 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		61D979962D91A86000CAE65E /* Fattmerchant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61D979942D91A86000CAE65E /* Fattmerchant.framework */; };
+		61D979A32D9339E900CAE65E /* Fattmerchant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61D979942D91A86000CAE65E /* Fattmerchant.framework */; };
+		61D979A42D9339E900CAE65E /* Fattmerchant.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 61D979942D91A86000CAE65E /* Fattmerchant.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		61D979A52D9339E900CAE65E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				61D979A42D9339E900CAE65E /* Fattmerchant.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		61D979832D8DE96000CAE65E /* Sample App (Swift UI).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sample App (Swift UI).app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -28,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61D979962D91A86000CAE65E /* Fattmerchant.framework in Frameworks */,
+				61D979A32D9339E900CAE65E /* Fattmerchant.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +85,7 @@
 				61D9797F2D8DE96000CAE65E /* Sources */,
 				61D979802D8DE96000CAE65E /* Frameworks */,
 				61D979812D8DE96000CAE65E /* Resources */,
+				61D979A52D9339E900CAE65E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

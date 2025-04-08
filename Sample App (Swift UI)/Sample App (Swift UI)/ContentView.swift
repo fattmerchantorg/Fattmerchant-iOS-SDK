@@ -3,10 +3,10 @@ import Fattmerchant
 
 struct ContentView: View {
     @State private var totalAmount: String = "$0.01"
-    private var omniInitializer = OmniInitializer()
+    @State private var omniInitializer = OmniInitializer.shared
     @ObservedObject var logMessagesManager = LogMessagesManager.shared
     @State private var scrollToBottom = false
-    @State private var isInitialized: Bool = false
+    @State private var lastLogMessageCount = 0
 
     var body: some View {
         NavigationView {
@@ -18,40 +18,40 @@ struct ContentView: View {
                         .multilineTextAlignment(.center)
                         .padding()
                         .frame(height: 46)
-                        .background(Color.gray.opacity(0.1))
                         .cornerRadius(10)
-                        .padding(.top, 20)
+                        .padding(.top, 30)
                     
-                    VStack {
-                        // ScrollViewReader for the log messages
-                        ScrollViewReader { proxy in
-                            ScrollView {
-                                VStack(spacing: 12) {
-                                    Text(logMessagesManager.logMessages)
-                                        .id("last")  // Unique identifier for the last log message
-                                        .multilineTextAlignment(.leading)
-                                        .padding()
-                                        .frame(width: geometry.size.width * 0.9)
-                                        .cornerRadius(10)
-                                        .padding(.bottom, 20)
-                                }
-                                .onChange(of: logMessagesManager.logMessages) { _ in
-                                    // Scroll to the last message when logMessages change
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(spacing: 12) {
+                                Text(logMessagesManager.logMessages)
+                                    .id("last")  // Unique identifier for the last log message
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.top, 5)
+                                    .frame(width: geometry.size.width * 0.9)
+                                    .cornerRadius(10)
+                                    .padding(.bottom, 20)
+                            }
+                            .onChange(of: logMessagesManager.logMessages) { newLogMessages in
+                                // Only scroll when the number of log messages increases to avoid excessive scrolling
+                                if newLogMessages.count > lastLogMessageCount {
                                     withAnimation {
                                         proxy.scrollTo("last", anchor: .bottom)
                                     }
+                                    lastLogMessageCount = newLogMessages.count  // Update the count after scrolling
                                 }
                             }
-                            .frame(height: geometry.size.height * 0.3)  // Set a fixed height for the log section
-                            .padding(.top, 20)
                         }
-                        
+                        .frame(height: geometry.size.height * 0.3)
+                        .padding(.top, 20)
+                    
+                    
                         // Buttons ScrollView
                         ScrollView {
                             VStack(spacing: 12) {
                                 // Buttons for various actions
-                                if !omniInitializer.isInitialized {
-                                Button("Initialize Omni") {
+                                if !omniInitializer.isOmniInitialized {
+                                Button("Initialize") {
                                     omniInitializer.initializeOmni() }
                                 .padding()
                                 .frame(height: 30)
@@ -63,7 +63,7 @@ struct ContentView: View {
                                         do {
                                             // Log the event
                                             logMessagesManager.log("Initializing with Ephemeral Token")
-                                            try await OmniInitializer().initializeEphemeralOmni()
+                                            try OmniInitializer.shared.initializeEphemeralOmni()
                                         } catch {
                                             // Handle any errors that occur during the asynchronous operation
                                             logMessagesManager.log("Error initializing Omni with ephemeral token: \(error)")
@@ -74,22 +74,20 @@ struct ContentView: View {
                                 .frame(height: 30)
                                 
                                 Button("Connect Reader") {
-                                    logMessagesManager.log("Connect Reader tapped")
-                                    print("Connect Reader tapped")
+                                    guard !omniInitializer.isConnecting else { return }
+                                    omniInitializer.searchForReaders()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Disconnect Reader") {
-                                    logMessagesManager.log("Disconnect Reader tapped")
-                                    print("Disconnect Reader tapped")
+                                    OmniInitializer.shared.disconnectReader()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Get Reader Info") {
-                                    logMessagesManager.log("Get Reader Info tapped")
-                                    print("Get Reader Info tapped")
+                                    OmniInitializer.shared.getReaderInfo()
                                 }
                                 .padding()
                                 .frame(height: 30)
