@@ -7,7 +7,11 @@ struct ContentView: View {
     @ObservedObject var logMessagesManager = LogMessagesManager.shared
     @State private var scrollToBottom = false
     @State private var lastLogMessageCount = 0
-
+    @State private var debounceTimer: Timer? = nil
+    @State private var transactions: [Fattmerchant.Transaction] = [] // This would be fetched
+    @State private var selectedTransaction: Fattmerchant.Transaction? = nil
+    @StateObject private var sheetManager = SheetManager()
+    
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
@@ -33,30 +37,37 @@ struct ContentView: View {
                                     .padding(.bottom, 20)
                             }
                             .onChange(of: logMessagesManager.logMessages) { newLogMessages in
-                                // Only scroll when the number of log messages increases to avoid excessive scrolling
-                                if newLogMessages.count > lastLogMessageCount {
-                                    withAnimation {
-                                        proxy.scrollTo("last", anchor: .bottom)
+                                // Debouncing state update
+                                debounceTimer?.invalidate()  // Cancel the previous timer if it's still active
+                                
+                                debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
+                                    // Only scroll when the number of log messages increases to avoid excessive scrolling
+                                    if newLogMessages.count > lastLogMessageCount {
+                                        // Dispatch to the main thread to ensure UI updates are handled correctly
+                                        DispatchQueue.main.async {
+                                            withAnimation {
+                                                proxy.scrollTo("last", anchor: .bottom)
+                                            }
+                                        }
+                                        lastLogMessageCount = newLogMessages.count  // Update the count after scrolling
                                     }
-                                    lastLogMessageCount = newLogMessages.count  // Update the count after scrolling
                                 }
                             }
                         }
                         .frame(height: geometry.size.height * 0.3)
                         .padding(.top, 20)
-                    
-                    
+                        
                         // Buttons ScrollView
                         ScrollView {
                             VStack(spacing: 12) {
                                 // Buttons for various actions
                                 if !omniInitializer.isOmniInitialized {
-                                Button("Initialize") {
-                                    omniInitializer.initializeOmni() }
-                                .padding()
-                                .frame(height: 30)
+                                    Button("Initialize") {
+                                        omniInitializer.initializeOmni()
+                                    }
+                                    .padding()
+                                    .frame(height: 30)
                                 }
-
                                 
                                 Button("Initialize w/Ephemeral Token") {
                                     Task {
@@ -93,11 +104,11 @@ struct ContentView: View {
                                 .frame(height: 30)
                                 
                                 Button("Refund Payment") {
-                                    logMessagesManager.log("Refund Payment tapped")
-                                    print("Refund Payment tapped")
+                                    fetchTransactions()
                                 }
                                 .padding()
                                 .frame(height: 30)
+                                
                                 Button("Take Payment with Reader") {
                                     logMessagesManager.log("Take Payment with Reader tapped")
                                     print("Take Payment with Reader tapped")
@@ -163,17 +174,78 @@ struct ContentView: View {
                             }
                             .padding()
                         }
+                        .frame(maxHeight: .infinity)
                     }
-                    .frame(maxHeight: .infinity)
+                }
+                .sheet(isPresented: $sheetManager.isPresented) {
+                    if sheetManager.activeSheet == .transactionPicker, !transactions.isEmpty {
+                        TransactionPicker(
+                            transactions: transactions,
+                            onTransactionChosen: { transaction in
+                                selectedTransaction = transaction
+                                refund(transaction)
+                                sheetManager.dismiss()
+                            },
+                            onCancel: {
+                                sheetManager.dismiss()
+                            }
+                        )
+                    }
                 }
             }
         }
     }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+   
+    private func fetchTransactions() {
+        OmniInitializer.shared.fetchTransactions(completion: { transactions in
+            DispatchQueue.main.async {
+                self.transactions = transactions
+                if !transactions.isEmpty {
+                    sheetManager.present(sheet: .transactionPicker)
+                } else {
+                    logMessagesManager.log("No transactions available.")
+                }
+            }
+        }, error: { err in
+            DispatchQueue.main.async {
+                logMessagesManager.log("Error fetching transactions: \(err.localizedDescription)")
+            }
+        })
+    }
+    
+    // Refund a selected transaction
+    private func refund(_ transaction: Fattmerchant.Transaction) {
+        // Pass totalAmount to OmniInitializer's refund method
+        OmniInitializer.shared.refund(transaction: transaction, totalTextInput: totalAmount, completion: {
+            logMessagesManager.log("Refunded transaction successfully")
+        }, error: { errorMessage in
+            logMessagesManager.log("Error refunding transaction: \(errorMessage)")
+        })
     }
 }
 
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+        }
+    }
+    
+
+    class SheetManager: ObservableObject {
+        enum ActiveSheet {
+            case transactionPicker
+        }
+
+        @Published var isPresented: Bool = false
+        @Published var activeSheet: ActiveSheet? = nil
+
+    func present(sheet: ActiveSheet) {
+        activeSheet = sheet
+        isPresented = true
+    }
+
+    func dismiss() {
+        isPresented = false
+        activeSheet = nil
+    }
+}

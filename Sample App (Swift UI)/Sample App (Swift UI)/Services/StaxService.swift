@@ -13,6 +13,7 @@ class OmniInitializer: TransactionUpdateDelegate, UserNotificationDelegate, Mobi
     var isConnecting = false
     var logMessages: [String] = []
     private var isInitializing: Bool = false
+    var transactions: [Fattmerchant.Transaction] = []
     
    private init() {
        omni = Omni()
@@ -58,7 +59,7 @@ class OmniInitializer: TransactionUpdateDelegate, UserNotificationDelegate, Mobi
           }
       }
 
-    public func initializeEphemeralOmni() {
+    public func initializeEphemeralOmni() throws {
         LogMessagesManager.shared.log("Attempting to initialize Omni with Ephemeral Token...")
 
         // Ensure we are not already initializing
@@ -191,6 +192,53 @@ class OmniInitializer: TransactionUpdateDelegate, UserNotificationDelegate, Mobi
             self.log(error.detail ?? "Huh")
         })
     }
+    
+    // Fetch transactions from Omni SDK
+    func fetchTransactions(completion: @escaping ([Fattmerchant.Transaction]) -> Void, error: @escaping (Error) -> Void) {
+        omni.getMobileReaderTransactions(completion: { transactions in
+            // Return the transactions to the caller
+            completion(transactions)
+        }, error: { err in
+            // Return the error to the caller
+            error(err)
+        })
+    }
+
+    // Number Formatter to handle parsing the amount input
+       fileprivate func numberFormatter() -> NumberFormatter {
+           let formatter = NumberFormatter()
+           formatter.numberStyle = .currency
+           formatter.currencySymbol = "$"  // Adjust according to your locale, e.g., if you use other currencies
+           return formatter
+       }
+
+    // Function to get the amount from a text field (or other sources)
+        fileprivate func getAmount(from textInput: String?) -> Amount {
+            guard
+                let text = textInput,  // Use the text from the text input (passed in as a parameter)
+                let number = numberFormatter().number(from: text)
+            else {
+                return Amount(cents: 0)  // Default to 1 cent if invalid or no value is provided
+            }
+
+            return Amount(dollars: number.doubleValue)
+        }
+        
+    // Refund the selected transaction with an amount
+    func refund(transaction: Fattmerchant.Transaction, totalTextInput: String?, completion: @escaping () -> Void, error: @escaping (String) -> Void) {
+        let amount = getAmount(from: totalTextInput)  // Get the amount from the text input
+
+        omni.refundMobileReaderTransaction(transaction: transaction, refundAmount: amount, completion: { _ in
+            // Refund successful
+            completion()
+        }, error: { err in
+            // Access the error message from the error
+            let errorMessage = err.detail ?? err.message
+            // Pass the error message to the SwiftUI error closure
+            error(errorMessage)
+        })
+    }
+
 
     // Function to log messages (will be displayed in the UI)
     func log(_ message: String) {
