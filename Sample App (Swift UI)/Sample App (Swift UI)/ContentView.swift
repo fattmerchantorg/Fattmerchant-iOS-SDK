@@ -16,14 +16,17 @@ struct ContentView: View {
         NavigationView {
             GeometryReader { geometry in
                 VStack {
-                    // TextField for entering amount
-                    TextField("$0.01", text: $totalAmount)
+                    TextField("", text: $totalAmount)
+                        .keyboardType(.numberPad)
                         .font(.system(size: 38, weight: .bold, design: .monospaced))
                         .multilineTextAlignment(.center)
                         .padding()
                         .frame(height: 46)
                         .cornerRadius(10)
                         .padding(.top, 30)
+                        .onChange(of: totalAmount) { newValue in
+                            totalAmount = formatCurrencyInput(newValue)
+                        }
                     
                     ScrollViewReader { proxy in
                         ScrollView {
@@ -85,7 +88,6 @@ struct ContentView: View {
                                 .frame(height: 30)
                                 
                                 Button("Connect Reader") {
-                                    guard !omniInitializer.isConnecting else { return }
                                     omniInitializer.searchForReaders()
                                 }
                                 .padding()
@@ -110,64 +112,75 @@ struct ContentView: View {
                                 .frame(height: 30)
                                 
                                 Button("Take Payment with Reader") {
-                                    logMessagesManager.log("Take Payment with Reader tapped")
-                                    print("Take Payment with Reader tapped")
+                                    OmniInitializer.shared.takePayment(amountText: totalAmount)
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Capture Last Transaction") {
-                                    logMessagesManager.log("Capture Last Transaction tapped")
-                                    print("Capture Last Transaction tapped")
+                                    OmniInitializer.shared.captureLastTransaction()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Preauth Payment with Reader") {
-                                    logMessagesManager.log("Preauth Payment with Reader tapped")
-                                    print("Preauth Payment with Reader tapped")
+                                    OmniInitializer.shared.takePayment(amountText: totalAmount, preauth: true)
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Void Last Transaction") {
-                                    logMessagesManager.log("Void Last Transaction tapped")
-                                    print("Void Last Transaction tapped")
+                                    OmniInitializer.shared.voidLastTransaction()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Cancel transaction") {
-                                    logMessagesManager.log("Cancel transaction tapped")
-                                    print("Cancel transaction tapped")
+                                    OmniInitializer.shared.cancelTransaction()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Tokenize Card") {
-                                    logMessagesManager.log("Tokenize Card tapped")
-                                    print("Tokenize Card tapped")
+                                    Task {
+                                        do {
+                                            try await OmniInitializer.shared.tokenizeCard()
+                                        } catch {
+                                            // Handle any errors that occur during the asynchronous operation
+                                            logMessagesManager.log("Error Tokenizing Card \(error)")
+                                        }
+                                    }
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Tokenize Bank Account") {
-                                    logMessagesManager.log("Tokenize Bank Account tapped")
-                                    print("Tokenize Bank Account tapped")
+                                    Task {
+                                        do {
+                                            try await OmniInitializer.shared.tokenizeBankAccount()
+                                        } catch {
+                                            // Handle any errors that occur during the asynchronous operation
+                                            logMessagesManager.log("Error Tokenizing Bank Account \(error)")
+                                        }
+                                    }
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Take Payment with Card") {
-                                    logMessagesManager.log("Take Payment with Card tapped")
-                                    print("Take Payment with Card tapped")
+                                    Task {
+                                            do {
+                                                try await OmniInitializer.shared.payWithCard(amountText: totalAmount)
+                                            } catch {
+                                                logMessagesManager.log("Payment failed: \(error.localizedDescription)")
+                                            }
+                                        }
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Take Payment with Bank Account") {
-                                    logMessagesManager.log("Take Payment with Bank Account tapped")
-                                    print("Take Payment with Bank Account tapped")
+                                    OmniInitializer.shared.payWithBankAccount()
                                 }
                                 .padding()
                                 .frame(height: 30)
@@ -211,6 +224,18 @@ struct ContentView: View {
                 logMessagesManager.log("Error fetching transactions: \(err.localizedDescription)")
             }
         })
+    }
+    
+    private func formatCurrencyInput(_ input: String) -> String {
+        // Remove non-digits
+        let digits = input.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+
+        guard let cents = Int(digits) else {
+            return "$0.00"
+        }
+
+        let dollars = Double(cents) / 100.0
+        return String(format: "$%.2f", dollars)
     }
     
     // Refund a selected transaction

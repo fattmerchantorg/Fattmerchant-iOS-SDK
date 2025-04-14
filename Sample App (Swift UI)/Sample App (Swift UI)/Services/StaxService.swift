@@ -14,6 +14,7 @@ class OmniInitializer: TransactionUpdateDelegate, UserNotificationDelegate, Mobi
     var logMessages: [String] = []
     private var isInitializing: Bool = false
     var transactions: [Fattmerchant.Transaction] = []
+    var lastPreauthTransaction: Fattmerchant.Transaction? = nil
     
    private init() {
        omni = Omni()
@@ -21,6 +22,7 @@ class OmniInitializer: TransactionUpdateDelegate, UserNotificationDelegate, Mobi
        omni.userNotificationDelegate = self
        omni.mobileReaderConnectionUpdateDelegate = self
        omni.usbAccessoryDelegate = self
+       
        if (omni.isInitialized == false) {
            initializeOmni()
        }
@@ -238,8 +240,192 @@ class OmniInitializer: TransactionUpdateDelegate, UserNotificationDelegate, Mobi
             error(errorMessage)
         })
     }
+    
 
+       fileprivate func createTransactionRequest(amountText: String) -> TransactionRequest {
+           let amount = getAmount(from: amountText)
+           let request = TransactionRequest(amount: amount)
+           return request
+       }
 
+      
+    func takePayment(amountText: String, preauth: Bool = false) {
+        Task {
+            var req = createTransactionRequest(amountText: amountText)
+            req.preauth = preauth
+
+            do {
+                let transaction = try await withCheckedThrowingContinuation { continuation in
+                    omni.takeMobileReaderTransaction(
+                        request: req,
+                        completion: { transaction in
+                            continuation.resume(returning: transaction)
+                        },
+                        error: { error in
+                            continuation.resume(throwing: error)
+                        }
+                    )
+                }
+
+                log("Finished transaction successfully")
+                if preauth {
+                    lastPreauthTransaction = transaction
+                }
+            } catch {
+                log("Transaction error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func captureLastTransaction() {
+        Task {
+            guard let transaction = lastPreauthTransaction else {
+                return log("No preauth transactions to capture")
+            }
+
+            guard let id = transaction.id else {
+                return log("Transaction ID is missing")
+            }
+
+            let amount = transaction.total.map { Amount(dollars: $0) }
+
+            do {
+                _ = try await withCheckedThrowingContinuation { continuation in
+                    omni.capturePreauthTransaction(
+                        transactionId: id,
+                        amount: amount,
+                        completion: { transaction in
+                            continuation.resume(returning: transaction)
+                        },
+                        error: { error in
+                            continuation.resume(throwing: error)
+                        }
+                    )
+                }
+
+                log("Captured transaction successfully")
+            } catch {
+                log("Capture error: \(error)")
+            }
+        }
+    }
+
+   
+    func voidLastTransaction() {
+        Task {
+            guard let lastTransaction = lastPreauthTransaction else {
+                log("No preauth transactions to void")
+                return
+            }
+            
+            guard let id = lastTransaction.id else {
+                log("Transaction ID is missing")
+                return
+            }
+            
+            do {
+                try await withCheckedThrowingContinuation { continuation in
+                    omni.voidTransaction(
+                        transactionId: id,
+                        completion: { _ in
+                            continuation.resume()
+                        },
+                        error: { error in
+                            continuation.resume(throwing: error)
+                        }
+                    )
+                }
+                log("Voided transaction successfully")
+            } catch {
+                log("Error voiding transaction: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func cancelTransaction() {
+        Task {
+            do {
+                try await withCheckedThrowingContinuation { continuation in
+                    omni.cancelMobileReaderTransaction(
+                        completion: { _ in
+                            continuation.resume()
+                        },
+                        error: { error in
+                            continuation.resume(throwing: error)
+                        }
+                    )
+                }
+                log("Transaction cancelled")
+            } catch {
+                log("Error cancelling transaction: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func tokenizeCard() async throws {
+        log("Attempting CNP Tokenization")
+        
+        var card = CreditCard.testCreditCard()
+        card.personName = "Test Creditcard"
+
+        let paymentMethod = try await withCheckedThrowingContinuation { continuation in
+            omni.tokenize(card, { paymentMethod in
+                continuation.resume(returning: paymentMethod)
+            }, error: { err in
+                continuation.resume(throwing: err)
+            })
+        }
+
+        log("Created PaymentMethod Successfully")
+        log("PaymentMethod:\nid: \(paymentMethod.id ?? "nil")\ncustomerId: \(paymentMethod.customerId)\nmethod: \(paymentMethod.method?.rawValue ?? "nil")")
+    }
+    
+    func tokenizeBankAccount() async throws {
+        log("Attempting CNP Tokenization")
+
+        let bank = BankAccount.testBankAccount()
+
+        let paymentMethod = try await withCheckedThrowingContinuation { continuation in
+            omni.tokenize(bank, { paymentMethod in
+                continuation.resume(returning: paymentMethod)
+            }, error: { err in
+                continuation.resume(throwing: err)
+            })
+        }
+
+        log("Created PaymentMethod Successfully")
+        log("PaymentMethod:\nid: \(paymentMethod.id ?? "nil")\ncustomerId: \(paymentMethod.customerId)\nmethod: \(paymentMethod.method?.rawValue ?? "nil")")
+    }
+    
+    func payWithCard(amountText: String) async throws {
+        log("Attempting CNP Transaction")
+        let card = CreditCard(
+            personName: "Test Payment",
+            cardNumber: "4111111111111111",
+            cardExp: "0228",
+            addressZip: "32812"
+        )
+        
+        let transactionRequest = TransactionRequest(
+            amount: getAmount(from: amountText),
+            card: card
+        )
+        
+        _ = try await withCheckedThrowingContinuation { continuation in
+            omni.pay(transactionRequest: transactionRequest, completion: { completedTransaction in
+                continuation.resume(returning: completedTransaction)
+            }, error: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+        
+        log("Finished transaction successfully")
+    }
+    
+    func payWithBankAccount() {
+        log("This feature isn't available yet")
+    }
+    
     // Function to log messages (will be displayed in the UI)
     func log(_ message: String) {
         LogMessagesManager.shared.log(message)
