@@ -18,7 +18,6 @@ class LogMessagesManager: ObservableObject {
         }
     }
 
-    // Example function to generate timestamp (you can customize this format)
     private func timestamp() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"

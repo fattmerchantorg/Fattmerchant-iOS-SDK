@@ -3,7 +3,7 @@ import Fattmerchant
 
 struct ContentView: View {
     @State private var totalAmount: String = "$0.01"
-    @State private var omniInitializer = OmniInitializer.shared
+    @State private var staxService = StaxService.shared
     @ObservedObject var logMessagesManager = LogMessagesManager.shared
     @State private var scrollToBottom = false
     @State private var lastLogMessageCount = 0
@@ -20,6 +20,7 @@ struct ContentView: View {
                         .keyboardType(.numberPad)
                         .font(.system(size: 38, weight: .bold, design: .monospaced))
                         .multilineTextAlignment(.center)
+                        .foregroundColor(Color(.lightGray))
                         .padding()
                         .frame(height: 46)
                         .cornerRadius(10)
@@ -64,43 +65,34 @@ struct ContentView: View {
                         ScrollView {
                             VStack(spacing: 12) {
                                 // Buttons for various actions
-                                if !omniInitializer.isOmniInitialized {
+                                if !staxService.isOmniInitialized {
                                     Button("Initialize") {
-                                        omniInitializer.initializeOmni()
+                                        staxService.initializeOmni()
                                     }
                                     .padding()
                                     .frame(height: 30)
                                 }
                                 
                                 Button("Initialize w/Ephemeral Token") {
-                                    Task {
-                                        do {
-                                            // Log the event
-                                            logMessagesManager.log("Initializing with Ephemeral Token")
-                                            try OmniInitializer.shared.initializeEphemeralOmni()
-                                        } catch {
-                                            // Handle any errors that occur during the asynchronous operation
-                                            logMessagesManager.log("Error initializing Omni with ephemeral token: \(error)")
-                                        }
-                                    }
+                                    staxService.initializeEphemeralOmni()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Connect Reader") {
-                                    omniInitializer.searchForReaders()
+                                    staxService.searchForReaders()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Disconnect Reader") {
-                                    OmniInitializer.shared.disconnectReader()
+                                    staxService.disconnectReader()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Get Reader Info") {
-                                    OmniInitializer.shared.getReaderInfo()
+                                    staxService.getReaderInfo()
                                 }
                                 .padding()
                                 .frame(height: 30)
@@ -112,75 +104,58 @@ struct ContentView: View {
                                 .frame(height: 30)
                                 
                                 Button("Take Payment with Reader") {
-                                    OmniInitializer.shared.takePayment(amountText: totalAmount)
+                                    staxService.takePayment(amountText: totalAmount)
                                 }
+                                .bold()
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Capture Last Transaction") {
-                                    OmniInitializer.shared.captureLastTransaction()
+                                    staxService.captureLastTransaction()
                                 }
+                                .bold()
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Preauth Payment with Reader") {
-                                    OmniInitializer.shared.takePayment(amountText: totalAmount, preauth: true)
+                                    staxService.takePayment(amountText: totalAmount, preauth: true)
                                 }
+                                .bold()
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Void Last Transaction") {
-                                    OmniInitializer.shared.voidLastTransaction()
+                                    staxService.voidLastTransaction()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Cancel transaction") {
-                                    OmniInitializer.shared.cancelTransaction()
+                                    staxService.cancelTransaction()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Tokenize Card") {
-                                    Task {
-                                        do {
-                                            try await OmniInitializer.shared.tokenizeCard()
-                                        } catch {
-                                            // Handle any errors that occur during the asynchronous operation
-                                            logMessagesManager.log("Error Tokenizing Card \(error)")
-                                        }
+                                    staxService.tokenizeCard()
                                     }
-                                }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Tokenize Bank Account") {
-                                    Task {
-                                        do {
-                                            try await OmniInitializer.shared.tokenizeBankAccount()
-                                        } catch {
-                                            // Handle any errors that occur during the asynchronous operation
-                                            logMessagesManager.log("Error Tokenizing Bank Account \(error)")
-                                        }
-                                    }
+                                    staxService.tokenizeBankAccount()
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Take Payment with Card") {
-                                    Task {
-                                            do {
-                                                try await OmniInitializer.shared.payWithCard(amountText: totalAmount)
-                                            } catch {
-                                                logMessagesManager.log("Payment failed: \(error.localizedDescription)")
-                                            }
-                                        }
+                                    staxService.payWithCard(amountText: totalAmount)
                                 }
                                 .padding()
                                 .frame(height: 30)
                                 
                                 Button("Take Payment with Bank Account") {
-                                    OmniInitializer.shared.payWithBankAccount()
+                                    staxService.payWithBankAccount()
                                 }
                                 .padding()
                                 .frame(height: 30)
@@ -210,20 +185,30 @@ struct ContentView: View {
     }
    
     private func fetchTransactions() {
-        OmniInitializer.shared.fetchTransactions(completion: { transactions in
-            DispatchQueue.main.async {
-                self.transactions = transactions
-                if !transactions.isEmpty {
-                    sheetManager.present(sheet: .transactionPicker)
-                } else {
-                    logMessagesManager.log("No transactions available.")
+        Task {
+            do {
+                let transactions = try await withCheckedThrowingContinuation { continuation in
+                    staxService.fetchTransactions(completion: { transactions in
+                        continuation.resume(returning: transactions)
+                    }, error: { err in
+                        continuation.resume(throwing: err)
+                    })
+                }
+
+                await MainActor.run {
+                    self.transactions = transactions
+                    if !transactions.isEmpty {
+                        sheetManager.present(sheet: .transactionPicker)
+                    } else {
+                        logMessagesManager.log("No transactions available.")
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    logMessagesManager.log("Error fetching transactions: \(error.localizedDescription)")
                 }
             }
-        }, error: { err in
-            DispatchQueue.main.async {
-                logMessagesManager.log("Error fetching transactions: \(err.localizedDescription)")
-            }
-        })
+        }
     }
     
     private func formatCurrencyInput(_ input: String) -> String {
@@ -241,7 +226,7 @@ struct ContentView: View {
     // Refund a selected transaction
     private func refund(_ transaction: Fattmerchant.Transaction) {
         // Pass totalAmount to OmniInitializer's refund method
-        OmniInitializer.shared.refund(transaction: transaction, totalTextInput: totalAmount, completion: {
+        staxService.refund(transaction: transaction, totalTextInput: totalAmount, completion: {
             logMessagesManager.log("Refunded transaction successfully")
         }, error: { errorMessage in
             logMessagesManager.log("Error refunding transaction: \(errorMessage)")
