@@ -205,7 +205,7 @@ struct ContentView: View {
                 }
             } catch {
                 await MainActor.run {
-                    logMessagesManager.log("Error fetching transactions: \(error.localizedDescription)")
+                    logMessagesManager.log("Error fetching transactions: \(error)")
                 }
             }
         }

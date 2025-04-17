@@ -42,7 +42,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
                self.log("Omni Initialized")
            }, error: { error in
                self.isInitializing = false
-               self.log("Error: \(error.localizedDescription)")
+               self.log("Error: \(error.detail ?? error.message)")
            })
        }
 
@@ -68,7 +68,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                self.log("Network error: \(error.localizedDescription)")
+                self.log("Network error: \(error)")
                 self.isInitializing = false
                 return
             }
@@ -96,7 +96,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
                 })
 
             } catch {
-                self.log("JSON parse error: \(error.localizedDescription)")
+                self.log("JSON parse error: \(error)")
                 self.isInitializing = false
             }
         }.resume()
@@ -131,7 +131,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
                 }
             }
         }, error: { error in
-            self.log("Error: \(error.localizedDescription)")
+            self.log("Error: \(error.detail ?? error.message)")
         })
     }
        
@@ -145,7 +145,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
                 self.isConnecting = false
                 self.log("Connected reader: \(connectedReader.name)")
             }, error: { error in
-                self.log("Couldn't connect to \(reader.name): \(error.localizedDescription)")
+                self.log("Couldn't connect to \(reader.name): \(error.detail ?? error.message)")
                 self.isConnecting = false
             })
         }
@@ -238,7 +238,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
                     self.lastPreauthTransaction = transaction
                 }
             }, error: { error in
-                self.log("Transaction error: \(error.localizedDescription)")
+                self.log("Transaction error: \(error.detail ?? error.message)")
             })
         }
     
@@ -282,7 +282,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
                 self.log("Voided transaction successfully")
             },
             error: { error in
-                self.log("Error voiding transaction: \(error.localizedDescription)")
+                self.log("Error voiding transaction: \(error.detail ?? error.message)")
             }
         )
     }
@@ -293,7 +293,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
                 self.log("Transaction cancelled")
             },
             error: { error in
-                self.log("Error cancelling transaction: \(error.localizedDescription)")
+                self.log("Error cancelling transaction: \(error.detail ?? error.message)")
             }
         )
     }
@@ -313,7 +313,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
             method: \(paymentMethod.method?.rawValue ?? "nil")
             """)
         }, error: { err in
-            self.log("Error tokenizing card: \(err.localizedDescription)")
+            self.log("Error tokenizing card: \(err.detail ?? err.message)")
         })
     }
 
@@ -331,7 +331,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
             method: \(paymentMethod.method?.rawValue ?? "nil")
             """)
         }, error: { err in
-            self.log("Error tokenizing bank account: \(err.localizedDescription)")
+            self.log("Error tokenizing bank account: \(err.detail ?? err.message)")
         })
     }
 
@@ -354,7 +354,7 @@ class StaxService: TransactionUpdateDelegate, UserNotificationDelegate, MobileRe
         omni.pay(transactionRequest: transactionRequest, completion: { completedTransaction in
             self.log("Finished transaction successfully")
         }, error: { error in
-            self.log("Error during payment: \(error.localizedDescription)")
+            self.log("Error during payment: \(error.detail ?? error.message)")
         })
     }
     
