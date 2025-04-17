@@ -42,8 +42,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-extension Bundle {
-  var commitHash: String? {
-    infoDictionary?["GitCommitHash"] as? String
-  }
-}

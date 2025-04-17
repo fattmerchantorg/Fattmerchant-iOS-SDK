@@ -78,7 +78,6 @@ public enum OmniGeneralException: OmniException {
  Once initialized, you can call its methods like `getAvailableReaders` and `takeMobileReaderTransaction`
  */
 public class Omni: NSObject {
-  
   internal var mobileReaderDriversInitialized: Bool = false
   internal var omniApi = OmniApi()
   internal var transactionRepository: TransactionRepository!
@@ -86,6 +85,10 @@ public class Omni: NSObject {
   internal var customerRepository: CustomerRepository!
   internal var paymentMethodRepository: PaymentMethodRepository!
   internal var mobileReaderDriverRepository = MobileReaderDriverRepository()
+  internal var staxInvoiceRepository: StaxInvoiceRepository!
+  internal var staxCatalogRepository: StaxCatalogRepository!
+  internal var staxPaymentMethodRepository: StaxPaymentMethodRepository!
+  internal var staxCustomerRepository: StaxCustomerRepository!
   internal var merchant: Merchant?
   internal var accessoryHelper: AccessoryHelper?
   
@@ -105,6 +108,7 @@ public class Omni: NSObject {
   public weak var mobileReaderConnectionUpdateDelegate: MobileReaderConnectionStatusDelegate?
   
   public weak var usbAccessoryDelegate: UsbAccessoryDelegate?
+    
   
   /// Contains all the data necessary to initialize `Omni`
   public struct InitParams {
@@ -121,6 +125,7 @@ public class Omni: NSObject {
     ///
     /// This is used for tokenizing and charging payment methods
     public var webpaymentsToken: String?
+      
     
     public init(appId: String, apiKey: String, environment: Environment = Environment.LIVE) {
       self.appId = appId
@@ -128,6 +133,8 @@ public class Omni: NSObject {
       self.environment = environment
     }
   }
+    
+  
   
   fileprivate func initRepos(omniApi: OmniApi) {
     transactionRepository = TransactionRepository(omniApi: omniApi)
@@ -135,7 +142,15 @@ public class Omni: NSObject {
     customerRepository = CustomerRepository(omniApi: omniApi)
     paymentMethodRepository = PaymentMethodRepository(omniApi: omniApi)
   }
-  
+
+  fileprivate func initNewRepos(httpClient: StaxHttpClient) {
+    // Initialize the new repositories
+    staxInvoiceRepository = StaxInvoiceRepositoryImpl(httpClient: httpClient)
+    staxCatalogRepository = StaxCatalogRepositoryImpl(httpClient: httpClient)
+    staxCustomerRepository = StaxCustomerRepositoryImpl(httpClient: httpClient)
+    staxPaymentMethodRepository = StaxPaymentMethodRepositoryImpl(httpClient: httpClient)
+  }
+   
   /// True when Omni is initialized. False otherwise
   public var isInitialized: Bool {
     return mobileReaderDriversInitialized
@@ -160,7 +175,10 @@ public class Omni: NSObject {
     
     omniApi.apiKey = params.apiKey
     omniApi.environment = params.environment
+    let baseUrl = URL(string: "https://apiprod.fattlabs.com")!
+    let httpClient = StaxHttpClient(baseURL: baseUrl, apiKey: params.apiKey!)
     initRepos(omniApi: omniApi)
+    initNewRepos(httpClient: httpClient)
     
     // Verify the apikey corresponds to a real merchant
     omniApi.getSelf(completion: { myself in
@@ -525,5 +543,337 @@ public class Omni: NSObject {
       completion(transactions)
     }), error: error)
   }
-  
+    
+// StaxInvoiceRepository
+    
+  /// Retrieves an Invoice by ID
+  /// - Parameters:
+  ///   - invoiceId: The ID of an exisiting invoice record
+  ///   - completion: Receives the returned invoice
+  ///   - error: A block to call if this operation fails
+  public func getInvoice(invoiceID: String, completion: @escaping (StaxInvoice) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let invoice = try await staxInvoiceRepository.getInvoice(id: invoiceID)
+              completion(invoice)
+          } catch let err {
+              error(err)
+          }
+      }
+   }
+    
+  /// Creates and returns a net new Invoice
+  /// - Parameters:
+  ///   - request: A StaxInvoice object containing necessary values to create a new invoice record
+  ///   - completion: Receives the newly created invoice
+  ///   - error: A block to call if this operation fails
+  public func createInvoice(request: StaxInvoice, completion: @escaping (StaxInvoice) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let invoice = try await staxInvoiceRepository.createInvoice(request)
+              completion(invoice)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Updates an Invoice by ID
+  /// - Parameters:
+  ///   - id: The ID of an exisiting invoice record
+  ///   - update: A StaxInvoice.Update object containing the values to update an exisiting invoice record
+  ///   - completion: Receives the returned updated invoice
+  ///   - error: A block to call if this operation fails
+  public func updateInvoice(id: String, update: StaxInvoice.Update, completion: @escaping (StaxInvoice) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let updatedInvoice = try await staxInvoiceRepository.updateInvoice(id: id, update: update)
+              completion(updatedInvoice)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Deletes an Invoice by ID
+  /// - Parameters:
+  ///   - id: The ID of an exisiting invoice record
+  ///   - completion: Called upon success
+  ///   - error: A block to call if this operation fails
+  public func deleteInvoice(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              try await staxInvoiceRepository.deleteInvoice(id: id)
+              completion()
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+
+// StaxCatalogRepository
+    
+  /// Retrieves an catalog item by ID
+  /// - Parameters:
+  ///   - id: The ID of an exisiting catalog item
+  ///   - completion: Receives the returned Catalog Item
+  ///   - error: A block to call if this operation fails
+  public func getCatalogItem(id: String, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let item = try await staxCatalogRepository.getCatalogItem(id: id)
+              completion(item)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Retrieves all Catalog Codes for the merchant
+  /// - Parameters:
+  ///   - completion: Receives the returned catalog codes
+  ///   - error: A block to call if this operation fails
+  public func getCatalogCodes(completion: @escaping ([String?]) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let codes = try await staxCatalogRepository.getCatalogCodes()
+              completion(codes)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+
+  /// Creates a net new catalog item
+  /// - Parameters:
+  ///   - item: A StaxCatalogItem object containing necessary values to create a new catalog item
+  ///   - completion: Receives the newly created Catalog Item
+  ///   - error: A block to call if this operation fails
+  public func createCatalogItem(item: StaxCatalogItem, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let createdItem = try await staxCatalogRepository.createCatalogItem(item: item)
+              completion(createdItem)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Updates an existing catalog item by ID
+  /// - Parameters:
+  ///   - id: the ID of an exisiting Catalog Item
+  ///   - update: A StaxCatalogItem.Update object containing the values to update an exisiting catalog item record
+  ///   - completion: Receives the updated Catalog Item
+  ///   - error: A block to call if this operation fails
+  public func updateCatalogItem(id: String, update: StaxCatalogItem.Update, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let updatedItem = try await staxCatalogRepository.updateCatalogItem(id: id, update: update)
+              completion(updatedItem)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+
+  /// Increments the quantity of an existing catalog item by ID
+  /// - Parameters:
+  ///   - id: The ID of the exisiting Catalog Item to increment
+  ///   - amount: An integer amount that will be used to update the catalog item quantity
+  ///   - completion: Receives the updated Catalog Item
+  ///   - error: A block to call if this operation fails
+  public func incrementCatalogItemStock(id: String, amount: Int, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let updatedItem = try await staxCatalogRepository.incrementCatalogItemStock(id: id, amount: amount)
+              completion(updatedItem)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+
+  /// Decrements the quantity of an existing catalog item by ID
+  /// - Parameters:
+  ///   - id: The ID of the exisiting Catalog Item to decrement
+  ///   - amount: An integer amount that will be used to update the catalog item quantity
+  ///   - completion: Receives the updated Catalog Item
+  ///   - error: A block to call if this operation fails
+  public func decrementCatalogItemStock(id: String, amount: Int, completion: @escaping (StaxCatalogItem) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let updatedItem = try await staxCatalogRepository.decrementCatalogItemStock(id: id, amount: amount)
+              completion(updatedItem)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Deletes an existing catalog item by ID
+  /// - Parameters:
+  ///   - id: The ID of the exisiting Catalog Item to delete
+  ///   - completion:Called upon success
+  ///   - error: A block to call if this operation fails
+  public func deleteCatalogItem(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              try await staxCatalogRepository.deleteCatalogItem(id: id)
+              completion()
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+// StaxCustomerRepository
+    
+  /// Retrieves a customer record by ID
+  /// - Parameters:
+  ///   - id: the ID of the customer record to retrieve
+  ///   - completion: Receives the returned customer record
+  ///   - error: A block to call if this operation fails
+  public func getCustomer(id: String, completion: @escaping (StaxCustomer) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let customer = try await staxCustomerRepository.getCustomer(id: id)
+              completion(customer)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+
+  /// Retrieves all payment methods for a customer by ID
+  /// - Parameters:
+  ///   - id: The customer ID to retrieve payment methods for
+  ///   - completion: Receives the returned payment method records
+  ///   - error: A block to call if this operation fails
+  public func getPaymentMethodsForCustomer(id: String, completion: @escaping ([StaxPaymentMethod]) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let paymentMethods = try await staxCustomerRepository.getPaymentMethodsForCustomer(id: id)
+              completion(paymentMethods)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Creates a net new customer record
+  /// - Parameters:
+  ///   - request: A StaxCustomer object containing necessary values to create a new customer record
+  ///   - completion: Receives the newly created customer record
+  ///   - error: A block to call if this operation fails
+  public func createCustomer(request: StaxCustomer, completion: @escaping (StaxCustomer) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let createdCustomer = try await staxCustomerRepository.createCustomer(request)
+              completion(createdCustomer)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Updates an existing customer record by ID
+  /// - Parameters:
+  ///   - id: The ID of the customer record to update
+  ///   - update: A StaxCustomer.Update object containing the values to update an exisiting customer record
+  ///   - completion: Receives the updated customer record
+  ///   - error: A block to call if this operation fails
+  public func updateCustomer(id: String, update: StaxCustomer.Update, completion: @escaping (StaxCustomer) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let updatedCustomer = try await staxCustomerRepository.updateCustomer(id: id, update: update)
+              completion(updatedCustomer)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Deletes an existing customer record by ID
+  /// - Parameters:
+  ///   - id: The ID of the exisiting customer to delete
+  ///   - completion:Called upon success
+  ///   - error: A block to call if this operation fails
+  public func deleteCustomer(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              try await staxCustomerRepository.deleteCustomer(id: id)
+              completion()
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+// StaxPaymentMethodRepository
+    
+  /// Retrieves a payment method record by ID
+  /// - Parameters:
+  ///   - id: the ID of the payment method record to retrieve
+  ///   - completion: Receives the returned payment method record
+  ///   - error: A block to call if this operation fails
+  public func getPaymentMethod(id: String, completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let paymentMethod = try await staxPaymentMethodRepository.getPaymentMethod(id: id)
+              completion(paymentMethod)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  ///  Calculates surcharge amount for a particular payment method and payment total
+  /// - Parameters:
+  ///   - id: The ID of the payment method to use to calculate surcharge amount
+  ///   - dollars: The dollar amount to calculate surcharge for
+  ///   - completion: Receives the returned surcharge amount
+  ///   - error: A block to call if this operation fails
+  public func getPaymentMethodSurcharge(id: String, dollars: Double, completion: @escaping (StaxSurchargeReview) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let surcharge = try await staxPaymentMethodRepository.getPaymentMethodSurcharge(id: id, dollars: dollars)
+              completion(surcharge)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Updates an exisiting payment method by ID
+  /// - Parameters:
+  ///   - id: the ID of the payment method record to update
+  ///   - update: A StaxPaymentMethod.Update object containing the values to update an exisiting payment method record
+  ///   - completion: Receives the returned payment method record
+  ///   - error: A block to call if this operation fails
+  public func updatePaymentMethod(id: String, update: StaxPaymentMethod.Update, completion: @escaping (StaxPaymentMethod) -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              let updatedPaymentMethod = try await staxPaymentMethodRepository.updatePaymentMethod(id: id, update: update)
+              completion(updatedPaymentMethod)
+          } catch let err {
+              error(err)
+          }
+      }
+  }
+    
+  /// Deletes an existing payment method record by ID
+  /// - Parameters:
+  ///   - id: The ID of the exisiting payment method to delete
+  ///   - completion:Called upon success
+  public func deletePaymentMethod(id: String, completion: @escaping () -> Void, error: @escaping (Error) -> Void) {
+      Task {
+          do {
+              try await staxPaymentMethodRepository.deletePaymentMethod(id: id)
+              completion()
+          } catch let err {
+              error(err)
+          }
+      }
+  }
 }
