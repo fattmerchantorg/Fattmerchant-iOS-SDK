@@ -37,6 +37,9 @@ public struct CreditCard: Codable {
   /// cardExp = "0122" // Expires on January 2022
   /// ```
   public var cardExp: String
+  
+  /// Optional CVV of the card
+  public var cardCvv: String?
 
   /// The zip code of the billing address
   public var addressZip: String
@@ -100,6 +103,7 @@ public struct CreditCard: Codable {
     creditCard.phone = "3210000000"
     creditCard.email = "fatt@merchant.com"
     creditCard.note = "This is a test credit card"
+    creditCard.cardCvv = "999"
 
     return creditCard
   }
