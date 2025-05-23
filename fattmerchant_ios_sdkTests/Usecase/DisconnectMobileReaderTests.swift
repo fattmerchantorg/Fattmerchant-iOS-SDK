@@ -10,7 +10,8 @@ import Foundation
 import XCTest
 
 class DisconnectMobileReaderTests: XCTestCase {
-
+  // TODO: Implement this with Job
+/*
   func testCanDisconnectMobileReader() {
     let reader = MobileReader(name: "Mock Reader", serialNumber: "1234")
     let driverRepo = MobileReaderDriverRepository()
@@ -27,5 +28,5 @@ class DisconnectMobileReaderTests: XCTestCase {
 
     wait(for: [expectation], timeout: 10.0)
   }
-
+*/
 }

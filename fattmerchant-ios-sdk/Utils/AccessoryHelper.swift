@@ -1,11 +1,3 @@
-//
-//  AccessoryHelper.swift
-//  fattmerchant-ios-sdk
-//
-//  Created by Thomas Vidas on 6/25/24.
-//  Copyright © 2024 Fattmerchant. All rights reserved.
-//
-
 import Foundation
 import ExternalAccessory
 
