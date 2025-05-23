@@ -2,7 +2,18 @@
 ///
 /// These errors encompass various failure points in the HTTP request lifecycle,
 /// from URL formation to response handling and decoding.
-public enum StaxNetworkError: Error {
+public enum StaxNetworkError: OmniException {
+  public static var mess = "Stax Network Error"
+  public var detail: String? {
+    switch self {
+      case .invalidURL: return "Invalid URL"
+      case .invalidResponse: return "Invalid Response"
+      case .httpError(let code): return "HTTP Error Code: \(code)"
+      case .decodingError(let error): return "HTTP Decoding Error: \(error)"
+      case .underlying(let error): return "Underlying System Error: \(error)"
+    }
+  }
+  
   /// The URL for the request could not be constructed properly.
   /// This typically occurs when the path or query parameters are malformed.
   case invalidURL

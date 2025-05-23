@@ -3,130 +3,146 @@ import Foundation
 /// Represents a transaction in the Stax API.
 public struct StaxTransaction: Codable {
   /// Unique identifier for the transaction
-  public let id: String?
+  public var id: String?
 
   /// ID of the associated invoice
-  public let invoiceId: String?
+  public var invoiceId: String?
 
   /// Reference ID for the transaction
-  public let referenceId: String?
+  public var referenceId: String?
 
   /// ID of the recurring transaction if part of a recurring series
-  public let recurringTransactionId: String?
+  public var recurringTransactionId: String?
 
   /// Authorization ID for the transaction
-  public let authId: String?
+  public var authId: String?
 
   /// Type of transaction
-  public let type: TransactionType?
+  public var type: TransactionType?
 
   /// Source of the transaction
-  public let source: String?
+  public var source: String?
 
   /// IP address of the transaction source
-  public let sourceIp: String?
+  public var sourceIp: String?
 
   /// Whether merchant was present during the transaction
-  public let isMerchantPresent: Bool?
+  public var isMerchantPresent: Bool?
 
   /// ID of the merchant associated with the transaction
-  public let merchantId: String?
+  public var merchantId: String?
 
   /// ID of the user who processed the transaction
-  public let userId: String?
+  public var userId: String?
 
   /// ID of the customer associated with the transaction
-  public let customerId: String?
+  public var customerId: String?
 
   /// ID of the payment method used
-  public let paymentMethodId: String?
+  public var paymentMethodId: String?
 
   /// Whether the transaction was manually entered
-  public let isManual: Bool?
+  public var isManual: Bool?
 
   /// Spreedly payment token
-  public let spreedlyToken: String?
+  public var spreedlyToken: String?
 
   /// Response from Spreedly service
-  public let spreedlyResponse: String?
+  public var spreedlyResponse: String?
 
   /// Whether the transaction was successful
-  public let success: Bool?
+  public var success: Bool?
 
   /// Message detailing transaction status or errors
-  public let message: String?
+  public var message: String?
 
   /// Additional metadata about the transaction
-  public let meta: String?
+  public var meta: JSONCodable?
 
   /// Total amount of the transaction
-  public let total: Double?
+  public var total: Double?
 
   /// Payment method used
-  public let method: String?
+  public var method: String?
 
   /// Whether this was a pre-authorization
-  public let preAuth: Bool?
+  public var preAuth: Bool?
 
   /// Whether the transaction has been captured
-  public let isCaptured: Bool?
+  public var isCaptured: Int?
 
   /// Last four digits of the payment method
-  public let lastFour: String?
+  public var lastFour: String?
 
   /// Interchange code for the transaction
-  public let interchangeCode: String?
+  public var interchangeCode: String?
 
   /// Interchange fee amount
-  public let interchangeFee: Double?
+  public var interchangeFee: Double?
 
   /// ID of the batch containing this transaction
-  public let batchId: String?
+  public var batchId: String?
 
   /// When the transaction was added to a batch
-  public let batchedAt: Date?
+  public var batchedAt: Date?
 
   /// EMV (chip card) response data
-  public let emvResponse: String?
+  public var emvResponse: String?
 
   /// Address Verification System response
-  public let avsResponse: String?
+  public var avsResponse: String?
 
   /// Card Verification Value response
-  public let cvvResponse: String?
+  public var cvvResponse: String?
 
   /// Point of Sale entry mode
-  public let posEntry: String?
+  public var posEntry: String?
 
   /// Salesperson who processed the transaction
-  public let posSalesperson: String?
+  public var posSalesperson: String?
 
   /// When the receipt was sent via email
-  public let receiptEmailAt: Date?
+  public var receiptEmailAt: Date?
 
   /// When the receipt was sent via SMS
-  public let receiptSmsAt: Date?
+  public var receiptSmsAt: Date?
 
   /// When the transaction was settled
-  public let settledAt: Date?
+  public var settledAt: Date?
 
   /// When the transaction was created
-  public let createdAt: Date?
+  public var createdAt: Date?
 
   /// When the transaction was last updated
-  public let updatedAt: Date?
+  public var updatedAt: Date?
 
   /// ID of the payment gateway used
-  public let gatewayId: String?
+  public var gatewayId: String?
 
   /// Issuer authorization code
-  public let issuerAuthCode: String?
+  public var issuerAuthCode: String?
 
   /// Channel through which the transaction was processed
-  public let channel: String?
+  public var channel: String?
 
   /// Currency used for the transaction
-  public let currency: Currency?
+  public var currency: Currency?
+  
+  /// Child transactions
+  public var childCaptures: [StaxTransaction]?
+  
+  /// `true` if this object is able to be refunded.
+  public var isRefundable: Bool?
+
+  /// `true` if this object is able to be voided.
+  public var isVoidable: Bool?
+  
+  /// The response from the gateway
+  public var response: JSONCodable?
+  
+  /// The transaction 'token'. This is technically the id of the transaction in a foreign platform.
+  /// The Stax API expects this value when we create a transaction, but we will likely never receive it.
+  internal var token: String?
     
   /// Types of transactions supported by the Stax API
   public enum TransactionType: String, Codable {
@@ -191,33 +207,38 @@ public struct StaxTransaction: Codable {
     case issuerAuthCode = "issuer_auth_code"
     case channel
     case currency
+    case childCaptures = "child_captures"
+    case isRefundable = "is_refundable"
+    case isVoidable = "is_voidable"
+    case response
+    case token
   }
     
   /// Creates a new `StaxTransaction` instance
   public init(
-    id: String?,
-    invoiceId: String?,
-    referenceId: String?,
-    recurringTransactionId: String?,
+    id: String? = nil,
+    invoiceId: String? = nil,
+    referenceId: String? = nil,
+    recurringTransactionId: String? = nil,
     authId: String? = nil,
-    type: TransactionType?,
+    type: TransactionType? = nil,
     source: String? = nil,
     sourceIp: String? = nil,
     isMerchantPresent: Bool? = nil,
-    merchantId: String?,
-    userId: String?,
-    customerId: String?,
+    merchantId: String? = nil,
+    userId: String? = nil,
+    customerId: String? = nil,
     paymentMethodId: String? = nil,
     isManual: Bool? = nil,
-    spreedlyToken: String?,
-    spreedlyResponse: String?,
-    success: Bool?,
+    spreedlyToken: String? = nil,
+    spreedlyResponse: String? = nil,
+    success: Bool? = nil,
     message: String? = nil,
-    meta: String?,
-    total: Double?,
-    method: String?,
-    preAuth: Bool?,
-    isCaptured: Bool?,
+    meta: JSONCodable? = nil,
+    total: Double? = nil,
+    method: String? = nil,
+    preAuth: Bool? = nil,
+    isCaptured: Int? = nil,
     lastFour: String? = nil,
     interchangeCode: String? = nil,
     interchangeFee: Double? = nil,
@@ -236,7 +257,12 @@ public struct StaxTransaction: Codable {
     gatewayId: String? = nil,
     issuerAuthCode: String? = nil,
     channel: String? = nil,
-    currency: Currency? = nil
+    currency: Currency? = nil,
+    childCaptures: [StaxTransaction]? = nil,
+    isRefundable: Bool? = nil,
+    isVoidable: Bool? = nil,
+    response: JSONCodable? = nil,
+    token: String? = nil
   ) {
     self.id = id
     self.invoiceId = invoiceId
@@ -280,6 +306,9 @@ public struct StaxTransaction: Codable {
     self.method = method
     self.preAuth = preAuth
     self.isCaptured = isCaptured
+    self.childCaptures = childCaptures
+    self.response = response
+    self.token = token
   }
 }
 

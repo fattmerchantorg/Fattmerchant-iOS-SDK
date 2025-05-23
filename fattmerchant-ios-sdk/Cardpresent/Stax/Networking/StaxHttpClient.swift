@@ -4,9 +4,9 @@ import Foundation
 /// Handles both modern async/await and legacy callback-based networking depending on iOS version.
 final class StaxHttpClient: Sendable {
   private let baseURL: URL
+  private let defaultHeaders: [String:String]
   private let session: URLSession = .shared
   private let decoder: JSONDecoder = .init()
-  private let defaultHeaders: [String: String]
 
   /// Creates a new Stax HTTP client.
   /// - Parameter baseURL: The base URL for the Stax API.
@@ -19,6 +19,12 @@ final class StaxHttpClient: Sendable {
       "Content-Type": "application/json",
       "Authorization": "Bearer \(apiKey)"
     ]
+    
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    decoder.dateDecodingStrategy = .formatted(dateFormatter)
   }
 
   /// Performs an HTTP request and decodes the response into the specified type.
@@ -119,7 +125,9 @@ final class StaxHttpClient: Sendable {
     }
 
     if let body = request.body {
-      urlRequest.httpBody = try JSONEncoder().encode(body)
+      let encoder = JSONEncoder()
+      encoder.keyEncodingStrategy = .convertToSnakeCase
+      urlRequest.httpBody = try encoder.encode(body)
       urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
     }
 

@@ -56,7 +56,7 @@ XCTAssertNotNil(getRefundValidationError(total: 1.0, totalRefunded: 0.0, refundA
   }
 
   func testShouldRefundUsingOmniIfDriverSupportsIt() {
-    MockDriver.omniRefundsSupported = true
+    MockDriver.isStaxRefundsSupported = true
 
     let transactionToRefund = Transaction()
     let transactionId = UUID().uuidString

@@ -3,28 +3,28 @@ import Foundation
 /// Represents a invoice in the Stax API.
 public struct StaxInvoice: Codable {
   /// Unique identifier for the invoice
-  public let id: String?
-  public let userId: String?
-  public let customerId: String?
-  public let merchantId: String?
-  public let paymentMethodId: String?
-  public let scheduleId: String?
-  public let balanceDue: Double?
-  public let isMerchantPresent: Bool?
-  public let isWebpayment: Bool?
-  public let hasPaymentAttemptFailed: Bool?
-  public let paymentAttemptMessage: String?
-  public let status: StaxInvoiceStatus?
-  public let total: Double?
-  public let totalPaid: Double?
-  public let url: String?
-  public let meta: JSONCodable?
-  public let dueAt: Date?
-  public let sentAt: Date?
-  public let paidAt: Date?
-  public let viewedAt: Date?
-  public let createdAt: Date?
-  public let updatedAt: Date?
+  public var id: String?
+  public var userId: String?
+  public var customerId: String?
+  public var merchantId: String?
+  public var paymentMethodId: String?
+  public var scheduleId: String?
+  public var balanceDue: Double?
+  public var isMerchantPresent: Bool?
+  public var isWebpayment: Bool?
+  public var hasPaymentAttemptFailed: Bool?
+  public var paymentAttemptMessage: String?
+  public var status: StaxInvoiceStatus?
+  public var total: Double?
+  public var totalPaid: Double?
+  public var url: String?
+  public var meta: JSONCodable?
+  public var dueAt: Date?
+  public var sentAt: Date?
+  public var paidAt: Date?
+  public var viewedAt: Date?
+  public var createdAt: Date?
+  public var updatedAt: Date?
   
   private enum CodingKeys: String, CodingKey {
     case id

@@ -7,12 +7,12 @@ public struct StaxAddress: Codable {
   public let country: String?
   
   public init(
-    line1: String?,
-    line2: String?,
-    city: String?,
-    state: String?,
-    zip: String?,
-    country: String?
+    line1: String? = nil,
+    line2: String? = nil,
+    city: String? = nil,
+    state: String? = nil,
+    zip: String? = nil,
+    country: String? = nil
   ) {
     self.line1 = line1
     self.line2 = line2
