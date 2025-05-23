@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <FileRef
+      location = "group:fattmerchant-ios-sdk.xcodeproj">
+   </FileRef>
    <Group
       location = "group:Samples"
       name = "Samples">
@@ -87,7 +90,4 @@
          </FileRef>
       </Group>
    </Group>
-   <FileRef
-      location = "group:fattmerchant-ios-sdk.xcodeproj">
-   </FileRef>
 </Workspace>

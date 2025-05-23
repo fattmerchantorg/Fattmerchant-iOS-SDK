@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -423,10 +423,26 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A74350932D822E420035250C /* Job */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Job; sourceTree = "<group>"; };
-		A74350B52D8279F40035250C /* Exception */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Exception; sourceTree = "<group>"; };
-		A74352262D888BBD0035250C /* Drivers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Drivers; sourceTree = "<group>"; };
-		A74352682D888BFE0035250C /* Delegates */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Delegates; sourceTree = "<group>"; };
+		A74350932D822E420035250C /* Job */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Job;
+			sourceTree = "<group>";
+		};
+		A74350B52D8279F40035250C /* Exception */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Exception;
+			sourceTree = "<group>";
+		};
+		A74352262D888BBD0035250C /* Drivers */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Drivers;
+			sourceTree = "<group>";
+		};
+		A74352682D888BFE0035250C /* Delegates */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Delegates;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -991,7 +1007,6 @@
 				};
 			};
 			buildConfigurationList = 591C208A206EB12F00C848DA /* Build configuration list for PBXProject "fattmerchant-ios-sdk" */;
-			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -999,6 +1014,7 @@
 				Base,
 			);
 			mainGroup = 591C2086206EB12F00C848DA;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 591C2091206EB12F00C848DA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
