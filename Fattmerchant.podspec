@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Fattmerchant'
-  s.version = '2.4.2'
+  s.version = '2.5.0'
   s.license = {
     :type => 'Apache License, Version 2.0',
     :text => "© #{ Date.today.year } Fattmerchant, inc"
@@ -42,9 +42,9 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 
     'ENABLE_BITCODE' => 'NO',
     'OTHER_LDFLAGS' => '-lz',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64 arm64'
   }
   s.user_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64 arm64'
   }
 end

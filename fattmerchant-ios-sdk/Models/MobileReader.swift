@@ -9,26 +9,26 @@
 import Foundation
 
 /// A Mobile Reader that can take a payment
-public class MobileReader: CustomStringConvertible {
+final public class MobileReader: CustomStringConvertible, Sendable {
 
   /// The name of this mobile reader
   /// For example, "Miura 186"
-  public var name: String
+  public let name: String
 
   /// The firmware version of the mobile reader
-  public var firmwareVersion: String?
+  public let firmwareVersion: String?
 
   /// The make of the mobile reader
-  public var make: String?
+  public let make: String?
 
   /// The model of the mobile reader
-  public var model: String?
+  public let model: String?
 
   /// The serail number of the mobile reader
-  public var serialNumber: String?
+  public let serialNumber: String?
 
   /// The way that the iOS device connects to the reader. Bluetooth, BLE, etc
-  public var connectionType: String?
+  public let connectionType: String?
 
   /// Initialize a MobileReader by name
   ///
