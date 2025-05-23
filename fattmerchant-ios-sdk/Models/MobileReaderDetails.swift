@@ -1,9 +1,7 @@
 import Foundation
 
 /// Mobile reader settings defined in the mobile reader tab
-class MobileReaderDetails: Model, Codable {
-  public var id: String?
-  /// Holds details for NMI settings set in the mobile reader tab
+class MobileReaderDetails: Codable {
   internal var nmi: NMIDetails?
 }
 
