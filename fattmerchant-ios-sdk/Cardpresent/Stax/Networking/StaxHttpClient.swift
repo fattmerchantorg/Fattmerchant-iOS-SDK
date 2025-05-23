@@ -13,7 +13,6 @@ final class StaxHttpClient: Sendable {
   /// - Parameter apiKey: The Stax API key.
   init(baseURL: URL, apiKey: String) {
     self.baseURL = baseURL
-    self.decoder.keyDecodingStrategy = .convertFromSnakeCase
     self.defaultHeaders = [
       "Accept": "application/json",
       "Content-Type": "application/json",
