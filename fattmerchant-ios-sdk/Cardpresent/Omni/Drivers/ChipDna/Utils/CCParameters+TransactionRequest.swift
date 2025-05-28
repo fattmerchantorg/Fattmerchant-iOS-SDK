@@ -1,6 +1,3 @@
-#if targetEnvironment(simulator)
-#else
-
 extension CCParameters {
 
   /// The param value to make NMI add a customer to the customer vault
@@ -39,5 +36,3 @@ extension CCParameters {
   }
 
 }
-
-#endif

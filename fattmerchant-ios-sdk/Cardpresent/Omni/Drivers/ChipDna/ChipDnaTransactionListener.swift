@@ -1,22 +1,19 @@
-#if targetEnvironment(simulator)
-#else
-
 import Foundation
 
 class ChipDnaTransactionListener: NSObject {
-
+  
   /// Called when ChipDna finishes a transaction
   var onFinished: ((CCParameters) -> Void)?
-
+  
   /// Provides a signature
   var signatureProvider: SignatureProviding?
-
+  
   /// Gets notified of transaction events
   weak var transactionUpdateDelegate: TransactionUpdateDelegate?
-
+  
   /// Gets notified of user notification events
   weak var userNotificationDelegate: UserNotificationDelegate?
-
+  
   /// Makes this listener bind to the transaction events ChipDna emits
   func bindToChipDna(
     signatureProvider: SignatureProviding? = nil,
@@ -37,7 +34,7 @@ class ChipDnaTransactionListener: NSObject {
     self.transactionUpdateDelegate = transactionUpdateDelegate
     self.signatureProvider = signatureProvider
   }
-
+  
   /// Makes this listener stop listening to transaction events from ChipDna
   func detachFromChipDna() {
     ChipDnaMobile.removeTransactionUpdateTarget(self)
@@ -50,7 +47,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.removeIdVerificationTarget(self)
     ChipDnaMobile.removeCardApplicationSelectionTarget(self)
   }
-
+  
   @objc fileprivate func onTransactionUpdate(parameters: CCParameters) {
     guard
       let delegate = transactionUpdateDelegate,
@@ -58,10 +55,10 @@ class ChipDnaTransactionListener: NSObject {
       let update = TransactionUpdate(chipDnaTransactionUpdate: transactionUpdateString) else {
       return
     }
-
+    
     delegate.onTransactionUpdate(transactionUpdate: update)
   }
-
+  
   @objc fileprivate func onUserNotification(parameters: CCParameters) {
     guard
       let delegate = userNotificationDelegate,
@@ -69,18 +66,18 @@ class ChipDnaTransactionListener: NSObject {
       let update = UserNotification(chipDnaUserNotification: userNotificationString) else {
       return
     }
-
+    
     delegate.onUserNotification(userNotification: update)
   }
-
+  
   @objc fileprivate func onTransactionFinished(parameters: CCParameters) {
     onFinished?(parameters)
   }
-
+  
   @objc fileprivate func onDeferredAuthorization(parameters: CCParameters) {
-
+    
   }
-
+  
   @objc fileprivate func onSignatureVerification(parameters: CCParameters) {
     guard let signatureProvider = signatureProvider else {
       let approveSignatureParams = CCParameters()
@@ -88,7 +85,7 @@ class ChipDnaTransactionListener: NSObject {
       ChipDnaMobile.sharedInstance().continueSignatureVerification(approveSignatureParams)
       return
     }
-
+    
     transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: TransactionUpdate.PromptProvideSignature)
     signatureProvider.signatureRequired(completion: { (signature) in
       self.transactionUpdateDelegate?.onTransactionUpdate(transactionUpdate: TransactionUpdate.SignatureProvided)
@@ -98,25 +95,24 @@ class ChipDnaTransactionListener: NSObject {
       ChipDnaMobile.sharedInstance().continueSignatureVerification(approveSignatureParams)
     })
   }
-
+  
   @objc fileprivate func onVoiceReferral(parameters: CCParameters) {
-
+    
   }
-
+  
   @objc fileprivate func onPartialApprove(parameters: CCParameters) {
-
+    
   }
-
+  
   @objc fileprivate func onForcedAcceptance(parameters: CCParameters) {
-
+    
   }
-
+  
   @objc fileprivate func onIdVerification(parameters: CCParameters) {
-
+    
   }
-
+  
   @objc fileprivate func onApplicationSelection(parameters: CCParameters) {
     ChipDnaMobile.sharedInstance()?.continueCardApplicationSelection(nil)
   }
 }
-#endif

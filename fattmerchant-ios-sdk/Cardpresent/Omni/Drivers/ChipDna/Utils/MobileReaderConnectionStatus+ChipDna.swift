@@ -1,6 +1,3 @@
-#if targetEnvironment(simulator)
-#else
-
 extension MobileReaderConnectionStatus {
 
   /// Initializes a `MobileReaderConnectionStatus` object from the given ChipDnaConfigurationUpdate
@@ -39,5 +36,3 @@ extension MobileReaderConnectionStatus {
     }
   }
 }
-
-#endif
