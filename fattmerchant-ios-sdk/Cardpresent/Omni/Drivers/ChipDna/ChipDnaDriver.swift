@@ -1,6 +1,3 @@
-#if targetEnvironment(simulator)
-#else
-
 import Foundation
 
 class ChipDnaDriver: NSObject, MobileReaderDriver {
@@ -441,5 +438,3 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
   }
 
 }
-
-#endif

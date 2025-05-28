@@ -118,18 +118,17 @@ public class Omni: NSObject {
     
     Task {
       // Get "/self" and "/team/gateway/hardware/mobile" settings from API
-      guard let auth = try? await getStaxSelf(apiKey), (auth?.merchant) != nil else {
+      guard let auth = try await getStaxSelf(apiKey) else {
         error(OmniNetworkingException.couldNotGetMerchantDetails)
         return
       }
+      let merchant = auth.merchant
       
-      guard
-        let details = try? await getMobileReaderAuthDetails(apiKey),
-        let nmiKeys = details?.nmi
-      else {
+      guard let details = try await getMobileReaderAuthDetails(apiKey) else {
         error(OmniInitializeException.missingMobileReaderCredentials)
         return
       }
+      let nmiKeys = details.nmi
       
       // Set the InitArgs based on environment type
       #if targetEnvironment(simulator)

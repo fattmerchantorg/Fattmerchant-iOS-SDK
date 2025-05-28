@@ -1,6 +1,3 @@
-#if targetEnvironment(simulator)
-#else
-
 extension TransactionUpdate {
 
   /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
@@ -19,4 +16,3 @@ extension TransactionUpdate {
   }
 }
 
-#endif

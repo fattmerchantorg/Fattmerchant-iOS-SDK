@@ -12,7 +12,8 @@ Pod::Spec.new do |s|
   }
   s.source = {
     :git => 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git',
-    :branch => "release/#{s.version}"
+    :branch => "release/#{s.version}",
+    :tag => s.version.to_s
   }
   s.ios.deployment_target = '13.0'
   s.swift_versions = ['5']  
@@ -39,12 +40,14 @@ Pod::Spec.new do |s|
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDTech.xcframework',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework',
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework'
-  s.pod_target_xcconfig = { 
+  s.pod_target_xcconfig = {
     'ENABLE_BITCODE' => 'NO',
     'OTHER_LDFLAGS' => '-lz',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64 arm64'
+    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
+    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
   }
   s.user_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64 arm64'
+    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
+    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
   }
 end
