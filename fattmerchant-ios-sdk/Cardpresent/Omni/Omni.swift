@@ -122,7 +122,6 @@ public class Omni: NSObject {
         error(OmniNetworkingException.couldNotGetMerchantDetails)
         return
       }
-      let merchant = auth.merchant
       
       guard let details = try await getMobileReaderAuthDetails(apiKey),
             let nmiKeys = details.nmi
