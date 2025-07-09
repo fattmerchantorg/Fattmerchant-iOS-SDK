@@ -122,13 +122,13 @@ public class Omni: NSObject {
         error(OmniNetworkingException.couldNotGetMerchantDetails)
         return
       }
-      let merchant = auth.merchant
       
-      guard let details = try await getMobileReaderAuthDetails(apiKey) else {
+      guard let details = try await getMobileReaderAuthDetails(apiKey),
+            let nmiKeys = details.nmi
+      else {
         error(OmniInitializeException.missingMobileReaderCredentials)
         return
       }
-      let nmiKeys = details.nmi
       
       // Set the InitArgs based on environment type
       #if targetEnvironment(simulator)

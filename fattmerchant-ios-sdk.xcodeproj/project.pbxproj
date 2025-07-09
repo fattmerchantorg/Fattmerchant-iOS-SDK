@@ -940,7 +940,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 591C2098206EB12F00C848DA /* Build configuration list for PBXNativeTarget "Fattmerchant" */;
 			buildPhases = (
-				D702B7BF23C8D25B00B8AB79 /* Swiftlint */,
 				591C208D206EB12F00C848DA /* Headers */,
 				591C208B206EB12F00C848DA /* Sources */,
 				591C208C206EB12F00C848DA /* Frameworks */,
@@ -1043,27 +1042,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		D702B7BF23C8D25B00B8AB79 /* Swiftlint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = Swiftlint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Check to see if swiflint is installed\nif which swiftlint >/dev/null; then\n# Run swiftlint only on the sdk code\ncd fattmerchant-ios-sdk\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		591C208B206EB12F00C848DA /* Sources */ = {
