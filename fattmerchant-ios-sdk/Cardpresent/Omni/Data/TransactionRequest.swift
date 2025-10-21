@@ -43,6 +43,9 @@ public struct TransactionRequest {
   
   /// The `StaxCatalogItem` being passed into the transaction
   public var staxLineItems: [StaxCatalogItem]?
+    
+  /// The POI of the transaction. This can be either a payment device (default) represented as 'PAYMENT_DEVICE' or tap to mobile 'TAP_TO_MOBILE'.
+  public var transactionPOI: String = "PAYMENT_DEVICE"
 
   /// The subtotal of the transaction
   public var subtotal: Double?
