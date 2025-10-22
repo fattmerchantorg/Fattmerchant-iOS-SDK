@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		468F72822EA9430600C20019 /* TakeTapPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F72812EA9430000C20019 /* TakeTapPayment.swift */; };
+		468F72832EA9430600C20019 /* TakeTapPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F72812EA9430000C20019 /* TakeTapPayment.swift */; };
 		469E997E2EA7A42C00EA9175 /* IDTech.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 469E996B2EA7A42C00EA9175 /* IDTech.bundle */; };
 		469E997F2EA7A42C00EA9175 /* CHCVSParser-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = 469E99522EA7A42C00EA9175 /* CHCVSParser-Licence.txt */; };
 		469E99802EA7A42C00EA9175 /* SQLCipher-Licence.txt in Resources */ = {isa = PBXBuildFile; fileRef = 469E995B2EA7A42C00EA9175 /* SQLCipher-Licence.txt */; };
@@ -300,6 +302,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		468F72812EA9430000C20019 /* TakeTapPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeTapPayment.swift; sourceTree = "<group>"; };
 		469E99452EA7A42C00EA9175 /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
 		469E99462EA7A42C00EA9175 /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
 		469E99482EA7A42C00EA9175 /* CardEaseXml.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CardEaseXml.xcframework; sourceTree = "<group>"; };
@@ -785,6 +788,7 @@
 		A7434F0E2D81D5F20035250C /* Usecase */ = {
 			isa = PBXGroup;
 			children = (
+				468F72812EA9430000C20019 /* TakeTapPayment.swift */,
 				A74352962D88B5F50035250C /* CapturePreauthTransaction.swift */,
 				A7434F082D81D5F20035250C /* RefundMobileReaderTransaction.swift */,
 				A7434F0A2D81D5F20035250C /* TakeMobileReaderPayment.swift */,
@@ -1218,6 +1222,7 @@
 				A7434FF82D81D6220035250C /* MobileReader.swift in Sources */,
 				A7434FF92D81D6220035250C /* CatalogItem.swift in Sources */,
 				A7434FFA2D81D6220035250C /* OmniException.swift in Sources */,
+				468F72832EA9430600C20019 /* TakeTapPayment.swift in Sources */,
 				A7434FFB2D81D6220035250C /* Merchant.swift in Sources */,
 				A7434FFC2D81D6220035250C /* Model.swift in Sources */,
 				A7434FFD2D81D6220035250C /* MobileReaderDetails.swift in Sources */,
@@ -1303,6 +1308,7 @@
 				A743529E2D89CD220035250C /* TransactionResult+StaxTransaction.swift in Sources */,
 				A7434F3D2D81D5F20035250C /* StaxPaymentMethodRepositoryImpl.swift in Sources */,
 				A7434F3E2D81D5F20035250C /* StaxValidationError.swift in Sources */,
+				468F72822EA9430600C20019 /* TakeTapPayment.swift in Sources */,
 				A7434FD92D81D6140035250C /* AsyncFilter.swift in Sources */,
 				A7434FDA2D81D6140035250C /* JSONCodable.swift in Sources */,
 				A7434FDB2D81D6140035250C /* Amount.swift in Sources */,
@@ -1522,7 +1528,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CURRENT_PROJECT_VERSION = 18;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = LRP59G45AR;
+				DEVELOPMENT_TEAM = DYRYDWJYX5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1569,7 +1575,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CURRENT_PROJECT_VERSION = 18;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = LRP59G45AR;
+				DEVELOPMENT_TEAM = DYRYDWJYX5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
