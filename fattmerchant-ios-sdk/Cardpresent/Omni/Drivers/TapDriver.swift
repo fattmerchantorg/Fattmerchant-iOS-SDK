@@ -10,24 +10,61 @@ import Foundation
 
 /// Protocol defining the interface for Tap to Pay services
 protocol TapDriver {
-    /// Whether Tap to Pay is available on this device
-    var isAvailable: Bool { get }
     
-    /// Whether refunds are supported for Tap to Pay transactions
-    var isRefundSupported: Bool { get }
-    
-    /// Starts a payment session using Tap to Pay
-    func startPaymentSession(
-        with request: TransactionRequest,
-        signatureProvider: SignatureProviding?,
-        transactionUpdateDelegate: TransactionUpdateDelegate?,
-        userNotificationDelegate: UserNotificationDelegate?,
-        completion: @escaping (TransactionResult) -> Void
+    static var source: String { get }
+
+    func void(
+        transactionResult: TransactionResult,
+        completion: @escaping (Bool) -> Void
     )
     
-    /// Voids a transaction
-    func void(transactionResult: TransactionResult, completion: @escaping (Bool) -> Void)
-    
-    /// Captures a transaction
+    func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void)
+
+    func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, userNotificationDelegate: UserNotificationDelegate?, completion: @escaping (TransactionResult) -> Void)
+
     func capture(transaction: Transaction, completion: @escaping (Bool) -> Void)
+
+    func capture(_ transaction: StaxTransaction, completion: @escaping (Bool) -> Void)
+}
+
+extension TapDriver {
+    
+    func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
+      performTransaction(with: request,
+                         signatureProvider: signatureProvider,
+                         transactionUpdateDelegate: transactionUpdateDelegate,
+                         userNotificationDelegate: nil,
+                         completion: completion)
+    }
+    
+    func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, userNotificationDelegate: UserNotificationDelegate?, completion: @escaping (TransactionResult) -> Void) {
+      performTransaction(with: request,
+                         signatureProvider: signatureProvider,
+                         transactionUpdateDelegate: transactionUpdateDelegate,
+                         userNotificationDelegate: userNotificationDelegate,
+                         completion: completion)
+    }
+
+    func capture(transaction: Transaction, completion: @escaping (Bool) -> Void)
+    {
+        print("TapDriver#capture not implemented")
+        completion(true)
+    }
+
+    func capture(
+        _ transaction: StaxTransaction,
+        completion: @escaping (Bool) -> Void
+    ) {
+        print("TapDriver#capture not implemented")
+        completion(true)
+    }
+
+    func void(
+        transactionResult: TransactionResult,
+        completion: @escaping (Bool) -> Void
+    ) {
+        print("TapDriver#void not implemented")
+        completion(true)
+    }
+
 }

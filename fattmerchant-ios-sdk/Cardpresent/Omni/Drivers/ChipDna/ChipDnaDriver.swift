@@ -1,6 +1,6 @@
 import Foundation
 
-class ChipDnaDriver: NSObject, MobileReaderDriver {
+class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
   static var isStaxRefundsSupported: Bool = true
   static var source: String = "NMI"
   
