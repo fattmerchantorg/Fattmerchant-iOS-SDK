@@ -1,6 +1,6 @@
-# Fattmerchant iOS SDK
+# Stax iOS SDK
 
-The Fattmerchant iOS SDK provides a simple way to accept a payment on your iOS app by providing tokenization of payment methods. By using these tokens instead of card and bank information, you no longer have to worry about sending sensitive card information to your server.
+The Stax iOS SDK provides a simple way to accept a payment on your iOS app by providing tokenization of payment methods. By using these tokens instead of card and bank information, you no longer have to worry about sending sensitive card information to your server.
 
 * [Requirements](#requirements)
 * [Installation](#installation)
@@ -11,7 +11,7 @@ The Fattmerchant iOS SDK provides a simple way to accept a payment on your iOS a
 
 ## Mobile Reader Payments
 
-Supercharge your mobile app by quickly adding mobile reader payments using the Omni Mobile SDK. These payments will create invoices, customers, and transaction objects in the Stax platform. You can also choose to have the payment method stored within Stax so you can use it from the Stax API.
+Supercharge your mobile app by quickly adding mobile reader payments using the Stax iOS SDK. These payments will create invoices, customers, and transaction objects in the Stax platform. You can also choose to have the payment method stored within Stax so you can use it from the Stax API.
 
 ### How it works
 
@@ -23,19 +23,40 @@ Supercharge your mobile app by quickly adding mobile reader payments using the O
 
 ## Requirements
 
-* Xcode 8+
-* iOS 9+
-* Ephemeral Stax API key
+* Xcode 16.0+
+* iOS 15+
+* Stax API key
 
 ***
 
 # Installation
 
-Use CocoaPods to install the Fattmerchant iOS SDK.
+## Swift Package Manager
+
+1. In Xcode, go to **File** → **Add Package Dependencies**
+2. Enter the repository URL: `https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git`
+3. Choose the version rule (recommended: **Up to Next Major**)
+4. Click **Add Package**
+
+Alternatively, add it to your `Package.swift` file:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git", from: "2.4.3")
+]
+```
+
+## CocoaPods
+
+Use CocoaPods to install the Stax iOS SDK.
 
 1. Install [CocoaPods](https://guides.cocoapods.org/using/getting-started.html){:target="_blank" rel="noreferrer"}
 2. Add `pod 'Fattmerchant'` to your `Podfile`
 3. Run `pod install`
+
+#### Note
+
+The `Fattmerchant` pod is both the name of the package and the import. The Stax iOS SDK and the `Fattmerchant` package are one and the same.
 
 ***
 
@@ -52,7 +73,7 @@ In order to build and run with the Cardpresent functionality, you must include t
 Create an instance of `InitParams`
 
 ```swift
-var initParams = Omni.InitParams(appId: "fmiossample", apiKey: apiKey, environment: Environment.DEV)
+var initParams = Omni.InitParams(appId: "com.example.app", apiKey: apiKey, environment: Environment.LIVE)
 ```
 
 Pass the initParams to `Omni.initialize(...)`, along with a completion lambda and an error lambda
@@ -82,7 +103,7 @@ omni.getAvailableReaders { readers ->
 }
 ```
 
-Once you have the list of available ones, you can choose which one you'd like to connect
+Once you have the list of available readers, you can choose which one you'd like to connect to.
 
 ```swift
 omni?.getAvailableReaders(completion: { readers in
@@ -150,3 +171,6 @@ omni.refundMobileReaderTransaction(transaction: transaction, completion: { (refu
 })
 ```
 
+## API Docs
+
+For more information on how to use the Stax iOS SDK, visit our [API documentation site](https://api-docs.staxpayments.com)
