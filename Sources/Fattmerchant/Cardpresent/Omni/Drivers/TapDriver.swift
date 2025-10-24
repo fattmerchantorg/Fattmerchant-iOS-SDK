@@ -9,6 +9,7 @@
 import Foundation
 
 /// Protocol defining the interface for Tap to Pay services
+@available(iOS 17.4, *)
 protocol TapDriver {
     
     static var source: String { get }

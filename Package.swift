@@ -13,13 +13,12 @@ let package = Package(
         ),
     ],
     targets: [
-        // Binary targets for all your XCFrameworks
         .binaryTarget(
-            name: "BBDevice",
+            name: "BBDevice-BT-3.27.0",
             path: "Framework/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework"
         ),
         .binaryTarget(
-            name: "BBDeviceOTA",
+            name: "BBDeviceOTA-1.6.13",
             path: "Framework/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework"
         ),
         .binaryTarget(
@@ -39,23 +38,23 @@ let package = Package(
             path: "Framework/IDTech.xcframework"
         ),
         .binaryTarget(
-            name: "SqlCipher",
+            name: "SqlCipher-4.6.1",
             path: "Framework/SqlCipher-4.6.1.xcframework"
         ),
         
-        // Your main target
         .target(
             name: "Fattmerchant",
             dependencies: [
-                "BBDevice",
-                "BBDeviceOTA",
+                "BBDevice-BT-3.27.0",
+                "BBDeviceOTA-1.6.13",
                 "CardEaseXml",
                 "ChipDnaMobileAPI",
                 "CloudCommerce",
                 "IDTech",
-                "SqlCipher"
+                "SqlCipher-4.6.1"
             ],
             path: "Sources/Fattmerchant",
+            exclude: ["Info.plist"],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("include"),
@@ -75,14 +74,16 @@ let package = Package(
                 .linkedFramework("MessageUI"),
                 .linkedFramework("SystemConfiguration"),
                 .linkedFramework("Security"),
-                .linkedLibrary("z")
+                .linkedLibrary("z"),
+                .unsafeFlags(["-Wl,-force_load"])
             ]
         ),
         
         .testTarget(
             name: "FattmerchantTests",
             dependencies: ["Fattmerchant"],
-            path: "Tests/FattmerchantTests"
+            path: "Tests/FattmerchantTests",
+            exclude: ["Info.plist"]
         ),
     ]
 )

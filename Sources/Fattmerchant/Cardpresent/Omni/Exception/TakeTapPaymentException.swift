@@ -7,6 +7,7 @@
 //
 
 /// Exception type for Tap to Pay payments
+@available(iOS 17.4, *)
 enum TakeTapPaymentException: OmniException {
 
     case iOSVersionNotSupported
