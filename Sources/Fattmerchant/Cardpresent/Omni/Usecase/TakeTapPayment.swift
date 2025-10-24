@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ProximityReader
 
 /// A use case for taking a payment using Apple's Tap to Pay on iPhone functionality
 ///
