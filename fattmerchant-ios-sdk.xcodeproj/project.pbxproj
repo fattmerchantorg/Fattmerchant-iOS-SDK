@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46012C7D2EABEC30004E5459 /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C732EABEC27004E5459 /* BBDevice-BT-3.27.0.xcframework */; };
+		46012C7F2EABEC30004E5459 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C742EABEC27004E5459 /* BBDeviceOTA-1.6.13.xcframework */; };
+		46012C812EABEC30004E5459 /* CardEaseXml.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C762EABEC27004E5459 /* CardEaseXml.xcframework */; };
+		46012C832EABEC30004E5459 /* ChipDnaMobileAPI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C772EABEC27004E5459 /* ChipDnaMobileAPI.xcframework */; };
+		46012C852EABEC30004E5459 /* CloudCommerce.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C782EABEC27004E5459 /* CloudCommerce.xcframework */; };
+		46012C862EABEC30004E5459 /* CloudCommerce.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C782EABEC27004E5459 /* CloudCommerce.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		46012C872EABEC30004E5459 /* IDTech.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C7A2EABEC27004E5459 /* IDTech.xcframework */; };
+		46012C892EABEC30004E5459 /* SqlCipher-4.6.1.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012C7B2EABEC27004E5459 /* SqlCipher-4.6.1.xcframework */; };
 		4650D1412EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */; };
 		4650D1422EAA9617009A5AF4 /* ConnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0C22EAA9617009A5AF4 /* ConnectMobileReaderException.swift */; };
 		4650D1432EAA9617009A5AF4 /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0F82EAA9617009A5AF4 /* Omni.swift */; };
@@ -310,14 +318,6 @@
 		469E99DA2EA7ABBB00EA9175 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99D92EA7ABBB00EA9175 /* MessageUI.framework */; };
 		469E99DC2EA7ABE200EA9175 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DB2EA7ABE200EA9175 /* SystemConfiguration.framework */; };
 		469E99DE2EA7ABEF00EA9175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DD2EA7ABEE00EA9175 /* Security.framework */; };
-		46EA2D022EAA78010085A3C2 /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2CF82EAA77F80085A3C2 /* BBDevice-BT-3.27.0.xcframework */; };
-		46EA2D042EAA78010085A3C2 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2CF92EAA77F80085A3C2 /* BBDeviceOTA-1.6.13.xcframework */; };
-		46EA2D062EAA78010085A3C2 /* CardEaseXml.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2CFB2EAA77F80085A3C2 /* CardEaseXml.xcframework */; };
-		46EA2D082EAA78010085A3C2 /* ChipDnaMobileAPI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2CFC2EAA77F80085A3C2 /* ChipDnaMobileAPI.xcframework */; };
-		46EA2D0C2EAA78010085A3C2 /* IDTech.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2CFF2EAA77F80085A3C2 /* IDTech.xcframework */; };
-		46EA2D0E2EAA78010085A3C2 /* SqlCipher-4.6.1.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2D002EAA77F80085A3C2 /* SqlCipher-4.6.1.xcframework */; };
-		46EA2D102EAA792D0085A3C2 /* CloudCommerce.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2CFD2EAA77F80085A3C2 /* CloudCommerce.xcframework */; };
-		46EA2D112EAA792D0085A3C2 /* CloudCommerce.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA2CFD2EAA77F80085A3C2 /* CloudCommerce.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
 		593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FDA2468956000D78874 /* AsyncFilterTests.swift */; };
 		597BEA5124851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA5024851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift */; };
@@ -353,7 +353,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				46EA2D112EAA792D0085A3C2 /* CloudCommerce.xcframework in Embed Frameworks */,
+				46012C862EABEC30004E5459 /* CloudCommerce.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,6 +361,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		46012C732EABEC27004E5459 /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
+		46012C742EABEC27004E5459 /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
+		46012C762EABEC27004E5459 /* CardEaseXml.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CardEaseXml.xcframework; sourceTree = "<group>"; };
+		46012C772EABEC27004E5459 /* ChipDnaMobileAPI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ChipDnaMobileAPI.xcframework; sourceTree = "<group>"; };
+		46012C782EABEC27004E5459 /* CloudCommerce.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CloudCommerce.xcframework; sourceTree = "<group>"; };
+		46012C792EABEC27004E5459 /* IDTech.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = IDTech.bundle; sourceTree = "<group>"; };
+		46012C7A2EABEC27004E5459 /* IDTech.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = IDTech.xcframework; sourceTree = "<group>"; };
+		46012C7B2EABEC27004E5459 /* SqlCipher-4.6.1.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "SqlCipher-4.6.1.xcframework"; sourceTree = "<group>"; };
 		4650D0922EAA9617009A5AF4 /* InitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationArgs.swift; sourceTree = "<group>"; };
 		4650D0932EAA9617009A5AF4 /* MobileReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatus.swift; sourceTree = "<group>"; };
 		4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDriverInitializationArgs.swift; sourceTree = "<group>"; };
@@ -518,14 +526,6 @@
 		469E99D92EA7ABBB00EA9175 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		469E99DB2EA7ABE200EA9175 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		469E99DD2EA7ABEE00EA9175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		46EA2CF82EAA77F80085A3C2 /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
-		46EA2CF92EAA77F80085A3C2 /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
-		46EA2CFB2EAA77F80085A3C2 /* CardEaseXml.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CardEaseXml.xcframework; sourceTree = "<group>"; };
-		46EA2CFC2EAA77F80085A3C2 /* ChipDnaMobileAPI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ChipDnaMobileAPI.xcframework; sourceTree = "<group>"; };
-		46EA2CFD2EAA77F80085A3C2 /* CloudCommerce.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CloudCommerce.xcframework; sourceTree = "<group>"; };
-		46EA2CFE2EAA77F80085A3C2 /* IDTech.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = IDTech.bundle; sourceTree = "<group>"; };
-		46EA2CFF2EAA77F80085A3C2 /* IDTech.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = IDTech.xcframework; sourceTree = "<group>"; };
-		46EA2D002EAA77F80085A3C2 /* SqlCipher-4.6.1.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "SqlCipher-4.6.1.xcframework"; sourceTree = "<group>"; };
 		46EA2D532EAA879E0085A3C2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -568,11 +568,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
-				46EA2D0E2EAA78010085A3C2 /* SqlCipher-4.6.1.xcframework in Frameworks */,
+				46012C892EABEC30004E5459 /* SqlCipher-4.6.1.xcframework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				469E99DA2EA7ABBB00EA9175 /* MessageUI.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
-				46EA2D062EAA78010085A3C2 /* CardEaseXml.xcframework in Frameworks */,
+				46012C812EABEC30004E5459 /* CardEaseXml.xcframework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
 				469E99DC2EA7ABE200EA9175 /* SystemConfiguration.framework in Frameworks */,
 				469E99D62EA7ABA200EA9175 /* CoreLocation.framework in Frameworks */,
@@ -580,11 +580,11 @@
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
 				D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */,
 				469E99D82EA7ABAA00EA9175 /* CoreData.framework in Frameworks */,
-				46EA2D0C2EAA78010085A3C2 /* IDTech.xcframework in Frameworks */,
-				46EA2D082EAA78010085A3C2 /* ChipDnaMobileAPI.xcframework in Frameworks */,
-				46EA2D042EAA78010085A3C2 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */,
-				46EA2D102EAA792D0085A3C2 /* CloudCommerce.xcframework in Frameworks */,
-				46EA2D022EAA78010085A3C2 /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
+				46012C872EABEC30004E5459 /* IDTech.xcframework in Frameworks */,
+				46012C852EABEC30004E5459 /* CloudCommerce.xcframework in Frameworks */,
+				46012C832EABEC30004E5459 /* ChipDnaMobileAPI.xcframework in Frameworks */,
+				46012C7F2EABEC30004E5459 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */,
+				46012C7D2EABEC30004E5459 /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
 				A7F5958A2C2B485B00033492 /* ExternalAccessory.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,6 +599,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		46012C752EABEC27004E5459 /* BBPOSFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				46012C732EABEC27004E5459 /* BBDevice-BT-3.27.0.xcframework */,
+				46012C742EABEC27004E5459 /* BBDeviceOTA-1.6.13.xcframework */,
+			);
+			path = BBPOSFrameworks;
+			sourceTree = "<group>";
+		};
+		46012C7C2EABEC27004E5459 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				46012C752EABEC27004E5459 /* BBPOSFrameworks */,
+				46012C762EABEC27004E5459 /* CardEaseXml.xcframework */,
+				46012C772EABEC27004E5459 /* ChipDnaMobileAPI.xcframework */,
+				46012C782EABEC27004E5459 /* CloudCommerce.xcframework */,
+				46012C792EABEC27004E5459 /* IDTech.bundle */,
+				46012C7A2EABEC27004E5459 /* IDTech.xcframework */,
+				46012C7B2EABEC27004E5459 /* SqlCipher-4.6.1.xcframework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
 		4650D09D2EAA9617009A5AF4 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -964,29 +987,6 @@
 			path = include;
 			sourceTree = "<group>";
 		};
-		46EA2CFA2EAA77F80085A3C2 /* BBPOSFrameworks */ = {
-			isa = PBXGroup;
-			children = (
-				46EA2CF82EAA77F80085A3C2 /* BBDevice-BT-3.27.0.xcframework */,
-				46EA2CF92EAA77F80085A3C2 /* BBDeviceOTA-1.6.13.xcframework */,
-			);
-			path = BBPOSFrameworks;
-			sourceTree = "<group>";
-		};
-		46EA2D012EAA77F80085A3C2 /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-				46EA2CFA2EAA77F80085A3C2 /* BBPOSFrameworks */,
-				46EA2CFB2EAA77F80085A3C2 /* CardEaseXml.xcframework */,
-				46EA2CFC2EAA77F80085A3C2 /* ChipDnaMobileAPI.xcframework */,
-				46EA2CFD2EAA77F80085A3C2 /* CloudCommerce.xcframework */,
-				46EA2CFE2EAA77F80085A3C2 /* IDTech.bundle */,
-				46EA2CFF2EAA77F80085A3C2 /* IDTech.xcframework */,
-				46EA2D002EAA77F80085A3C2 /* SqlCipher-4.6.1.xcframework */,
-			);
-			path = Framework;
-			sourceTree = "<group>";
-		};
 		46EA2D552EAA88BD0085A3C2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1059,7 +1059,7 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				46EA2D012EAA77F80085A3C2 /* Framework */,
+				46012C7C2EABEC27004E5459 /* Frameworks */,
 				469E99DD2EA7ABEE00EA9175 /* Security.framework */,
 				469E99DB2EA7ABE200EA9175 /* SystemConfiguration.framework */,
 				469E99D92EA7ABBB00EA9175 /* MessageUI.framework */,
