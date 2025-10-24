@@ -16,7 +16,12 @@ let package = Package(
         .target(
             name: "Fattmerchant",
             dependencies: [],
-            path: "Sources/Fattmerchant"
+            path: "Sources/Fattmerchant",
+            publicHeadersPath: "include",
+            cSettings: [
+                .headerSearchPath("include"),
+                .define("SWIFT_PACKAGE")
+            ]
         ),
         .testTarget(
             name: "FattmerchantTests",
@@ -25,4 +30,3 @@ let package = Package(
         ),
     ]
 )
-

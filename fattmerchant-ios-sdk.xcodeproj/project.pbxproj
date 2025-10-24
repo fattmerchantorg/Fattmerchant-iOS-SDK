@@ -155,7 +155,6 @@
 		4650D1D22EAA9617009A5AF4 /* SelectablePinPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0B52EAA9617009A5AF4 /* SelectablePinPad.swift */; };
 		4650D1D32EAA9617009A5AF4 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D1392EAA9617009A5AF4 /* Amount.swift */; };
 		4650D1D42EAA9617009A5AF4 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4650D13E2EAA9617009A5AF4 /* Info.plist */; };
-		4650D1D52EAA9617009A5AF4 /* Fattmerchant.h in Headers */ = {isa = PBXBuildFile; fileRef = 4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */; };
 		4650D1D72EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */; };
 		4650D1D82EAA9617009A5AF4 /* ConnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0C22EAA9617009A5AF4 /* ConnectMobileReaderException.swift */; };
 		4650D1D92EAA9617009A5AF4 /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0F82EAA9617009A5AF4 /* Omni.swift */; };
@@ -303,6 +302,7 @@
 		4650D2672EAA9617009A5AF4 /* StaxBankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D1012EAA9617009A5AF4 /* StaxBankHolderType.swift */; };
 		4650D2682EAA9617009A5AF4 /* SelectablePinPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0B52EAA9617009A5AF4 /* SelectablePinPad.swift */; };
 		4650D2692EAA9617009A5AF4 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D1392EAA9617009A5AF4 /* Amount.swift */; };
+		4650D26C2EABAE75009A5AF4 /* Fattmerchant.h in Headers */ = {isa = PBXBuildFile; fileRef = 4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		468F73082EAA5ABA00C20019 /* MockTapDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F73072EAA5ABA00C20019 /* MockTapDriver.swift */; };
 		468F730A2EAA5B6A00C20019 /* TakeTapPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F73092EAA5B6A00C20019 /* TakeTapPaymentTests.swift */; };
 		469E99D62EA7ABA200EA9175 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99D52EA7ABA200EA9175 /* CoreLocation.framework */; };
@@ -510,6 +510,7 @@
 		4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fattmerchant.h; sourceTree = "<group>"; };
 		4650D13E2EAA9617009A5AF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4650D13F2EAA9617009A5AF4 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		4650D26B2EABADF0009A5AF4 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		468F73072EAA5ABA00C20019 /* MockTapDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTapDriver.swift; sourceTree = "<group>"; };
 		468F73092EAA5B6A00C20019 /* TakeTapPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeTapPaymentTests.swift; sourceTree = "<group>"; };
 		469E99D52EA7ABA200EA9175 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -944,14 +945,23 @@
 		4650D1402EAA9617009A5AF4 /* Fattmerchant */ = {
 			isa = PBXGroup;
 			children = (
+				4650D26A2EABADE4009A5AF4 /* include */,
 				4650D1262EAA9617009A5AF4 /* Cardpresent */,
 				4650D1372EAA9617009A5AF4 /* Models */,
 				4650D13C2EAA9617009A5AF4 /* Utils */,
-				4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */,
 				4650D13E2EAA9617009A5AF4 /* Info.plist */,
 				4650D13F2EAA9617009A5AF4 /* Networking.swift */,
 			);
 			path = Fattmerchant;
+			sourceTree = "<group>";
+		};
+		4650D26A2EABADE4009A5AF4 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4650D26B2EABADF0009A5AF4 /* module.modulemap */,
+				4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 		46EA2CFA2EAA77F80085A3C2 /* BBPOSFrameworks */ = {
@@ -1121,7 +1131,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4650D1D52EAA9617009A5AF4 /* Fattmerchant.h in Headers */,
+				4650D26C2EABAE75009A5AF4 /* Fattmerchant.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1697,8 +1707,8 @@
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Sources/Fattmerchant",
-					"$(PROJECT_DIR)/Sources/Fattmerchant",
+					"$(SRCROOT)/Sources/Fattmerchant/include",
+					"$(PROJECT_DIR)/Sources/Fattmerchant/include",
 				);
 				INFOPLIST_FILE = Sources/Fattmerchant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1725,7 +1735,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = Sources/Fattmerchant/Fattmerchant.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1750,8 +1760,8 @@
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Sources/Fattmerchant",
-					"$(PROJECT_DIR)/Sources/Fattmerchant",
+					"$(SRCROOT)/Sources/Fattmerchant/include",
+					"$(PROJECT_DIR)/Sources/Fattmerchant/include",
 				);
 				INFOPLIST_FILE = Sources/Fattmerchant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1778,7 +1788,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = Sources/Fattmerchant/Fattmerchant.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
