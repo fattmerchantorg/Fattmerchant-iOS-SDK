@@ -28,6 +28,7 @@ protocol TapDriver {
     func capture(_ transaction: StaxTransaction, completion: @escaping (Bool) -> Void)
 }
 
+@available(iOS 17.4, *)
 extension TapDriver {
     
     func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {

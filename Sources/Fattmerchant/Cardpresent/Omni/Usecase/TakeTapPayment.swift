@@ -59,11 +59,6 @@ class TakeTapPayment {
         completion: @escaping (Transaction) -> Void,
         failure: @escaping (OmniException) -> Void
     ) {
-        // Check iOS version first
-        guard #available(iOS 17.4, *) else {
-            failure(Exception.iOSVersionNotSupported)
-            return
-        }
 
         self.getOrCreateInvoice(failure) { (createdInvoice) in
             self.takeTapToPayPayment(
@@ -586,17 +581,6 @@ class TakeTapPayment {
                 },
                 error: failure
             )
-        }
-    }
-}
-
-extension TakeTapPayment {
-    /// Checks if Tap to Pay is supported on the current device and iOS version
-    static func isSupported() -> (supported: Bool, reason: String?) {
-        if #available(iOS 17.4, *) {
-            return (true, nil)
-        } else {
-            return (false, "Tap to Pay on iPhone requires iOS 17.4 or later")
         }
     }
 }

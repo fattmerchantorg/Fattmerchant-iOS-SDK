@@ -10,7 +10,6 @@
 @available(iOS 17.4, *)
 enum TakeTapPaymentException: OmniException {
 
-    case iOSVersionNotSupported
     case invoiceIdCannotBeBlank
     case invoiceNotFound
     case couldNotCreateInvoice(detail: String?)
@@ -24,9 +23,6 @@ enum TakeTapPaymentException: OmniException {
 
     var localizedDescription: String {
         switch self {
-        case .iOSVersionNotSupported:
-            return
-                "Tap to Pay on iPhone requires iOS 17.4 or later. Please update your device to use this feature."
         case .invoiceIdCannotBeBlank:
             return "Invoice ID cannot be blank"
         case .invoiceNotFound:
