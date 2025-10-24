@@ -15,31 +15,31 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "BBDevice-BT-3.27.0",
-            path: "Framework/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework"
+            path: "Frameworks/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework"
         ),
         .binaryTarget(
             name: "BBDeviceOTA-1.6.13",
-            path: "Framework/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework"
+            path: "Frameworks/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework"
         ),
         .binaryTarget(
             name: "CardEaseXml",
-            path: "Framework/CardEaseXml.xcframework"
+            path: "Frameworks/CardEaseXml.xcframework"
         ),
         .binaryTarget(
             name: "ChipDnaMobileAPI",
-            path: "Framework/ChipDnaMobileAPI.xcframework"
+            path: "Frameworks/ChipDnaMobileAPI.xcframework"
         ),
         .binaryTarget(
             name: "CloudCommerce",
-            path: "Framework/CloudCommerce.xcframework"
+            path: "Frameworks/CloudCommerce.xcframework"
         ),
         .binaryTarget(
             name: "IDTech",
-            path: "Framework/IDTech.xcframework"
+            path: "Frameworks/IDTech.xcframework"
         ),
         .binaryTarget(
             name: "SqlCipher-4.6.1",
-            path: "Framework/SqlCipher-4.6.1.xcframework"
+            path: "Frameworks/SqlCipher-4.6.1.xcframework"
         ),
         
         .target(
@@ -54,7 +54,6 @@ let package = Package(
                 "SqlCipher-4.6.1"
             ],
             path: "Sources/Fattmerchant",
-            exclude: ["Info.plist"],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("include"),
