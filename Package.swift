@@ -9,39 +9,40 @@ let package = Package(
     products: [
         .library(
             name: "Fattmerchant",
-            targets: ["Fattmerchant"]
-        ),
+            targets: [
+                "Fattmerchant"
+            ]
+        )
     ],
     targets: [
         .binaryTarget(
             name: "BBDevice-BT-3.27.0",
-            path: "Frameworks/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework"
+            path: "ChipDnaMobile/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework"
         ),
         .binaryTarget(
             name: "BBDeviceOTA-1.6.13",
-            path: "Frameworks/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework"
+            path: "ChipDnaMobile/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework"
         ),
         .binaryTarget(
             name: "CardEaseXml",
-            path: "Frameworks/CardEaseXml.xcframework"
+            path: "ChipDnaMobile/CardEaseXml.xcframework"
         ),
         .binaryTarget(
             name: "ChipDnaMobileAPI",
-            path: "Frameworks/ChipDnaMobileAPI.xcframework"
+            path: "ChipDnaMobile/ChipDnaMobileAPI.xcframework"
         ),
         .binaryTarget(
             name: "CloudCommerce",
-            path: "Frameworks/CloudCommerce.xcframework"
+            path: "ChipDnaMobile/CloudCommerce.xcframework"
         ),
         .binaryTarget(
             name: "IDTech",
-            path: "Frameworks/IDTech.xcframework"
+            path: "ChipDnaMobile/IDTech.xcframework"
         ),
         .binaryTarget(
             name: "SqlCipher-4.6.1",
-            path: "Frameworks/SqlCipher-4.6.1.xcframework"
+            path: "ChipDnaMobile/SqlCipher-4.6.1.xcframework"
         ),
-        
         .target(
             name: "Fattmerchant",
             dependencies: [
@@ -51,13 +52,14 @@ let package = Package(
                 "ChipDnaMobileAPI",
                 "CloudCommerce",
                 "IDTech",
-                "SqlCipher-4.6.1"
+                "SqlCipher-4.6.1",
             ],
             path: "Sources/Fattmerchant",
+            exclude: ["Info.plist"],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("include"),
-                .define("SWIFT_PACKAGE")
+                .define("SWIFT_PACKAGE"),
             ],
             linkerSettings: [
                 .linkedFramework("Foundation"),
@@ -74,10 +76,10 @@ let package = Package(
                 .linkedFramework("SystemConfiguration"),
                 .linkedFramework("Security"),
                 .linkedLibrary("z"),
-                .unsafeFlags(["-Wl,-force_load"])
+                .unsafeFlags(["-Wl,-force_load"]),
             ]
         ),
-        
+
         .testTarget(
             name: "FattmerchantTests",
             dependencies: ["Fattmerchant"],
