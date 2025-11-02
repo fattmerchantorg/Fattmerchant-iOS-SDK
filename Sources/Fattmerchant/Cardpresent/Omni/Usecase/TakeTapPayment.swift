@@ -15,8 +15,6 @@ import Foundation
 /// - Compatible iPhone device (iPhone XS or later)
 /// - Tap to Pay on iPhone must be set up in the device settings
 ///
-/// **Important:** Always check `TakeTapPayment.isSupported()` before attempting to use this feature
-/// to provide appropriate user messaging for unsupported devices or iOS versions.
 @available(iOS 17.4, *)
 class TakeTapPayment {
 

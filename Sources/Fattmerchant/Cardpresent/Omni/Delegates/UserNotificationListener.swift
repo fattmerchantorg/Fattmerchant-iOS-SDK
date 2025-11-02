@@ -11,7 +11,7 @@ import Foundation
 /// Gets notified of all messages that need to be displayed to a user
 ///
 /// For example, "Please insert/swipe your card"
-public protocol UserNotificationDelegate: class {
+public protocol UserNotificationDelegate: AnyObject {
 
   /// Called when a prompt is required to be shown to a customer and returns a UserNotification
   func onUserNotification(userNotification: UserNotification)

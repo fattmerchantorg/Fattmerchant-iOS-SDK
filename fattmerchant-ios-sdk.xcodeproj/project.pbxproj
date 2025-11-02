@@ -7,19 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		46012C8C2EAFA430004E5459 /* TakeTapPaymentJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46012C8B2EAFA429004E5459 /* TakeTapPaymentJob.swift */; };
-		46012C8D2EAFA430004E5459 /* TakeTapPaymentJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46012C8B2EAFA429004E5459 /* TakeTapPaymentJob.swift */; };
-		46012C8F2EAFA5A1004E5459 /* TapDriverRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46012C8E2EAFA59A004E5459 /* TapDriverRepository.swift */; };
-		46012C902EAFA5A1004E5459 /* TapDriverRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46012C8E2EAFA59A004E5459 /* TapDriverRepository.swift */; };
 		46012CF92EAFEEB9004E5459 /* MockTapDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F73072EAA5ABA00C20019 /* MockTapDriver.swift */; };
-		46012D072EAFF710004E5459 /* ChipDnaMobileAPI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012D002EAFF710004E5459 /* ChipDnaMobileAPI.xcframework */; };
-		46012D082EAFF710004E5459 /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012CFC2EAFF710004E5459 /* BBDevice-BT-3.27.0.xcframework */; };
-		46012D092EAFF710004E5459 /* CardEaseXml.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012CFF2EAFF710004E5459 /* CardEaseXml.xcframework */; };
-		46012D0A2EAFF710004E5459 /* IDTech.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012D032EAFF710004E5459 /* IDTech.xcframework */; };
-		46012D0C2EAFF710004E5459 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012CFD2EAFF710004E5459 /* BBDeviceOTA-1.6.13.xcframework */; };
-		46012D0D2EAFF710004E5459 /* SqlCipher-4.6.1.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012D042EAFF710004E5459 /* SqlCipher-4.6.1.xcframework */; };
-		46012D0E2EAFF73D004E5459 /* CloudCommerce.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46012D012EAFF710004E5459 /* CloudCommerce.xcframework */; };
-		46012D0F2EAFF73D004E5459 /* CloudCommerce.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46012D012EAFF710004E5459 /* CloudCommerce.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4650D1412EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */; };
 		4650D1422EAA9617009A5AF4 /* ConnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0C22EAA9617009A5AF4 /* ConnectMobileReaderException.swift */; };
 		4650D1432EAA9617009A5AF4 /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0F82EAA9617009A5AF4 /* Omni.swift */; };
@@ -315,7 +303,6 @@
 		4650D2672EAA9617009A5AF4 /* StaxBankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D1012EAA9617009A5AF4 /* StaxBankHolderType.swift */; };
 		4650D2682EAA9617009A5AF4 /* SelectablePinPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0B52EAA9617009A5AF4 /* SelectablePinPad.swift */; };
 		4650D2692EAA9617009A5AF4 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D1392EAA9617009A5AF4 /* Amount.swift */; };
-		4650D26C2EABAE75009A5AF4 /* Fattmerchant.h in Headers */ = {isa = PBXBuildFile; fileRef = 4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		468F73082EAA5ABA00C20019 /* MockTapDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F73072EAA5ABA00C20019 /* MockTapDriver.swift */; };
 		468F730A2EAA5B6A00C20019 /* TakeTapPaymentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F73092EAA5B6A00C20019 /* TakeTapPaymentTests.swift */; };
 		469E99D62EA7ABA200EA9175 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99D52EA7ABA200EA9175 /* CoreLocation.framework */; };
@@ -324,6 +311,9 @@
 		469E99DC2EA7ABE200EA9175 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DB2EA7ABE200EA9175 /* SystemConfiguration.framework */; };
 		469E99DE2EA7ABEF00EA9175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DD2EA7ABEE00EA9175 /* Security.framework */; };
 		46B0F7452EB023230084A07A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B0F7442EB023230084A07A /* libc++.tbd */; };
+		46F3E5402EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
+		46F3E5412EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
+		46F3E5472EB7CE9C000A1FF2 /* ChipDnaMobileKit in Frameworks */ = {isa = PBXBuildFile; productRef = 46F3E5462EB7CE9C000A1FF2 /* ChipDnaMobileKit */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
 		593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FDA2468956000D78874 /* AsyncFilterTests.swift */; };
 		597BEA5124851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA5024851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift */; };
@@ -359,7 +349,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				46012D0F2EAFF73D004E5459 /* CloudCommerce.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,16 +356,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		46012C8B2EAFA429004E5459 /* TakeTapPaymentJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeTapPaymentJob.swift; sourceTree = "<group>"; };
-		46012C8E2EAFA59A004E5459 /* TapDriverRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapDriverRepository.swift; sourceTree = "<group>"; };
-		46012CFC2EAFF710004E5459 /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
-		46012CFD2EAFF710004E5459 /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
-		46012CFF2EAFF710004E5459 /* CardEaseXml.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CardEaseXml.xcframework; sourceTree = "<group>"; };
-		46012D002EAFF710004E5459 /* ChipDnaMobileAPI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ChipDnaMobileAPI.xcframework; sourceTree = "<group>"; };
-		46012D012EAFF710004E5459 /* CloudCommerce.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CloudCommerce.xcframework; sourceTree = "<group>"; };
-		46012D022EAFF710004E5459 /* IDTech.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = IDTech.bundle; sourceTree = "<group>"; };
-		46012D032EAFF710004E5459 /* IDTech.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = IDTech.xcframework; sourceTree = "<group>"; };
-		46012D042EAFF710004E5459 /* SqlCipher-4.6.1.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "SqlCipher-4.6.1.xcframework"; sourceTree = "<group>"; };
 		4650D0922EAA9617009A5AF4 /* InitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationArgs.swift; sourceTree = "<group>"; };
 		4650D0932EAA9617009A5AF4 /* MobileReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatus.swift; sourceTree = "<group>"; };
 		4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDriverInitializationArgs.swift; sourceTree = "<group>"; };
@@ -523,10 +502,8 @@
 		4650D1392EAA9617009A5AF4 /* Amount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
 		4650D13A2EAA9617009A5AF4 /* AsyncFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFilter.swift; sourceTree = "<group>"; };
 		4650D13B2EAA9617009A5AF4 /* JSONCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCodable.swift; sourceTree = "<group>"; };
-		4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fattmerchant.h; sourceTree = "<group>"; };
 		4650D13E2EAA9617009A5AF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4650D13F2EAA9617009A5AF4 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
-		468C5E992EB27976000B1D27 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		468F73072EAA5ABA00C20019 /* MockTapDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTapDriver.swift; sourceTree = "<group>"; };
 		468F73092EAA5B6A00C20019 /* TakeTapPaymentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeTapPaymentTests.swift; sourceTree = "<group>"; };
 		469E99D52EA7ABA200EA9175 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -536,6 +513,7 @@
 		469E99DD2EA7ABEE00EA9175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		46B0F7442EB023230084A07A /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		46EA2D532EAA879E0085A3C2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		46F3E53F2EB7C832000A1FF2 /* Reexports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reexports.swift; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C20A3206EB26700C848DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -580,12 +558,6 @@
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				469E99DA2EA7ABBB00EA9175 /* MessageUI.framework in Frameworks */,
-				46012D072EAFF710004E5459 /* ChipDnaMobileAPI.xcframework in Frameworks */,
-				46012D082EAFF710004E5459 /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
-				46012D092EAFF710004E5459 /* CardEaseXml.xcframework in Frameworks */,
-				46012D0A2EAFF710004E5459 /* IDTech.xcframework in Frameworks */,
-				46012D0C2EAFF710004E5459 /* BBDeviceOTA-1.6.13.xcframework in Frameworks */,
-				46012D0D2EAFF710004E5459 /* SqlCipher-4.6.1.xcframework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
 				469E99DC2EA7ABE200EA9175 /* SystemConfiguration.framework in Frameworks */,
@@ -593,7 +565,7 @@
 				469E99DE2EA7ABEF00EA9175 /* Security.framework in Frameworks */,
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
 				D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */,
-				46012D0E2EAFF73D004E5459 /* CloudCommerce.xcframework in Frameworks */,
+				46F3E5472EB7CE9C000A1FF2 /* ChipDnaMobileKit in Frameworks */,
 				469E99D82EA7ABAA00EA9175 /* CoreData.framework in Frameworks */,
 				A7F5958A2C2B485B00033492 /* ExternalAccessory.framework in Frameworks */,
 			);
@@ -609,29 +581,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		46012CFE2EAFF710004E5459 /* BBPOSFrameworks */ = {
-			isa = PBXGroup;
-			children = (
-				46012CFC2EAFF710004E5459 /* BBDevice-BT-3.27.0.xcframework */,
-				46012CFD2EAFF710004E5459 /* BBDeviceOTA-1.6.13.xcframework */,
-			);
-			path = BBPOSFrameworks;
-			sourceTree = "<group>";
-		};
-		46012D052EAFF710004E5459 /* ChipDnaMobile */ = {
-			isa = PBXGroup;
-			children = (
-				46012CFE2EAFF710004E5459 /* BBPOSFrameworks */,
-				46012CFF2EAFF710004E5459 /* CardEaseXml.xcframework */,
-				46012D002EAFF710004E5459 /* ChipDnaMobileAPI.xcframework */,
-				46012D012EAFF710004E5459 /* CloudCommerce.xcframework */,
-				46012D022EAFF710004E5459 /* IDTech.bundle */,
-				46012D032EAFF710004E5459 /* IDTech.xcframework */,
-				46012D042EAFF710004E5459 /* SqlCipher-4.6.1.xcframework */,
-			);
-			path = ChipDnaMobile;
-			sourceTree = "<group>";
-		};
 		4650D09D2EAA9617009A5AF4 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -758,7 +707,6 @@
 		4650D0DF2EAA9617009A5AF4 /* Job */ = {
 			isa = PBXGroup;
 			children = (
-				46012C8B2EAFA429004E5459 /* TakeTapPaymentJob.swift */,
 				4650D0D22EAA9617009A5AF4 /* CancelCurrentTransactionJob.swift */,
 				4650D0D32EAA9617009A5AF4 /* CapturePreAuthTransactionJob.swift */,
 				4650D0D42EAA9617009A5AF4 /* ConnectToMobileReaderJob.swift */,
@@ -798,7 +746,6 @@
 		4650D0EF2EAA9617009A5AF4 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				46012C8E2EAFA59A004E5459 /* TapDriverRepository.swift */,
 				4650D0E72EAA9617009A5AF4 /* CustomerRepository.swift */,
 				4650D0E82EAA9617009A5AF4 /* InvoiceRepository.swift */,
 				4650D0E92EAA9617009A5AF4 /* MobileReaderDriverRepository.swift */,
@@ -980,6 +927,7 @@
 		4650D1402EAA9617009A5AF4 /* Fattmerchant */ = {
 			isa = PBXGroup;
 			children = (
+				46F3E53F2EB7C832000A1FF2 /* Reexports.swift */,
 				4650D26A2EABADE4009A5AF4 /* include */,
 				4650D1262EAA9617009A5AF4 /* Cardpresent */,
 				4650D1372EAA9617009A5AF4 /* Models */,
@@ -993,8 +941,6 @@
 		4650D26A2EABADE4009A5AF4 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				468C5E992EB27976000B1D27 /* module.modulemap */,
-				4650D13D2EAA9617009A5AF4 /* Fattmerchant.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -1018,7 +964,6 @@
 		591C2086206EB12F00C848DA = {
 			isa = PBXGroup;
 			children = (
-				46012D052EAFF710004E5459 /* ChipDnaMobile */,
 				46EA2D562EAA89CB0085A3C2 /* Tests */,
 				46EA2D552EAA88BD0085A3C2 /* Sources */,
 				46EA2D532EAA879E0085A3C2 /* Package.swift */,
@@ -1144,7 +1089,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4650D26C2EABAE75009A5AF4 /* Fattmerchant.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1216,6 +1160,9 @@
 				Base,
 			);
 			mainGroup = 591C2086206EB12F00C848DA;
+			packageReferences = (
+				46F3E5452EB7CE9C000A1FF2 /* XCLocalSwiftPackageReference "build/SwiftPM/SwiftPackage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 591C2091206EB12F00C848DA /* Products */;
 			projectDirPath = "";
@@ -1281,7 +1228,6 @@
 				4650D1F22EAA9617009A5AF4 /* MockSearchArgs.swift in Sources */,
 				4650D1F32EAA9617009A5AF4 /* OmniNetworkingException.swift in Sources */,
 				4650D1F42EAA9617009A5AF4 /* ChipDnaXMLTransactionParser.swift in Sources */,
-				46012C902EAFA5A1004E5459 /* TapDriverRepository.swift in Sources */,
 				4650D1F52EAA9617009A5AF4 /* Transaction+ChipDna.swift in Sources */,
 				4650D1F62EAA9617009A5AF4 /* MockInitializationArgs.swift in Sources */,
 				4650D1F72EAA9617009A5AF4 /* TransactionResult+StaxTransaction.swift in Sources */,
@@ -1314,6 +1260,7 @@
 				4650D2122EAA9617009A5AF4 /* MobileReaderDriverException.swift in Sources */,
 				4650D2132EAA9617009A5AF4 /* StaxCatalogRepositoryImpl.swift in Sources */,
 				4650D2142EAA9617009A5AF4 /* StaxBankAccount.swift in Sources */,
+				46F3E5412EB7C838000A1FF2 /* Reexports.swift in Sources */,
 				4650D2152EAA9617009A5AF4 /* TokenizeBankAccountJob.swift in Sources */,
 				4650D2162EAA9617009A5AF4 /* MobileReaderDriverRepository.swift in Sources */,
 				4650D2172EAA9617009A5AF4 /* InvoiceRepository.swift in Sources */,
@@ -1349,7 +1296,6 @@
 				4650D2352EAA9617009A5AF4 /* Model.swift in Sources */,
 				4650D2362EAA9617009A5AF4 /* MobileReaderConnectionStatus.swift in Sources */,
 				4650D2372EAA9617009A5AF4 /* Self.swift in Sources */,
-				46012C8D2EAFA430004E5459 /* TakeTapPaymentJob.swift in Sources */,
 				4650D2382EAA9617009A5AF4 /* ChipDnaTransactionUserReference.swift in Sources */,
 				4650D2392EAA9617009A5AF4 /* CreditCard.swift in Sources */,
 				4650D23A2EAA9617009A5AF4 /* UsbAccessoryDelegate.swift in Sources */,
@@ -1410,7 +1356,6 @@
 				D765D48823CE422400656040 /* JSONValueTest.swift in Sources */,
 				D760D82A23D884680075057C /* CustomerJson.swift in Sources */,
 				D783DAC42449F35E007C0A17 /* TakePaymentTests.swift in Sources */,
-				46012C8F2EAFA5A1004E5459 /* TapDriverRepository.swift in Sources */,
 				D73BBCF7244D805C0052B525 /* DisconnectMobileReaderTests.swift in Sources */,
 				D7692F1923E4B00500CB0954 /* OmniTest.swift in Sources */,
 				D760D82C23D884F70075057C /* PaymentMethodJson.swift in Sources */,
@@ -1487,6 +1432,7 @@
 				4650D17E2EAA9617009A5AF4 /* StaxBankAccount.swift in Sources */,
 				4650D17F2EAA9617009A5AF4 /* TokenizeBankAccountJob.swift in Sources */,
 				4650D1802EAA9617009A5AF4 /* MobileReaderDriverRepository.swift in Sources */,
+				46F3E5402EB7C838000A1FF2 /* Reexports.swift in Sources */,
 				4650D1812EAA9617009A5AF4 /* InvoiceRepository.swift in Sources */,
 				4650D1822EAA9617009A5AF4 /* StaxPaymentMethodRepository.swift in Sources */,
 				4650D1832EAA9617009A5AF4 /* GetConnectedMobileReaderException.swift in Sources */,
@@ -1529,7 +1475,6 @@
 				4650D1A82EAA9617009A5AF4 /* TransactionRequest+StaxInvoice.swift in Sources */,
 				4650D1A92EAA9617009A5AF4 /* StaxTaxRate.swift in Sources */,
 				4650D1AA2EAA9617009A5AF4 /* StaxHttpClient.swift in Sources */,
-				46012C8C2EAFA430004E5459 /* TakeTapPaymentJob.swift in Sources */,
 				4650D1AB2EAA9617009A5AF4 /* StaxCustomer.swift in Sources */,
 				4650D1AC2EAA9617009A5AF4 /* StaxMerchant.swift in Sources */,
 				4650D1AD2EAA9617009A5AF4 /* JSONCodable.swift in Sources */,
@@ -1730,7 +1675,7 @@
 				);
 				INFOPLIST_FILE = Sources/Fattmerchant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1784,7 +1729,7 @@
 				);
 				INFOPLIST_FILE = Sources/Fattmerchant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1914,6 +1859,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		46F3E5452EB7CE9C000A1FF2 /* XCLocalSwiftPackageReference "build/SwiftPM/SwiftPackage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = build/SwiftPM/SwiftPackage;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		46F3E5462EB7CE9C000A1FF2 /* ChipDnaMobileKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ChipDnaMobileKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 591C2087206EB12F00C848DA /* Project object */;
 }

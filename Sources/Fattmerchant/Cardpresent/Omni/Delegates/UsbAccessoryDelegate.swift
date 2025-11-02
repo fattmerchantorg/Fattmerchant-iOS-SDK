@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol UsbAccessoryDelegate: class {
+public protocol UsbAccessoryDelegate: AnyObject {
 
   /// Called when a something is plugged into the iPhone/iPad
   func onUsbAccessoryConnected()
