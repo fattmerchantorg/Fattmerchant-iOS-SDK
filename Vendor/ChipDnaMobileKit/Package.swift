@@ -14,7 +14,6 @@ let package = Package(
                 .target(name: "IDTechResources"),
                 .target(name: "ChipDnaMobile"),
                 .target(name: "IDTech"),
-                .target(name: "CloudCommerce"),
                 .target(name: "BBDeviceBT"),
                 .target(name: "BBDeviceOTA"),
             ],
@@ -38,7 +37,6 @@ let package = Package(
             name: "IDTech",
             path: "Binaries/IDTechStatic.xcframework"
         ),
-        .binaryTarget(name: "CloudCommerce", path: "Binaries/CloudCommerce.xcframework"),
         .binaryTarget(name: "BBDeviceBT", path: "Binaries/BBDevice-BT-3.27.0.xcframework"),
         .binaryTarget(name: "BBDeviceOTA", path: "Binaries/BBDeviceOTA-1.6.13.xcframework"),
     ]

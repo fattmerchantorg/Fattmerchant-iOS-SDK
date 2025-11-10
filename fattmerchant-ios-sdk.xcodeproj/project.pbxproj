@@ -8,6 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		46012CF92EAFEEB9004E5459 /* MockTapDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468F73072EAA5ABA00C20019 /* MockTapDriver.swift */; };
+		4632569D2EB811520046F6D8 /* TakeTapPaymentJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632569C2EB811520046F6D8 /* TakeTapPaymentJob.swift */; };
+		4632569E2EB811520046F6D8 /* TakeTapPaymentJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632569C2EB811520046F6D8 /* TakeTapPaymentJob.swift */; };
+		463256A02EB812220046F6D8 /* TapPaymentDriverRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632569F2EB812180046F6D8 /* TapPaymentDriverRepository.swift */; };
+		463256A12EB812220046F6D8 /* TapPaymentDriverRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632569F2EB812180046F6D8 /* TapPaymentDriverRepository.swift */; };
+		463257742EBB9E490046F6D8 /* ConnectToTapDeviceJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257732EBB9E3A0046F6D8 /* ConnectToTapDeviceJob.swift */; };
+		463257752EBB9E490046F6D8 /* ConnectToTapDeviceJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257732EBB9E3A0046F6D8 /* ConnectToTapDeviceJob.swift */; };
+		4632577A2EBBC0540046F6D8 /* TapConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257792EBBC04C0046F6D8 /* TapConnectionStatusDelegate.swift */; };
+		4632577B2EBBC0540046F6D8 /* TapConnectionStatusDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257792EBBC04C0046F6D8 /* TapConnectionStatusDelegate.swift */; };
+		4632577D2EBBC0970046F6D8 /* TapConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632577C2EBBC0920046F6D8 /* TapConnectionStatus.swift */; };
+		4632577E2EBBC0970046F6D8 /* TapConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632577C2EBBC0920046F6D8 /* TapConnectionStatus.swift */; };
+		463257802EBBD1C70046F6D8 /* TapConnectionStatus+ChipDna.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632577F2EBBD1BE0046F6D8 /* TapConnectionStatus+ChipDna.swift */; };
+		463257812EBBD1C70046F6D8 /* TapConnectionStatus+ChipDna.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632577F2EBBD1BE0046F6D8 /* TapConnectionStatus+ChipDna.swift */; };
+		463257832EBBDC560046F6D8 /* ConnectTapException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257822EBBDC510046F6D8 /* ConnectTapException.swift */; };
+		463257842EBBDC560046F6D8 /* ConnectTapException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257822EBBDC510046F6D8 /* ConnectTapException.swift */; };
 		4650D1412EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */; };
 		4650D1422EAA9617009A5AF4 /* ConnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0C22EAA9617009A5AF4 /* ConnectMobileReaderException.swift */; };
 		4650D1432EAA9617009A5AF4 /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0F82EAA9617009A5AF4 /* Omni.swift */; };
@@ -311,9 +325,18 @@
 		469E99DC2EA7ABE200EA9175 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DB2EA7ABE200EA9175 /* SystemConfiguration.framework */; };
 		469E99DE2EA7ABEF00EA9175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DD2EA7ABEE00EA9175 /* Security.framework */; };
 		46B0F7452EB023230084A07A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B0F7442EB023230084A07A /* libc++.tbd */; };
+		46ED45002EBCF3BE0004555D /* CloudCommerce.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; };
+		46ED45012EBCF3BE0004555D /* CloudCommerce.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		46ED45082EBD03180004555D /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FA2EBCF3B50004555D /* BBDevice-BT-3.27.0.xcframework */; };
+		46ED450A2EBD03180004555D /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FB2EBCF3B50004555D /* BBDeviceOTA-1.6.13.xcframework */; };
+		46ED450C2EBD03180004555D /* ChipDnaMobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FC2EBCF3B50004555D /* ChipDnaMobile.xcframework */; };
+		46ED450E2EBD03180004555D /* IDTechStatic.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FE2EBCF3B50004555D /* IDTechStatic.xcframework */; };
+		46ED45132EBD03650004555D /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED45112EBD03650004555D /* Dummy.swift */; };
+		46ED45142EBD03650004555D /* IDTech.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 46ED45122EBD03650004555D /* IDTech.bundle */; };
+		46ED45172EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */; };
+		46ED45182EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */; };
 		46F3E5402EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
 		46F3E5412EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
-		46F3E5472EB7CE9C000A1FF2 /* ChipDnaMobileKit in Frameworks */ = {isa = PBXBuildFile; productRef = 46F3E5462EB7CE9C000A1FF2 /* ChipDnaMobileKit */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
 		593A7FDB2468956000D78874 /* AsyncFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593A7FDA2468956000D78874 /* AsyncFilterTests.swift */; };
 		597BEA5124851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597BEA5024851B7D009319D6 /* ChipDnaXMLTransactionParserTests.swift */; };
@@ -349,6 +372,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				46ED45012EBCF3BE0004555D /* CloudCommerce.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -356,6 +380,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4632569C2EB811520046F6D8 /* TakeTapPaymentJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeTapPaymentJob.swift; sourceTree = "<group>"; };
+		4632569F2EB812180046F6D8 /* TapPaymentDriverRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPaymentDriverRepository.swift; sourceTree = "<group>"; };
+		463257732EBB9E3A0046F6D8 /* ConnectToTapDeviceJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectToTapDeviceJob.swift; sourceTree = "<group>"; };
+		463257792EBBC04C0046F6D8 /* TapConnectionStatusDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapConnectionStatusDelegate.swift; sourceTree = "<group>"; };
+		4632577C2EBBC0920046F6D8 /* TapConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapConnectionStatus.swift; sourceTree = "<group>"; };
+		4632577F2EBBD1BE0046F6D8 /* TapConnectionStatus+ChipDna.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TapConnectionStatus+ChipDna.swift"; sourceTree = "<group>"; };
+		463257822EBBDC510046F6D8 /* ConnectTapException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTapException.swift; sourceTree = "<group>"; };
 		4650D0922EAA9617009A5AF4 /* InitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationArgs.swift; sourceTree = "<group>"; };
 		4650D0932EAA9617009A5AF4 /* MobileReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatus.swift; sourceTree = "<group>"; };
 		4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDriverInitializationArgs.swift; sourceTree = "<group>"; };
@@ -513,6 +544,14 @@
 		469E99DD2EA7ABEE00EA9175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		46B0F7442EB023230084A07A /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		46EA2D532EAA879E0085A3C2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		46ED44FA2EBCF3B50004555D /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
+		46ED44FB2EBCF3B50004555D /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
+		46ED44FC2EBCF3B50004555D /* ChipDnaMobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ChipDnaMobile.xcframework; sourceTree = "<group>"; };
+		46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CloudCommerce.xcframework; sourceTree = "<group>"; };
+		46ED44FE2EBCF3B50004555D /* IDTechStatic.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = IDTechStatic.xcframework; sourceTree = "<group>"; };
+		46ED45112EBD03650004555D /* Dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dummy.swift; sourceTree = "<group>"; };
+		46ED45122EBD03650004555D /* IDTech.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = IDTech.bundle; sourceTree = "<group>"; };
+		46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipDnaEnvironment.swift; sourceTree = "<group>"; };
 		46F3E53F2EB7C832000A1FF2 /* Reexports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reexports.swift; sourceTree = "<group>"; };
 		591C2090206EB12F00C848DA /* Fattmerchant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fattmerchant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		591C209F206EB26600C848DA /* FattmerchantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FattmerchantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -555,17 +594,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				46B0F7452EB023230084A07A /* libc++.tbd in Frameworks */,
+				46ED45082EBD03180004555D /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
+				46ED450C2EBD03180004555D /* ChipDnaMobile.xcframework in Frameworks */,
+				46ED45002EBCF3BE0004555D /* CloudCommerce.xcframework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				469E99DA2EA7ABBB00EA9175 /* MessageUI.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
+				46ED450E2EBD03180004555D /* IDTechStatic.xcframework in Frameworks */,
 				D793091423D256840066FCA2 /* CoreAudio.framework in Frameworks */,
 				469E99DC2EA7ABE200EA9175 /* SystemConfiguration.framework in Frameworks */,
 				469E99D62EA7ABA200EA9175 /* CoreLocation.framework in Frameworks */,
 				469E99DE2EA7ABEF00EA9175 /* Security.framework in Frameworks */,
 				D793091023D2565E0066FCA2 /* ExternalAccessory.framework in Frameworks */,
+				46ED450A2EBD03180004555D /* BBDeviceOTA-1.6.13.xcframework in Frameworks */,
 				D793090E23D256540066FCA2 /* AVFoundation.framework in Frameworks */,
-				46F3E5472EB7CE9C000A1FF2 /* ChipDnaMobileKit in Frameworks */,
 				469E99D82EA7ABAA00EA9175 /* CoreData.framework in Frameworks */,
 				A7F5958A2C2B485B00033492 /* ExternalAccessory.framework in Frameworks */,
 			);
@@ -584,6 +627,7 @@
 		4650D09D2EAA9617009A5AF4 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				4632577C2EBBC0920046F6D8 /* TapConnectionStatus.swift */,
 				4650D0922EAA9617009A5AF4 /* InitializationArgs.swift */,
 				4650D0932EAA9617009A5AF4 /* MobileReaderConnectionStatus.swift */,
 				4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */,
@@ -602,6 +646,7 @@
 		4650D0A32EAA9617009A5AF4 /* Delegates */ = {
 			isa = PBXGroup;
 			children = (
+				463257792EBBC04C0046F6D8 /* TapConnectionStatusDelegate.swift */,
 				4650D09E2EAA9617009A5AF4 /* MobileReaderConnectionStatusDelegate.swift */,
 				4650D09F2EAA9617009A5AF4 /* SignatureProviding.swift */,
 				4650D0A02EAA9617009A5AF4 /* TransactionUpdateDelegate.swift */,
@@ -614,6 +659,7 @@
 		4650D0A82EAA9617009A5AF4 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */,
 				4650D0A42EAA9617009A5AF4 /* ChipDnaConnectionTypes.swift */,
 				4650D0A52EAA9617009A5AF4 /* ChipDnaInitializationArgs.swift */,
 				4650D0A62EAA9617009A5AF4 /* ChipDnaSearchArgs.swift */,
@@ -625,6 +671,7 @@
 		4650D0B02EAA9617009A5AF4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4632577F2EBBD1BE0046F6D8 /* TapConnectionStatus+ChipDna.swift */,
 				4650D0A92EAA9617009A5AF4 /* CCParameters+TransactionRequest.swift */,
 				4650D0AA2EAA9617009A5AF4 /* ChipDnaMobile+ChipDnaDriver.swift */,
 				4650D0AB2EAA9617009A5AF4 /* MobileReader+ChipDna.swift */,
@@ -683,6 +730,7 @@
 		4650D0D12EAA9617009A5AF4 /* Exception */ = {
 			isa = PBXGroup;
 			children = (
+				463257822EBBDC510046F6D8 /* ConnectTapException.swift */,
 				4650D0C02EAA9617009A5AF4 /* CancelCurrentTransactionException.swift */,
 				4650D0C12EAA9617009A5AF4 /* CapturePreauthTransactionException.swift */,
 				4650D0C22EAA9617009A5AF4 /* ConnectMobileReaderException.swift */,
@@ -707,6 +755,7 @@
 		4650D0DF2EAA9617009A5AF4 /* Job */ = {
 			isa = PBXGroup;
 			children = (
+				463257732EBB9E3A0046F6D8 /* ConnectToTapDeviceJob.swift */,
 				4650D0D22EAA9617009A5AF4 /* CancelCurrentTransactionJob.swift */,
 				4650D0D32EAA9617009A5AF4 /* CapturePreAuthTransactionJob.swift */,
 				4650D0D42EAA9617009A5AF4 /* ConnectToMobileReaderJob.swift */,
@@ -717,6 +766,7 @@
 				4650D0D92EAA9617009A5AF4 /* JobResult.swift */,
 				4650D0DA2EAA9617009A5AF4 /* SearchForMobileReadersJob.swift */,
 				4650D0DB2EAA9617009A5AF4 /* TakeMobileReaderPaymentJob.swift */,
+				4632569C2EB811520046F6D8 /* TakeTapPaymentJob.swift */,
 				4650D0DC2EAA9617009A5AF4 /* TokenizeBankAccountJob.swift */,
 				4650D0DD2EAA9617009A5AF4 /* TokenizeCreditCardJob.swift */,
 				4650D0DE2EAA9617009A5AF4 /* VoidTransactionJob.swift */,
@@ -746,6 +796,7 @@
 		4650D0EF2EAA9617009A5AF4 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				4632569F2EB812180046F6D8 /* TapPaymentDriverRepository.swift */,
 				4650D0E72EAA9617009A5AF4 /* CustomerRepository.swift */,
 				4650D0E82EAA9617009A5AF4 /* InvoiceRepository.swift */,
 				4650D0E92EAA9617009A5AF4 /* MobileReaderDriverRepository.swift */,
@@ -948,6 +999,7 @@
 		46EA2D552EAA88BD0085A3C2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				46ED45102EBD033C0004555D /* IDTechResources */,
 				4650D1402EAA9617009A5AF4 /* Fattmerchant */,
 			);
 			path = Sources;
@@ -959,6 +1011,28 @@
 				591C20A0206EB26700C848DA /* FattmerchantTests */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		46ED44FF2EBCF3B50004555D /* Binaries */ = {
+			isa = PBXGroup;
+			children = (
+				46ED44FA2EBCF3B50004555D /* BBDevice-BT-3.27.0.xcframework */,
+				46ED44FB2EBCF3B50004555D /* BBDeviceOTA-1.6.13.xcframework */,
+				46ED44FC2EBCF3B50004555D /* ChipDnaMobile.xcframework */,
+				46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */,
+				46ED44FE2EBCF3B50004555D /* IDTechStatic.xcframework */,
+			);
+			name = Binaries;
+			path = Vendor/ChipDnaMobileKit/Binaries;
+			sourceTree = "<group>";
+		};
+		46ED45102EBD033C0004555D /* IDTechResources */ = {
+			isa = PBXGroup;
+			children = (
+				46ED45112EBD03650004555D /* Dummy.swift */,
+				46ED45122EBD03650004555D /* IDTech.bundle */,
+			);
+			path = IDTechResources;
 			sourceTree = "<group>";
 		};
 		591C2086206EB12F00C848DA = {
@@ -1017,6 +1091,7 @@
 		D71B6F8A239E5955007FB7C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				46ED44FF2EBCF3B50004555D /* Binaries */,
 				46B0F7442EB023230084A07A /* libc++.tbd */,
 				469E99DD2EA7ABEE00EA9175 /* Security.framework */,
 				469E99DB2EA7ABE200EA9175 /* SystemConfiguration.framework */,
@@ -1161,7 +1236,6 @@
 			);
 			mainGroup = 591C2086206EB12F00C848DA;
 			packageReferences = (
-				46F3E5452EB7CE9C000A1FF2 /* XCLocalSwiftPackageReference "build/SwiftPM/SwiftPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 591C2091206EB12F00C848DA /* Products */;
@@ -1179,6 +1253,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46ED45142EBD03650004555D /* IDTech.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1209,6 +1284,7 @@
 				4650D1DF2EAA9617009A5AF4 /* CancelCurrentTransactionException.swift in Sources */,
 				4650D1E02EAA9617009A5AF4 /* StaxInvoiceRepository.swift in Sources */,
 				4650D1E12EAA9617009A5AF4 /* TransactionRequest.swift in Sources */,
+				463256A12EB812220046F6D8 /* TapPaymentDriverRepository.swift in Sources */,
 				4650D1E22EAA9617009A5AF4 /* VoidTransactionJob.swift in Sources */,
 				4650D1E32EAA9617009A5AF4 /* CreateBankAccountException.swift in Sources */,
 				4650D1E42EAA9617009A5AF4 /* StaxApiRequest.swift in Sources */,
@@ -1252,8 +1328,10 @@
 				4650D20A2EAA9617009A5AF4 /* MobileReaderDriverSearchArgs.swift in Sources */,
 				4650D20B2EAA9617009A5AF4 /* RefundMobileReaderTransaction.swift in Sources */,
 				4650D20C2EAA9617009A5AF4 /* StaxUser.swift in Sources */,
+				4632569D2EB811520046F6D8 /* TakeTapPaymentJob.swift in Sources */,
 				4650D20D2EAA9617009A5AF4 /* StaxBankAccountType.swift in Sources */,
 				4650D20E2EAA9617009A5AF4 /* Networking.swift in Sources */,
+				463257742EBB9E490046F6D8 /* ConnectToTapDeviceJob.swift in Sources */,
 				4650D20F2EAA9617009A5AF4 /* InitializationArgs.swift in Sources */,
 				4650D2102EAA9617009A5AF4 /* DisconnectMobileReaderJob.swift in Sources */,
 				4650D2112EAA9617009A5AF4 /* StaxCatalogRepository.swift in Sources */,
@@ -1271,6 +1349,7 @@
 				4650D21C2EAA9617009A5AF4 /* MobileReaderDriver.swift in Sources */,
 				4650D21D2EAA9617009A5AF4 /* PaymentMethodType.swift in Sources */,
 				4650D21E2EAA9617009A5AF4 /* Transaction.swift in Sources */,
+				463257812EBBD1C70046F6D8 /* TapConnectionStatus+ChipDna.swift in Sources */,
 				4650D21F2EAA9617009A5AF4 /* TransactionGateway.swift in Sources */,
 				4650D2202EAA9617009A5AF4 /* StaxPaymentMethod.swift in Sources */,
 				4650D2212EAA9617009A5AF4 /* CustomerRepository.swift in Sources */,
@@ -1299,10 +1378,12 @@
 				4650D2382EAA9617009A5AF4 /* ChipDnaTransactionUserReference.swift in Sources */,
 				4650D2392EAA9617009A5AF4 /* CreditCard.swift in Sources */,
 				4650D23A2EAA9617009A5AF4 /* UsbAccessoryDelegate.swift in Sources */,
+				46ED45132EBD03650004555D /* Dummy.swift in Sources */,
 				4650D23B2EAA9617009A5AF4 /* ModelRepository+DefaultImpl.swift in Sources */,
 				4650D23C2EAA9617009A5AF4 /* DisconnectMobileReaderException.swift in Sources */,
 				4650D23D2EAA9617009A5AF4 /* TokenizePaymentMethod.swift in Sources */,
 				4650D23E2EAA9617009A5AF4 /* TransactionRequest+StaxInvoice.swift in Sources */,
+				463257842EBBDC560046F6D8 /* ConnectTapException.swift in Sources */,
 				4650D23F2EAA9617009A5AF4 /* StaxTaxRate.swift in Sources */,
 				4650D2402EAA9617009A5AF4 /* StaxHttpClient.swift in Sources */,
 				4650D2412EAA9617009A5AF4 /* StaxCustomer.swift in Sources */,
@@ -1324,6 +1405,7 @@
 				4650D2512EAA9617009A5AF4 /* Invoice.swift in Sources */,
 				4650D2522EAA9617009A5AF4 /* StaxMerchantOptions.swift in Sources */,
 				4650D2532EAA9617009A5AF4 /* StaxAddress.swift in Sources */,
+				4632577E2EBBC0970046F6D8 /* TapConnectionStatus.swift in Sources */,
 				4650D2542EAA9617009A5AF4 /* StaxInvoice+TransactionRequest.swift in Sources */,
 				4650D2552EAA9617009A5AF4 /* TokenizeCreditCardJob.swift in Sources */,
 				4650D2562EAA9617009A5AF4 /* StaxCustomerRepositoryImpl.swift in Sources */,
@@ -1331,6 +1413,7 @@
 				4650D2582EAA9617009A5AF4 /* StaxError.swift in Sources */,
 				4650D2592EAA9617009A5AF4 /* CapturePreAuthTransactionJob.swift in Sources */,
 				4650D25A2EAA9617009A5AF4 /* AccessoryHelper.swift in Sources */,
+				4632577A2EBBC0540046F6D8 /* TapConnectionStatusDelegate.swift in Sources */,
 				4650D25B2EAA9617009A5AF4 /* StaxPaymentMethodType.swift in Sources */,
 				4650D25C2EAA9617009A5AF4 /* VoidTransactionException.swift in Sources */,
 				4650D25D2EAA9617009A5AF4 /* Customer.swift in Sources */,
@@ -1340,6 +1423,7 @@
 				4650D2612EAA9617009A5AF4 /* CancelCurrentTransactionJob.swift in Sources */,
 				4650D2622EAA9617009A5AF4 /* StaxCustomerRepository.swift in Sources */,
 				4650D2632EAA9617009A5AF4 /* StaxHttpClientProtocol.swift in Sources */,
+				46ED45182EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */,
 				4650D2642EAA9617009A5AF4 /* SignatureProviding.swift in Sources */,
 				4650D2652EAA9617009A5AF4 /* ChipDnaConnectionTypes.swift in Sources */,
 				4650D2662EAA9617009A5AF4 /* SearchForMobileReadersJob.swift in Sources */,
@@ -1388,8 +1472,10 @@
 				4650D1522EAA9617009A5AF4 /* PinPadManufacturer.swift in Sources */,
 				4650D1532EAA9617009A5AF4 /* StaxInvoiceRepositoryImpl.swift in Sources */,
 				4650D1542EAA9617009A5AF4 /* PaginatedData.swift in Sources */,
+				4632569E2EB811520046F6D8 /* TakeTapPaymentJob.swift in Sources */,
 				4650D1552EAA9617009A5AF4 /* AsyncFilter.swift in Sources */,
 				4650D1562EAA9617009A5AF4 /* TakeTapPaymentException.swift in Sources */,
+				4632577B2EBBC0540046F6D8 /* TapConnectionStatusDelegate.swift in Sources */,
 				4650D1572EAA9617009A5AF4 /* TakeMobileReaderPaymentException.swift in Sources */,
 				4650D1582EAA9617009A5AF4 /* ConnectToMobileReaderJob.swift in Sources */,
 				4650D1592EAA9617009A5AF4 /* TakeTapPayment.swift in Sources */,
@@ -1427,6 +1513,7 @@
 				4650D1792EAA9617009A5AF4 /* InitializationArgs.swift in Sources */,
 				4650D17A2EAA9617009A5AF4 /* DisconnectMobileReaderJob.swift in Sources */,
 				4650D17B2EAA9617009A5AF4 /* StaxCatalogRepository.swift in Sources */,
+				463257752EBB9E490046F6D8 /* ConnectToTapDeviceJob.swift in Sources */,
 				4650D17C2EAA9617009A5AF4 /* MobileReaderDriverException.swift in Sources */,
 				4650D17D2EAA9617009A5AF4 /* StaxCatalogRepositoryImpl.swift in Sources */,
 				4650D17E2EAA9617009A5AF4 /* StaxBankAccount.swift in Sources */,
@@ -1471,6 +1558,7 @@
 				4650D1A42EAA9617009A5AF4 /* UsbAccessoryDelegate.swift in Sources */,
 				4650D1A52EAA9617009A5AF4 /* ModelRepository+DefaultImpl.swift in Sources */,
 				4650D1A62EAA9617009A5AF4 /* DisconnectMobileReaderException.swift in Sources */,
+				4632577D2EBBC0970046F6D8 /* TapConnectionStatus.swift in Sources */,
 				4650D1A72EAA9617009A5AF4 /* TokenizePaymentMethod.swift in Sources */,
 				4650D1A82EAA9617009A5AF4 /* TransactionRequest+StaxInvoice.swift in Sources */,
 				4650D1A92EAA9617009A5AF4 /* StaxTaxRate.swift in Sources */,
@@ -1478,12 +1566,14 @@
 				4650D1AB2EAA9617009A5AF4 /* StaxCustomer.swift in Sources */,
 				4650D1AC2EAA9617009A5AF4 /* StaxMerchant.swift in Sources */,
 				4650D1AD2EAA9617009A5AF4 /* JSONCodable.swift in Sources */,
+				46ED45172EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */,
 				4650D1AE2EAA9617009A5AF4 /* BankHolderType.swift in Sources */,
 				4650D1AF2EAA9617009A5AF4 /* UserNotification+ChipDna.swift in Sources */,
 				4650D1B02EAA9617009A5AF4 /* JSONValue.swift in Sources */,
 				4650D1B12EAA9617009A5AF4 /* ChipDnaInitializationArgs.swift in Sources */,
 				4650D1B22EAA9617009A5AF4 /* TransactionUpdateDelegate.swift in Sources */,
 				4650D1B32EAA9617009A5AF4 /* TakeMobileReaderPaymentJob.swift in Sources */,
+				463256A02EB812220046F6D8 /* TapPaymentDriverRepository.swift in Sources */,
 				4650D1B42EAA9617009A5AF4 /* TransactionUpdate.swift in Sources */,
 				4650D1B52EAA9617009A5AF4 /* Merchant.swift in Sources */,
 				4650D1B62EAA9617009A5AF4 /* JobResult.swift in Sources */,
@@ -1494,6 +1584,7 @@
 				4650D1BB2EAA9617009A5AF4 /* Invoice.swift in Sources */,
 				4650D1BC2EAA9617009A5AF4 /* StaxMerchantOptions.swift in Sources */,
 				4650D1BD2EAA9617009A5AF4 /* StaxAddress.swift in Sources */,
+				463257832EBBDC560046F6D8 /* ConnectTapException.swift in Sources */,
 				4650D1BE2EAA9617009A5AF4 /* StaxInvoice+TransactionRequest.swift in Sources */,
 				4650D1BF2EAA9617009A5AF4 /* TokenizeCreditCardJob.swift in Sources */,
 				4650D1C02EAA9617009A5AF4 /* StaxCustomerRepositoryImpl.swift in Sources */,
@@ -1512,6 +1603,7 @@
 				4650D1CD2EAA9617009A5AF4 /* StaxHttpClientProtocol.swift in Sources */,
 				4650D1CE2EAA9617009A5AF4 /* SignatureProviding.swift in Sources */,
 				4650D1CF2EAA9617009A5AF4 /* ChipDnaConnectionTypes.swift in Sources */,
+				463257802EBBD1C70046F6D8 /* TapConnectionStatus+ChipDna.swift in Sources */,
 				4650D1D02EAA9617009A5AF4 /* SearchForMobileReadersJob.swift in Sources */,
 				4650D1D12EAA9617009A5AF4 /* StaxBankHolderType.swift in Sources */,
 				4650D1D22EAA9617009A5AF4 /* SelectablePinPad.swift in Sources */,
@@ -1859,20 +1951,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		46F3E5452EB7CE9C000A1FF2 /* XCLocalSwiftPackageReference "build/SwiftPM/SwiftPackage" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = build/SwiftPM/SwiftPackage;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		46F3E5462EB7CE9C000A1FF2 /* ChipDnaMobileKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ChipDnaMobileKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 591C2087206EB12F00C848DA /* Project object */;
 }

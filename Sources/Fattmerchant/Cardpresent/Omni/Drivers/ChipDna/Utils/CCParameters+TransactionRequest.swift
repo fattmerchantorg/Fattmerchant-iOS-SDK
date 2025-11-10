@@ -6,18 +6,6 @@ extension CCParameters {
         return "add-customer"
     }
 
-    /// Convert `TransactionRequest` POI `String` to ChipDna `CCParameterValue` type
-    func getPOIValueTypeString(from string: String) -> String {
-        switch string.lowercased() {
-        case "PAYMENT_DEVICE":
-            return CCValuePaymentDevice
-        case "TAP_TO_MOBILE":
-            return CCValueTapToMobile
-        default:
-            return CCValuePaymentDevice
-        }
-    }
-
     subscript(key: String) -> String? {
         get {
             guard
@@ -41,7 +29,6 @@ extension CCParameters {
         self[CCParamUserReference] = generateChipDnaTransactionUserReference()
         self[CCParamPaymentMethod] = CCValueCard
         self[CCParamTransactionType] = CCValueSale
-        self[CCParamTransactionPOI] = getPOIValueTypeString(from: transactionRequest.transactionPOI)
 
         if transactionRequest.tokenize {
             self[CCParamCustomerVaultCommand] = ParamValueAddCustomer

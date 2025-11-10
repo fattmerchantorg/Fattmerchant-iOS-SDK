@@ -19,6 +19,12 @@ protocol TapDriver {
         completion: @escaping (Bool) -> Void
     )
     
+    var tapConnectionStatusDelegate: TapConnectionStatusDelegate? { get set }
+
+    func isReadyToTakePayment(completion: (Bool) -> Void)
+    
+    func connectToTap(completion: @escaping (Bool, OmniException?) -> Void)
+    
     func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void)
 
     func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, userNotificationDelegate: UserNotificationDelegate?, completion: @escaping (TransactionResult) -> Void)
@@ -30,6 +36,10 @@ protocol TapDriver {
 
 @available(iOS 17.4, *)
 extension TapDriver {
+    
+    func connectToTap(completion: @escaping (Bool, OmniException?) -> Void) {
+        connectToTap(completion: completion)
+    }
     
     func performTransaction(with request: TransactionRequest, signatureProvider: SignatureProviding?, transactionUpdateDelegate: TransactionUpdateDelegate?, completion: @escaping (TransactionResult) -> Void) {
       performTransaction(with: request,

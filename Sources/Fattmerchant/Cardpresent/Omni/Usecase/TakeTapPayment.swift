@@ -313,9 +313,6 @@ class TakeTapPayment {
         _ failure: @escaping (OmniException) -> Void,
         _ completion: @escaping (TransactionResult) -> Void
     ) {
-
-        self.request.transactionPOI = "TAP_TO_MOBILE"
-
         tapDriver.performTransaction(
             with: self.request,
             signatureProvider: signatureProvider,
