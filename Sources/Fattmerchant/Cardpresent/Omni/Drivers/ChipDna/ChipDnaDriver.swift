@@ -13,9 +13,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     weak var mobileReaderConnectionStatusDelegate:
         MobileReaderConnectionStatusDelegate?
 
-    /// Listens to the transaction events of ChipDna
-    fileprivate var chipDnaTransactionListener = ChipDnaTransactionListener()
-
     /// A block to run after self deserializes a list of SelectablePinPads from the result of ChipDna availablePinPads
     fileprivate var onAvailablePinPadsCallback: (([SelectablePinPad]) -> Void)?
 
@@ -261,9 +258,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     ) {
         let requestParams = CCParameters(transactionRequest: request)
 
-        chipDnaTransactionListener.detachFromChipDna()
+        // Create a fresh transaction listener for this transaction to prevent callback accumulation
+        let transactionListener = ChipDnaTransactionListener()
 
-        chipDnaTransactionListener.onFinished = { result in
+        transactionListener.onFinished = { result in
 
             let success = result[CCParamTransactionResult] == CCValueApproved
             let receiptData = ChipDnaMobileSerializer.deserializeReceiptData(
@@ -298,11 +296,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 transactionId: result[CCParamTransactionId] ?? ""
             ) { ccExpiration in
                 transactionResult.cardExpiration = ccExpiration
+                // Clean up this transaction listener once we're done
+                transactionListener.detachFromChipDna()
                 completion(transactionResult)
             }
         }
 
-        chipDnaTransactionListener.bindToChipDna(
+        transactionListener.bindToChipDna(
             signatureProvider: signatureProvider,
             transactionUpdateDelegate: transactionUpdateDelegate,
             userNotificationDelegate: userNotificationDelegate

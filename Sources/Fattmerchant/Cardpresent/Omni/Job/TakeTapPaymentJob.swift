@@ -49,7 +49,6 @@ actor TakeTapPaymentJob: Job {
         }
 
         do {
-            // Hop on actor and copy any actor-isolated state you need into locals
             let currentRequest = self.request
             let currentSignatureProvider = self.signatureProvider
             let currentTransactionUpdateDelegate = self.transactionUpdateDelegate
@@ -57,7 +56,6 @@ actor TakeTapPaymentJob: Job {
 
             var invoice = try await getOrCreateInvoice(id: currentRequest.invoiceId)
 
-            // Perform transaction with timeout and single-shot guard
             result = try await performWithTimeout(timeout: performTimeout) { resume in
                 driver.performTransaction(
                     with: currentRequest,
@@ -384,9 +382,6 @@ actor TakeTapPaymentJob: Job {
         transaction.response = gatewayResponseJson
         transaction.token = result.externalId
         transaction.message = result.message
-
-        transaction.isRefundable = false
-        transaction.isVoidable = true
 
         if request.preauth {
             transaction.type = .preAuth
