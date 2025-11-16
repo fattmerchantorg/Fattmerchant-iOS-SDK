@@ -11,7 +11,6 @@ let package = Package(
         .target(
             name: "Fattmerchant",
             dependencies: [
-                .target(name: "CloudCommerce"),
                 .target(name: "IDTechResources"),
                 .target(name: "ChipDnaMobile"),
                 .target(name: "IDTech"),
@@ -59,6 +58,5 @@ let package = Package(
         ),
         .binaryTarget(name: "BBDeviceBT", path: "Vendor/ChipDnaMobileKit/Binaries/BBDevice-BT-3.27.0.xcframework"),
         .binaryTarget(name: "BBDeviceOTA", path: "Vendor/ChipDnaMobileKit/Binaries/BBDeviceOTA-1.6.13.xcframework"),
-        .binaryTarget(name: "CloudCommerce", path: "Vendor/ChipDnaMobileKit/Binaries/CloudCommerce.xcframework")
     ]
 )
