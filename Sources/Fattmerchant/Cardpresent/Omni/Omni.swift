@@ -183,6 +183,7 @@ public class Omni: NSObject {
     )
     public func initialize(
         params: InitParams,
+        test: Bool = false,
         completion: @Sendable @escaping () -> Void,
         error: @escaping (OmniException) -> Void
     ) {
@@ -194,7 +195,7 @@ public class Omni: NSObject {
             applicationId: appId,
             ephemeralToken: apiKey,
         )
-        self.initialize(args: args, completion: completion, error: error)
+        self.initialize(args: args, test: test, completion: completion, error: error)
     }
 
     /// Creates a `PaymentMethod` out of a `BankAccount` object for reuse with Stax Pay.
