@@ -51,6 +51,10 @@ final class StaxHttpClient: Sendable {
       throw StaxNetworkError.invalidResponse
     }
     
+    #if DEBUG
+    logResponse(data: data, response: httpResponse, for: req)
+    #endif
+    
     guard (200...299).contains(httpResponse.statusCode) else {
       throw StaxNetworkError.httpError(httpResponse.statusCode)
     }
@@ -83,6 +87,13 @@ final class StaxHttpClient: Sendable {
           }
 
           guard (200...299).contains(httpResponse.statusCode) else {
+            #if DEBUG
+            if let data = data {
+              self.logResponse(data: data, response: httpResponse, for: req)
+            } else {
+              self.logResponse(data: Data(), response: httpResponse, for: req)
+            }
+            #endif
             continuation.resume(throwing: StaxNetworkError.httpError(httpResponse.statusCode))
             return
           }
@@ -91,6 +102,10 @@ final class StaxHttpClient: Sendable {
             continuation.resume(throwing: StaxNetworkError.invalidResponse)
             return
           }
+
+          #if DEBUG
+          self.logResponse(data: data, response: httpResponse, for: req)
+          #endif
 
           do {
             let decoded = try self.decoder.decode(T.self, from: data)
@@ -131,5 +146,37 @@ final class StaxHttpClient: Sendable {
     }
 
     return urlRequest
+  }
+}
+
+// MARK: - Debug logging
+private extension StaxHttpClient {
+  func logResponse(data: Data, response: HTTPURLResponse, for request: URLRequest) {
+    let urlString = request.url?.absoluteString ?? "<nil>"
+    let method = request.httpMethod ?? "GET"
+    let status = response.statusCode
+    let headers = response.allHeaderFields
+
+    var bodyString: String = ""
+    if data.isEmpty {
+      bodyString = "<empty body>"
+    } else if
+      let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+      let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted]),
+      let prettyString = String(data: prettyData, encoding: .utf8) {
+      bodyString = prettyString
+    } else if let utf8 = String(data: data, encoding: .utf8) {
+      bodyString = utf8
+    } else {
+      bodyString = "<\(data.count) bytes binary>"
+    }
+
+    print("""
+    [StaxHttpClient] \(method) \(urlString)
+    Status: \(status)
+    Response Headers: \(headers)
+    Response Body:
+    \(bodyString)
+    """)
   }
 }

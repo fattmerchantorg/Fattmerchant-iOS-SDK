@@ -95,34 +95,7 @@ actor TakeTapPaymentJob: Job {
                 )
             }
 
-            // If the transaction is a pre-auth, then we don't need to capture it
-            if currentRequest.preauth {
-                return JobResult.success(transaction)
-            }
-
-            // Capture with timeout and single-shot guard
-            let isSuccessful: Bool = try await performWithTimeout(timeout: captureTimeout) { resume in
-                driver.capture(transaction) { ok in
-                    resume(.success(ok))
-                }
-            }
-
-            if isSuccessful {
-                return JobResult.success(transaction)
-            }
-
-            // We couldn't capture the transaction. So mark it failed on Stax.
-            var failed = transaction
-            failed.success = false
-            failed.message = "Error capturing the tap payment transaction"
-
-            let request = StaxApiRequest<StaxTransaction>(
-                path: "/transaction",
-                method: .put,
-                body: failed
-            )
-            let _ = try await client.perform(request)
-            throw TakeTapPaymentException.couldNotCaptureTransaction
+            return JobResult.success(transaction)
         } catch {
             // Void the transaction (best-effort) and mark the JobResult as a failure
             if let result = result {
@@ -326,48 +299,37 @@ actor TakeTapPaymentJob: Job {
     ) async throws -> StaxTransaction {
 
         guard let paymentMethodId = paymentMethod.id else {
-            throw TakeTapPaymentException.couldNotUpdateInvoice(
-                detail: "Payment Method ID is required"
-            )
+          throw TakeMobileReaderPaymentException.couldNotUpdateInvoice(detail: "Payment Method ID is required")
         }
 
         guard let lastFour = paymentMethod.cardLastFour else {
-            throw TakeTapPaymentException.couldNotCreatePaymentMethod(
-                detail: "Could not retrieve masked pan"
-            )
+          throw TakeMobileReaderPaymentException.couldNotCreatePaymentMethod(detail: "Could not retrieve masked pan")
         }
-
+        
         guard let customerId = customer.id else {
-            throw TakeTapPaymentException.couldNotCreateTransaction(
-                detail: "Customer id is required"
-            )
+          throw TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: "Customer id is required")
         }
 
         guard let invoiceId = invoice.id else {
-            throw TakeTapPaymentException.couldNotCreateTransaction(
-                detail: "Invoice id is required"
-            )
+          throw TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: "Invoice id is required")
         }
-
+        
         guard let result = result else {
-            throw TakeTapPaymentException.couldNotCreateTransaction(
-                detail: "No TransactionResult returned"
-            )
+          throw TakeMobileReaderPaymentException.couldNotCreateTransaction(detail: "No TransactionResult returned")
         }
 
         var gatewayResponseJson: JSONCodable = JSONCodable.null
-        if let authCode = result.authCode, result.source.lowercased() == "tap" {
-            let gatewayResponse = [
-                "gateway_specific_response_fields": [
-                    "tap": [
-                        "authcode": authCode
-                    ]
-                ]
+        if let authCode = result.authCode, result.source.lowercased() == "nmi" {
+          let gatewayResponse = [
+            "gateway_specific_response_fields": [
+              "nmi": [
+                "authcode": authCode
+              ]
             ]
-            gatewayResponseJson =
-                (try? JSONCodable.encode(gatewayResponse)) ?? JSONCodable.null
+          ]
+          gatewayResponseJson = (try? JSONCodable.encode(gatewayResponse)) ?? JSONCodable.null
         }
-
+        
         var transaction = StaxTransaction()
         transaction.paymentMethodId = paymentMethodId
         transaction.total = request.amount.dollars()
@@ -376,25 +338,29 @@ actor TakeTapPaymentJob: Job {
         transaction.meta = result.createTransactionMeta()
         transaction.type = .charge
         transaction.method = "card"
-        transaction.source = "iOS|CPSDK|TAP|\(result.source)"
+        transaction.source = "iOS|CPSDK|\(result.source)"
+        transaction.channel = "ios"
         transaction.customerId = customerId
         transaction.invoiceId = invoiceId
         transaction.response = gatewayResponseJson
         transaction.token = result.externalId
         transaction.message = result.message
 
-        if request.preauth {
-            transaction.type = .preAuth
-            transaction.preAuth = true
-            transaction.isCaptured = 0
-            transaction.isVoidable = true
+        // DEBUG: Pretty-print the JSON body we are about to send
+        do {
+          let encoder = JSONEncoder()
+          encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+          // Use a stable date format if any dates are included (not expected for create payload)
+          encoder.dateEncodingStrategy = .iso8601
+          let data = try encoder.encode(transaction)
+          if let jsonString = String(data: data, encoding: .utf8) {
+            print("TakeTapPaymentJob.createTransaction JSON body:\n\(jsonString)")
+          }
+        } catch {
+          print("TakeTapPaymentJob.createTransaction JSON encoding failed: \(error)")
         }
 
-        let request = StaxApiRequest<StaxTransaction>(
-            path: "/transaction",
-            method: .post,
-            body: transaction
-        )
+        let request = StaxApiRequest<StaxTransaction>(path: "/transaction", method: .post, body: transaction)
         return try await client.perform(request)
     }
 }
