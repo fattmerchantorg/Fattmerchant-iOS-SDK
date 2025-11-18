@@ -10,10 +10,7 @@ actor ConnectToTapJob: Job {
     func start() async -> JobResult<Bool> {
         var driver = TapPaymentDriverRepository.shared.all().first
 
-        DispatchQueue.main.async {
-            driver.tapConnectionUpdateDelegate = self.tapConnectionUpdateDelegate
-        }
-        
+        driver?.tapConnectionStatusDelegate = connectionStatusDelegate
         var connectTapException = ConnectTapException.couldNotConnectToTap(detail: "")
         let connected: Bool = await withCheckedContinuation {
             continuation in
