@@ -68,6 +68,12 @@ In order to build and run with the Cardpresent functionality, you must include t
 
 * **NSBluetoothAlwaysUsageDescription**: Provide a value here to let your users know why Bluetooth access is required
 
+## IDTech Device Support
+
+If you plan to use IDTech mobile readers (VP3350), you **must** manually add the `IDTech.bundle` to your app's bundle resources. See [IDTECH_SETUP.md](IDTECH_SETUP.md) for detailed instructions.
+
+> ⚠️ **Important**: Failing to add the bundle will result in `IdTechBundleRequired` errors when connecting to IDTech devices.
+
 ## Initialize
 
 Create an instance of `InitParams`
