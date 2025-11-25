@@ -11,7 +11,6 @@ let package = Package(
         .target(
             name: "Fattmerchant",
             dependencies: [
-                .target(name: "IDTechResources"),
                 .target(name: "ChipDnaMobile"),
                 .target(name: "IDTech"),
                 .target(name: "BBDeviceBT"),
@@ -19,6 +18,9 @@ let package = Package(
             ],
             path: "Sources/Fattmerchant",
             exclude: ["Info.plist"],
+            resources: [
+                .copy("../IDTechResources/IDTech.bundle")
+            ],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("include"),
@@ -41,12 +43,6 @@ let package = Package(
                 .linkedLibrary("z")
             ],
             
-        ),
-        .target(
-            name: "IDTechResources",
-            path: "Sources/IDTechResources",
-            sources: ["Dummy.swift"],
-            resources: [.copy("IDTech.bundle")]
         ),
         .binaryTarget(
             name: "ChipDnaMobile",

@@ -338,7 +338,7 @@ actor TakeTapPaymentJob: Job {
         transaction.meta = result.createTransactionMeta()
         transaction.type = .charge
         transaction.method = "card"
-        transaction.source = "iOS|CPSDK|\(result.source)"
+        transaction.source = "iOS|CPSDK|\(result.source)|tap_to_pay"
         transaction.channel = "ios"
         transaction.customerId = customerId
         transaction.invoiceId = invoiceId
