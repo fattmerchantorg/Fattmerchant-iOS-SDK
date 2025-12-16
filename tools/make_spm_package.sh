@@ -22,12 +22,12 @@ Capabilities
 • Build ChipDnaMobile.xcframework from static .a inputs (arm64 + optional x86_64).
 • Generate headers/modulemap (directory umbrella) for ChipDnaMobile.
 • Rewrap vendor IDTech.framework → IDTechStatic.xcframework (no headers/modulemap).
-• Copy CloudCommerce & BBPOS .xcframeworks verbatim as binary targets.
+• Copy BBPOS .xcframeworks verbatim as binary targets (CloudCommerce excluded).
 • Package IDTech.bundle as a Swift target resource (IDTechResources).
 • Emit Package.swift with targets:
-    - ChipDnaMobileKit (wrapper; re-exports ChipDnaMobile, links IDTechStatic, BBPOS, CloudCommerce)
+    - ChipDnaMobileKit (wrapper; re-exports ChipDnaMobile, links IDTechStatic, BBPOS)
     - IDTechResources (resources)
-    - Binary targets: ChipDnaMobile, IDTechStatic, CloudCommerce, BBDeviceBT, BBDeviceOTA
+    - Binary targets: ChipDnaMobile, IDTechStatic, BBDeviceBT, BBDeviceOTA
 • Optional: install/mirror the generated package into a vendor folder (e.g. Vendor/ChipDnaMobileKit).
 • Optional: zip + compute checksum for ChipDnaMobile.xcframework.
 • Doctor mode: validate environment, inputs, outputs, and common pitfalls.
@@ -237,15 +237,16 @@ if [[ -d "$IDTECH_XCF" ]]; then
   ok "Built $IDTECH_STATIC_XCF"
 fi
 
-# ---------- vendor xcframeworks (CloudCommerce + BBPOS). DO NOT copy original IDTech.xcframework ----------
+# ---------- vendor xcframeworks (BBPOS only - CloudCommerce excluded). DO NOT copy original IDTech.xcframework ----------
 VENDOR_DEPS=""
 VENDOR_BIN_ENTRIES=""
 
-if [[ -d "$ROOT_ABS/CloudCommerce.xcframework" ]]; then
-  rsync -a "$ROOT_ABS/CloudCommerce.xcframework" "$BIN_DIR/"
-  VENDOR_DEPS+=$'\n                .target(name: "CloudCommerce"),'
-  VENDOR_BIN_ENTRIES+=$'\n        .binaryTarget(name: "CloudCommerce", path: "Binaries/CloudCommerce.xcframework"),'
-fi
+# CloudCommerce is excluded from SPM package
+# if [[ -d "$ROOT_ABS/CloudCommerce.xcframework" ]]; then
+#   rsync -a "$ROOT_ABS/CloudCommerce.xcframework" "$BIN_DIR/"
+#   VENDOR_DEPS+=$'\n                .target(name: "CloudCommerce"),'
+#   VENDOR_BIN_ENTRIES+=$'\n        .binaryTarget(name: "CloudCommerce", path: "Binaries/CloudCommerce.xcframework"),'
+# fi
 
 if [[ -d "$ROOT_ABS/BBPOSFrameworks" ]]; then
   for p in "$ROOT_ABS/BBPOSFrameworks"/*.xcframework; do [[ -e "$p" ]] && rsync -a "$p" "$BIN_DIR/"; done

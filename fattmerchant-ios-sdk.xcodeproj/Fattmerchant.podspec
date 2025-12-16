@@ -21,7 +21,6 @@ Pod::Spec.new do |s|
     'ChipDnaMobile/BBPOSFrameworks',
     'ChipDnaMobile/CardEaseXml.xcframework',
     'ChipDnaMobile/ChipDnaMobileAPI.xcframework',
-    'ChipDnaMobile/CloudCommerce.xcframework',
     'ChipDnaMobile/SqlCipher-4.6.1.xcframework'
   ]
 
@@ -31,7 +30,6 @@ Pod::Spec.new do |s|
     'ChipDnaMobile/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework',
     'ChipDnaMobile/CardEaseXml.xcframework',
     'ChipDnaMobile/ChipDnaMobileAPI.xcframework',
-    'ChipDnaMobile/CloudCommerce.xcframework',
     'ChipDnaMobile/IDTech.xcframework',
     'ChipDnaMobile/SqlCipher-4.6.1.xcframework'
   ]

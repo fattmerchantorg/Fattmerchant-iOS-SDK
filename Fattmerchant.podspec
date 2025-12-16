@@ -27,7 +27,6 @@ s.preserve_paths = [
 'ChipDnaMobileKit/Binaries/BBDevice-BT-3.27.0.xcframework',
 'ChipDnaMobileKit/Binaries/BBDeviceOTA-1.6.13.xcframework',
 'ChipDnaMobileKit/Binaries/ChipDnaMobile.xcframework',
-'ChipDnaMobileKit/Binaries/CloudCommerce.xcframework',
 'ChipDnaMobileKit/Binaries/IDTechStatic.xcframework',
 'ChipDnaMobileKit/Sources/IDTechResources/IDTech.bundle/IDTech.bundle'
 ]
@@ -37,7 +36,6 @@ s.vendored_frameworks = [
 'ChipDnaMobileKit/Binaries/BBDevice-BT-3.27.0.xcframework',
 'ChipDnaMobileKit/Binaries/BBDeviceOTA-1.6.13.xcframework',
 'ChipDnaMobileKit/Binaries/ChipDnaMobile.xcframework',
-'ChipDnaMobileKit/Binaries/CloudCommerce.xcframework',
 'ChipDnaMobileKit/Binaries/IDTechStatic.xcframework'
 ]
 
