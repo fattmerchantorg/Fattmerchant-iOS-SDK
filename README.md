@@ -108,8 +108,6 @@ git lfs install
 git lfs pull
 ```
 
-Alternatively, contact Stax support at **techteam@fattmerchant.com** to obtain the framework directly.
-
 ### How to Add CloudCommerce to Your Project
 
 #### Swift Package Manager
