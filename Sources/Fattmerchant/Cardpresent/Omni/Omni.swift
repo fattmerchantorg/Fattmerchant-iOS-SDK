@@ -763,10 +763,13 @@ public class Omni: NSObject {
     }
 
     /// Checks if the merchant has the 'taptombl' service active in NMI and activates it if not.
-    /// - Parameter completion: A `() -> Void` callback invoked upon successful service activation or if the service is already active.
-    /// - Parameter error: A `(OmniException?) -> Void` error handler invoked if the SDK encounters an error while checking or activating the service.
+    /// - Parameters:
+    ///   - merchantId: The NMI merchant ID to check and activate the service for.
+    ///   - completion: A `() -> Void` callback invoked upon successful service activation or if the service is already active.
+    ///   - error: A `(OmniException?) -> Void` error handler invoked if the SDK encounters an error while checking or activating the service.
     /// - Note: This method requires the NMI service to be properly initialized during SDK initialization.
     public func addTapServiceToNMI(
+        merchantId: String,
         completion: @escaping () -> Void,
         error: @escaping (OmniException?) -> Void
     ) {
@@ -776,10 +779,6 @@ public class Omni: NSObject {
         
         guard let nmiService = self.nmiService else {
             return error(OmniGeneralException.message("NMI service not initialized"))
-        }
-        
-        guard let merchantId = self.merchant?.id else {
-            return error(OmniGeneralException.message("Merchant ID not available"))
         }
         
         let job = AddTapServiceJob(
