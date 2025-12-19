@@ -32,6 +32,9 @@ public class Omni: NSObject {
     internal var staxPaymentMethodRepository: StaxPaymentMethodRepository!
     internal var staxCustomerRepository: StaxCustomerRepository!
     internal var merchant: Merchant?
+    
+    /// NMI Service for managing processors and value-added services
+    private var nmiService: NMIService?
 
     internal var accessoryHelper: AccessoryHelper?
 
@@ -147,6 +150,12 @@ public class Omni: NSObject {
                 error(OmniInitializeException.missingMobileReaderCredentials)
                 return
             }
+            
+            // Initialize NMI Service
+            self.nmiService = NMIService(
+                apiKey: nmiKeys.apiKey,
+                securityKey: nmiKeys.securityKey
+            )
 
             // Set the InitArgs based on environment type
             #if targetEnvironment(simulator)
@@ -751,6 +760,46 @@ public class Omni: NSObject {
             }
         }
 
+    }
+
+    /// Checks if the merchant has the 'taptombl' service active in NMI and activates it if not.
+    /// - Parameter completion: A `() -> Void` callback invoked upon successful service activation or if the service is already active.
+    /// - Parameter error: A `(OmniException?) -> Void` error handler invoked if the SDK encounters an error while checking or activating the service.
+    /// - Note: This method requires the NMI service to be properly initialized during SDK initialization.
+    public func addTapServiceToNMI(
+        completion: @escaping () -> Void,
+        error: @escaping (OmniException?) -> Void
+    ) {
+        guard isInitialized else {
+            return error(OmniGeneralException.uninitialized)
+        }
+        
+        guard let nmiService = self.nmiService else {
+            return error(OmniGeneralException.message("NMI service not initialized"))
+        }
+        
+        guard let merchantId = self.merchant?.id else {
+            return error(OmniGeneralException.message("Merchant ID not available"))
+        }
+        
+        let job = AddTapServiceJob(
+            nmiService: nmiService,
+            merchantId: merchantId
+        )
+        
+        Task {
+            let result = await job.start()
+            switch result {
+            case .success:
+                self.preferredQueue.async {
+                    completion()
+                }
+            case .failure(let fail):
+                self.preferredQueue.async {
+                    error(fail)
+                }
+            }
+        }
     }
 
     /// Attempts to disconnect from the provided `MobileReader`

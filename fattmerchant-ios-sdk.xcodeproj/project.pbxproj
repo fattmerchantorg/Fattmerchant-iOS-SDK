@@ -22,6 +22,26 @@
 		463257812EBBD1C70046F6D8 /* TapConnectionStatus+ChipDna.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4632577F2EBBD1BE0046F6D8 /* TapConnectionStatus+ChipDna.swift */; };
 		463257832EBBDC560046F6D8 /* ConnectTapException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257822EBBDC510046F6D8 /* ConnectTapException.swift */; };
 		463257842EBBDC560046F6D8 /* ConnectTapException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463257822EBBDC510046F6D8 /* ConnectTapException.swift */; };
+		464D12B32EF471AD007C0E91 /* NMIApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12A92EF471AD007C0E91 /* NMIApiRequest.swift */; };
+		464D12B42EF471AD007C0E91 /* NMIServiceExamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AF2EF471AD007C0E91 /* NMIServiceExamples.swift */; };
+		464D12B52EF471AD007C0E91 /* NMIHttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AB2EF471AD007C0E91 /* NMIHttpMethod.swift */; };
+		464D12B62EF471AD007C0E91 /* NMIHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AA2EF471AD007C0E91 /* NMIHttpClient.swift */; };
+		464D12B72EF471AD007C0E91 /* NMINetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AD2EF471AD007C0E91 /* NMINetworkError.swift */; };
+		464D12B82EF471AD007C0E91 /* NMIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AE2EF471AD007C0E91 /* NMIService.swift */; };
+		464D12B92EF471AD007C0E91 /* NMIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AC2EF471AD007C0E91 /* NMIModels.swift */; };
+		464D12BA2EF471AD007C0E91 /* PROCESSORS_REPORT.md in Resources */ = {isa = PBXBuildFile; fileRef = 464D12B02EF471AD007C0E91 /* PROCESSORS_REPORT.md */; };
+		464D12BB2EF471AD007C0E91 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 464D12B12EF471AD007C0E91 /* README.md */; };
+		464D12BC2EF471AD007C0E91 /* NMIApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12A92EF471AD007C0E91 /* NMIApiRequest.swift */; };
+		464D12BD2EF471AD007C0E91 /* NMIServiceExamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AF2EF471AD007C0E91 /* NMIServiceExamples.swift */; };
+		464D12BE2EF471AD007C0E91 /* NMIHttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AB2EF471AD007C0E91 /* NMIHttpMethod.swift */; };
+		464D12BF2EF471AD007C0E91 /* NMIHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AA2EF471AD007C0E91 /* NMIHttpClient.swift */; };
+		464D12C02EF471AD007C0E91 /* NMINetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AD2EF471AD007C0E91 /* NMINetworkError.swift */; };
+		464D12C12EF471AD007C0E91 /* NMIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AE2EF471AD007C0E91 /* NMIService.swift */; };
+		464D12C22EF471AD007C0E91 /* NMIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12AC2EF471AD007C0E91 /* NMIModels.swift */; };
+		464D12C32EF471AD007C0E91 /* PROCESSORS_REPORT.md in Resources */ = {isa = PBXBuildFile; fileRef = 464D12B02EF471AD007C0E91 /* PROCESSORS_REPORT.md */; };
+		464D12C42EF471AD007C0E91 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 464D12B12EF471AD007C0E91 /* README.md */; };
+		464D12C62EF471D7007C0E91 /* AddTapServiceJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12C52EF471D7007C0E91 /* AddTapServiceJob.swift */; };
+		464D12C72EF471D7007C0E91 /* AddTapServiceJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464D12C52EF471D7007C0E91 /* AddTapServiceJob.swift */; };
 		4650D1412EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */; };
 		4650D1422EAA9617009A5AF4 /* ConnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0C22EAA9617009A5AF4 /* ConnectMobileReaderException.swift */; };
 		4650D1432EAA9617009A5AF4 /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0F82EAA9617009A5AF4 /* Omni.swift */; };
@@ -325,8 +345,6 @@
 		469E99DC2EA7ABE200EA9175 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DB2EA7ABE200EA9175 /* SystemConfiguration.framework */; };
 		469E99DE2EA7ABEF00EA9175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 469E99DD2EA7ABEE00EA9175 /* Security.framework */; };
 		46B0F7452EB023230084A07A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B0F7442EB023230084A07A /* libc++.tbd */; };
-		46ED45002EBCF3BE0004555D /* CloudCommerce.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; };
-		46ED45012EBCF3BE0004555D /* CloudCommerce.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46ED45082EBD03180004555D /* BBDevice-BT-3.27.0.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FA2EBCF3B50004555D /* BBDevice-BT-3.27.0.xcframework */; };
 		46ED450A2EBD03180004555D /* BBDeviceOTA-1.6.13.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FB2EBCF3B50004555D /* BBDeviceOTA-1.6.13.xcframework */; };
 		46ED450C2EBD03180004555D /* ChipDnaMobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FC2EBCF3B50004555D /* ChipDnaMobile.xcframework */; };
@@ -335,6 +353,8 @@
 		46ED45142EBD03650004555D /* IDTech.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 46ED45122EBD03650004555D /* IDTech.bundle */; };
 		46ED45172EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */; };
 		46ED45182EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */; };
+		46F1999F2ECBD84F0077BABC /* CloudCommerce.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; };
+		46F199A02ECBD84F0077BABC /* CloudCommerce.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46F3E5402EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
 		46F3E5412EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
@@ -366,13 +386,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		46012D102EAFF73D004E5459 /* Embed Frameworks */ = {
+		46F1999D2ECBD7B80077BABC /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				46ED45012EBCF3BE0004555D /* CloudCommerce.xcframework in Embed Frameworks */,
+				46F199A02ECBD84F0077BABC /* CloudCommerce.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +407,16 @@
 		4632577C2EBBC0920046F6D8 /* TapConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapConnectionStatus.swift; sourceTree = "<group>"; };
 		4632577F2EBBD1BE0046F6D8 /* TapConnectionStatus+ChipDna.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TapConnectionStatus+ChipDna.swift"; sourceTree = "<group>"; };
 		463257822EBBDC510046F6D8 /* ConnectTapException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTapException.swift; sourceTree = "<group>"; };
+		464D12A92EF471AD007C0E91 /* NMIApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMIApiRequest.swift; sourceTree = "<group>"; };
+		464D12AA2EF471AD007C0E91 /* NMIHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMIHttpClient.swift; sourceTree = "<group>"; };
+		464D12AB2EF471AD007C0E91 /* NMIHttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMIHttpMethod.swift; sourceTree = "<group>"; };
+		464D12AC2EF471AD007C0E91 /* NMIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMIModels.swift; sourceTree = "<group>"; };
+		464D12AD2EF471AD007C0E91 /* NMINetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMINetworkError.swift; sourceTree = "<group>"; };
+		464D12AE2EF471AD007C0E91 /* NMIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMIService.swift; sourceTree = "<group>"; };
+		464D12AF2EF471AD007C0E91 /* NMIServiceExamples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMIServiceExamples.swift; sourceTree = "<group>"; };
+		464D12B02EF471AD007C0E91 /* PROCESSORS_REPORT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PROCESSORS_REPORT.md; sourceTree = "<group>"; };
+		464D12B12EF471AD007C0E91 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		464D12C52EF471D7007C0E91 /* AddTapServiceJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTapServiceJob.swift; sourceTree = "<group>"; };
 		4650D0922EAA9617009A5AF4 /* InitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationArgs.swift; sourceTree = "<group>"; };
 		4650D0932EAA9617009A5AF4 /* MobileReaderConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderConnectionStatus.swift; sourceTree = "<group>"; };
 		4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileReaderDriverInitializationArgs.swift; sourceTree = "<group>"; };
@@ -595,9 +625,9 @@
 			files = (
 				46B0F7452EB023230084A07A /* libc++.tbd in Frameworks */,
 				46ED45082EBD03180004555D /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
+				46F1999F2ECBD84F0077BABC /* CloudCommerce.xcframework in Frameworks */,
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				46ED450C2EBD03180004555D /* ChipDnaMobile.xcframework in Frameworks */,
-				46ED45002EBCF3BE0004555D /* CloudCommerce.xcframework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
 				469E99DA2EA7ABBB00EA9175 /* MessageUI.framework in Frameworks */,
 				D7B7110623D588F800EF98DB /* AudioToolbox.framework in Frameworks */,
@@ -624,6 +654,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		464D12B22EF471AD007C0E91 /* NMI */ = {
+			isa = PBXGroup;
+			children = (
+				464D12A92EF471AD007C0E91 /* NMIApiRequest.swift */,
+				464D12AA2EF471AD007C0E91 /* NMIHttpClient.swift */,
+				464D12AB2EF471AD007C0E91 /* NMIHttpMethod.swift */,
+				464D12AC2EF471AD007C0E91 /* NMIModels.swift */,
+				464D12AD2EF471AD007C0E91 /* NMINetworkError.swift */,
+				464D12AE2EF471AD007C0E91 /* NMIService.swift */,
+				464D12AF2EF471AD007C0E91 /* NMIServiceExamples.swift */,
+				464D12B02EF471AD007C0E91 /* PROCESSORS_REPORT.md */,
+				464D12B12EF471AD007C0E91 /* README.md */,
+			);
+			path = NMI;
+			sourceTree = "<group>";
+		};
 		4650D09D2EAA9617009A5AF4 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -755,6 +801,7 @@
 		4650D0DF2EAA9617009A5AF4 /* Job */ = {
 			isa = PBXGroup;
 			children = (
+				464D12C52EF471D7007C0E91 /* AddTapServiceJob.swift */,
 				463257732EBB9E3A0046F6D8 /* ConnectToTapDeviceJob.swift */,
 				4650D0D22EAA9617009A5AF4 /* CancelCurrentTransactionJob.swift */,
 				4650D0D32EAA9617009A5AF4 /* CapturePreAuthTransactionJob.swift */,
@@ -935,6 +982,7 @@
 		4650D1262EAA9617009A5AF4 /* Cardpresent */ = {
 			isa = PBXGroup;
 			children = (
+				464D12B22EF471AD007C0E91 /* NMI */,
 				4650D0FA2EAA9617009A5AF4 /* Omni */,
 				4650D1252EAA9617009A5AF4 /* Stax */,
 			);
@@ -1178,7 +1226,7 @@
 				591C208B206EB12F00C848DA /* Sources */,
 				591C208C206EB12F00C848DA /* Frameworks */,
 				591C208E206EB12F00C848DA /* Resources */,
-				46012D102EAFF73D004E5459 /* Embed Frameworks */,
+				46F1999D2ECBD7B80077BABC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1254,6 +1302,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				46ED45142EBD03650004555D /* IDTech.bundle in Resources */,
+				464D12BA2EF471AD007C0E91 /* PROCESSORS_REPORT.md in Resources */,
+				464D12BB2EF471AD007C0E91 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1262,6 +1312,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4650D1D42EAA9617009A5AF4 /* Info.plist in Resources */,
+				464D12C32EF471AD007C0E91 /* PROCESSORS_REPORT.md in Resources */,
+				464D12C42EF471AD007C0E91 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1360,6 +1412,13 @@
 				4650D2262EAA9617009A5AF4 /* OmniInitializeException.swift in Sources */,
 				4650D2272EAA9617009A5AF4 /* CreateCreditCardException.swift in Sources */,
 				4650D2282EAA9617009A5AF4 /* Endpoints.swift in Sources */,
+				464D12B32EF471AD007C0E91 /* NMIApiRequest.swift in Sources */,
+				464D12B42EF471AD007C0E91 /* NMIServiceExamples.swift in Sources */,
+				464D12B52EF471AD007C0E91 /* NMIHttpMethod.swift in Sources */,
+				464D12B62EF471AD007C0E91 /* NMIHttpClient.swift in Sources */,
+				464D12B72EF471AD007C0E91 /* NMINetworkError.swift in Sources */,
+				464D12B82EF471AD007C0E91 /* NMIService.swift in Sources */,
+				464D12B92EF471AD007C0E91 /* NMIModels.swift in Sources */,
 				4650D2292EAA9617009A5AF4 /* TransactionRepository.swift in Sources */,
 				4650D22A2EAA9617009A5AF4 /* ModelRepository+EndpointDefaultImpl.swift in Sources */,
 				4650D22B2EAA9617009A5AF4 /* GetConnectedMobileReaderJob.swift in Sources */,
@@ -1400,6 +1459,7 @@
 				4650D24C2EAA9617009A5AF4 /* JobResult.swift in Sources */,
 				4650D24D2EAA9617009A5AF4 /* InitializeDriversException.swift in Sources */,
 				4650D24E2EAA9617009A5AF4 /* StaxTransaction.swift in Sources */,
+				464D12C72EF471D7007C0E91 /* AddTapServiceJob.swift in Sources */,
 				4650D24F2EAA9617009A5AF4 /* CCParameters+TransactionRequest.swift in Sources */,
 				4650D2502EAA9617009A5AF4 /* MockDriver.swift in Sources */,
 				4650D2512EAA9617009A5AF4 /* Invoice.swift in Sources */,
@@ -1559,6 +1619,13 @@
 				4650D1A52EAA9617009A5AF4 /* ModelRepository+DefaultImpl.swift in Sources */,
 				4650D1A62EAA9617009A5AF4 /* DisconnectMobileReaderException.swift in Sources */,
 				4632577D2EBBC0970046F6D8 /* TapConnectionStatus.swift in Sources */,
+				464D12BC2EF471AD007C0E91 /* NMIApiRequest.swift in Sources */,
+				464D12BD2EF471AD007C0E91 /* NMIServiceExamples.swift in Sources */,
+				464D12BE2EF471AD007C0E91 /* NMIHttpMethod.swift in Sources */,
+				464D12BF2EF471AD007C0E91 /* NMIHttpClient.swift in Sources */,
+				464D12C02EF471AD007C0E91 /* NMINetworkError.swift in Sources */,
+				464D12C12EF471AD007C0E91 /* NMIService.swift in Sources */,
+				464D12C22EF471AD007C0E91 /* NMIModels.swift in Sources */,
 				4650D1A72EAA9617009A5AF4 /* TokenizePaymentMethod.swift in Sources */,
 				4650D1A82EAA9617009A5AF4 /* TransactionRequest+StaxInvoice.swift in Sources */,
 				4650D1A92EAA9617009A5AF4 /* StaxTaxRate.swift in Sources */,
@@ -1605,6 +1672,7 @@
 				4650D1CF2EAA9617009A5AF4 /* ChipDnaConnectionTypes.swift in Sources */,
 				463257802EBBD1C70046F6D8 /* TapConnectionStatus+ChipDna.swift in Sources */,
 				4650D1D02EAA9617009A5AF4 /* SearchForMobileReadersJob.swift in Sources */,
+				464D12C62EF471D7007C0E91 /* AddTapServiceJob.swift in Sources */,
 				4650D1D12EAA9617009A5AF4 /* StaxBankHolderType.swift in Sources */,
 				4650D1D22EAA9617009A5AF4 /* SelectablePinPad.swift in Sources */,
 				4650D1D32EAA9617009A5AF4 /* Amount.swift in Sources */,

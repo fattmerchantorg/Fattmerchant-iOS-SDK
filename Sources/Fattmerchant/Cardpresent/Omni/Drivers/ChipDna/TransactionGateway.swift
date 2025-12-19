@@ -2,6 +2,9 @@ import Foundation
 
 /// Communicates with Transaction Gateway via the Direct Post API
 /// https://fattmerchant.transactiongateway.com/merchants/resources/integration/integration_portal.php
+///
+/// NOTE: This class is being deprecated in favor of NMIService.
+/// For new code, please use NMIService instead.
 internal class TransactionGateway {
 
   /// The base url of Transaction Gateway
@@ -12,6 +15,9 @@ internal class TransactionGateway {
   ///   - transactionId: the id of the Transaction
   ///   - securityKey: authentication for Transaction Gateway
   ///   - completion: a block to run once finished. Gets the cc expiration, if found
+  ///
+  /// - Deprecated: Use `NMIService.getTransactionCcExpiration(transactionId:)` instead.
+  @available(*, deprecated, message: "Use NMIService.getTransactionCcExpiration(transactionId:) instead")
   static func getTransactionCcExpiration(securityKey: String, transactionId: String, completion: @escaping (String?) -> Void) {
     let session = URLSession(configuration: URLSessionConfiguration.default)
     let url = URL(string: "\(baseUrl)?security_key=\(securityKey)&transaction_id=\(transactionId)")!
