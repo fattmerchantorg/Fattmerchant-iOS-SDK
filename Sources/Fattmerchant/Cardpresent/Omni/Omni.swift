@@ -151,13 +151,11 @@ public class Omni: NSObject {
                 return
             }
             
-            // Initialize NMI Service if API key is available
-            if let nmiApiKey = nmiKeys.apiKey {
-                self.nmiService = NMIService(
-                    apiKey: nmiApiKey,
-                    securityKey: nmiKeys.securityKey
-                )
-            }
+            // Initialize NMI Service (securityKey is used as the API key per NMI documentation)
+            self.nmiService = NMIService(
+                apiKey: nmiKeys.securityKey,
+                securityKey: nmiKeys.securityKey
+            )
 
             // Set the InitArgs based on environment type
             #if targetEnvironment(simulator)
