@@ -1,53 +1,64 @@
 Pod::Spec.new do |s|
-  s.name = 'Fattmerchant'
-  s.version = '2.5.0'
-  s.license = {
-    :type => 'Apache License, Version 2.0',
-    :text => "© #{ Date.today.year } Fattmerchant, inc"
-  }
-  s.summary = 'Fattmerchant iOS SDK'
-  s.homepage = 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK'
-  s.authors = {
-    'Fattmerchant' => 'techteam@fattmerchant.com'
-  }
-  s.source = {
-    :git => 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git',
-    :branch => "release/#{s.version}",
-    :tag => s.version.to_s
-  }
-  s.ios.deployment_target = '13.0'
-  s.swift_versions = ['5']  
-  s.source_files = "fattmerchant-ios-sdk/**/*.{h,m,swift}"
-  s.public_header_files = "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/*.h"
-  s.preserve_paths = 
-    "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDTech.xcframework",
-    "fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks"
-  s.library = 'sqlite3'
-  s.frameworks = 
-    'UIKit',
-    'AVFoundation',
-    'MediaPlayer',
-    'CoreAudio',
-    'ExternalAccessory',
-    'CoreBluetooth',
-    'AudioToolbox',
-    'ExternalAccessory'
-  s.vendored_libraries = 
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libChipDnaMobileAPI.a',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/libCardEaseXml.a',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/SQLCipher/libsqlcipher-4.5.0.a'
-  s.vendored_frameworks =
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/IDTech.xcframework',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDevice-BT-3.27.0.xcframework',
-    'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework'
-  s.pod_target_xcconfig = {
-    'ENABLE_BITCODE' => 'NO',
-    'OTHER_LDFLAGS' => '-lz',
-    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
-    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
-  }
-  s.user_target_xcconfig = {
-    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
-    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
-  }
+s.name         = 'Fattmerchant'
+s.version      = '2.6.0'
+s.summary      = 'Fattmerchant iOS SDK'
+s.homepage     = 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK'
+s.license      = { :type => 'Apache License, Version 2.0', :text => "© #{ Date.today.year } Fattmerchant, inc" }
+s.authors      = { 'Fattmerchant' => 'techteam@fattmerchant.com' }
+
+# Source
+s.source       = { :git => 'https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git', :branch => "release/#{s.version}", :tag => s.version.to_s }
+
+# Platforms
+s.ios.deployment_target = '15.0'
+s.swift_versions = ['5.7']
+
+# Sources (matches SPM target path)
+s.source_files = 'Sources/Fattmerchant/**/*.{h,m,swift}'
+s.public_header_files = 'Sources/Fattmerchant/include/**/*.h'
+
+# Resources required at runtime (IDTech bundle)
+s.resources = [
+'ChipDnaMobileKit/Sources/IDTechResources/IDTech.bundle/IDTech.bundle'
+]
+
+# Preserve vendored content
+s.preserve_paths = [
+'ChipDnaMobileKit/Binaries/BBDevice-BT-3.27.0.xcframework',
+'ChipDnaMobileKit/Binaries/BBDeviceOTA-1.6.13.xcframework',
+'ChipDnaMobileKit/Binaries/ChipDnaMobile.xcframework',
+'ChipDnaMobileKit/Binaries/IDTechStatic.xcframework',
+'ChipDnaMobileKit/Sources/IDTechResources/IDTech.bundle/IDTech.bundle'
+]
+
+# Vendored frameworks to mirror SPM binary targets
+s.vendored_frameworks = [
+'ChipDnaMobileKit/Binaries/BBDevice-BT-3.27.0.xcframework',
+'ChipDnaMobileKit/Binaries/BBDeviceOTA-1.6.13.xcframework',
+'ChipDnaMobileKit/Binaries/ChipDnaMobile.xcframework',
+'ChipDnaMobileKit/Binaries/IDTechStatic.xcframework'
+]
+
+# System frameworks and libraries to mirror SPM linkerSettings
+s.frameworks = [
+'Foundation',
+'UIKit',
+'AVFoundation',
+'ExternalAccessory',
+'CoreBluetooth',
+'CoreAudio',
+'AudioToolbox',
+'MediaPlayer',
+'CoreLocation',
+'CoreData',
+'MessageUI',
+'SystemConfiguration',
+'Security'
+]
+s.libraries = 'z'
+
+# Build settings
+s.pod_target_xcconfig = {
+'OTHER_LDFLAGS' => '-Wl,-force_load'
+}
 end

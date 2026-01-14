@@ -1,0 +1,300 @@
+0000	No error, beginning task
+FF01	no response from reader
+FF02	invalid response data
+FF03	time out for task or CMD
+FF04	wrong parameter
+FF05	SDK is doing MSR or ICC task
+FF06	SDK is doing PINPad task
+FF07	SDK is doing CTLS task
+FF08	SDK is doing Other task
+FF09	err response or data
+FF0A	no reader attached
+FF0B	mono audio is enabled
+FF0C	did connection
+FF0D	audio volume is too low
+FF0E	task or CMD be canceled
+FF0F	UF wrong string format
+FF10	UF file not found
+FF11	UF wrong file format
+FF12	Attempt to contact online host failed
+FF13	Attempt to perform RKI failed
+FF14	SDK is busy processing another CMD
+0300	Key Type(TDES) of Session Key is not same as the related Master Key.
+0400	Related Key was not loaded.
+0500	Key Same.
+0501	Key is all zero
+0502	TR-31 format error
+0702	PAN is Error Key.
+0705	No Internal MSR PAN (or Internal MSR PAN is erased timeout)
+0D00	This Key had been loaded.
+0E00	Base Time was loaded.
+0F00	Encryption Or Decryption Failed.
+1000	Battery Low Warning (It is High Priority Response while Battery is Low.)
+1800	Send “Cancel Command” after send “Get Encrypted PIN” &”Get Numeric “& “Get Amount”
+1900	Press “Cancel” key after send “Get Encrypted PIN” &”Get Numeric “& “Get Amount”
+30FF	Security Chip is not connect
+3000	Security Chip is deactivation & Device is In Removal Legally State.
+3101	Security Chip is activation &  Device is In Removal Legally State.
+5500	No Admin DUKPT Key.
+5501	Admin  DUKPT Key STOP.
+5502	Admin DUKPT Key KSN is Error.
+5503	Get Authentication Code1 Failed.
+5504	Validate Authentication Code Error.
+5505	Encrypt or Decrypt data failed.
+5506	Not Support the New Key Type.
+5507	New Key Index is Error.
+5508	Step Error.
+5509    KSN Error.
+550A	MAC Error.
+550B	Key Usage Error.
+550C	Mode Of Use Error.
+550F	Other Error.
+6000	Save or Config Failed / Or Read Config Error.
+6200	No Serial Number.
+6900	Invalid Command - Protocol is right, but task ID is invalid.
+6A01	Unsupported Command – Protocol and task ID are right, but command is invalid – In this State
+6A00	Unsupported Command - Protocol and task ID are right, but command is invalid.
+6B00	Unknown parameter in command - Protocol task ID and command are right, but parameter is invalid.
+6C00	Unknown parameter in command – Protocol task ID and command are right, but length is out of the requirement.
+7200	Device is suspend (MKSK suspend or press password suspend).
+7300	PIN DUKPT is STOP (21 bit 1).
+7400	Device is Busy.
+E100	Can not enter sleep mode
+E200	File has existed
+E300	File has not existed
+E313	IO line low -- Card error after session start
+E400	Open File Error
+E500	SmartCard Error
+E600	Get MSR Card data is error
+E700	Command time out
+E800	File read or write is error
+E900	Active 1850 error!
+EA00	Load bootloader error
+EF00	Protocol Error- STX or ETX or check error.
+EB00	Picture is not exist
+2C02	No Microprocessor ICC seated
+2C06	no card seated to request ATR
+2D01	Card Not Supported,
+2D03	Card Not Supported, wants CRC
+690D	Command not supported on reader without ICC support
+8100	ICC error time out on power-up
+8200	invalid TS character received - Wrong operation step
+8300	No Card Data
+8400	TriMagII no Response
+8500	pps confirmation error
+8600	Unsupported F, D, or combination of F and D
+8700	protocol not supported EMV TD1 out of range
+8800	power not at proper level
+8900	ATR length too long
+8B01	EMV invalid TA1 byte value
+8B02	EMV TB1 required
+8B03	EMV Unsupported TB1 only 00 allowed
+8B04	EMV Card Error, invalid BWI or CWI
+8B06	EMV TB2 not allowed in ATR
+8B07	EMV TC2 out of range
+8B08	EMV TC2 out of range
+8B09	per EMV96 TA3 must be > 0xF
+8B10	ICC error on power-up
+8B11	EMV T=1 then TB3 required
+8B12	Card Error, invalid BWI or CWI
+8B13	Card Error, invalid BWI or CWI
+8B17	EMV TC1/TB3 conflict*
+8B20	EMV TD2 out of range must be T=1
+8C00	TCK error
+A304	connector has no voltage setting
+A305	ICC error on power-up invalid (SBLK(IFSD) exchange
+E301	ICC error after session start
+FF00	Request to go online
+FF01	EMV: Accept the offline transaction
+FF02	EMV: Decline the offline transaction
+FF03	EMV: Accept the online transaction
+FF04	EMV: Decline the online transaction
+FF05	EMV: Application may fallback to magstripe technology
+FF06	EMV: ICC detected tah the conditions of use are not satisfied
+FF07	EMV: ICC didn't accept transaction
+FF08	EMV: Transaction was cancelled
+FF09	EMV: Application was not selected by kernel or ICC format error or ICC missing data error
+FF0A	EMV: Transaction is terminated
+FF0B	EMV: Other EMV Error
+FFFF	NO RESPONSE
+F002	ICC communication timeout
+F003	ICC communication Error
+F00F	ICC Card Seated and Highest Priority, disable MSR work request
+F200	AID List / Application Data is not exist
+F201	Terminal Data is not exist
+F202	TLV format is error
+F203	AID List is full
+F204	Any CA Key is not exist
+F205	CA Key RID is not exist
+F206	CA Key Index it not exist
+F207	CA Key is full
+F208	CA Key Hash Value is Error
+F209	Transaction  format error
+F20A	The command will not be processing
+F20B	CRL is not exist
+F20C	CRL number  exceed max number
+F20D	Amount,Other Amount,Trasaction Type  are  missing
+F20E	The Identification of algorithm is mistake
+F20F	No Financial Card
+F210	In Encrypt Result state, TLV total Length is greater than Max Length
+1001	INVALID ARG
+1002	FILE_OPEN_FAILED
+1003	FILE OPERATION_FAILED
+
+2001	MEMORY_NOT_ENOUGH
+
+3002	SMARTCARD_FAIL
+3003	SMARTCARD_INIT_FAILED
+3004	FALLBACK_SITUATION
+3005	SMARTCARD_ABSENT
+3006	SMARTCARD_TIMEOUT
+
+5001	EMV_PARSING_TAGS_FAILED
+5002	EMV_DUPLICATE_CARD_DATA_ELEMENT
+5003	EMV_DATA_FORMAT_INCORRECT
+5004	EMV_NO_TERM_APP
+5005	EMV_NO_MATCHING_APP
+5006	EMV_MISSING_MANDATORY_OBJECT
+5007	EMV_APP_SELECTION_RETRY
+5008	EMV_GET_AMOUNT_ERROR
+5009	EMV_CARD_REJECTED
+5010	EMV_AIP_NOT_RECEIVED
+5011	EMV_AFL_NOT_RECEIVED
+5012	EMV_AFL_LEN_OUT_OF_RANGE
+5013	EMV_SFI_OUT_OF_RANGE
+5014	EMV_AFL_INCORRECT
+5015	EMV_EXP_DATE_INCORRECT
+5016	EMV_EFF_DATE_INCORRECT
+5017	EMV_ISS_COD_TBL_OUT_OF_RANGE
+5018	EMV_CRYPTOGRAM_TYPE_INCORRECT
+5019	EMV_PSE_NOT_SUPPORTED_BY_CARD
+5020	EMV_USER_SELECTED_LANGUAGE
+5021	EMV_SERVICE_NOT_ALLOWED
+5022	EMV_NO_TAG_FOUND
+5023	EMV_CARD_BLOCKED
+5024	EMV_LEN_INCORRECT
+5025	CARD_COM_ERROR
+5026	EMV_TSC_NOT_INCREASED
+5027	EMV_HASH_INCORRECT
+5028	EMV_NO_ARC
+5029	EMV_INVALID_ARC
+5030	EMV_NO_ONLINE_COMM
+5031	TRAN_TYPE_INCORRECT
+5032	EMV_APP_NO_SUPPORT
+5033	EMV_APP_NOT_SELECT
+5034	EMV_LANG_NOT_SELECT
+5035	EMV_NO_TERM_DATA
+
+6001	CVM_TYPE_UNKNOWN
+6002	CVM_AIP_NOT_SUPPORTED
+6003	CVM_TAG_8E_MISSING
+6004	CVM_TAG_8E_FORMAT_ERROR
+6005	CVM_CODE_IS_NOT_SUPPORTED
+6006	CVM_COND_CODE_IS_NOT_SUPPORTED
+6007	NO_MORE_CVM
+6008	PIN_BYPASSED_BEFORE
+
+7001	PK_BUFFER_SIZE_TOO_BIG
+7002	PK_FILE_WRITE_ERROR
+7003	PK_HASH_ERROR
+
+8001	NO_CARD_HOLDER_CONFIRMATION
+8002	GET_ONLINE_PIN
+
+D000	Data not exist
+D001	Data access error
+D100	RID not exist
+D101	RID existed
+D102	Index not exist
+D200	Maximum exceeded
+D201	Hash error
+D205	System Busy
+E100	Can not enter sleep mode.
+E200	File has existed.
+E300	File has not existed.
+E400	Open File Error.
+E500	SmartCard Error
+E600	Get MSR Card data is error.
+E700	Command time out .
+E800	File read or write is error.
+E900	Active 1850 error!
+EA00	Load bootloader error.
+EF00	Protocol Error- STX or ETX or check error.
+EB00	Picture is not exist.
+
+
+0008	err response or data
+0009	no reader attached
+000A	did connection
+000B	mono audio is enabled
+000C	audio volume is too low
+000D	task or CMD be canceled
+
+0E00	Authorization Accepted
+0E01	Unable to go online
+0E02	Technical Issue
+0E03	Declined
+0E04	Issuer Referral transaction
+
+0F00	Accept the online transaction
+0F01	Decline the online transaction
+0F02	Request to go online
+0F03	Transaction is terminated
+0F05	Application was not selected by kernel or ICC format error or ICC missing data error
+0F07	ICC didn't accept transaction
+0F0A	Application may fallback to magstripe technology
+0F0C	Transaction was cancelled
+0F0D	Timeout
+0F0F	Other EMV Error
+0F10	Accept the offline transaction
+0F11	Decline the offline transaction
+
+0F21	ICC detected tah the conditions of use are not satisfied
+0F22	No app were found on card matching terminal configuration
+0F23	Terminal file does not exist
+0F24	CAPK file does not exist
+0F25	CRL Entry does not exist
+0FFE	Return code when blocking is disabled
+0FFF	Command unavailable
+F002	ICC communication timeout
+F003	ICC communication Error
+F005	ICC Encrypted C-APDU Data Structure Length Error Or Format Error.
+F00F	ICC Card Seated and Highest Priority, disable MSR work request
+
+6200	No Serial Number
+6900	Invalid Command
+5500	No Admin DUKPT Key
+5501	Admin DUKPT Key STOP
+5502	Admin DUKPT Key KSN is Error
+5503	Get Authentication Code1 Failed
+5504	Validate Authentication Code Error
+5505	Encrypt Or Decrypt data failed
+5506	Not Support the New Key Type
+5507	New Key Index is Error
+5508	Step Error
+5509	Timed out
+550A	MAC checking error
+550B	Key Usage Error
+550C	Mode of Use Error
+550D	Algorithm Error
+550F	Other Error
+
+8001	Authorization: Cannot initialize RKI; no customer/key information found
+8101	Step 1: No key injection established
+8102	Step 1: Failed to encrypt challenge
+8103	Step 1: challenge length is incorrect
+8104	Step 1: Incorrect challenge data
+8105	Step 1: Response length incorrect
+8106	Step 1: Firmware responded NAK for Step 1
+8201	Step 2: Customer key id could not be found in the DB
+8202	Step 2: Key Slot does not exist
+8203	Step 2: Could not get the future KSI from the server
+8204	Step 2: Could not get TR31 data block
+8205	Step 2: TR31 block length is incorrect
+8206	Step 2: Incorrect challenge data
+8207	Step 2: Firmware responded NAK for Step 2
+8301	Step 3: No key injection record found
+8302	Step 3: Remote Key Injection failed (NAK)
+8303	Step 3: Incorrect response form
+8304	Step 3: Firmware responded NAK for Step 3
+
