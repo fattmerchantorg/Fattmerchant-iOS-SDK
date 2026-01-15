@@ -70,6 +70,21 @@ actor TakeTapPaymentJob: Job {
             guard let result = result else {
                 throw TakeTapPaymentException.couldNotCreateInvoice(detail: "No TransactionResult")
             }
+            
+            // If transaction was not successful (cancelled, declined, or error), 
+            // don't try to create backend records - return the transaction result as-is
+            guard result.success else {
+                // Create a StaxTransaction representing the failed/cancelled transaction
+                var failedTransaction = StaxTransaction()
+                failedTransaction.success = false
+                failedTransaction.message = result.message
+                failedTransaction.lastFour = result.maskedPan?.suffix(4).map(String.init)
+                failedTransaction.cardType = result.cardType
+                failedTransaction.total = request.amount.dollars()
+                failedTransaction.source = result.source
+                
+                return JobResult.success(failedTransaction)
+            }
 
             let customer = try await createCustomer(from: result)
             let paymentMethod = try await createPaymentMethod(

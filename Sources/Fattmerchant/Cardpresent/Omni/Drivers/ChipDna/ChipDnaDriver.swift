@@ -328,6 +328,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                     transactionResult.maskedPan = cardDetails[CCParamMaskedPan]
                 }
                 
+                // Get card type from card details if not already present
+                if transactionResult.cardType == nil {
+                    transactionResult.cardType = cardDetails[CCParamCardSchemeId]?.lowercased()
+                }
+                
                 // Get expiry date from card details if not already present
                 if let expiryDate = cardDetails[CCParamExpiryDate] {
                     // Convert YYMM format to MM/YY format

@@ -8,6 +8,12 @@ class ChipDnaTransactionListener: NSObject {
   /// Called when ChipDna returns card details
   var onCardDetailsReceived: ((CCParameters) -> Void)?
   
+  /// Called when ChipDna requires signature capture
+  var onSignatureCaptureReceived: ((CCParameters) -> Void)?
+  
+  /// Called when ChipDna finishes processing a receipt
+  var onProcessReceiptFinished: ((CCParameters) -> Void)?
+  
   /// Provides a signature
   var signatureProvider: SignatureProviding?
   
@@ -34,6 +40,8 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.addUserNotificationTarget(self, action: #selector(onUserNotification(parameters:)))
     ChipDnaMobile.addCardApplicationSelectionTarget(self, action: #selector(onApplicationSelection(parameters:)))
     ChipDnaMobile.addCardDetailsTarget(self, action: #selector(onCardDetails(parameters:)))
+    ChipDnaMobile.addSignatureCaptureTarget(self, action: #selector(onSignatureCapture(parameters:)))
+    ChipDnaMobile.addProcessReceiptFinishedTarget(self, action: #selector(onProcessReceiptFinished(parameters:)))
     self.userNotificationDelegate = userNotificationDelegate
     self.transactionUpdateDelegate = transactionUpdateDelegate
     self.signatureProvider = signatureProvider
@@ -51,6 +59,8 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.removeIdVerificationTarget(self)
     ChipDnaMobile.removeCardApplicationSelectionTarget(self)
     ChipDnaMobile.removeCardDetailsTarget(self)
+    ChipDnaMobile.removeSignatureCaptureTarget(self)
+    ChipDnaMobile.removeProcessReceiptFinishedTarget(self)
   }
   
   @objc fileprivate func onTransactionUpdate(parameters: CCParameters) {
@@ -123,5 +133,15 @@ class ChipDnaTransactionListener: NSObject {
   
   @objc fileprivate func onCardDetails(parameters: CCParameters) {
     onCardDetailsReceived?(parameters)
+  }
+  
+  @objc fileprivate func onSignatureCapture(parameters: CCParameters) {
+    // Signature capture event fired - contains receipt data for signature
+    onSignatureCaptureReceived?(parameters)
+  }
+  
+  @objc fileprivate func onProcessReceiptFinished(parameters: CCParameters) {
+    // Process receipt finished - contains result of processReceipt call
+    onProcessReceiptFinished?(parameters)
   }
 }
