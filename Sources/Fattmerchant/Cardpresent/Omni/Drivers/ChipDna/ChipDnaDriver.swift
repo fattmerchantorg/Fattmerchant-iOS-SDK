@@ -266,6 +266,29 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         transactionListener.onFinished = { result in
 
+            // For Tap to Pay: check if transaction was terminated before card details
+            // If only errors are present (no transaction result), this is an early termination
+            let hasTransactionResult = result[CCParamTransactionResult] != nil
+            let hasErrors = result[CCParamErrors] != nil && !(result[CCParamErrors]?.isEmpty ?? true)
+            
+            // Early termination case: transaction finished before card details
+            if !hasTransactionResult && hasErrors {
+                var transactionResult = TransactionResult()
+                transactionResult.source = Self.source
+                transactionResult.request = request
+                transactionResult.success = false
+                
+                if let errors = result[CCParamErrors] {
+                    transactionResult.message = self.parseTapTransactionErrorMessage(errors: errors)
+                }
+                
+                // Clean up and return early termination result
+                transactionListener.detachFromChipDna()
+                completion(transactionResult)
+                return
+            }
+            
+            // Normal transaction completion (after card details or regular flow)
             let success = result[CCParamTransactionResult] == CCValueApproved
             let receiptData = ChipDnaMobileSerializer.deserializeReceiptData(
                 result[CCParamReceiptData]
@@ -290,7 +313,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 receiptData?[kCCReceiptFieldTransactionSource]?.value
             
             // Parse Tap to Pay transaction errors if transaction failed
-            if !success, let errors = result[CCParamErrors], !errors.isEmpty {
+            if !success && hasErrors, let errors = result[CCParamErrors] {
                 transactionResult.message = self.parseTapTransactionErrorMessage(errors: errors)
             }
 
@@ -299,6 +322,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             }
             
             // Enrich with additional card details if available (from tap to pay)
+            // Card details callback fires BEFORE transaction finished for successful transactions
             if let cardDetails = additionalCardDetails {
                 if transactionResult.maskedPan == nil {
                     transactionResult.maskedPan = cardDetails[CCParamMaskedPan]
