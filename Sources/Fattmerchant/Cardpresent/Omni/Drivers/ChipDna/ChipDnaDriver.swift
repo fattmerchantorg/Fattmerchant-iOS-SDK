@@ -288,6 +288,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             transactionResult.externalId = result[CCParamTransactionId]
             transactionResult.transactionSource =
                 receiptData?[kCCReceiptFieldTransactionSource]?.value
+            
+            // Parse Tap to Pay transaction errors if transaction failed
+            if !success, let errors = result[CCParamErrors], !errors.isEmpty {
+                transactionResult.message = self.parseTapTransactionErrorMessage(errors: errors)
+            }
 
             if let token = result[CCParamCustomerVaultId] {
                 transactionResult.paymentToken = "nmi_\(token)"
@@ -639,13 +644,98 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             )
             onTapConnectAndConfigureCallback(true, nil)
         } else {
-            var detail: String? = nil
-            if let errs = parameters[CCParamErrors], !errs.isEmpty {
-                detail = errs
-            }
-            let exception = ConnectTapException.couldNotConnectToTap(detail: detail)
+            // Parse error codes and map to specific exceptions
+            let exception = parseTapConnectionError(parameters: parameters)
             onTapConnectAndConfigureCallback(false, exception)
         }
+    }
+    
+    /// Parses ChipDNA error parameters and returns appropriate ConnectTapException
+    private func parseTapConnectionError(parameters: CCParameters) -> ConnectTapException {
+        guard let errors = parameters[CCParamErrors], !errors.isEmpty else {
+            return .couldNotConnectToTap(detail: nil)
+        }
+        
+        let errorString = errors.lowercased()
+        
+        // Connect and Configure errors
+        if errorString.contains("taptomobilenotsupported") || errorString.contains("tap to mobile not supported") {
+            return .tapToMobileNotSupported
+        }
+        if errorString.contains("nopiselected") || errorString.contains("no poi selected") {
+            return .noPoiSelected
+        }
+        if errorString.contains("locationpermissionsnotgranted") || errorString.contains("location permissions") {
+            return .locationPermissionsNotGranted
+        }
+        if errorString.contains("applicationupdaterequired") || errorString.contains("application update") {
+            return .applicationUpdateRequired
+        }
+        
+        // Connect and Configure Finished event errors
+        if errorString.contains("countrycodeinvalid") || errorString.contains("country code") {
+            return .countryCodeInvalid
+        }
+        if errorString.contains("attestationfailed") || errorString.contains("attestation") {
+            return .attestationFailed
+        }
+        if errorString.contains("accesstokenexpired") || errorString.contains("token expired") {
+            return .accessTokenExpired
+        }
+        if errorString.contains("teamidentifiermissing") || errorString.contains("team identifier") {
+            return .teamIdentifierMissing
+        }
+        if errorString.contains("invalidappleaccount") || errorString.contains("apple account") {
+            return .invalidAppleAccount
+        }
+        if errorString.contains("missingbundleidentifier") || errorString.contains("bundle identifier") {
+            return .missingBundleIdentifier
+        }
+        if errorString.contains("currentcountrynotallowed") || errorString.contains("country not allowed") {
+            return .currentCountryNotAllowed
+        }
+        if errorString.contains("nolocationfound") || errorString.contains("no location") {
+            return .noLocationFound
+        }
+        
+        // Default case with error details
+        return .couldNotConnectToTap(detail: errors)
+    }
+    
+    /// Parses Tap to Pay transaction errors and returns user-friendly message
+    private func parseTapTransactionErrorMessage(errors: String) -> String {
+        let errorString = errors.lowercased()
+        
+        // Start Transaction errors
+        if errorString.contains("transactionpoinotconnected") || errorString.contains("poi not connected") {
+            return "Tap to Pay is not connected"
+        }
+        if errorString.contains("transactionpoiinvalid") || errorString.contains("poi invalid") {
+            return "Invalid transaction point of interaction"
+        }
+        if errorString.contains("autoconfirmrequired") || errorString.contains("auto confirm") {
+            return "Auto-confirmation is required for this transaction"
+        }
+        if errorString.contains("tipamountinvalid") || errorString.contains("tip amount invalid") {
+            return "Invalid tip amount format"
+        }
+        if errorString.contains("tipamountnotallowed") || errorString.contains("tip amount not allowed") {
+            return "Merchant tipping is not supported for this device"
+        }
+        if errorString.contains("merchanttippingnotsupported") || errorString.contains("tipping not supported") {
+            return "Tipping is not supported with the configured processor"
+        }
+        
+        // Transaction Finished event errors
+        if errorString.contains("taptomobiletransactionterminated") || errorString.contains("transaction terminated") {
+            return "Transaction was terminated by Tap to Pay"
+        }
+        if errorString.contains("taptomobilesessionclosed") || errorString.contains("session closed") {
+            return "Tap to Pay session is no longer available"
+        }
+        
+        // Return original error if no specific match
+        return errors
     }
 
     @objc func onConfigurationUpdate(parameters: CCParameters) {

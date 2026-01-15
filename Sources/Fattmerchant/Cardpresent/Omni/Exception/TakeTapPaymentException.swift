@@ -18,6 +18,18 @@ enum TakeTapPaymentException: OmniException {
     case couldNotUpdateInvoice(detail: String?)
     case couldNotCreateTransaction(detail: String?)
     case couldNotCaptureTransaction
+    
+    // Start Transaction errors
+    case transactionPOINotConnected
+    case transactionPOIInvalid
+    case autoConfirmRequired
+    case tipAmountInvalid
+    case tipAmountNotAllowed
+    case merchantTippingNotSupported
+    
+    // Transaction Finished event errors
+    case tapToMobileTransactionTerminated
+    case tapToMobileSessionClosed
 
     static var mess = "Error processing tap payment"
 
@@ -39,6 +51,22 @@ enum TakeTapPaymentException: OmniException {
             return "Could not create transaction: \(detail ?? "")"
         case .couldNotCaptureTransaction:
             return "Could not capture transaction"
+        case .transactionPOINotConnected:
+            return "Tap to Pay is not connected"
+        case .transactionPOIInvalid:
+            return "Invalid transaction point of interaction"
+        case .autoConfirmRequired:
+            return "Auto-confirmation is required for this transaction"
+        case .tipAmountInvalid:
+            return "Invalid tip amount format"
+        case .tipAmountNotAllowed:
+            return "Merchant tipping is not supported for this device"
+        case .merchantTippingNotSupported:
+            return "Tipping is not supported with the configured processor"
+        case .tapToMobileTransactionTerminated:
+            return "Transaction was terminated by Tap to Pay"
+        case .tapToMobileSessionClosed:
+            return "Tap to Pay session is no longer available"
         }
     }
 }
