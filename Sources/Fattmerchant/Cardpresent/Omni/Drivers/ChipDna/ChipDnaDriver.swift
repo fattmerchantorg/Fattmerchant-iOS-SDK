@@ -260,6 +260,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         // Create a fresh transaction listener for this transaction to prevent callback accumulation
         let transactionListener = ChipDnaTransactionListener()
+        
+        // Store card details for enriching the transaction result
+        var additionalCardDetails: CCParameters?
 
         transactionListener.onFinished = { result in
 
@@ -289,17 +292,43 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             if let token = result[CCParamCustomerVaultId] {
                 transactionResult.paymentToken = "nmi_\(token)"
             }
+            
+            // Enrich with additional card details if available (from tap to pay)
+            if let cardDetails = additionalCardDetails {
+                if transactionResult.maskedPan == nil {
+                    transactionResult.maskedPan = cardDetails[CCParamMaskedPan]
+                }
+                
+                // Get expiry date from card details if not already present
+                if let expiryDate = cardDetails[CCParamExpiryDate] {
+                    // Convert YYMM format to MM/YY format
+                    if expiryDate.count == 4 {
+                        let yy = String(expiryDate.prefix(2))
+                        let mm = String(expiryDate.suffix(2))
+                        transactionResult.cardExpiration = "\(mm)/\(yy)"
+                    }
+                }
+            }
 
             // Get more details about the transaction since ChipDna doesn't get everything
             TransactionGateway.getTransactionCcExpiration(
                 securityKey: Self.initializationArgs!.keys.securityKey,
                 transactionId: result[CCParamTransactionId] ?? ""
             ) { ccExpiration in
-                transactionResult.cardExpiration = ccExpiration
+                // Only override if we don't have expiration from card details
+                if transactionResult.cardExpiration == nil {
+                    transactionResult.cardExpiration = ccExpiration
+                }
                 // Clean up this transaction listener once we're done
                 transactionListener.detachFromChipDna()
                 completion(transactionResult)
             }
+        }
+        
+        // Set up card details callback for tap to pay
+        transactionListener.onCardDetailsReceived = { cardDetails in
+            // Store card details for later enrichment
+            additionalCardDetails = cardDetails
         }
 
         transactionListener.bindToChipDna(
@@ -631,6 +660,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onTapConfigurationUpdate(parameters: CCParameters) {
+        // Handle configuration update status
         if let str = parameters[CCParamConfigurationUpdate],
             let status = TapConnectionStatus(
                 chipDnaConfigurationUpdate: str
@@ -638,6 +668,17 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         {
             tapConnectionStatusDelegate?.tapConnectionStatusUpdate(
                 status: status
+            )
+        }
+        
+        // Handle configuration percentage (0-100)
+        // This is received after CCValueUpdatingTapToMobileConfig
+        if let percentageStr = parameters[CCParamTapToMobileConfigurationPercentage],
+            let percentage = Int(percentageStr),
+            percentage >= 0 && percentage <= 100
+        {
+            tapConnectionStatusDelegate?.tapConnectionConfigurationPercentage(
+                percentage: percentage
             )
         }
     }
@@ -653,6 +694,28 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         {
             mobileReaderConnectionStatusDelegate?
                 .mobileReaderConnectionStatusUpdate(status: status)
+        }
+    }
+    
+    /// Requests card details from the payment device (for tap to pay)
+    /// - Parameter completion: A callback containing the card details parameters if successful
+    func requestCardDetails(completion: @escaping (CCParameters?) -> Void) {
+        let cardDetailsListener = ChipDnaTransactionListener()
+        
+        cardDetailsListener.onCardDetailsReceived = { cardDetails in
+            cardDetailsListener.detachFromChipDna()
+            completion(cardDetails)
+        }
+        
+        cardDetailsListener.bindToChipDna()
+        
+        let params = CCParameters()
+        let result = ChipDnaMobile.sharedInstance()?.getCardDetails(params)
+        
+        // If the call failed immediately, clean up and return nil
+        if result?[CCParamResult] != CCValueTrue {
+            cardDetailsListener.detachFromChipDna()
+            completion(nil)
         }
     }
 }

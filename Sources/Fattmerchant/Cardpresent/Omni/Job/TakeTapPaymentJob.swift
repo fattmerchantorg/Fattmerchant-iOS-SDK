@@ -197,12 +197,36 @@ actor TakeTapPaymentJob: Job {
         let customerRepository = StaxCustomerRepositoryImpl(httpClient: client)
 
         var name: String = TakeTapPaymentJob.DEFAULT_TAP_CUSTOMER_NAME
+        var firstName: String? = nil
+        var lastName: String? = nil
 
-        // For tap payments, we might have different customer name logic
-        if let first = result.cardHolderFirstName,
-            let last = result.cardHolderLastName
-        {
+        // For tap to pay, use cardholder name from card details if available
+        if let first = result.cardHolderFirstName, !first.isEmpty {
+            firstName = first
+        }
+        
+        if let last = result.cardHolderLastName, !last.isEmpty {
+            lastName = last
+        }
+        
+        // Build the full name from available components
+        if let first = firstName, let last = lastName {
             name = "\(first) \(last)"
+        } else if let first = firstName {
+            name = first
+        } else if let last = lastName {
+            name = last
+        }
+        
+        // Check transaction source for contactless/tap transactions
+        if let transactionSource = result.transactionSource,
+            transactionSource.lowercased().contains("contactless") ||
+            transactionSource.lowercased().contains("tap")
+        {
+            // If we still have the default name, use a more descriptive one
+            if name == TakeTapPaymentJob.DEFAULT_TAP_CUSTOMER_NAME {
+                name = "Mobile Device"
+            }
         }
 
         let request = StaxCustomer.from(name: name)
@@ -233,11 +257,26 @@ actor TakeTapPaymentJob: Job {
         }
 
         var paymentMethod = StaxPaymentMethod.from(customer: customer)
+        
+        // Card expiration is now enriched from CardDetails callback for tap to pay
         paymentMethod.cardExpiry = result.cardExpiration
         paymentMethod.method = .card
         paymentMethod.cardType = type
         paymentMethod.cardLastFour = String(lastFour)
-        paymentMethod.personName = customer.name
+        
+        // Use cardholder name if available from card details, otherwise use customer name
+        if let firstName = result.cardHolderFirstName, 
+           let lastName = result.cardHolderLastName,
+           !firstName.isEmpty, !lastName.isEmpty {
+            paymentMethod.personName = "\(firstName) \(lastName)"
+        } else if let firstName = result.cardHolderFirstName, !firstName.isEmpty {
+            paymentMethod.personName = firstName
+        } else if let lastName = result.cardHolderLastName, !lastName.isEmpty {
+            paymentMethod.personName = lastName
+        } else {
+            paymentMethod.personName = customer.name
+        }
+        
         paymentMethod.tokenize = false
 
         // If there is a token, tokenize it with the POST /payment-method/token route

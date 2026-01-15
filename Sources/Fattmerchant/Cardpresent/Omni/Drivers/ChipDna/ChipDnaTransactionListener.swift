@@ -5,6 +5,9 @@ class ChipDnaTransactionListener: NSObject {
   /// Called when ChipDna finishes a transaction
   var onFinished: ((CCParameters) -> Void)?
   
+  /// Called when ChipDna returns card details
+  var onCardDetailsReceived: ((CCParameters) -> Void)?
+  
   /// Provides a signature
   var signatureProvider: SignatureProviding?
   
@@ -30,6 +33,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.addIdVerificationTarget(self, action: #selector(onIdVerification(parameters:)))
     ChipDnaMobile.addUserNotificationTarget(self, action: #selector(onUserNotification(parameters:)))
     ChipDnaMobile.addCardApplicationSelectionTarget(self, action: #selector(onApplicationSelection(parameters:)))
+    ChipDnaMobile.addCardDetailsTarget(self, action: #selector(onCardDetails(parameters:)))
     self.userNotificationDelegate = userNotificationDelegate
     self.transactionUpdateDelegate = transactionUpdateDelegate
     self.signatureProvider = signatureProvider
@@ -46,6 +50,7 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.removeForcedAcceptanceTarget(self)
     ChipDnaMobile.removeIdVerificationTarget(self)
     ChipDnaMobile.removeCardApplicationSelectionTarget(self)
+    ChipDnaMobile.removeCardDetailsTarget(self)
   }
   
   @objc fileprivate func onTransactionUpdate(parameters: CCParameters) {
@@ -114,5 +119,9 @@ class ChipDnaTransactionListener: NSObject {
   
   @objc fileprivate func onApplicationSelection(parameters: CCParameters) {
     ChipDnaMobile.sharedInstance()?.continueCardApplicationSelection(nil)
+  }
+  
+  @objc fileprivate func onCardDetails(parameters: CCParameters) {
+    onCardDetailsReceived?(parameters)
   }
 }
