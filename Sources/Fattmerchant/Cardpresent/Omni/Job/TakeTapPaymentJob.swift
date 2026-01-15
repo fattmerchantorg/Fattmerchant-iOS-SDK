@@ -73,13 +73,14 @@ actor TakeTapPaymentJob: Job {
             
             // If transaction was not successful (cancelled, declined, or error), 
             // don't try to create backend records - return the transaction result as-is
-            guard result.success else {
+            guard result.success == true else {
                 // Create a StaxTransaction representing the failed/cancelled transaction
                 var failedTransaction = StaxTransaction()
                 failedTransaction.success = false
                 failedTransaction.message = result.message
-                failedTransaction.lastFour = result.maskedPan?.suffix(4).map(String.init)
-                failedTransaction.cardType = result.cardType
+                if let pan = result.maskedPan, pan.count >= 4 {
+                    failedTransaction.lastFour = String(pan.suffix(4))
+                }
                 failedTransaction.total = request.amount.dollars()
                 failedTransaction.source = result.source
                 
