@@ -400,6 +400,7 @@ actor TakeTapPaymentJob: Job {
         transaction.response = gatewayResponseJson
         transaction.token = result.externalId
         transaction.message = result.message
+        transaction.spreedlyToken = "nmi_1234"
 
         // DEBUG: Pretty-print the JSON body we are about to send
         do {
