@@ -233,17 +233,6 @@ actor TakeTapPaymentJob: Job {
         } else if let last = lastName {
             name = last
         }
-        
-        // Check transaction source for contactless/tap transactions
-        if let transactionSource = result.transactionSource,
-            transactionSource.lowercased().contains("contactless") ||
-            transactionSource.lowercased().contains("tap")
-        {
-            // If we still have the default name, use a more descriptive one
-            if name == TakeTapPaymentJob.DEFAULT_TAP_CUSTOMER_NAME {
-                name = "Mobile Device"
-            }
-        }
 
         let request = StaxCustomer.from(name: name)
         return try await customerRepository.createCustomer(request)
