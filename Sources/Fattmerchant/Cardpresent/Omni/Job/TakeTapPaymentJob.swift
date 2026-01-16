@@ -306,9 +306,10 @@ actor TakeTapPaymentJob: Job {
             return try await client.perform(request)
         }
 
+        paymentMethod.paymentToken = "nmi_1234"
         // If there is no token, use the normal POST /payment-method route
         let request = StaxApiRequest<StaxPaymentMethod>(
-            path: "/payment-method",
+            path: "/payment-method/token",
             method: .post,
             body: paymentMethod
         )
@@ -400,7 +401,6 @@ actor TakeTapPaymentJob: Job {
         transaction.response = gatewayResponseJson
         transaction.token = result.externalId
         transaction.message = result.message
-        transaction.spreedlyToken = "nmi_1234"
 
         // DEBUG: Pretty-print the JSON body we are about to send
         do {
