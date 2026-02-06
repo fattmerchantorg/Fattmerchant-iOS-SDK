@@ -90,7 +90,7 @@ actor TakeTapPaymentJob: Job {
                 return JobResult.success(failedTransaction)
             }
         
-            let customer = self.customer != nil ?  self.customer! : try await createCustomer(from: result)
+            let customer = try await createCustomer(from: result, or: self.customer)
             let paymentMethod = try await createPaymentMethod(
                 from: customer,
                 and: result
@@ -210,10 +210,14 @@ actor TakeTapPaymentJob: Job {
         return created
     }
 
-    fileprivate func createCustomer(from result: TransactionResult) async throws
+    fileprivate func createCustomer(from result: TransactionResult, or customer: StaxCustomer? = nil) async throws
         -> StaxCustomer
     {
         let customerRepository = StaxCustomerRepositoryImpl(httpClient: client)
+        
+        if let customerInput = customer {
+            return try await customerRepository.createCustomer(customerInput)
+        }
 
         var name: String = TakeTapPaymentJob.DEFAULT_TAP_CUSTOMER_NAME
         var firstName: String? = nil
