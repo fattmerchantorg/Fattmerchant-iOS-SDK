@@ -20,6 +20,7 @@ class Invoice: Model {
   public var isWebpayment: Bool?
   public var merchantId: String?
   public var meta: JSONValue?
+  public var customer: Customer?
   public var paidAt: String?
   public var paymentAttemptFailed: Bool?
   public var paymentAttemptMessage: String?

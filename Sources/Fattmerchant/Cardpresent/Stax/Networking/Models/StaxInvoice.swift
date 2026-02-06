@@ -19,6 +19,7 @@ public struct StaxInvoice: Codable {
   public var totalPaid: Double?
   public var url: String?
   public var meta: JSONCodable?
+  public var customer: StaxCustomer?
   public var dueAt: Date?
   public var sentAt: Date?
   public var paidAt: Date?
@@ -43,6 +44,7 @@ public struct StaxInvoice: Codable {
     case totalPaid = "total_paid"
     case url
     case meta
+    case customer
     case dueAt = "due_at"
     case sentAt = "sent_at"
     case paidAt = "paid_at"
@@ -68,6 +70,7 @@ public struct StaxInvoice: Codable {
     totalPaid: Double? = nil,
     url: String? = nil,
     meta: JSONCodable? = nil,
+    customer: StaxCustomer? = nil,
     dueAt: Date? = nil,
     sentAt: Date? = nil,
     paidAt: Date? = nil,
@@ -91,6 +94,7 @@ public struct StaxInvoice: Codable {
     self.totalPaid = totalPaid
     self.url = url
     self.meta = meta
+    self.customer = customer
     self.dueAt = dueAt
     self.sentAt = sentAt
     self.paidAt = paidAt
@@ -116,6 +120,7 @@ public struct StaxInvoice: Codable {
     self.totalPaid = (changes["totalPaid"] as? Double) ?? existing.totalPaid
     self.url = (changes["url"] as? String) ?? existing.url
     self.meta = (changes["meta"] as? JSONCodable) ?? existing.meta
+    self.customer = (changes["customer"] as? StaxCustomer) ?? existing.customer
     self.dueAt = (changes["dueAt"] as? Date) ?? existing.dueAt
     self.sentAt = existing.sentAt
     self.paidAt = existing.paidAt
@@ -162,6 +167,7 @@ public struct StaxInvoice: Codable {
         case "totalPaid": return invoice.totalPaid
         case "url": return invoice.url
         case "meta": return invoice.meta
+        case "customer": return invoice.customer
         case "dueAt": return invoice.dueAt
         default: return nil
       }

@@ -87,6 +87,32 @@ actor TakeTapPaymentJob: Job {
                 return JobResult.success(failedTransaction)
             }
 
+            if let invoiceCustomer = invoice.customer {
+                let paymentMethod = try await createPaymentMethod(
+                    from: invoiceCustomer,
+                    and: result
+                )
+                invoice = try await updateInvoice(
+                    invoice,
+                    with: invoiceCustomer,
+                    and: paymentMethod
+                )
+                let transaction = try await createTransaction(
+                    driver: driver,
+                    customer: invoiceCustomer,
+                    invoice: invoice,
+                    paymentMethod: paymentMethod
+                )
+
+                guard transaction.id != nil else {
+                    throw TakeTapPaymentException.couldNotCreateTransaction(
+                        detail: "Missing transaction id"
+                    )
+                }
+
+                return JobResult.success(transaction)
+            }
+            
             let customer = try await createCustomer(from: result)
             let paymentMethod = try await createPaymentMethod(
                 from: customer,
