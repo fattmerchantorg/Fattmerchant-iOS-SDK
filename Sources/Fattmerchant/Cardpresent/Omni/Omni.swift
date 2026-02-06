@@ -433,6 +433,7 @@ public class Omni: NSObject {
     @available(iOS 17.4, *)
     public func takeTapTransaction(
         with request: TransactionRequest,
+        and customer: StaxCustomer? = nil,
         completion: @escaping (StaxTransaction) -> Void,
         error: @escaping (OmniException) -> Void
     ) {
@@ -443,6 +444,7 @@ public class Omni: NSObject {
         let job = TakeTapPaymentJob(
             request: request,
             client: client,
+            customer: customer,
             signatureProvider: signatureProvider,
             transactionUpdateDelegate: transactionUpdateDelegate,
             userNotificationDelegate: userNotificationDelegate

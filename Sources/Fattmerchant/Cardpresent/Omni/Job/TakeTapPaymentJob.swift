@@ -18,6 +18,7 @@ actor TakeTapPaymentJob: Job {
 
     private let client: StaxHttpClientProtocol
     private var request: TransactionRequest
+    private var customer: StaxCustomer?
     private let signatureProvider: SignatureProviding?
     private weak var transactionUpdateDelegate: TransactionUpdateDelegate?
     private weak var userNotificationDelegate: UserNotificationDelegate?
@@ -31,12 +32,14 @@ actor TakeTapPaymentJob: Job {
     init(
         request: TransactionRequest,
         client: StaxHttpClientProtocol,
+        customer: StaxCustomer? = nil,
         signatureProvider: SignatureProviding? = nil,
         transactionUpdateDelegate: TransactionUpdateDelegate? = nil,
         userNotificationDelegate: UserNotificationDelegate? = nil
     ) {
         self.request = request
         self.client = client
+        self.customer = customer
         self.signatureProvider = signatureProvider
         self.transactionUpdateDelegate = transactionUpdateDelegate
         self.userNotificationDelegate = userNotificationDelegate
@@ -86,34 +89,8 @@ actor TakeTapPaymentJob: Job {
                 
                 return JobResult.success(failedTransaction)
             }
-
-            if let invoiceCustomer = invoice.customer {
-                let paymentMethod = try await createPaymentMethod(
-                    from: invoiceCustomer,
-                    and: result
-                )
-                invoice = try await updateInvoice(
-                    invoice,
-                    with: invoiceCustomer,
-                    and: paymentMethod
-                )
-                let transaction = try await createTransaction(
-                    driver: driver,
-                    customer: invoiceCustomer,
-                    invoice: invoice,
-                    paymentMethod: paymentMethod
-                )
-
-                guard transaction.id != nil else {
-                    throw TakeTapPaymentException.couldNotCreateTransaction(
-                        detail: "Missing transaction id"
-                    )
-                }
-
-                return JobResult.success(transaction)
-            }
-            
-            let customer = try await createCustomer(from: result)
+        
+            let customer = self.customer != nil ?  self.customer! : try await createCustomer(from: result)
             let paymentMethod = try await createPaymentMethod(
                 from: customer,
                 and: result
