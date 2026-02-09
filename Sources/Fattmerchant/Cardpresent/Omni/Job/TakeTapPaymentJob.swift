@@ -393,6 +393,7 @@ actor TakeTapPaymentJob: Job {
         transaction.source = "iOS|CPSDK|\(result.source)|tap_to_pay"
         transaction.channel = "ios"
         transaction.customerId = customerId
+        transaction.customer = customer
         transaction.invoiceId = invoiceId
         transaction.response = gatewayResponseJson
         transaction.token = result.externalId

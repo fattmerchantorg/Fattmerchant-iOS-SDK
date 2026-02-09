@@ -37,6 +37,9 @@ public struct StaxTransaction: Codable {
 
   /// ID of the customer associated with the transaction
   public var customerId: String?
+   
+  /// Customer associated with the transaction
+  public var customer: StaxCustomer?
 
   /// ID of the payment method used
   public var paymentMethodId: String?
@@ -177,6 +180,7 @@ public struct StaxTransaction: Codable {
     case merchantId = "merchant_id"
     case userId = "user_id"
     case customerId = "customer_id"
+    case customer = "customer"
     case paymentMethodId = "payment_method_id"
     case isManual = "is_manual"
     case spreedlyToken = "spreedly_token"
@@ -228,6 +232,7 @@ public struct StaxTransaction: Codable {
     merchantId: String? = nil,
     userId: String? = nil,
     customerId: String? = nil,
+    customer: StaxCustomer? = nil,
     paymentMethodId: String? = nil,
     isManual: Bool? = nil,
     spreedlyToken: String? = nil,
@@ -274,6 +279,7 @@ public struct StaxTransaction: Codable {
     self.merchantId = merchantId
     self.userId = userId
     self.customerId = customerId
+    self.customer = customer
     self.paymentMethodId = paymentMethodId
     self.isManual = isManual
     self.spreedlyToken = spreedlyToken
