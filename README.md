@@ -241,7 +241,38 @@ Use Tap to Pay on iPhone to accept contactless payments directly on supported iP
 
 Tap to Pay uses the same `TransactionRequest` model as mobile reader payments, but uses the iPhone's built-in NFC reader to accept contactless cards and digital wallets.
 
+## Connect to Tap to Pay
+
+Before taking a Tap to Pay transaction, you must first connect to the Tap to Pay reader on the iPhone using `connectToTap`. Once the connection is successful, you can proceed to take a payment.
+
+```swift
+if #available(iOS 17.4, *) {
+    omni.connectToTap(completion: {
+        print("Connected to Tap to Pay!")
+
+        // Now take a payment
+        let amount = Amount(cents: 1050) // $10.50
+        let request = TransactionRequest(amount: amount)
+
+        omni.takeTapTransaction(with: request) { transaction in
+            print("Tap payment successful!")
+            print("Transaction ID: \(transaction.id)")
+            print("Amount: \(transaction.total)")
+        } error: { error in
+            print("Tap payment failed: \(error)")
+        }
+
+    }, error: { error in
+        print("Failed to connect to Tap to Pay: \(String(describing: error))")
+    })
+} else {
+    print("Tap to Pay requires iOS 17.4 or later")
+}
+```
+
 ## Taking a Tap to Pay Transaction
+
+If you have already connected to Tap to Pay, you can take a payment directly using `takeTapTransaction`:
 
 ```swift
 // Create an Amount
@@ -284,41 +315,58 @@ class PaymentViewController: UIViewController {
             return
         }
         
-        // Create amount for $25.00
-        let amount = Amount(cents: 2500)
-        
-        // Create transaction request
-        let request = TransactionRequest(amount: amount)
-        
-        // Optional: Add metadata
-        request.meta = ["order_id": "12345", "customer_name": "John Doe"]
-        
         // Show processing UI
         showProcessingUI()
         
-        // Process the payment
-        omni?.takeTapTransaction(with: request, completion: { [weak self] transaction in
+        // First, connect to Tap to Pay
+        omni?.connectToTap(completion: { [weak self] in
             guard let self = self else { return }
             
-            self.hideProcessingUI()
+            print("✅ Connected to Tap to Pay!")
             
-            // Payment succeeded
-            self.showSuccessUI(transaction: transaction)
+            // Create amount for $25.00
+            let amount = Amount(cents: 2500)
             
-            print("✅ Payment successful!")
-            print("Transaction ID: \(transaction.id)")
-            print("Amount: \(transaction.total)")
-            print("Last 4: \(transaction.lastFour ?? "N/A")")
+            // Create transaction request
+            let request = TransactionRequest(amount: amount)
+            
+            // Optional: Add metadata
+            request.meta = ["order_id": "12345", "customer_name": "John Doe"]
+            
+            // Process the payment
+            self.omni?.takeTapTransaction(with: request, completion: { [weak self] transaction in
+                guard let self = self else { return }
+                
+                self.hideProcessingUI()
+                
+                // Payment succeeded
+                self.showSuccessUI(transaction: transaction)
+                
+                print("✅ Payment successful!")
+                print("Transaction ID: \(transaction.id)")
+                print("Amount: \(transaction.total)")
+                print("Last 4: \(transaction.lastFour ?? "N/A")")
+                
+            }, error: { [weak self] error in
+                guard let self = self else { return }
+                
+                self.hideProcessingUI()
+                
+                // Payment failed
+                self.showErrorUI(error: error)
+                
+                print("❌ Payment failed: \(error?.localizedDescription ?? "Unknown error")")
+            })
             
         }, error: { [weak self] error in
             guard let self = self else { return }
             
             self.hideProcessingUI()
             
-            // Payment failed
+            // Connection failed
             self.showErrorUI(error: error)
             
-            print("❌ Payment failed: \(error.localizedDescription)")
+            print("❌ Failed to connect: \(error?.localizedDescription ?? "Unknown error")")
         })
     }
     
