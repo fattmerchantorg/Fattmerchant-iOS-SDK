@@ -183,6 +183,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         let requestParams = CCParameters()
         requestParams.setValue(CCValueTrue, forKey: CCParamTapToMobilePOI)
         requestParams.setValue(CCValueFalse, forKey: CCParamPaymentDevicePOI)
+        
+        ChipDnaMobile.sharedInstance()?.getStatus(nil)
 
         onTapConnectAndConfigureCallback = { success, error in
             completion(success, error)
@@ -677,6 +679,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             let exception = parseTapConnectionError(parameters: parameters)
             onTapConnectAndConfigureCallback(false, exception)
         }
+        
+        ChipDnaMobile.sharedInstance().getStatus(nil)
     }
     
     /// Parses ChipDNA error parameters and returns appropriate ConnectTapException
