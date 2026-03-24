@@ -15,8 +15,8 @@ class MockMobileReaderDriverRepository: MobileReaderDriverRepository {
     MockDriver()
   ]
 
-  override func getDrivers(completion: ([MobileReaderDriver]) -> Void) {
-    completion(drivers)
+  override func all() -> [MobileReaderDriver] {
+    return drivers
   }
 
 }

@@ -97,6 +97,12 @@
                <Test
                   Identifier = "FattmerchantIosTests">
                </Test>
+               <Test
+                  Identifier = "TakePaymentTests">
+               </Test>
+               <Test
+                  Identifier = "TakeMobileReaderPaymentTests">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

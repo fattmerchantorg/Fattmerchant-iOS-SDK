@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 import Foundation
 
 class ChipDnaTransactionListener: NSObject {
@@ -116,3 +117,4 @@ class ChipDnaTransactionListener: NSObject {
     ChipDnaMobile.sharedInstance()?.continueCardApplicationSelection(nil)
   }
 }
+#endif

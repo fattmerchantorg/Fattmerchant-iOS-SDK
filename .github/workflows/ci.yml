@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master, "release/**"]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        destination:
+          - 'platform=iOS Simulator,name=iPhone 16,OS=latest'
+          - 'platform=iOS Simulator,name=iPad (10th generation),OS=latest'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          xcodebuild build-for-testing \
+            -workspace fattmerchant-ios-sdk.xcworkspace \
+            -scheme fattmerchant-ios-sdk \
+            -destination '${{ matrix.destination }}'
+      - name: Test
+        run: |
+          xcodebuild test-without-building \
+            -workspace fattmerchant-ios-sdk.xcworkspace \
+            -scheme fattmerchant-ios-sdk \
+            -destination '${{ matrix.destination }}'
+
+  deploy:
+    name: Deploy to CocoaPods
+    runs-on: macos-15
+    needs: build-and-test
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to CocoaPods
+        uses: michaelhenry/deploy-to-cocoapods-github-action@1.0.10
+        with:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}

@@ -1,3 +1,5 @@
+import Foundation
+
 public enum JSONCodable: Codable, Equatable {
   case string(String)
   case int(Int)

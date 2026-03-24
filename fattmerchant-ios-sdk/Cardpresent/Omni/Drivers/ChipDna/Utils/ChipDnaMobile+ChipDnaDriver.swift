@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 extension ChipDnaMobile {
   /// Returns `true` if a device is actively connected to the ChipDnaMobile SDK
   internal static var isDeviceConnected: Bool {
@@ -23,7 +24,8 @@ extension ChipDnaMobile {
     else {
       return false
     }
-    
+
     return true
   }
 }
+#endif
