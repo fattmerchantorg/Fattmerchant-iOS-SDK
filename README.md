@@ -145,7 +145,7 @@ end
 Create an instance of `InitParams`
 
 ```swift
-var initParams = Omni.InitParams(appId: "com.example.app", apiKey: apiKey, environment: Environment.LIVE)
+var initParams = Omni.InitParams(appId: "appId", apiKey: apiKey, environment: Environment.LIVE)
 ```
 
 Pass the initParams to `Omni.initialize(...)`, along with a completion lambda and an error lambda
@@ -164,6 +164,31 @@ omni?.initialize(params: initParams, completion: {
 ```
 
 ***
+
+## Initialize - TEST MODE
+
+> ⚠️ **Important**: A Stax merchant set up with test credentials is **required** to test **Tap to Pay on iPhone** functionality. Please reach out to your Account Manager.
+
+Create an instance of `InitParams`
+
+```swift
+var initParams = Omni.InitParams(appId: "appId", apiKey: apiKey)
+```
+
+Pass the initParams to `Omni.initialize()`, along with a completion lambda and error lambda
+
+```swift
+omni = Omni()
+testMode = true
+log("Attempting initalization...")
+
+// Initialize Omni with Test flag
+omni?.initialize(params: initParams, test: testMode, completion: {
+    // Initialized in test mode!
+}) { (error) in
+    // Error initializing test mode
+}
+```
 
 # Connect a Mobile Reader
 
