@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 extension MobileReader {
   
   static func from(pinPad: SelectablePinPad) -> MobileReader {
@@ -16,4 +17,4 @@ extension MobileReader {
     )
   }
 }
-
+#endif

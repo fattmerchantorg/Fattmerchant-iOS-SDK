@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 extension TransactionUpdate {
 
   /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
@@ -15,4 +16,4 @@ extension TransactionUpdate {
     }
   }
 }
-
+#endif

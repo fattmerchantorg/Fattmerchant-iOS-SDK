@@ -20,6 +20,7 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_SIMULATOR
 // ChipDNA
 #import "ChipDnaMobile.h"
 #import "ChipDnaMobileUtils.h"
@@ -29,6 +30,7 @@
 #import "CCParameters.h"
 #import "ErrorCodes.h"
 // End ChipDNA
+#endif
 
 //! Project version number for fattmerchant_ios_sdk.
 FOUNDATION_EXPORT double fattmerchant_ios_sdkVersionNumber;
