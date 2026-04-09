@@ -159,8 +159,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             }
             completion(connectedReader)
         }
-
-        // requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
+        print("reader name \(reader.name)")
+        if reader.name.uppercased().hasPrefix("IDTECH") {
+            requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
+        }
 
         ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
         ChipDnaMobile.addConnectAndConfigureFinishedTarget(
