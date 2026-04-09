@@ -160,6 +160,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             completion(connectedReader)
         }
 
+        // requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
+
         ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
         ChipDnaMobile.addConnectAndConfigureFinishedTarget(
             self,
@@ -173,7 +175,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             self,
             action: #selector(onDeviceUpdate(parameters:))
         )
-        ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
+        print("connect and config 1")
+        ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
     /// Connects to Tap to Pay via ChipDna and propagates success/failure.
@@ -199,7 +202,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             self,
             action: #selector(onTapConfigurationUpdate(parameters:))
         )
-
+   print("connect and config 2")
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
@@ -647,12 +650,15 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onConnectAndConfigure(parameters: CCParameters) {
+       
         ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
 
         guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
         else { return }
         if parameters[CCParamResult] != CCValueTrue {
+            print("Hit on connect and config \((parameters[CCParamResult] as? String))")
             onConnectAndConfigureCallback(nil)
+            return
         }
 
         // Figure out the reader details and pass them along
