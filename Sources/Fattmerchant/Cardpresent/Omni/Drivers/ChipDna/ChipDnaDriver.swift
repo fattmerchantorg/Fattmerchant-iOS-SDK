@@ -159,7 +159,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             }
             completion(connectedReader)
         }
-        print("reader name \(reader.name)")
+
         if reader.name.uppercased().hasPrefix("IDTECH") {
             requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
         }
@@ -177,7 +177,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             self,
             action: #selector(onDeviceUpdate(parameters:))
         )
-        print("connect and config 1")
+      
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
@@ -204,7 +204,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             self,
             action: #selector(onTapConfigurationUpdate(parameters:))
         )
-   print("connect and config 2")
+
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
@@ -658,7 +658,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
         else { return }
         if parameters[CCParamResult] != CCValueTrue {
-            print("Hit on connect and config \((parameters[CCParamResult] as? String))")
             onConnectAndConfigureCallback(nil)
             return
         }
