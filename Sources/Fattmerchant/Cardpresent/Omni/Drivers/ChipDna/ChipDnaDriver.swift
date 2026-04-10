@@ -342,11 +342,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 
                 // Get expiry date from card details if not already present
                 if let expiryDate = cardDetails[CCParamExpiryDate] {
-                    // Convert YYMM format to MM/YY format
+                    // Convert YYMM format to MMYY format
                     if expiryDate.count == 4 {
                         let yy = String(expiryDate.prefix(2))
                         let mm = String(expiryDate.suffix(2))
-                        transactionResult.cardExpiration = "\(mm)/\(yy)"
+                        transactionResult.cardExpiration = "\(mm)\(yy)"
                     }
                 }
             }
