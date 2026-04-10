@@ -657,10 +657,25 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
         else { return }
+       
         if parameters[CCParamResult] != CCValueTrue {
-            onConnectAndConfigureCallback(nil)
-            return
-        }
+        // Check for error details
+        let errorCodes = parameters[CCParamErrors] ?? "Unknown"
+        let errorDescription = parameters[CCParamErrorDescription] ?? "No description"
+        let CCParamResult = parameters[CCParamResult] ?? "no ccparamresult"
+        
+        print("❌ Connection failed")
+        print("Error codes: \(errorCodes)")
+        print("Error description: \(errorDescription)")
+        print("CCParamResult: \(CCParamResult)")
+        
+        onConnectAndConfigureCallback(nil)
+        return
+    }
+
+        onConnectAndConfigureCallback(nil)
+        return
+    }
 
         // Figure out the reader details and pass them along
         onConnectAndConfigureCallback(ChipDnaDriver.getConnectedReader())
