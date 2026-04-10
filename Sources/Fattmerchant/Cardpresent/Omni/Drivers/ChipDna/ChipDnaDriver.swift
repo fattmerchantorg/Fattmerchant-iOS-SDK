@@ -673,10 +673,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         return
     }
 
-        onConnectAndConfigureCallback(nil)
-        return
-    }
-
         // Figure out the reader details and pass them along
         onConnectAndConfigureCallback(ChipDnaDriver.getConnectedReader())
     }
