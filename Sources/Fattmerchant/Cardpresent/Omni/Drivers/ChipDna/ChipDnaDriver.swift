@@ -160,6 +160,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             completion(connectedReader)
         }
 
+        if reader.name.uppercased().hasPrefix("IDTECH") {
+            requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
+        }
+
         ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
         ChipDnaMobile.addConnectAndConfigureFinishedTarget(
             self,
@@ -173,7 +177,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             self,
             action: #selector(onDeviceUpdate(parameters:))
         )
-        ChipDnaMobile.sharedInstance()?.connectAndConfigure(nil)
+      
+        ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
     /// Connects to Tap to Pay via ChipDna and propagates success/failure.
@@ -337,11 +342,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 
                 // Get expiry date from card details if not already present
                 if let expiryDate = cardDetails[CCParamExpiryDate] {
-                    // Convert YYMM format to MM/YY format
+                    // Convert YYMM format to MMYY format
                     if expiryDate.count == 4 {
                         let yy = String(expiryDate.prefix(2))
                         let mm = String(expiryDate.suffix(2))
-                        transactionResult.cardExpiration = "\(mm)/\(yy)"
+                        transactionResult.cardExpiration = "\(mm)\(yy)"
                     }
                 }
             }
@@ -647,12 +652,14 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onConnectAndConfigure(parameters: CCParameters) {
+       
         ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
 
         guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
         else { return }
         if parameters[CCParamResult] != CCValueTrue {
             onConnectAndConfigureCallback(nil)
+            return
         }
 
         // Figure out the reader details and pass them along
