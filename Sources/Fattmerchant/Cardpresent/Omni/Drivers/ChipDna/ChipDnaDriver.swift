@@ -228,13 +228,26 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         // Targets were registered in `initialize()`; the singleton holds them
         // for the process lifetime and handlers route on the nil-ness of this
         // closure.
+        //
+        // If a prior call's closure is still parked (caller abandoned the
+        // attempt before ChipDnaMobile fired its event), we must invoke it
+        // with an empty result BEFORE overwriting — otherwise the previous
+        // closure's captured `CheckedContinuation` in
+        // `SearchForMobileReadersJob.start()` deinits un-resumed and Swift
+        // runtime logs: "SWIFT TASK CONTINUATION MISUSE: start() leaked its
+        // continuation without resuming it."
         stateLock.lock()
+        let previousAvailablePinPads = onAvailablePinPadsCallback
         onAvailablePinPadsCallback = { availablePinPads in
             let readers = availablePinPads.map({ MobileReader.from(pinPad: $0) }
             )
             completion(readers)
         }
         stateLock.unlock()
+
+        // Fire the superseded closure outside the lock so it can re-enter the
+        // driver without deadlocking.
+        previousAvailablePinPads?([])
 
         ChipDnaMobile.sharedInstance()?.getAvailablePinPads(params)
     }
@@ -260,7 +273,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         // Claim the reader flow's event scope before arming the callback. This
         // gates `onConfigurationUpdate` / `onDeviceUpdate` fan-out to the reader
         // delegate and keeps tap-session events from leaking into it.
+        //
+        // Capture any stale pending closure first and invoke it with `nil`
+        // (failure) after releasing the lock. Same reasoning as in
+        // `searchForReaders`: overwriting without invoking orphans the prior
+        // closure's continuation in `ConnectToMobileReaderJob.start()`.
         stateLock.lock()
+        let previousConnectAndConfigure = onConnectAndConfigureCallback
         activeMode = .reader
         onConnectAndConfigureCallback = { connectedReader in
             let _ = ChipDnaMobile.sharedInstance().getStatus(nil)
@@ -272,6 +291,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             completion(connectedReader)
         }
         stateLock.unlock()
+
+        previousConnectAndConfigure?(nil)
 
         if reader.name.uppercased().hasPrefix("IDTECH") {
             requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
@@ -306,12 +327,33 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         // Claim the tap flow's event scope before arming the callback, for the
         // same reason `connect()` does.
+        //
+        // Capture any stale pending closure from a prior (abandoned) tap
+        // attempt so we can invoke it with a "superseded" failure BEFORE
+        // overwriting the slot. Without this, the prior closure's captured
+        // `CheckedContinuation` in `ConnectToTapJob.start()` would deinit
+        // un-resumed and Swift runtime would log:
+        //   "SWIFT TASK CONTINUATION MISUSE: start() leaked its continuation
+        //    without resuming it."
+        // This happens in practice when the app cancels a tap-connect mid
+        // flight (e.g. user dismisses the TTP prep screen) but ChipDnaMobile
+        // never fires its `connectAndConfigureFinished` event, leaving the
+        // closure parked in this slot until the next attempt overwrites it.
         stateLock.lock()
+        let previousTapConnectAndConfigure = onTapConnectAndConfigureCallback
         activeMode = .tap
         onTapConnectAndConfigureCallback = { success, error in
             completion(success, error)
         }
         stateLock.unlock()
+
+        // Fire outside the lock — caller may re-enter the driver.
+        previousTapConnectAndConfigure?(
+            false,
+            ConnectTapException.couldNotConnectToTap(
+                detail: "superseded by new connectToTap attempt"
+            )
+        )
 
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
