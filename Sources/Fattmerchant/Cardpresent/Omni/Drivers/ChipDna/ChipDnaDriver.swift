@@ -265,9 +265,16 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     func connectToTap(
         completion: @escaping (Bool, OmniException?) -> Void
     ) {
-        // Fail fast if the SDK isn't initialized.
+        // Fail fast if the SDK isn't initialized. `ConnectToTapJob` force-casts
+        // the returned error to `ConnectTapException`, so the error type here
+        // must be a `ConnectTapException` variant — not `OmniGeneralException`.
         guard ChipDnaMobile.isInitialized() else {
-            completion(false, OmniGeneralException.uninitialized)
+            completion(
+                false,
+                ConnectTapException.couldNotConnectToTap(
+                    detail: "SDK not initialized"
+                )
+            )
             return
         }
 
@@ -296,8 +303,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         completion: (MobileReader?) -> Void,
         error: @escaping (OmniException) -> Void
     ) {
-        if !ChipDnaMobile.isInitialized() {
+        guard ChipDnaMobile.isInitialized() else {
             error(OmniGeneralException.uninitialized)
+            return
         }
 
         completion(ChipDnaDriver.getConnectedReader())
