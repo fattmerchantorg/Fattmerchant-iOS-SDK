@@ -4,10 +4,27 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     static var isStaxRefundsSupported: Bool = true
     static var source: String = "NMI"
 
+    /// Process-long-lived singleton. Required so our ChipDnaMobile callback
+    /// targets (`self`) are registered exactly once and never mutated from
+    /// inside a callback — mutating ChipDnaMobile's target list during its
+    /// own enumeration aborts with `NSGenericException: "Collection was
+    /// mutated while being enumerated"` on `runCallbackThread`.
+    static let shared = ChipDnaDriver()
+
     /// The ChipDna init params passed in the `initialize` function.
     private static var initializationArgs: ChipDnaInitializationArgs?
 
+    /// Guards one-time registration of ChipDnaMobile callback targets.
+    /// Registration is deferred until after `ChipDnaMobile.initialize()` has
+    /// succeeded, then happens on the first `searchForReaders`/`connect`/
+    /// `connectToTap` call and is never repeated.
+    private var callbackTargetsRegistered = false
+
     var familiarSerialNumbers: [String] = []
+
+    private override init() {
+        super.init()
+    }
 
     weak var tapConnectionStatusDelegate: (any TapConnectionStatusDelegate)?
     weak var mobileReaderConnectionStatusDelegate:
@@ -129,12 +146,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             completion(readers)
         }
 
-        // Remove extraneous listeners, and search for available pin pads.
-        ChipDnaMobile.removeAvailablePinPadsTarget(self)
-        ChipDnaMobile.addAvailablePinPadsTarget(
-            self,
-            action: #selector(onAvailablePinPads(parameters:))
-        )
+        // Target registration is one-shot for the process; see
+        // `registerCallbackTargetsIfNeeded()`. Do NOT add/remove targets
+        // here — mutating ChipDnaMobile's target list around callbacks
+        // is what caused the enumeration-mutation crash.
+        registerCallbackTargetsIfNeeded()
         ChipDnaMobile.sharedInstance()?.getAvailablePinPads(params)
     }
 
@@ -165,19 +181,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         }
 
         ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
-        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
-            self,
-            action: #selector(onConnectAndConfigure(parameters:))
-        )
-        ChipDnaMobile.addConfigurationUpdateTarget(
-            self,
-            action: #selector(onConfigurationUpdate(parameters:))
-        )
-        ChipDnaMobile.addDeviceUpdateTarget(
-            self,
-            action: #selector(onDeviceUpdate(parameters:))
-        )
-      
+        // All callback targets (finished, configuration update, device update)
+        // are registered once by `registerCallbackTargetsIfNeeded()` for the
+        // process lifetime. Handlers route on pending-completion state
+        // (nil-ness of `onConnectAndConfigureCallback`) and delegate
+        // nullability, not on registration presence.
+        registerCallbackTargetsIfNeeded()
+
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
@@ -195,15 +205,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             completion(success, error)
         }
 
-        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
-            self,
-            action: #selector(onTapConnectAndConfigure(parameters:))
-        )
-
-        ChipDnaMobile.addConfigurationUpdateTarget(
-            self,
-            action: #selector(onTapConfigurationUpdate(parameters:))
-        )
+        // All TTP callback targets (finished, tap configuration update) are
+        // registered once by `registerCallbackTargetsIfNeeded()`; the
+        // handler guards on `onTapConnectAndConfigureCallback` being non-nil,
+        // so only the active TTP flow consumes the event.
+        registerCallbackTargetsIfNeeded()
 
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
@@ -630,12 +636,59 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
     // MARK: - ChipDna Listeners
 
-    @objc public func onAvailablePinPads(parameters: CCParameters) {
-        ChipDnaMobile.removeAvailablePinPadsTarget(self)
+    /// Registers all crash-path callback targets with ChipDnaMobile exactly
+    /// once. These targets remain registered for the lifetime of the process;
+    /// handlers below use the captured completion closure (nil-ing it after
+    /// firing) as the "has pending request" signal rather than presence in
+    /// the SDK's target list. This eliminates the need to mutate the target
+    /// list from inside a callback, which was the source of
+    /// `NSGenericException: "Collection was mutated while being enumerated"`.
+    fileprivate func registerCallbackTargetsIfNeeded() {
+        guard !callbackTargetsRegistered else { return }
+        guard ChipDnaMobile.isInitialized() else { return }
 
+        ChipDnaMobile.addAvailablePinPadsTarget(
+            self,
+            action: #selector(onAvailablePinPads(parameters:))
+        )
+        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
+            self,
+            action: #selector(onConnectAndConfigure(parameters:))
+        )
+        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
+            self,
+            action: #selector(onTapConnectAndConfigure(parameters:))
+        )
+        // ConfigurationUpdate and DeviceUpdate targets register here too.
+        // They were previously added per-`connect()` call, which was fine when
+        // each call used a fresh driver instance; on the shared singleton that
+        // pattern would stack duplicate (target, selector) pairs on every
+        // connect cycle. Handlers are idempotent fan-outs to a weak delegate,
+        // so one-shot registration is strictly correct.
+        ChipDnaMobile.addConfigurationUpdateTarget(
+            self,
+            action: #selector(onConfigurationUpdate(parameters:))
+        )
+        ChipDnaMobile.addConfigurationUpdateTarget(
+            self,
+            action: #selector(onTapConfigurationUpdate(parameters:))
+        )
+        ChipDnaMobile.addDeviceUpdateTarget(
+            self,
+            action: #selector(onDeviceUpdate(parameters:))
+        )
+        callbackTargetsRegistered = true
+    }
+
+    @objc public func onAvailablePinPads(parameters: CCParameters) {
+        // Single-fire guard: capture locally and clear before invoking.
+        // Target stays registered for the process lifetime; this nil-out
+        // is how we track "no pending search" without mutating the SDK's
+        // target list from inside its own enumeration.
         guard let onAvailablePinPadsCallback = onAvailablePinPadsCallback else {
             return
         }
+        self.onAvailablePinPadsCallback = nil
 
         // Attempt deserialization
         guard
@@ -652,11 +705,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onConnectAndConfigure(parameters: CCParameters) {
-       
-        ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
-
+        // Single-fire guard. `onTapConnectAndConfigure` shares the same
+        // ChipDnaMobile event; nil-check ensures only the originating flow
+        // (regular reader connect) consumes this invocation.
         guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
         else { return }
+        self.onConnectAndConfigureCallback = nil
         if parameters[CCParamResult] != CCValueTrue {
             onConnectAndConfigureCallback(nil)
             return
@@ -667,13 +721,15 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onTapConnectAndConfigure(parameters: CCParameters) {
-        ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
-
+        // Single-fire guard. Shares the `connectAndConfigureFinished` event
+        // with `onConnectAndConfigure`; nil-check ensures only the active
+        // TTP flow consumes this invocation.
         guard let onTapConnectAndConfigureCallback =
             onTapConnectAndConfigureCallback
         else {
             return
         }
+        self.onTapConnectAndConfigureCallback = nil
 
         let result = parameters[CCParamResult]
         if result == CCValueTrue {
