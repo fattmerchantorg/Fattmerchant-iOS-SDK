@@ -98,6 +98,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         completion: @escaping (Bool) -> Void
     ) {
         // Atomically tear down transient state before ChipDnaMobile re-init:
+        //   - Capture any in-flight one-shot completion closures so we can
+        //     resume their upstream awaiters with a synthetic failure. Without
+        //     this, nil-ing a pending closure silently orphans the caller's
+        //     async continuation (e.g. `HardwareManager.tapConnectContinuation`),
+        //     producing a permanent "alreadyConnecting" state until app restart.
         //   - `callbackTargetsRegistered = false` so the upcoming SDK init
         //     triggers fresh target registration against the new internal state.
         //   - Nil out the three one-shot completion closures so any late
@@ -108,12 +113,27 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         //   - Reset `activeMode` so stale config events from the old session
         //     don't leak to either delegate during teardown.
         stateLock.lock()
+        let pendingAvailablePinPads = onAvailablePinPadsCallback
+        let pendingConnectAndConfigure = onConnectAndConfigureCallback
+        let pendingTapConnectAndConfigure = onTapConnectAndConfigureCallback
         callbackTargetsRegistered = false
         onAvailablePinPadsCallback = nil
         onConnectAndConfigureCallback = nil
         onTapConnectAndConfigureCallback = nil
         activeMode = .none
         stateLock.unlock()
+
+        // Fire the captured closures OUTSIDE the lock — they may re-enter the
+        // driver (e.g. a completion handler that immediately kicks off another
+        // SDK call). Holding `stateLock` across that re-entry would deadlock.
+        pendingAvailablePinPads?([])
+        pendingConnectAndConfigure?(nil)
+        pendingTapConnectAndConfigure?(
+            false,
+            ConnectTapException.couldNotConnectToTap(
+                detail: "SDK re-initialized"
+            )
+        )
 
         guard let args = args as? ChipDnaInitializationArgs,
             !args.keys.securityKey.isEmpty
