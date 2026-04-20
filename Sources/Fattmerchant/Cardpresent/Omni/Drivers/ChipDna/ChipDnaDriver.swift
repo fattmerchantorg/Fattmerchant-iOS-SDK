@@ -64,6 +64,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         args: MobileReaderDriverInitializationArgs,
         completion: @escaping (Bool) -> Void
     ) {
+        // Re-init paths (e.g. auth change → app calls initialize again) may
+        // clear ChipDnaMobile's internal target list. Reset the one-shot flag
+        // so `registerCallbackTargetsIfNeeded()` re-runs on the next operation
+        // and our handlers are wired back up against the fresh SDK state.
+        callbackTargetsRegistered = false
+
         guard let args = args as? ChipDnaInitializationArgs,
             !args.keys.securityKey.isEmpty
         else {
