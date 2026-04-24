@@ -55,6 +55,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             return
         }
 
+        // Dispose prior state on re-init so merchant switches rebind
+        // ChipDnaMobile to the new merchant's Tap attestation —
+        // `setProperties(newApiKey)` alone does not clear the cached link.
+        if ChipDnaMobile.isInitialized() {
+            ChipDnaMobile.dispose(nil)
+        }
+
         ChipDnaDriver.initializationArgs = args
 
         // Initialize the ChipDna SDK
