@@ -7,6 +7,19 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     /// The ChipDna init params passed in the `initialize` function.
     private static var initializationArgs: ChipDnaInitializationArgs?
 
+    /// Set by the auto-dispose branch in `initialize` to signal that the next
+    /// `connectToTap` is running on a merchant-switched session and must
+    /// force a full TMS re-download. Consumed + cleared by `connectToTap`.
+    /// Stays `false` on first init and on same-merchant disconnect→reinit.
+    ///
+    /// TMS = Terminal Management System: NMI's server-side provisioning
+    /// service that pushes per-merchant configuration (EMV kernels, limits,
+    /// TapToMobilePOIIdentifier, merchant display name) down into
+    /// ChipDnaMobile's local encrypted database. The cache survives
+    /// `dispose(nil)`, which is why we need to force a refresh on
+    /// merchant switch.
+    fileprivate static var tmsRefreshPending: Bool = false
+
     var familiarSerialNumbers: [String] = []
 
     weak var tapConnectionStatusDelegate: (any TapConnectionStatusDelegate)?
@@ -72,6 +85,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             if disposeResult?[CCParamResult] != CCValueTrue {
                 print("[ChipDnaDriver.initialize] dispose returned non-success: \(String(describing: disposeResult))")
             }
+            // Merchant switch: the next TTP connect must force a full TMS
+            // re-download so ChipDnaMobile rotates the cached
+            // TapToMobilePOIIdentifier + merchant display name to the new
+            // merchant's values. `dispose` + `setProperties(newApiKey)`
+            // alone do not invalidate the TMS cache.
+            ChipDnaDriver.tmsRefreshPending = true
         }
 
         ChipDnaDriver.initializationArgs = args
@@ -207,8 +226,30 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         let requestParams = CCParameters()
         requestParams.setValue(CCValueTrue, forKey: CCParamTapToMobilePOI)
         requestParams.setValue(CCValueFalse, forKey: CCParamPaymentDevicePOI)
-        
-        ChipDnaMobile.sharedInstance()?.getStatus(nil)
+
+        // Only force a full TMS re-download when we know a merchant switch
+        // occurred (flag set by the auto-dispose branch in `initialize`).
+        // Without this, dispose + setProperties(newApiKey) leaves the prior
+        // merchant's TMS cache in place — so the attestation token handed
+        // to Apple carries the old POI, and the PassKit sheet and the
+        // ISO 8583 Card Acceptor Name on the cardholder's statement both
+        // reflect the previous merchant even though NMI routes funds to
+        // the new one. Skip the refresh on same-merchant reconnects to
+        // avoid an unnecessary NMI round-trip.
+        let forceTmsRefresh = ChipDnaDriver.tmsRefreshPending
+        ChipDnaDriver.tmsRefreshPending = false
+        if forceTmsRefresh {
+            requestParams.setValue(CCValueTrue, forKey: CCParamFullTmsUpdate)
+        }
+
+        // Diagnostic: capture POI identifier + merchant display name before
+        // connectAndConfigure so we can compare against the post-connect
+        // values in onTapConnectAndConfigure and verify whether the refresh
+        // actually rotated them.
+        let beforeStatus = ChipDnaMobile.sharedInstance()?.getStatus(nil)
+        let beforePOI = beforeStatus?[CCParamTapToMobilePOIIdentifier] ?? "nil"
+        let beforeName = beforeStatus?[CCParamMerchantDisplayName] ?? "nil"
+        print("[ChipDnaDriver.connectToTap] BEFORE connectAndConfigure forceTmsRefresh=\(forceTmsRefresh) POI=\(beforePOI) name=\(beforeName)")
 
         onTapConnectAndConfigureCallback = { success, error in
             completion(success, error)
@@ -714,8 +755,14 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             let exception = parseTapConnectionError(parameters: parameters)
             onTapConnectAndConfigureCallback(false, exception)
         }
-        
-        ChipDnaMobile.sharedInstance().getStatus(nil)
+
+        // Diagnostic: pairs with the BEFORE log in `connectToTap`. If the POI
+        // identifier here matches the BEFORE value after a merchant switch,
+        // the TMS refresh didn't rotate what Apple's attestation sees.
+        let afterStatus = ChipDnaMobile.sharedInstance()?.getStatus(nil)
+        let afterPOI = afterStatus?[CCParamTapToMobilePOIIdentifier] ?? "nil"
+        let afterName = afterStatus?[CCParamMerchantDisplayName] ?? "nil"
+        print("[ChipDnaDriver.onTapConnectAndConfigure] AFTER connectAndConfigure result=\(result ?? "nil") POI=\(afterPOI) name=\(afterName)")
     }
     
     /// Parses ChipDNA error parameters and returns appropriate ConnectTapException
