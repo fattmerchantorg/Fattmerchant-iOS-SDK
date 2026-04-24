@@ -9,7 +9,7 @@ class MobileReaderDriverRepository {
     #if targetEnvironment(simulator)
       return [MockDriver()]
     #else
-      return [ChipDnaDriver()]
+      return [ChipDnaDriver.shared]
     #endif
   }
 

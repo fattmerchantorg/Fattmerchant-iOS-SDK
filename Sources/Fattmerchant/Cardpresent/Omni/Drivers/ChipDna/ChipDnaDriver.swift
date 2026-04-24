@@ -4,14 +4,64 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     static var isStaxRefundsSupported: Bool = true
     static var source: String = "NMI"
 
+    /// Process-long-lived singleton. Required so our ChipDnaMobile callback
+    /// targets (`self`) are registered exactly once and never mutated from
+    /// inside a callback — mutating ChipDnaMobile's target list during its
+    /// own enumeration aborts with `NSGenericException: "Collection was
+    /// mutated while being enumerated"` on `runCallbackThread`.
+    static let shared = ChipDnaDriver()
+
     /// The ChipDna init params passed in the `initialize` function.
     private static var initializationArgs: ChipDnaInitializationArgs?
 
+    /// Serial queue used to hop off ChipDnaMobile's `runCallbackThread` before
+    /// mutating SDK state (dispose + re-initialize). Prevents re-entering the
+    /// target-list mutation path while ChipDnaMobile is still enumerating its
+    /// targets — the root cause class of the original crash.
+    private static let sdkMutationQueue = DispatchQueue(
+        label: "com.fattmerchant.chipdna.sdk-mutation"
+    )
+
+    /// Protects `callbackTargetsRegistered`, the three one-shot completion
+    /// closures, and `activeMode`. All of these are read on caller threads
+    /// (job queue, HardwareManager actor executor) and written on ChipDnaMobile's
+    /// `runCallbackThread`; a lock is required for memory-visibility, not just
+    /// mutual exclusion.
+    private let stateLock = NSLock()
+
+    /// Guards one-time registration of ChipDnaMobile callback targets.
+    /// Registration happens synchronously inside `initialize()` on success,
+    /// so the flag is `true` whenever the SDK is initialized.
+    private var callbackTargetsRegistered = false
+
+    /// Scope for ConfigurationUpdate fan-out. Both reader and tap flows share
+    /// ChipDnaMobile's `configurationUpdate` event; gating handlers on the
+    /// active mode prevents cross-contamination of delegate calls between flows.
+    fileprivate enum ActiveMode { case none, reader, tap }
+    fileprivate var activeMode: ActiveMode = .none
+
     var familiarSerialNumbers: [String] = []
 
-    weak var tapConnectionStatusDelegate: (any TapConnectionStatusDelegate)?
+    private override init() {
+        super.init()
+    }
+
+    /// Delegate for reader (USB/BLE/BT) connection status updates.
+    ///
+    /// - Important: This is a singleton-scoped property. The SDK does **not**
+    ///   serialize assignment; callers must ensure only one flow assigns this
+    ///   delegate at a time. In practice, `HardwareManager`'s `connectContinuation`
+    ///   guard enforces this — future callers should preserve that invariant or
+    ///   wrap their own serialization. Late callbacks from a prior flow can
+    ///   leak into a newly-assigned delegate if that contract is broken.
     weak var mobileReaderConnectionStatusDelegate:
         MobileReaderConnectionStatusDelegate?
+
+    /// Delegate for Tap to Pay connection status updates.
+    ///
+    /// - Important: Same serialization contract as
+    ///   `mobileReaderConnectionStatusDelegate`. See its doc comment.
+    weak var tapConnectionStatusDelegate: (any TapConnectionStatusDelegate)?
 
     /// A block to run after self deserializes a list of SelectablePinPads from the result of ChipDna availablePinPads
     fileprivate var onAvailablePinPadsCallback: (([SelectablePinPad]) -> Void)?
@@ -47,6 +97,44 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         args: MobileReaderDriverInitializationArgs,
         completion: @escaping (Bool) -> Void
     ) {
+        // Atomically tear down transient state before ChipDnaMobile re-init:
+        //   - Capture any in-flight one-shot completion closures so we can
+        //     resume their upstream awaiters with a synthetic failure. Without
+        //     this, nil-ing a pending closure silently orphans the caller's
+        //     async continuation (e.g. `HardwareManager.tapConnectContinuation`),
+        //     producing a permanent "alreadyConnecting" state until app restart.
+        //   - `callbackTargetsRegistered = false` so the upcoming SDK init
+        //     triggers fresh target registration against the new internal state.
+        //   - Nil out the three one-shot completion closures so any late
+        //     callback emitted during `dispose()` / `initialize()` can't consume
+        //     a pending completion that belongs to a prior (now-abandoned)
+        //     operation. This closes the re-init race window where an old
+        //     handler would nil a closure meant for the post-re-init attempt.
+        //   - Reset `activeMode` so stale config events from the old session
+        //     don't leak to either delegate during teardown.
+        stateLock.lock()
+        let pendingAvailablePinPads = onAvailablePinPadsCallback
+        let pendingConnectAndConfigure = onConnectAndConfigureCallback
+        let pendingTapConnectAndConfigure = onTapConnectAndConfigureCallback
+        callbackTargetsRegistered = false
+        onAvailablePinPadsCallback = nil
+        onConnectAndConfigureCallback = nil
+        onTapConnectAndConfigureCallback = nil
+        activeMode = .none
+        stateLock.unlock()
+
+        // Fire the captured closures OUTSIDE the lock — they may re-enter the
+        // driver (e.g. a completion handler that immediately kicks off another
+        // SDK call). Holding `stateLock` across that re-entry would deadlock.
+        pendingAvailablePinPads?([])
+        pendingConnectAndConfigure?(nil)
+        pendingTapConnectAndConfigure?(
+            false,
+            ConnectTapException.couldNotConnectToTap(
+                detail: "SDK re-initialized"
+            )
+        )
+
         guard let args = args as? ChipDnaInitializationArgs,
             !args.keys.securityKey.isEmpty
         else {
@@ -88,7 +176,13 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             return
         }
 
-        // Initialized
+        // Register callback targets synchronously against the fresh SDK state.
+        // Doing this here (rather than lazily on first connect) means the only
+        // context that ever mutates ChipDnaMobile's target list is this
+        // app-originated initialize path. `searchForReaders`/`connect`/
+        // `connectToTap` callers find the flag already set and skip registration.
+        registerCallbackTargetsIfNeeded()
+
         completion(true)
     }
 
@@ -125,23 +219,43 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     ) {
         // TODO: Allow scans for only USB, BLE, or BT based on args
 
+        // Fail fast if the SDK isn't initialized. Previously this path would
+        // silently no-op and the caller would dead-wait on a completion that
+        // never fires.
+        guard ChipDnaMobile.isInitialized() else {
+            completion([])
+            return
+        }
+
         // Scan everything for 5 seconds
         let params = CCParameters()
         params[CCParamBLEScanTime] = "5"
 
-        // Set the callback to contain this function's completion parameter
+        // Set the callback to contain this function's completion parameter.
+        // Targets were registered in `initialize()`; the singleton holds them
+        // for the process lifetime and handlers route on the nil-ness of this
+        // closure.
+        //
+        // If a prior call's closure is still parked (caller abandoned the
+        // attempt before ChipDnaMobile fired its event), we must invoke it
+        // with an empty result BEFORE overwriting — otherwise the previous
+        // closure's captured `CheckedContinuation` in
+        // `SearchForMobileReadersJob.start()` deinits un-resumed and Swift
+        // runtime logs: "SWIFT TASK CONTINUATION MISUSE: start() leaked its
+        // continuation without resuming it."
+        stateLock.lock()
+        let previousAvailablePinPads = onAvailablePinPadsCallback
         onAvailablePinPadsCallback = { availablePinPads in
             let readers = availablePinPads.map({ MobileReader.from(pinPad: $0) }
             )
             completion(readers)
         }
+        stateLock.unlock()
 
-        // Remove extraneous listeners, and search for available pin pads.
-        ChipDnaMobile.removeAvailablePinPadsTarget(self)
-        ChipDnaMobile.addAvailablePinPadsTarget(
-            self,
-            action: #selector(onAvailablePinPads(parameters:))
-        )
+        // Fire the superseded closure outside the lock so it can re-enter the
+        // driver without deadlocking.
+        previousAvailablePinPads?([])
+
         ChipDnaMobile.sharedInstance()?.getAvailablePinPads(params)
     }
 
@@ -152,11 +266,28 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         reader: MobileReader,
         completion: @escaping (MobileReader?) -> Void
     ) {
+        // Fail fast if the SDK isn't initialized.
+        guard ChipDnaMobile.isInitialized() else {
+            completion(nil)
+            return
+        }
+
         let requestParams = CCParameters()
         requestParams[CCParamPinPadName] = reader.name
         requestParams[CCParamPinPadConnectionType] =
             reader.connectionType ?? CCValueBLE
 
+        // Claim the reader flow's event scope before arming the callback. This
+        // gates `onConfigurationUpdate` / `onDeviceUpdate` fan-out to the reader
+        // delegate and keeps tap-session events from leaking into it.
+        //
+        // Capture any stale pending closure first and invoke it with `nil`
+        // (failure) after releasing the lock. Same reasoning as in
+        // `searchForReaders`: overwriting without invoking orphans the prior
+        // closure's continuation in `ConnectToMobileReaderJob.start()`.
+        stateLock.lock()
+        let previousConnectAndConfigure = onConnectAndConfigureCallback
+        activeMode = .reader
         onConnectAndConfigureCallback = { connectedReader in
             let _ = ChipDnaMobile.sharedInstance().getStatus(nil)
             if let connectedReader = connectedReader,
@@ -166,25 +297,15 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             }
             completion(connectedReader)
         }
+        stateLock.unlock()
+
+        previousConnectAndConfigure?(nil)
 
         if reader.name.uppercased().hasPrefix("IDTECH") {
             requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
         }
 
         ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
-        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
-            self,
-            action: #selector(onConnectAndConfigure(parameters:))
-        )
-        ChipDnaMobile.addConfigurationUpdateTarget(
-            self,
-            action: #selector(onConfigurationUpdate(parameters:))
-        )
-        ChipDnaMobile.addDeviceUpdateTarget(
-            self,
-            action: #selector(onDeviceUpdate(parameters:))
-        )
-      
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
@@ -192,24 +313,53 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     func connectToTap(
         completion: @escaping (Bool, OmniException?) -> Void
     ) {
+        // Fail fast if the SDK isn't initialized. `ConnectToTapJob` force-casts
+        // the returned error to `ConnectTapException`, so the error type here
+        // must be a `ConnectTapException` variant — not `OmniGeneralException`.
+        guard ChipDnaMobile.isInitialized() else {
+            completion(
+                false,
+                ConnectTapException.couldNotConnectToTap(
+                    detail: "SDK not initialized"
+                )
+            )
+            return
+        }
+
         let requestParams = CCParameters()
         requestParams.setValue(CCValueTrue, forKey: CCParamTapToMobilePOI)
         requestParams.setValue(CCValueFalse, forKey: CCParamPaymentDevicePOI)
-        
+
         ChipDnaMobile.sharedInstance()?.getStatus(nil)
 
+        // Claim the tap flow's event scope before arming the callback, for the
+        // same reason `connect()` does.
+        //
+        // Capture any stale pending closure from a prior (abandoned) tap
+        // attempt so we can invoke it with a "superseded" failure BEFORE
+        // overwriting the slot. Without this, the prior closure's captured
+        // `CheckedContinuation` in `ConnectToTapJob.start()` would deinit
+        // un-resumed and Swift runtime would log:
+        //   "SWIFT TASK CONTINUATION MISUSE: start() leaked its continuation
+        //    without resuming it."
+        // This happens in practice when the app cancels a tap-connect mid
+        // flight (e.g. user dismisses the TTP prep screen) but ChipDnaMobile
+        // never fires its `connectAndConfigureFinished` event, leaving the
+        // closure parked in this slot until the next attempt overwrites it.
+        stateLock.lock()
+        let previousTapConnectAndConfigure = onTapConnectAndConfigureCallback
+        activeMode = .tap
         onTapConnectAndConfigureCallback = { success, error in
             completion(success, error)
         }
+        stateLock.unlock()
 
-        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
-            self,
-            action: #selector(onTapConnectAndConfigure(parameters:))
-        )
-
-        ChipDnaMobile.addConfigurationUpdateTarget(
-            self,
-            action: #selector(onTapConfigurationUpdate(parameters:))
+        // Fire outside the lock — caller may re-enter the driver.
+        previousTapConnectAndConfigure?(
+            false,
+            ConnectTapException.couldNotConnectToTap(
+                detail: "superseded by new connectToTap attempt"
+            )
         )
 
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
@@ -222,8 +372,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         completion: (MobileReader?) -> Void,
         error: @escaping (OmniException) -> Void
     ) {
-        if !ChipDnaMobile.isInitialized() {
+        guard ChipDnaMobile.isInitialized() else {
             error(OmniGeneralException.uninitialized)
+            return
         }
 
         completion(ChipDnaDriver.getConnectedReader())
@@ -236,16 +387,33 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         completion: @escaping (Bool) -> Void,
         error: @escaping (OmniException) -> Void
     ) {
-        if !ChipDnaMobile.isInitialized() {
+        guard ChipDnaMobile.isInitialized() else {
             error(OmniGeneralException.uninitialized)
+            return
         }
 
-        // Re-initializing the ChipDnaMobile SDK disconnects everything, so that works.
-        ChipDnaMobile.dispose(nil)
-        initialize(
-            args: ChipDnaDriver.initializationArgs!,
-            completion: completion
-        )
+        guard let args = ChipDnaDriver.initializationArgs else {
+            error(OmniGeneralException.uninitialized)
+            return
+        }
+
+        // Hop off any ChipDnaMobile callback thread before touching the SDK's
+        // target list. `dispose()` synchronously fires final callbacks; if
+        // `disconnect()` was invoked from within one of those callbacks (e.g.
+        // a delegate reacting to a status update), performing the dispose +
+        // re-initialize inline would mutate ChipDnaMobile's target list while
+        // it's still being enumerated — the exact pattern that caused the
+        // original crash. Serializing onto `sdkMutationQueue` guarantees the
+        // target list is only touched from a non-callback context.
+        ChipDnaDriver.sdkMutationQueue.async { [weak self] in
+            guard let self = self else {
+                completion(false)
+                return
+            }
+            // Re-initializing the ChipDnaMobile SDK disconnects everything, so that works.
+            ChipDnaMobile.dispose(nil)
+            self.initialize(args: args, completion: completion)
+        }
     }
 
     func performTransaction(
@@ -637,12 +805,72 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
     // MARK: - ChipDna Listeners
 
-    @objc public func onAvailablePinPads(parameters: CCParameters) {
-        ChipDnaMobile.removeAvailablePinPadsTarget(self)
-
-        guard let onAvailablePinPadsCallback = onAvailablePinPadsCallback else {
+    /// Registers all crash-path callback targets with ChipDnaMobile exactly
+    /// once per SDK initialization. Called synchronously from `initialize()`
+    /// on success; `searchForReaders` / `connect` / `connectToTap` no longer
+    /// call this path. Handlers use the captured completion closure (nil-ing
+    /// it after firing) as the "has pending request" signal rather than
+    /// presence in the SDK's target list. This eliminates the need to mutate
+    /// the target list from inside a callback, which was the source of
+    /// `NSGenericException: "Collection was mutated while being enumerated"`.
+    fileprivate func registerCallbackTargetsIfNeeded() {
+        stateLock.lock()
+        if callbackTargetsRegistered {
+            stateLock.unlock()
             return
         }
+        guard ChipDnaMobile.isInitialized() else {
+            stateLock.unlock()
+            return
+        }
+        callbackTargetsRegistered = true
+        stateLock.unlock()
+
+        ChipDnaMobile.addAvailablePinPadsTarget(
+            self,
+            action: #selector(onAvailablePinPads(parameters:))
+        )
+        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
+            self,
+            action: #selector(onConnectAndConfigure(parameters:))
+        )
+        ChipDnaMobile.addConnectAndConfigureFinishedTarget(
+            self,
+            action: #selector(onTapConnectAndConfigure(parameters:))
+        )
+        // ConfigurationUpdate and DeviceUpdate targets register here too.
+        // They were previously added per-`connect()` call, which was fine when
+        // each call used a fresh driver instance; on the shared singleton that
+        // pattern would stack duplicate (target, selector) pairs on every
+        // connect cycle. Scoping is now handled in the handlers themselves
+        // via `activeMode`, so one-shot registration is strictly correct.
+        ChipDnaMobile.addConfigurationUpdateTarget(
+            self,
+            action: #selector(onConfigurationUpdate(parameters:))
+        )
+        ChipDnaMobile.addConfigurationUpdateTarget(
+            self,
+            action: #selector(onTapConfigurationUpdate(parameters:))
+        )
+        ChipDnaMobile.addDeviceUpdateTarget(
+            self,
+            action: #selector(onDeviceUpdate(parameters:))
+        )
+    }
+
+    @objc public func onAvailablePinPads(parameters: CCParameters) {
+        // Single-fire guard: capture-and-clear atomically under `stateLock` so
+        // two concurrent callback-thread invocations can't both read non-nil
+        // before either nil-outs. Target stays registered for the lifetime of
+        // the SDK init; this nil-out is how we track "no pending search"
+        // without mutating the SDK's target list from inside its own
+        // enumeration.
+        stateLock.lock()
+        let callback = onAvailablePinPadsCallback
+        onAvailablePinPadsCallback = nil
+        stateLock.unlock()
+
+        guard let callback = callback else { return }
 
         // Attempt deserialization
         guard
@@ -651,49 +879,56 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 pinPadsXml: availablePinPadsXml
             )
         else {
-            onAvailablePinPadsCallback([])
+            callback([])
             return
         }
 
-        onAvailablePinPadsCallback(pinPads)
+        callback(pinPads)
     }
 
     @objc func onConnectAndConfigure(parameters: CCParameters) {
-       
-        ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
+        // Single-fire guard under `stateLock`. `onTapConnectAndConfigure`
+        // shares the same ChipDnaMobile event; nil-check ensures only the
+        // originating flow (regular reader connect) consumes this invocation.
+        stateLock.lock()
+        let callback = onConnectAndConfigureCallback
+        onConnectAndConfigureCallback = nil
+        stateLock.unlock()
 
-        guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
-        else { return }
+        guard let callback = callback else { return }
+
         if parameters[CCParamResult] != CCValueTrue {
-            onConnectAndConfigureCallback(nil)
+            callback(nil)
             return
         }
 
         // Figure out the reader details and pass them along
-        onConnectAndConfigureCallback(ChipDnaDriver.getConnectedReader())
+        callback(ChipDnaDriver.getConnectedReader())
     }
 
     @objc func onTapConnectAndConfigure(parameters: CCParameters) {
-        ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
+        // Single-fire guard under `stateLock`. Shares the
+        // `connectAndConfigureFinished` event with `onConnectAndConfigure`;
+        // nil-check ensures only the active TTP flow consumes this invocation.
+        stateLock.lock()
+        let callback = onTapConnectAndConfigureCallback
+        onTapConnectAndConfigureCallback = nil
+        stateLock.unlock()
 
-        guard let onTapConnectAndConfigureCallback =
-            onTapConnectAndConfigureCallback
-        else {
-            return
-        }
+        guard let callback = callback else { return }
 
         let result = parameters[CCParamResult]
         if result == CCValueTrue {
             tapConnectionStatusDelegate?.tapConnectionStatusUpdate(
                 status: .connected
             )
-            onTapConnectAndConfigureCallback(true, nil)
+            callback(true, nil)
         } else {
             // Parse error codes and map to specific exceptions
             let exception = parseTapConnectionError(parameters: parameters)
-            onTapConnectAndConfigureCallback(false, exception)
+            callback(false, exception)
         }
-        
+
         ChipDnaMobile.sharedInstance().getStatus(nil)
     }
     
@@ -786,6 +1021,15 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onConfigurationUpdate(parameters: CCParameters) {
+        // Gate on `activeMode == .reader`. Both reader and tap flows register
+        // handlers against ChipDnaMobile's `configurationUpdate` event on the
+        // singleton; without this gate, tap-session config events would fan
+        // out to `mobileReaderConnectionStatusDelegate` and vice versa.
+        stateLock.lock()
+        let mode = activeMode
+        stateLock.unlock()
+        guard mode == .reader else { return }
+
         if let str = parameters[CCParamConfigurationUpdate],
             let status = MobileReaderConnectionStatus(
                 chipDnaConfigurationUpdate: str
@@ -797,6 +1041,12 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onTapConfigurationUpdate(parameters: CCParameters) {
+        // Gate on `activeMode == .tap`. See `onConfigurationUpdate` for rationale.
+        stateLock.lock()
+        let mode = activeMode
+        stateLock.unlock()
+        guard mode == .tap else { return }
+
         // Handle configuration update status
         if let str = parameters[CCParamConfigurationUpdate],
             let status = TapConnectionStatus(
@@ -807,7 +1057,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 status: status
             )
         }
-        
+
         // Handle configuration percentage (0-100)
         // This is received after CCValueUpdatingTapToMobileConfig
         if let percentageStr = parameters[CCParamTapToMobileConfigurationPercentage],
@@ -821,6 +1071,14 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     }
 
     @objc func onDeviceUpdate(parameters: CCParameters) {
+        // Device-status updates are meaningful only to the reader flow. The
+        // tap flow uses its own configuration events to signal connection
+        // state, not device-status events.
+        stateLock.lock()
+        let mode = activeMode
+        stateLock.unlock()
+        guard mode == .reader else { return }
+
         if let deviceStatusXml = parameters[CCParamDeviceStatusUpdate],
             let deviceStatus = ChipDnaMobileSerializer.deserializeDeviceStatus(
                 deviceStatusXml

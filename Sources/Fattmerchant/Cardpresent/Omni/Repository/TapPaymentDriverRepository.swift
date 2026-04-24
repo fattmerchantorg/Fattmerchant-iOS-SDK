@@ -7,7 +7,7 @@ class TapPaymentDriverRepository {
       #if targetEnvironment(simulator)
         return [MockTapDriver()]
       #else
-        return [ChipDnaDriver()]
+        return [ChipDnaDriver.shared]
       #endif
     }
 }
