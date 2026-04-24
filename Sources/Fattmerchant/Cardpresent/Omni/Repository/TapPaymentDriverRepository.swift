@@ -5,7 +5,7 @@ class TapPaymentDriverRepository {
 
     func all() -> [TapDriver] {
       #if targetEnvironment(simulator)
-        return [MockDriver()]
+        return [MockTapDriver()]
       #else
         return [ChipDnaDriver()]
       #endif
