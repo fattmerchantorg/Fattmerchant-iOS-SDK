@@ -231,14 +231,22 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     ) {
         if !ChipDnaMobile.isInitialized() {
             error(OmniGeneralException.uninitialized)
+            return
         }
 
-        // Re-initializing the ChipDnaMobile SDK disconnects everything, so that works.
+        // Dispose ChipDnaMobile without re-initializing. Callers (notably
+        // `Omni.initialize`) are responsible for re-initializing with fresh
+        // args on the next setup. Previously, this method re-initialized
+        // using the static `ChipDnaDriver.initializationArgs`, which still
+        // held the prior merchant's NMI keys — causing ChipDnaMobile to stay
+        // bound to the previous merchant's Tap attestation across merchant
+        // switches (the Apple PassKit sheet kept showing the prior merchant's
+        // name even after `Omni.initialize` was called with the new JWT).
+        // Clearing the static here also prevents any future caller from
+        // accidentally re-initializing with stale args.
         ChipDnaMobile.dispose(nil)
-        initialize(
-            args: ChipDnaDriver.initializationArgs!,
-            completion: completion
-        )
+        ChipDnaDriver.initializationArgs = nil
+        completion(true)
     }
 
     func performTransaction(
