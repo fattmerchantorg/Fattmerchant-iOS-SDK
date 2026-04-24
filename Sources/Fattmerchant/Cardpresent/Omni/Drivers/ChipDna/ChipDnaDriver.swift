@@ -58,8 +58,20 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         // Dispose prior state on re-init so merchant switches rebind
         // ChipDnaMobile to the new merchant's Tap attestation —
         // `setProperties(newApiKey)` alone does not clear the cached link.
+        // Remove target-action registrations first: `dispose(nil)` is not
+        // documented to clear class-level target lists, so callbacks
+        // from a prior merchant's failed/cancelled connectAndConfigure
+        // can leak across dispose and fire on a later merchant's
+        // re-attestation.
         if ChipDnaMobile.isInitialized() {
-            ChipDnaMobile.dispose(nil)
+            ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
+            ChipDnaMobile.removeConfigurationUpdateTarget(self)
+            ChipDnaMobile.removeDeviceUpdateTarget(self)
+            ChipDnaMobile.removeAvailablePinPadsTarget(self)
+            let disposeResult = ChipDnaMobile.dispose(nil)
+            if disposeResult?[CCParamResult] != CCValueTrue {
+                print("[ChipDnaDriver.initialize] dispose returned non-success: \(String(describing: disposeResult))")
+            }
         }
 
         ChipDnaDriver.initializationArgs = args
@@ -241,7 +253,16 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         }
 
         // Re-initializing the ChipDnaMobile SDK disconnects everything, so that works.
-        ChipDnaMobile.dispose(nil)
+        // Remove target-action registrations first — same rationale as
+        // the auto-dispose guard in `initialize`.
+        ChipDnaMobile.removeConnectAndConfigureFinishedTarget(self)
+        ChipDnaMobile.removeConfigurationUpdateTarget(self)
+        ChipDnaMobile.removeDeviceUpdateTarget(self)
+        ChipDnaMobile.removeAvailablePinPadsTarget(self)
+        let disposeResult = ChipDnaMobile.dispose(nil)
+        if disposeResult?[CCParamResult] != CCValueTrue {
+            print("[ChipDnaDriver.disconnect] dispose returned non-success: \(String(describing: disposeResult))")
+        }
         initialize(
             args: ChipDnaDriver.initializationArgs!,
             completion: completion
