@@ -8,6 +8,9 @@
 ///     method: .get
 /// )
 /// ```
+
+import Foundation
+
 struct StaxApiRequest<Response: Decodable> {
   /// The path component of the URL, relative to the base URL.
   /// Should start with a forward slash, e.g. "/transactions".
