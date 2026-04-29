@@ -35,11 +35,13 @@ class MockDriver: MobileReaderDriver {
   }
 
   func initialize(args: MobileReaderDriverInitializationArgs, completion: (Bool) -> Void) {
+    #if !targetEnvironment(simulator)
     if let args = args as? ChipDnaInitializationArgs {
       completion(args.keys.securityKey.isEmpty)
       return
     }
-    
+    #endif
+
     completion(false)
   }
 

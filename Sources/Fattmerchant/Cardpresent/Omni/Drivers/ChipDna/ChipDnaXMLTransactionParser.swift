@@ -1,4 +1,3 @@
-#if !targetEnvironment(simulator)
 //
 //  ChipDnaXMLTransactionParser.swift
 //  fattmerchant-ios-sdk
@@ -103,4 +102,3 @@ class ChipDnaXMLTransactionParser: NSObject, XMLParserDelegate {
     finish()
   }
 }
-#endif
