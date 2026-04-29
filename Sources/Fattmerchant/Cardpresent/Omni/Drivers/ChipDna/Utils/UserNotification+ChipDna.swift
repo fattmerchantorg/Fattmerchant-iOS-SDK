@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 extension UserNotification {
 
   /// Makes an Omni TransactionUpdate from a ChipDna TransactionUpdate string
@@ -16,3 +17,4 @@ extension UserNotification {
   }
 }
 
+#endif

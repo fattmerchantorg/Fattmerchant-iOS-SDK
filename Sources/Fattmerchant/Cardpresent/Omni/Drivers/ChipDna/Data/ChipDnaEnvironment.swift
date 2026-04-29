@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 //
 //  ChipDnaEnvironment.swift
 //  fattmerchant-ios-sdk
@@ -19,3 +20,4 @@ public enum ChipDnaEnvironment {
     }
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 //
 //  ChipDnaTransactionUserReference.swift
 //  Fattmerchant
@@ -19,3 +20,4 @@ func generateChipDnaTransactionUserReference() -> String {
   let dateString = dateFormatter.string(from: Date())
   return "CDM-\(dateString)"
 }
+#endif

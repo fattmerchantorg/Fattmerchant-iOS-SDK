@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 import Foundation
 
 /// Communicates with Transaction Gateway via the Direct Post API
@@ -38,3 +39,4 @@ internal class TransactionGateway {
   }
 
 }
+#endif

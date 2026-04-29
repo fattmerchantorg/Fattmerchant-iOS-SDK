@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 import Foundation
 
 class ChipDnaTransactionListener: NSObject {
@@ -145,3 +146,4 @@ class ChipDnaTransactionListener: NSObject {
     onProcessReceiptFinished?(parameters)
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 import Foundation
 
 class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
@@ -924,3 +925,4 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         }
     }
 }
+#endif

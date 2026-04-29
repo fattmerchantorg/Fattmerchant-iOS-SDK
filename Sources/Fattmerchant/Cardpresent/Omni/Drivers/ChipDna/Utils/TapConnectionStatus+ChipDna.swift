@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 import Foundation
 
 extension TapConnectionStatus {
@@ -41,3 +42,4 @@ extension TapConnectionStatus {
         }
     }
 }
+#endif
