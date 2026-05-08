@@ -201,6 +201,8 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         if reader.name.uppercased().hasPrefix("IDTECH") {
             requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
+        } else {
+            requestParams.setValue(CCValueTrue, forKey: CCParamForceTmsUpdate)
         }
 
         ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
