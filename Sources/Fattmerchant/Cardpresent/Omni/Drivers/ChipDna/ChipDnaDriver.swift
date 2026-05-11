@@ -191,7 +191,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         onConnectAndConfigureCallback = { connectedReader in
             let _ = ChipDnaMobile.sharedInstance().getStatus(nil)
-            if let connectedReader = connectedReader,
+            if let connefcctedReader = connectedReader,
                 let serial = connectedReader.serialNumber
             {
                 self.familiarSerialNumbers.append(serial)
@@ -218,9 +218,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             self,
             action: #selector(onDeviceUpdate(parameters:))
         )
-       if !reader.name.uppercased().hasPrefix("IDTECH") {
-            ChipDnaDriver.dumpRequestParams(requestParams, label: "BBPOS:\(reader.name)")
-        }
+
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
@@ -744,6 +742,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
         else { return }
         if parameters[CCParamResult] != CCValueTrue {
+             let errors = parameters[CCParamErrors] ?? "nil"
+            let errorDesc = parameters[CCParamErrorDescription] ?? "nil"
+            ChipDnaDriver.dumpRequestParams(parameters, label: "onConnectAndConfigure.FAILED")
+            print("[ChipDnaDriver.onConnectAndConfigure] FAILED errors=\(errors) description=\(errorDesc)")
             onConnectAndConfigureCallback(nil)
             return
         }
