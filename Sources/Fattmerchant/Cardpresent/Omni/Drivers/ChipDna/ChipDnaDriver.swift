@@ -191,7 +191,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         onConnectAndConfigureCallback = { connectedReader in
             let _ = ChipDnaMobile.sharedInstance().getStatus(nil)
-            if let connefcctedReader = connectedReader,
+            if let connectedReader = connectedReader,
                 let serial = connectedReader.serialNumber
             {
                 self.familiarSerialNumbers.append(serial)
