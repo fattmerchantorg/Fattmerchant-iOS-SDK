@@ -202,6 +202,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         if reader.name.uppercased().hasPrefix("IDTECH") {
             requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
         } else {
+            // force TMS updates for BBPOS readers
             requestParams.setValue(CCValueTrue, forKey: CCParamForceTmsUpdate)
         }
 
@@ -220,18 +221,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         )
 
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
-    }
-
-    /// Logs every key/value in a CCParameters object before it's handed to
-    /// ChipDnaMobile.connectAndConfigure. Use to diagnose whether a flag like
-    /// CCParamForceTmsUpdate is actually being set on a given connect path.
-    fileprivate static func dumpRequestParams(_ params: CCParameters, label: String) {
-        let keys = (params.allKeys() as? [String]) ?? []
-        let dump = keys.map { key in
-            let value = params.value(forKey: key) ?? "nil"
-            return "\(key)=\(value)"
-        }.joined(separator: ", ")
-        print("[ChipDnaDriver.\(label)] connectAndConfigure params: { \(dump) }")
     }
 
     /// Connects to Tap to Pay via ChipDna and propagates success/failure.
@@ -742,10 +731,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         guard let onConnectAndConfigureCallback = onConnectAndConfigureCallback
         else { return }
         if parameters[CCParamResult] != CCValueTrue {
-             let errors = parameters[CCParamErrors] ?? "nil"
-            let errorDesc = parameters[CCParamErrorDescription] ?? "nil"
-            ChipDnaDriver.dumpRequestParams(parameters, label: "onConnectAndConfigure.FAILED")
-            print("[ChipDnaDriver.onConnectAndConfigure] FAILED errors=\(errors) description=\(errorDesc)")
             onConnectAndConfigureCallback(nil)
             return
         }

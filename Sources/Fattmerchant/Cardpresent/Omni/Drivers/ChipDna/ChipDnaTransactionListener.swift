@@ -65,13 +65,10 @@ class ChipDnaTransactionListener: NSObject {
   }
   
   @objc fileprivate func onTransactionUpdate(parameters: CCParameters) {
-     let rawString = parameters[CCParamTransactionUpdate] ?? "nil"
-    print("[ChipDnaListener.txUpdate] raw=\"\(rawString)\"")
     guard
       let delegate = transactionUpdateDelegate,
       let transactionUpdateString = parameters[CCParamTransactionUpdate],
       let update = TransactionUpdate(chipDnaTransactionUpdate: transactionUpdateString) else {
-      print("[ChipDnaListener.txUpdate] DROPPED — raw=\"\(rawString)\" did not map to a known TransactionUpdate (delegate=\(transactionUpdateDelegate != nil ? "set" : "nil"))")
       return
     }
     
