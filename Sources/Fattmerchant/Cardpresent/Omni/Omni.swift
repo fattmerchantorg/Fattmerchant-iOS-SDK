@@ -44,10 +44,10 @@ public class Omni: NSObject {
     /// Responsible for providing signatures for transactions, when required
     public var signatureProvider: SignatureProviding?
 
-    /// Receives notifications about transaction events such as when a card is swiped
+    /// Receives notifications about transaction events such as when a card is inserted or tapped
     public weak var transactionUpdateDelegate: TransactionUpdateDelegate?
 
-    /// Receives notifications about user-facing transaction events such as when a user swipes a chip card
+    /// Receives notifications about user-facing transaction events such as when a user inserts a chip card
     public weak var userNotificationDelegate: UserNotificationDelegate?
 
     /// Receives notifications about reader connection events

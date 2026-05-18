@@ -16,12 +16,12 @@ public struct TransactionUpdate {
 
   /// Describes what the transaction status is
   ///
-  /// Example: "Prompt Insert Swipe Card"
+  /// Example: "Prompt Insert Or Tap Card"
   public let value: String
 
   /// A message that you can show to the end user
   ///
-  /// Example: "Please insert or swipe card"
+  /// Example: "Please insert or tap card"
   public let userFriendlyMessage: String?
 
   public init(_ value: String, _ userFriendlyMessage: String? = nil) {
@@ -29,24 +29,24 @@ public struct TransactionUpdate {
     self.userFriendlyMessage = userFriendlyMessage
   }
 
-  /// Request card be swiped or inserted
-  public static let PromptInsertSwipeCard = TransactionUpdate("Prompt Insert Swipe Card", "Please insert or swipe card")
+  /// Request card be inserted or tapped
+  public static let PromptInsertSwipeCard = TransactionUpdate("Prompt Insert Or Tap Card", "Please insert or tap card")
 
-  public static let PromptInsertSwipeTap = TransactionUpdate("Prompt Insert Swipe Tap Card",
-                                                             "Please insert, tap, or swipe card")
+  public static let PromptInsertSwipeTap = TransactionUpdate("Prompt Insert Or Tap Card",
+                                                             "Please insert or tap card")
   public static let PromptInsertCard = TransactionUpdate("Prompt Insert Card", "Please insert card")
 
-  /// Request card be swiped
-  public static let PromptSwipeCard = TransactionUpdate("Prompt Swipe Card", "Please swipe card")
+  /// Request card be inserted or tapped
+  public static let PromptSwipeCard = TransactionUpdate("Prompt Insert Or Tap Card", "Please insert or tap card")
 
-  /// Card was swiped
-  public static let CardSwiped = TransactionUpdate("Card Swiped")
+  /// Card was read
+  public static let CardSwiped = TransactionUpdate("Card Read")
 
   /// Card was inserted
   public static let CardInserted = TransactionUpdate("Card Inserted")
 
-  /// Card Swipe error
-  public static let CardSwipeError = TransactionUpdate("Card Swipe Error", "Card swipe error. Please try again")
+  /// Card read error
+  public static let CardSwipeError = TransactionUpdate("Card Read Error", "Card read error. Please try again")
 
   /// Request card be removed
   public static let PromptRemoveCard = TransactionUpdate("Prompt Remove Card", "Please remove card")
