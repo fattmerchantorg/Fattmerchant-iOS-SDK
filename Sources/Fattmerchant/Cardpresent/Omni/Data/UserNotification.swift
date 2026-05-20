@@ -15,12 +15,12 @@ public struct UserNotification {
 
   /// Describes what the transaction status is
   ///
-  /// Example: "Prompt User Fallback Insert Or Tap Card"
+  /// Example: "Prompt User Fallback Swipe Card"
   public let value: String
 
   /// A message that you can show to the end user
   ///
-  /// Example: "Please insert or tap your card."
+  /// Example: "Please swipe your card."
   public let userFriendlyMessage: String?
 
   public init(_ value: String, _ userFriendlyMessage: String? = nil) {
@@ -37,17 +37,17 @@ public struct UserNotification {
   /// Indicates that only one card should be presented
   public static let PresentOneCardOnly = UserNotification("Prompt User Present One Card Only", "Please only present one card.")
 
-  /// Indicates that fallback to Insert/Tap has occurred
-  public static let FallbackSwipeCard = UserNotification("Prompt User Fallback Insert Or Tap Card", "Please insert or tap your card.")
+  /// Indicates that fallback to Swipe has occurred
+  public static let FallbackSwipeCard = UserNotification("Prompt User Fallback Swipe Card", "Please swipe your card.")
 
-  /// Indicates that fallforward to Insert/Tap has occurred
-  public static let FallforwardSwipeCard = UserNotification("Prompt User Fallforward Insert Or Tap Card", "Please insert or tap your card.")
+  /// Indicates that fallforward to Swipe has occurred
+  public static let FallforwardSwipeCard = UserNotification("Prompt User Fallforward Swipe Card", "Please swipe your card.")
 
   /// Indicates that fallforward to Insert has occurred
   public static let FallforwardInsertCard = UserNotification("Prompt User Fallforward Insert Card", "Please insert your card.")
 
-  /// Indicates that fallforward to Insert/Tap has occurred
-  public static let FallforwardInsertSwipeCard = UserNotification("Prompt User Fallforward Insert Or Tap Card", "Please insert or tap your card.")
+  /// Indicates that fallforward to Insert/Swipe has occurred
+  public static let FallforwardInsertSwipeCard = UserNotification("Prompt User Fallforward Insert Swipe Card", "Please insert or swipe your card.")
 
   /// Indicates that the card should be tried again
   public static let TryCardAgain = UserNotification( "Prompt User Try Card Again", "Please try your card again.")
