@@ -220,6 +220,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             action: #selector(onDeviceUpdate(parameters:))
         )
 
+        print("[ChipDnaDriver.connect] connectAndConfigure requestParams=\(requestParams)")
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
