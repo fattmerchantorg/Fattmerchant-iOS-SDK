@@ -71,10 +71,10 @@ class ChipDnaTransactionListener: NSObject {
       let update = TransactionUpdate(chipDnaTransactionUpdate: transactionUpdateString) else {
       return
     }
-
-    delegate.onTransactionUpdate(transactionUpdate: sanitizedForConnectedReader(update))
+    
+    delegate.onTransactionUpdate(transactionUpdate: update)
   }
-
+  
   @objc fileprivate func onUserNotification(parameters: CCParameters) {
     guard
       let delegate = userNotificationDelegate,
@@ -82,47 +82,8 @@ class ChipDnaTransactionListener: NSObject {
       let update = UserNotification(chipDnaUserNotification: userNotificationString) else {
       return
     }
-
-    delegate.onUserNotification(userNotification: sanitizedForConnectedReader(update))
-  }
-
-  /// BBPOS readers should not surface "swipe" wording to the end user even when EMV
-  /// fallback to MSR is technically active. Rewrite known swipe-language prompts to
-  /// insert/tap wording when the connected reader is BBPOS (name prefix "CHB").
-  private func isBBPOSReaderConnected() -> Bool {
-    guard let name = ChipDnaDriver.getConnectedReader()?.name else { return false }
-    return name.uppercased().hasPrefix("CHB")
-  }
-
-  private func sanitizedForConnectedReader(_ update: TransactionUpdate) -> TransactionUpdate {
-    guard isBBPOSReaderConnected() else { return update }
-    switch update.value {
-    case TransactionUpdate.PromptInsertSwipeCard.value,
-         TransactionUpdate.PromptInsertSwipeTap.value,
-         TransactionUpdate.PromptSwipeCard.value:
-      return TransactionUpdate("Prompt Insert Or Tap Card", "Please insert or tap card")
-    case TransactionUpdate.CardSwiped.value:
-      return TransactionUpdate("Card Read")
-    case TransactionUpdate.CardSwipeError.value:
-      return TransactionUpdate("Card Read Error", "Card read error. Please try again")
-    default:
-      return update
-    }
-  }
-
-  private func sanitizedForConnectedReader(_ notification: UserNotification) -> UserNotification {
-    guard isBBPOSReaderConnected() else { return notification }
-    // EMV fallback/fallforward states only accept contact (insert), not contactless
-    // (tap) — the contactless kernel is not in play during chip→MSR fallback.
-    switch notification.value {
-    case UserNotification.FallbackSwipeCard.value:
-      return UserNotification("Prompt User Fallback Insert Card", "Please insert your card.")
-    case UserNotification.FallforwardSwipeCard.value,
-         UserNotification.FallforwardInsertSwipeCard.value:
-      return UserNotification("Prompt User Fallforward Insert Card", "Please insert your card.")
-    default:
-      return notification
-    }
+    
+    delegate.onUserNotification(userNotification: update)
   }
   
   @objc fileprivate func onTransactionFinished(parameters: CCParameters) {
