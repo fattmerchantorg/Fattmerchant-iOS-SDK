@@ -220,10 +220,6 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             action: #selector(onDeviceUpdate(parameters:))
         )
 
-        let paramDump = (requestParams.allKeys() as? [String])?
-            .map { key in "\(key)=\(requestParams.value(forKey: key) ?? "nil")" }
-            .joined(separator: ", ") ?? "<unreadable>"
-        print("[ChipDnaDriver.connect] connectAndConfigure requestParams={ \(paramDump) }")
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
