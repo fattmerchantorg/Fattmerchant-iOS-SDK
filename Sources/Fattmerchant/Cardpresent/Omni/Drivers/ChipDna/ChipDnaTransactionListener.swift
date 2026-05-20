@@ -112,13 +112,14 @@ class ChipDnaTransactionListener: NSObject {
 
   private func sanitizedForConnectedReader(_ notification: UserNotification) -> UserNotification {
     guard isBBPOSReaderConnected() else { return notification }
+    // EMV fallback/fallforward states only accept contact (insert), not contactless
+    // (tap) — the contactless kernel is not in play during chip→MSR fallback.
     switch notification.value {
     case UserNotification.FallbackSwipeCard.value:
-      return UserNotification("Prompt User Fallback Insert Or Tap Card", "Please insert or tap your card.")
-    case UserNotification.FallforwardSwipeCard.value:
-      return UserNotification("Prompt User Fallforward Insert Or Tap Card", "Please insert or tap your card.")
-    case UserNotification.FallforwardInsertSwipeCard.value:
-      return UserNotification("Prompt User Fallforward Insert Or Tap Card", "Please insert or tap your card.")
+      return UserNotification("Prompt User Fallback Insert Card", "Please insert your card.")
+    case UserNotification.FallforwardSwipeCard.value,
+         UserNotification.FallforwardInsertSwipeCard.value:
+      return UserNotification("Prompt User Fallforward Insert Card", "Please insert your card.")
     default:
       return notification
     }
