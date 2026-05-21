@@ -201,6 +201,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
 
         if reader.name.uppercased().hasPrefix("IDTECH") {
             requestParams.setValue(CCValueTrue, forKey: CCParamApplyFirmwareUpdate)
+        } else if reader.name.uppercased().hasPrefix("CHB") {
+            // force TMS updates for BBPOS readers
+            requestParams.setValue(CCValueTrue, forKey: CCParamForceTmsUpdate)
         }
 
         ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
@@ -216,7 +219,7 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             self,
             action: #selector(onDeviceUpdate(parameters:))
         )
-      
+
         ChipDnaMobile.sharedInstance()?.connectAndConfigure(requestParams)
     }
 
