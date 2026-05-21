@@ -134,6 +134,11 @@ class ChipDnaDriver: NSObject, MobileReaderDriver {
       completion(connectedReader)
     }
     
+    if reader.name.uppercased().hasPrefix("CHB") {
+            // force TMS updates for BBPOS readers
+            requestParams.setValue(CCValueTrue, forKey: CCParamForceTmsUpdate)
+        }
+
     ChipDnaMobile.sharedInstance()?.setProperties(requestParams)
     ChipDnaMobile.addConnectAndConfigureFinishedTarget(self, action: #selector(onConnectAndConfigure(parameters:)))
     ChipDnaMobile.addConfigurationUpdateTarget(self, action: #selector(onConfigurationUpdate(parameters:)))
