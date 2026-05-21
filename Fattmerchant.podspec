@@ -42,12 +42,6 @@ Pod::Spec.new do |s|
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework'
   s.pod_target_xcconfig = {
     'ENABLE_BITCODE' => 'NO',
-    'OTHER_LDFLAGS' => '-lz',
-    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
-    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
-  }
-  s.user_target_xcconfig = {
-    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
-    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
+    'OTHER_LDFLAGS' => '-lz'
   }
 end
