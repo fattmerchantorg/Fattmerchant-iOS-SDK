@@ -165,9 +165,33 @@ final class NMIHttpClient: NMIHttpClientProtocol, Sendable {
       urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
     }
 
+    logRequest(urlRequest)
     return urlRequest
   }
-  
+
+  // ⚠️ TEMP DEBUG — REMOVE BEFORE SHIPPING.
+  /// Logs the full outgoing NMI request (method, URL, every header, body) so the
+  /// exact request to endpoints like `/v4/processors/reports` can be inspected in
+  /// the host app's console. Intentionally NOT gated behind `#if DEBUG` so it shows
+  /// regardless of how the SDK is compiled. Prints credentials (X-Api-Key /
+  /// Authorization) in plaintext — do not leave this in a release build.
+  private func logRequest(_ request: URLRequest) {
+    print("📡➡️ NMI Request")
+    print("Method: \(request.httpMethod ?? "nil")")
+    print("URL: \(request.url?.absoluteString ?? "nil")")
+    if let headers = request.allHTTPHeaderFields, !headers.isEmpty {
+      print("Headers:")
+      for (key, value) in headers {
+        print("  \(key): \(value)")
+      }
+    } else {
+      print("Headers: (none)")
+    }
+    if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
+      print("Body: \(bodyString)")
+    }
+  }
+
   #if DEBUG
   /// Logs HTTP response details for debugging purposes.
   /// - Parameters:
