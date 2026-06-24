@@ -80,7 +80,7 @@ class TakeMobileReaderPaymentTests: XCTestCase {
     result.maskedPan = "41111111111111111"
 
     job.createTransaction(result: result,
-                          driver: mobileReaderDriverRepo.driver,
+                          driver: mobileReaderDriverRepo.all().first!,
                           paymentMethod: paymentMethod,
                           customer: customer,
                           invoice: invoice,

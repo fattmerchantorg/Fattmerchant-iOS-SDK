@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Fattmerchant'
-  s.version = '2.5.0'
+  s.version = '2.5.1'
   s.license = {
     :type => 'Apache License, Version 2.0',
     :text => "© #{ Date.today.year } Fattmerchant, inc"
@@ -42,12 +42,6 @@ Pod::Spec.new do |s|
     'fattmerchant-ios-sdk/Vendor/ChipDnaMobile/BBPOSFrameworks/BBDeviceOTA-1.6.13.xcframework'
   s.pod_target_xcconfig = {
     'ENABLE_BITCODE' => 'NO',
-    'OTHER_LDFLAGS' => '-lz',
-    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
-    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
-  }
-  s.user_target_xcconfig = {
-    'VALID_ARCHS[sdk=iphonesimulator*]' => '', # No simulator support
-    'VALID_ARCHS[sdk=iphoneos*]' => 'arm64 arm64e'
+    'OTHER_LDFLAGS' => '-lz'
   }
 end

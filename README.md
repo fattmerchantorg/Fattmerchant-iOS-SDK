@@ -441,3 +441,4 @@ omni.refundMobileReaderTransaction(transaction: transaction, completion: { (refu
 ## API Docs
 
 For more information on how to use the Stax iOS SDK, visit our [API documentation site](https://api-docs.staxpayments.com)
+
