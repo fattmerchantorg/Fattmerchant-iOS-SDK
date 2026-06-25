@@ -92,9 +92,7 @@ You may also want to add it if you need:
 
 ### How to Obtain CloudCommerce
 
-**If you have Git LFS enabled**: The framework will be downloaded automatically when you clone the repository.
-
-**If you don't have Git LFS enabled**: You'll see a pointer file instead of the actual framework. To get the framework:
+After cloning, you'll see a small pointer file instead of the actual framework. Run the following to download it with Git LFS:
 
 ```bash
 # Install Git LFS (if not already installed)
