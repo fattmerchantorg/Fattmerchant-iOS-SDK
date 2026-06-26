@@ -164,7 +164,7 @@ omni?.initialize(params: initParams, completion: {
 ***
 
 
-> ⚠️ **Important**: Testing Tap to Pay on iPhone **requires** a Stax merchant configured with live credentials - please reach out to your Account Manager to get set up. Please note that onboarding and other flows can be tested in test mode, but actual transaction processing via Tap to Pay requires a **LIVE environment**, **testMode set to false**, and a **TestFlight build**. Lower environments will return an error.
+> ⚠️ **Important**: Testing Tap to Pay on iPhone **requires** a Stax merchant configured with test credentials - please reach out to your Account Manager to get set up. Please note that onboarding and other flows can be tested in test mode, but actual transaction processing via Tap to Pay requires a **LIVE environment**, **testMode set to false**, and a **TestFlight build**. Lower environments will return an error.
 
 Create an instance of `InitParams`
 
