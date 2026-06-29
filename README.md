@@ -166,6 +166,8 @@ omni?.initialize(params: initParams, completion: {
 
 > ⚠️ **Important**: Testing Tap to Pay on iPhone **requires** a Stax merchant configured with test credentials - please reach out to your Account Manager to get set up. Please note that onboarding and other flows can be tested in test mode, but actual transaction processing via Tap to Pay requires a **LIVE environment**, **testMode set to false**, and a **TestFlight build**. Lower environments will return an error.
 
+> The Stax-provided testing merchant operates in a LIVE processing environment with a $1 transaction limit. Any transactions processed during testing will need to be manually refunded or voided.
+
 Create an instance of `InitParams`
 
 ```swift
