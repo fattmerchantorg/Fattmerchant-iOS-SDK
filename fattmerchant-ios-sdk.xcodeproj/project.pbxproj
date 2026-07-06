@@ -142,7 +142,6 @@
 		4650D1A22EAA9617009A5AF4 /* ChipDnaTransactionUserReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0B32EAA9617009A5AF4 /* ChipDnaTransactionUserReference.swift */; };
 		4650D1A32EAA9617009A5AF4 /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D12B2EAA9617009A5AF4 /* CreditCard.swift */; };
 		4650D1A42EAA9617009A5AF4 /* UsbAccessoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0A12EAA9617009A5AF4 /* UsbAccessoryDelegate.swift */; };
-		4650D1A52EAA9617009A5AF4 /* ModelRepository+DefaultImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0EB2EAA9617009A5AF4 /* ModelRepository+DefaultImpl.swift */; };
 		4650D1A62EAA9617009A5AF4 /* DisconnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0C52EAA9617009A5AF4 /* DisconnectMobileReaderException.swift */; };
 		4650D1A72EAA9617009A5AF4 /* TokenizePaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0F52EAA9617009A5AF4 /* TokenizePaymentMethod.swift */; };
 		4650D1A82EAA9617009A5AF4 /* TransactionRequest+StaxInvoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0982EAA9617009A5AF4 /* TransactionRequest+StaxInvoice.swift */; };
@@ -189,7 +188,6 @@
 		4650D1D12EAA9617009A5AF4 /* StaxBankHolderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D1012EAA9617009A5AF4 /* StaxBankHolderType.swift */; };
 		4650D1D22EAA9617009A5AF4 /* SelectablePinPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0B52EAA9617009A5AF4 /* SelectablePinPad.swift */; };
 		4650D1D32EAA9617009A5AF4 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D1392EAA9617009A5AF4 /* Amount.swift */; };
-		4650D1D42EAA9617009A5AF4 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4650D13E2EAA9617009A5AF4 /* Info.plist */; };
 		4650D1D72EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0942EAA9617009A5AF4 /* MobileReaderDriverInitializationArgs.swift */; };
 		4650D1D82EAA9617009A5AF4 /* ConnectMobileReaderException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0C22EAA9617009A5AF4 /* ConnectMobileReaderException.swift */; };
 		4650D1D92EAA9617009A5AF4 /* Omni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650D0F82EAA9617009A5AF4 /* Omni.swift */; };
@@ -353,8 +351,6 @@
 		46ED45142EBD03650004555D /* IDTech.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 46ED45122EBD03650004555D /* IDTech.bundle */; };
 		46ED45172EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */; };
 		46ED45182EBE439F0004555D /* ChipDnaEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED45162EBE438F0004555D /* ChipDnaEnvironment.swift */; };
-		46F1999F2ECBD84F0077BABC /* CloudCommerce.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; };
-		46F199A02ECBD84F0077BABC /* CloudCommerce.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46F3E5402EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
 		46F3E5412EB7C838000A1FF2 /* Reexports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F3E53F2EB7C832000A1FF2 /* Reexports.swift */; };
 		593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D793091123D256690066FCA2 /* CoreBluetooth.framework */; };
@@ -392,7 +388,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				46F199A02ECBD84F0077BABC /* CloudCommerce.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -577,7 +572,6 @@
 		46ED44FA2EBCF3B50004555D /* BBDevice-BT-3.27.0.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDevice-BT-3.27.0.xcframework"; sourceTree = "<group>"; };
 		46ED44FB2EBCF3B50004555D /* BBDeviceOTA-1.6.13.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BBDeviceOTA-1.6.13.xcframework"; sourceTree = "<group>"; };
 		46ED44FC2EBCF3B50004555D /* ChipDnaMobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ChipDnaMobile.xcframework; sourceTree = "<group>"; };
-		46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CloudCommerce.xcframework; sourceTree = "<group>"; };
 		46ED44FE2EBCF3B50004555D /* IDTechStatic.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = IDTechStatic.xcframework; sourceTree = "<group>"; };
 		46ED45112EBD03650004555D /* Dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dummy.swift; sourceTree = "<group>"; };
 		46ED45122EBD03650004555D /* IDTech.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = IDTech.bundle; sourceTree = "<group>"; };
@@ -625,7 +619,6 @@
 			files = (
 				46B0F7452EB023230084A07A /* libc++.tbd in Frameworks */,
 				46ED45082EBD03180004555D /* BBDevice-BT-3.27.0.xcframework in Frameworks */,
-				46F1999F2ECBD84F0077BABC /* CloudCommerce.xcframework in Frameworks */,
 				593A7FAC24600FEF00D78874 /* CoreBluetooth.framework in Frameworks */,
 				46ED450C2EBD03180004555D /* ChipDnaMobile.xcframework in Frameworks */,
 				D7B7110723D5890600EF98DB /* MediaPlayer.framework in Frameworks */,
@@ -1067,7 +1060,6 @@
 				46ED44FA2EBCF3B50004555D /* BBDevice-BT-3.27.0.xcframework */,
 				46ED44FB2EBCF3B50004555D /* BBDeviceOTA-1.6.13.xcframework */,
 				46ED44FC2EBCF3B50004555D /* ChipDnaMobile.xcframework */,
-				46ED44FD2EBCF3B50004555D /* CloudCommerce.xcframework */,
 				46ED44FE2EBCF3B50004555D /* IDTechStatic.xcframework */,
 			);
 			name = Binaries;
@@ -1311,7 +1303,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4650D1D42EAA9617009A5AF4 /* Info.plist in Resources */,
 				464D12C32EF471AD007C0E91 /* PROCESSORS_REPORT.md in Resources */,
 				464D12C42EF471AD007C0E91 /* README.md in Resources */,
 			);
@@ -1616,7 +1607,6 @@
 				4650D1A22EAA9617009A5AF4 /* ChipDnaTransactionUserReference.swift in Sources */,
 				4650D1A32EAA9617009A5AF4 /* CreditCard.swift in Sources */,
 				4650D1A42EAA9617009A5AF4 /* UsbAccessoryDelegate.swift in Sources */,
-				4650D1A52EAA9617009A5AF4 /* ModelRepository+DefaultImpl.swift in Sources */,
 				4650D1A62EAA9617009A5AF4 /* DisconnectMobileReaderException.swift in Sources */,
 				4632577D2EBBC0970046F6D8 /* TapConnectionStatus.swift in Sources */,
 				464D12BC2EF471AD007C0E91 /* NMIApiRequest.swift in Sources */,
@@ -1747,7 +1737,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1806,7 +1796,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1949,7 +1939,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1983,7 +1973,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

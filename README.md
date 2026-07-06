@@ -92,9 +92,7 @@ You may also want to add it if you need:
 
 ### How to Obtain CloudCommerce
 
-**If you have Git LFS enabled**: The framework will be downloaded automatically when you clone the repository.
-
-**If you don't have Git LFS enabled**: You'll see a pointer file instead of the actual framework. To get the framework:
+After cloning, you'll see a small pointer file instead of the actual framework. Run the following to download it with Git LFS:
 
 ```bash
 # Install Git LFS (if not already installed)
@@ -165,9 +163,10 @@ omni?.initialize(params: initParams, completion: {
 
 ***
 
-## Initialize - TEST MODE
 
-> ⚠️ **Important**: A Stax merchant set up with test credentials is **required** to test **Tap to Pay on iPhone** functionality. Please reach out to your Account Manager.
+> ⚠️ **Important**: Testing Tap to Pay on iPhone **requires** a Stax merchant configured with test credentials - please reach out to your Account Manager to get set up. Please note that onboarding and other flows can be tested in test mode, but actual transaction processing via Tap to Pay requires a **LIVE environment**, **testMode set to false**, and a **TestFlight build**. Lower environments will return an error.
+
+> The Stax-provided testing merchant operates in a LIVE processing environment with a $1 transaction limit. Any transactions processed during testing will need to be manually refunded or voided.
 
 Create an instance of `InitParams`
 
@@ -441,3 +440,4 @@ omni.refundMobileReaderTransaction(transaction: transaction, completion: { (refu
 ## API Docs
 
 For more information on how to use the Stax iOS SDK, visit our [API documentation site](https://api-docs.staxpayments.com)
+

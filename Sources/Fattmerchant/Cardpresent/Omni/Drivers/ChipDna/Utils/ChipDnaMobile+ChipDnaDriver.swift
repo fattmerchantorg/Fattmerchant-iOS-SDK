@@ -24,7 +24,7 @@ extension ChipDnaMobile {
     else {
       return false
     }
-    
+
     return true
   }
 }
