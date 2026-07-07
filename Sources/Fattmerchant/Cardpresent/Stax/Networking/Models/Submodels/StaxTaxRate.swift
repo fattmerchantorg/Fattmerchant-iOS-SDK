@@ -15,12 +15,8 @@ struct StaxTaxRate: Codable {
     name = try container.decodeIfPresent(String.self, forKey: .name)
     isDefault = try container.decodeIfPresent(Bool.self, forKey: .isDefault)
 
-    if let doubleRate = try? container.decodeIfPresent(Double.self, forKey: .rate) {
-      rate = doubleRate
-    } else if let stringRate = try? container.decodeIfPresent(String.self, forKey: .rate) {
-      rate = Double(stringRate)
-    } else {
-      rate = nil
-    }
+    // `rate` may arrive as a JSON number or a numeric string; accept either.
+    rate = (try? container.decodeIfPresent(Double.self, forKey: .rate))
+      ?? (try? container.decodeIfPresent(String.self, forKey: .rate)).flatMap { Double($0) }
   }
 }
