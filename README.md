@@ -24,12 +24,29 @@ Supercharge your mobile app by quickly adding mobile reader payments using the S
 ## Requirements
 
 * Xcode 16.0+
-* iOS 13+
+* iOS 15+
 * Stax API key
 
 ***
 
 # Installation
+
+## Swift Package Manager
+
+1. In Xcode, go to **File** → **Add Package Dependencies**
+2. Enter the repository URL: `https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git`
+3. Choose the version rule (recommended: **Up to Next Major**)
+4. Click **Add Package**
+
+Alternatively, add it to your `Package.swift` file:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK.git", from: "2.4.3")
+]
+```
+
+## CocoaPods
 
 Use CocoaPods to install the Stax iOS SDK.
 
@@ -51,12 +68,82 @@ In order to build and run with the Cardpresent functionality, you must include t
 
 * **NSBluetoothAlwaysUsageDescription**: Provide a value here to let your users know why Bluetooth access is required
 
+## IDTech Device Support
+
+If you plan to use IDTech mobile readers (VP3350), you **must** manually add the `IDTech.bundle` to your app's bundle resources. See [IDTECH_SETUP.md](IDTECH_SETUP.md) for detailed instructions.
+
+> ⚠️ **Important**: Failing to add the bundle will result in `IdTechBundleRequired` errors when connecting to IDTech devices.
+
+## CloudCommerce Support
+
+CloudCommerce is a framework that provides transaction processing capabilities for **Tap to Pay on iPhone** functionality. It also includes advanced features like SOAP-based transaction history, receipt management, and extended transaction details. 
+
+> ⚠️ **Important**: CloudCommerce.xcframework is stored in this repository using **Git LFS** (Large File Storage) and is **not distributed** via CocoaPods or Swift Package Manager.
+
+### When to Add CloudCommerce
+
+You **must** add CloudCommerce to your project if you:
+- Plan to use **Tap to Pay on iPhone** (iOS 17.4+)
+
+You may also want to add it if you need:
+- SOAP transaction history retrieval
+- Extended transaction details and statistics
+- Advanced receipt management features
+
+### How to Obtain CloudCommerce
+
+After cloning, you'll see a small pointer file instead of the actual framework. Run the following to download it with Git LFS:
+
+```bash
+# Install Git LFS (if not already installed)
+brew install git-lfs  # macOS
+
+# Enable Git LFS in this repository
+cd /path/to/Fattmerchant-iOS-SDK
+git lfs install
+
+# Pull the actual framework files
+git lfs pull
+```
+
+### How to Add CloudCommerce to Your Project
+
+#### Swift Package Manager
+
+1. Ensure you have the framework (see above for Git LFS instructions)
+2. Drag `OptionalFrameworks/CloudCommerce.xcframework` into your Xcode project
+3. In your target's **General** tab, add `CloudCommerce.xcframework` to **Frameworks, Libraries, and Embedded Content**
+4. Set the embed option to **Embed & Sign**
+
+#### CocoaPods
+
+If using CocoaPods, you'll need to manually add the framework:
+
+1. Ensure you have the framework (see above for Git LFS instructions)
+2. Copy `OptionalFrameworks/CloudCommerce.xcframework` to your project's frameworks folder
+3. Add the following to your Podfile:
+
+```ruby
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['FRAMEWORK_SEARCH_PATHS'] ||= ['$(inherited)']
+      config.build_settings['FRAMEWORK_SEARCH_PATHS'] << '$(PROJECT_DIR)/Frameworks'
+    end
+  end
+end
+```
+
+4. Ensure the framework is added to your target's **Frameworks, Libraries, and Embedded Content**
+
+> ⚠️ **Important**: CloudCommerce is **required** for Tap to Pay on iPhone functionality. It is optional for mobile reader payments and basic payment processing.
+
 ## Initialize
 
 Create an instance of `InitParams`
 
 ```swift
-var initParams = Omni.InitParams(appId: "com.example.app", apiKey: apiKey, environment: Environment.LIVE)
+var initParams = Omni.InitParams(appId: "appId", apiKey: apiKey, environment: Environment.LIVE)
 ```
 
 Pass the initParams to `Omni.initialize(...)`, along with a completion lambda and an error lambda
@@ -75,6 +162,32 @@ omni?.initialize(params: initParams, completion: {
 ```
 
 ***
+
+
+> ⚠️ **Important**: Testing Tap to Pay on iPhone **requires** a Stax merchant configured with test credentials - please reach out to your Account Manager to get set up. Please note that onboarding and other flows can be tested in test mode, but actual transaction processing via Tap to Pay requires a **LIVE environment**, **testMode set to false**, and a **TestFlight build**. Lower environments will return an error.
+
+> The Stax-provided testing merchant operates in a LIVE processing environment with a $1 transaction limit. Any transactions processed during testing will need to be manually refunded or voided.
+
+Create an instance of `InitParams`
+
+```swift
+var initParams = Omni.InitParams(appId: "appId", apiKey: apiKey)
+```
+
+Pass the initParams to `Omni.initialize()`, along with a completion lambda and error lambda
+
+```swift
+omni = Omni()
+testMode = true
+log("Attempting initalization...")
+
+// Initialize Omni with Test flag
+omni?.initialize(params: initParams, test: testMode, completion: {
+    // Initialized in test mode!
+}) { (error) in
+    // Error initializing test mode
+}
+```
 
 # Connect a Mobile Reader
 
@@ -137,6 +250,176 @@ let request = TransactionRequest(amount: amount, tokenize: false)
 
 ***
 
+# Tap to Pay on iPhone
+
+Use Tap to Pay on iPhone to accept contactless payments directly on supported iPhone devices without any additional hardware.
+
+## Requirements
+
+* iPhone XS or later
+* iOS 17.4+
+* Stax account with Tap to Pay enabled
+* **CloudCommerce.xcframework** - See [CloudCommerce Support](#cloudcommerce-support) section above for installation instructions
+
+## How it works
+
+Tap to Pay uses the same `TransactionRequest` model as mobile reader payments, but uses the iPhone's built-in NFC reader to accept contactless cards and digital wallets.
+
+## Connect to Tap to Pay
+
+Before taking a Tap to Pay transaction, you must first connect to the Tap to Pay reader on the iPhone using `connectToTap`. Once the connection is successful, you can proceed to take a payment.
+
+```swift
+if #available(iOS 17.4, *) {
+    omni.connectToTap(completion: {
+        print("Connected to Tap to Pay!")
+
+        // Now take a payment
+        let amount = Amount(cents: 1050) // $10.50
+        let request = TransactionRequest(amount: amount)
+
+        omni.takeTapTransaction(with: request) { transaction in
+            print("Tap payment successful!")
+            print("Transaction ID: \(transaction.id)")
+            print("Amount: \(transaction.total)")
+        } error: { error in
+            print("Tap payment failed: \(error)")
+        }
+
+    }, error: { error in
+        print("Failed to connect to Tap to Pay: \(String(describing: error))")
+    })
+} else {
+    print("Tap to Pay requires iOS 17.4 or later")
+}
+```
+
+## Taking a Tap to Pay Transaction
+
+If you have already connected to Tap to Pay, you can take a payment directly using `takeTapTransaction`:
+
+```swift
+// Create an Amount
+let amount = Amount(cents: 1050) // $10.50
+
+// Create the TransactionRequest
+let request = TransactionRequest(amount: amount)
+
+// Take a Tap to Pay transaction
+if #available(iOS 17.4, *) {
+    omni.takeTapTransaction(with: request) { transaction in
+        print("Tap payment successful!")
+        print("Transaction ID: \(transaction.id)")
+        print("Amount: \(transaction.total)")
+        
+        // Handle successful payment
+        // Update your UI, print receipt, etc.
+    } error: { error in
+        print("Tap payment failed: \(error)")
+        
+        // Handle error
+        // Show error message to user
+    }
+} else {
+    print("Tap to Pay requires iOS 17.4 or later")
+}
+```
+
+## Complete Example
+
+```swift
+import Fattmerchant
+
+class PaymentViewController: UIViewController {
+    var omni: Omni?
+    
+    @IBAction func processTapPayment(_ sender: UIButton) {
+        guard #available(iOS 17.4, *) else {
+            showAlert(title: "Not Supported", message: "Tap to Pay requires iOS 17.4 or later")
+            return
+        }
+        
+        // Show processing UI
+        showProcessingUI()
+        
+        // First, connect to Tap to Pay
+        omni?.connectToTap(completion: { [weak self] in
+            guard let self = self else { return }
+            
+            print("✅ Connected to Tap to Pay!")
+            
+            // Create amount for $25.00
+            let amount = Amount(cents: 2500)
+            
+            // Create transaction request
+            let request = TransactionRequest(amount: amount)
+            
+            // Optional: Add metadata
+            request.meta = ["order_id": "12345", "customer_name": "John Doe"]
+            
+            // Process the payment
+            self.omni?.takeTapTransaction(with: request, completion: { [weak self] transaction in
+                guard let self = self else { return }
+                
+                self.hideProcessingUI()
+                
+                // Payment succeeded
+                self.showSuccessUI(transaction: transaction)
+                
+                print("✅ Payment successful!")
+                print("Transaction ID: \(transaction.id)")
+                print("Amount: \(transaction.total)")
+                print("Last 4: \(transaction.lastFour ?? "N/A")")
+                
+            }, error: { [weak self] error in
+                guard let self = self else { return }
+                
+                self.hideProcessingUI()
+                
+                // Payment failed
+                self.showErrorUI(error: error)
+                
+                print("❌ Payment failed: \(error?.localizedDescription ?? "Unknown error")")
+            })
+            
+        }, error: { [weak self] error in
+            guard let self = self else { return }
+            
+            self.hideProcessingUI()
+            
+            // Connection failed
+            self.showErrorUI(error: error)
+            
+            print("❌ Failed to connect: \(error?.localizedDescription ?? "Unknown error")")
+        })
+    }
+    
+    private func showProcessingUI() {
+        // Show loading indicator and "Hold card near iPhone" message
+    }
+    
+    private func hideProcessingUI() {
+        // Hide loading indicator
+    }
+    
+    private func showSuccessUI(transaction: StaxTransaction) {
+        // Show success checkmark, amount, etc.
+    }
+    
+    private func showErrorUI(error: OmniException) {
+        // Show error message
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+}
+```
+
+***
+
 # Refund a Payment
 
 You can use the [Stax API]({{ site.api_ref_url }}#reference/0/transactions){:target="_blank" rel="noreferrer"} to do so.
@@ -157,3 +440,4 @@ omni.refundMobileReaderTransaction(transaction: transaction, completion: { (refu
 ## API Docs
 
 For more information on how to use the Stax iOS SDK, visit our [API documentation site](https://api-docs.staxpayments.com)
+

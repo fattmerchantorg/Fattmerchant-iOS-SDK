@@ -1,0 +1,5 @@
+module Fattmerchant {
+    umbrella header "Fattmerchant.h"
+    export *
+    module * { export * }
+}
