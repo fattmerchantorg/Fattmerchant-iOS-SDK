@@ -38,16 +38,16 @@ public struct UserNotification {
   public static let PresentOneCardOnly = UserNotification("Prompt User Present One Card Only", "Please only present one card.")
 
   /// Indicates that fallback to Swipe has occurred
-  public static let FallbackSwipeCard = UserNotification("Prompt User Fallback Swipe Card", "Please swipe your card.")
+  public static let FallbackSwipeCard = UserNotification("Prompt User Fallback Swipe Card", "Please insert your card.")
 
   /// Indicates that fallforward to Swipe has occurred
-  public static let FallforwardSwipeCard = UserNotification("Prompt User Fallforward Swipe Card", "Please swipe your card.")
+  public static let FallforwardSwipeCard = UserNotification("Prompt User Fallforward Swipe Card", "Please insert your card.")
 
   /// Indicates that fallforward to Insert has occurred
   public static let FallforwardInsertCard = UserNotification("Prompt User Fallforward Insert Card", "Please insert your card.")
 
   /// Indicates that fallforward to Insert/Swipe has occurred
-  public static let FallforwardInsertSwipeCard = UserNotification("Prompt User Fallforward Insert Swipe Card", "Please insert or swipe your card.")
+  public static let FallforwardInsertSwipeCard = UserNotification("Prompt User Fallforward Insert Swipe Card", "Please insert your card.")
 
   /// Indicates that the card should be tried again
   public static let TryCardAgain = UserNotification( "Prompt User Try Card Again", "Please try your card again.")
