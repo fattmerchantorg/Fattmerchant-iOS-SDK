@@ -25,7 +25,8 @@ actor TakeTapPaymentJob: Job {
 
     fileprivate var result: TransactionResult? = nil
 
-    private let performTimeout: UInt64 = 90 * 1_000_000_000 // 90s
+    // TEMP(PHO-4990): lowered from 90s to reproduce the timeout orphan path. Revert before merge.
+    private let performTimeout: UInt64 = 5 * 1_000_000_000 // 5s
     private let captureTimeout: UInt64 = 45 * 1_000_000_000 // 45s
     private let voidTimeout: UInt64 = 30 * 1_000_000_000 // 30s
 
