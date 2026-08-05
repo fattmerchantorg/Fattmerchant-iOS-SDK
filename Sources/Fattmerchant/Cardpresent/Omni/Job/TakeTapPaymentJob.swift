@@ -1,53 +1,4 @@
 import Foundation
-import os.log
-
-/// Step-by-step tracing for the tap flow, for use while testing.
-///
-/// Every line carries elapsed seconds from the start of the step being measured, because the
-/// question these logs exist to answer is *where the time went* — specifically whether a tap that
-/// reports a timeout spent its budget on the tap itself or on the post-approval expiration lookup.
-///
-/// Goes through the unified log rather than `print`, because `print` writes to stdout, which iOS
-/// discards for an app it launched itself. That makes `print` invisible on any build you cannot
-/// attach a debugger to — TestFlight included, since App Store signing omits `get-task-allow`.
-/// `os_log` reaches Console.app on a connected device and is captured in a sysdiagnose.
-///
-/// Uses `os_log` rather than the nicer `Logger` API because the podspec still targets iOS 13, and
-/// `Logger` needs 14. Interpolations are marked `%{public}` — the unified log redacts dynamic
-/// strings to `<private>` otherwise, which would make every line useless.
-///
-/// Deliberately not `@available`-restricted: `ChipDnaDriver` is not gated to iOS 17.4 and needs it
-/// too. Lives in this file rather than its own because new files require an Xcode project change.
-///
-/// - Important: `isEnabled` starts `true` for testing. Set it to `false` before release, or drive
-///   it from the host app — this records card metadata (last four, card type) to the device log.
-enum TapLog {
-    static var isEnabled = true
-
-    static let subsystem = "com.fattmerchant.sdk"
-
-    private static let log = OSLog(subsystem: subsystem, category: "TapPayment")
-
-    /// Logs a step with the time taken since `start`.
-    static func step(_ message: String, since start: Date) {
-        guard isEnabled else { return }
-        emit(String(format: "+%.2fs %@", Date().timeIntervalSince(start), message))
-    }
-
-    /// Logs a step with no timing attached.
-    static func note(_ message: String) {
-        guard isEnabled else { return }
-        emit(message)
-    }
-
-    private static func emit(_ message: String) {
-        // `.default`, not `.info`: info-level messages are filtered out by default in both
-        // Console.app and `log show`, so they would appear to be missing entirely unless the
-        // reader knew to opt in. `.default` is also persisted to the log store, which is what
-        // lets a tester reproduce the bug and hand over a sysdiagnose afterwards.
-        os_log("[StaxTap] %{public}@", log: log, type: .default, message)
-    }
-}
 
 @available(iOS 17.4, *)
 final class SingleShot {
@@ -109,19 +60,7 @@ actor TakeTapPaymentJob: Job {
 
     fileprivate var result: TransactionResult? = nil
 
-    // ⚠️⚠️ TESTING ONLY — REVERT TO 90s BEFORE MERGING ⚠️⚠️
-    //
-    // At 5s every tap reports a timeout, which is the point: it forces the catch block down the
-    // void path on demand instead of waiting for a real one.
-    //
-    // This works only because the timeout cannot surface until the driver's completion has run
-    // (the task group has to drain the continuation child). So the sale still completes and is
-    // captured normally, the box gets the result, and *then* TimedOut propagates — giving the void
-    // something real to reverse. A genuinely hard 5s deadline would fire before the card was even
-    // presented, leave the box empty, and test nothing.
-    //
-    // Shipping this value would fail and reverse every single tap payment.
-    private let performTimeout: UInt64 = 5 * 1_000_000_000 // 5s  ← TESTING, was 90s
+    private let performTimeout: UInt64 = 90 * 1_000_000_000 // 90s
     private let captureTimeout: UInt64 = 45 * 1_000_000_000 // 45s
     private let voidTimeout: UInt64 = 30 * 1_000_000_000 // 30s
 
@@ -147,11 +86,8 @@ actor TakeTapPaymentJob: Job {
     }
 
     func start() async -> JobResult<StaxTransaction> {
-        let jobStart = Date()
-
         let drivers = TapPaymentDriverRepository.shared.all()
         guard let driver = drivers.first, drivers.count == 1 else {
-            TapLog.note("ABORT: expected exactly one tap driver, found \(drivers.count)")
             return JobResult.failure(OmniGeneralException.uninitialized)
         }
 
@@ -165,17 +101,7 @@ actor TakeTapPaymentJob: Job {
             let currentTransactionUpdateDelegate = self.transactionUpdateDelegate
             let currentUserNotificationDelegate = self.userNotificationDelegate
 
-            TapLog.note("--- tap start. amount=\(currentRequest.amount.dollars()) invoiceId=\(currentRequest.invoiceId ?? "new") tokenize=\(currentRequest.tokenize) timeout=\(performTimeout / 1_000_000_000)s")
-
-            let invoiceStart = Date()
             var invoice = try await getOrCreateInvoice(id: currentRequest.invoiceId)
-            TapLog.step("1/6 invoice ready. id=\(invoice.id ?? "nil")", since: invoiceStart)
-
-            // The clock that matters: `performTimeout` is measured against this, and it covers the
-            // driver's whole round trip — presentment, authorisation, and any post-approval
-            // enrichment the driver does before it calls back.
-            let tapStart = Date()
-            TapLog.note("2/6 calling performTransaction — waiting for driver")
 
             result = try await performWithTimeout(timeout: performTimeout) { resume in
                 driver.performTransaction(
@@ -184,7 +110,6 @@ actor TakeTapPaymentJob: Job {
                     transactionUpdateDelegate: currentTransactionUpdateDelegate,
                     userNotificationDelegate: currentUserNotificationDelegate
                 ) { txnResult in
-                    TapLog.step("2/6 driver completion fired. success=\(txnResult.success.map(String.init) ?? "nil") userRef=\(txnResult.userReference ?? "nil") txnId=\(txnResult.externalId ?? "nil") cardType=\(txnResult.cardType ?? "nil") last4=\(txnResult.maskedPan?.suffix(4).description ?? "nil") cardExp=\(txnResult.cardExpiration ?? "nil") authCode=\(txnResult.authCode ?? "nil")", since: tapStart)
                     resultBox.set(txnResult)
                     resume(.success(txnResult))
                 }
@@ -197,7 +122,6 @@ actor TakeTapPaymentJob: Job {
             // If transaction was not successful (cancelled, declined, or error),
             // don't try to create backend records - return the transaction result as-is
             guard result.success == true else {
-                TapLog.step("2/6 tap NOT approved — no records, no void needed. message=\(result.message ?? "nil")", since: jobStart)
                 // Create a StaxTransaction representing the failed/cancelled transaction
                 var failedTransaction = StaxTransaction()
                 failedTransaction.success = false
@@ -213,33 +137,23 @@ actor TakeTapPaymentJob: Job {
         
             // Everything past here runs with money already captured at the gateway, so any
             // failure below must reach the void in the catch block.
-            let customerStart = Date()
             let customer = try await createCustomer(from: result, or: self.customer)
-            TapLog.step("3/6 customer created. id=\(customer.id ?? "nil")", since: customerStart)
-
-            let pmStart = Date()
             let paymentMethod = try await createPaymentMethod(
                 from: customer,
                 and: result
             )
-            TapLog.step("4/6 payment method created. id=\(paymentMethod.id ?? "nil") cardExpiry=\(paymentMethod.cardExpiry ?? "nil")", since: pmStart)
-
-            let invoiceUpdateStart = Date()
             invoice = try await updateInvoice(
                 invoice,
                 with: customer,
                 and: paymentMethod
             )
-            TapLog.step("5/6 invoice updated. id=\(invoice.id ?? "nil")", since: invoiceUpdateStart)
 
-            let txnStart = Date()
             let transaction = try await createTransaction(
                 driver: driver,
                 customer: customer,
                 invoice: invoice,
                 paymentMethod: paymentMethod
             )
-            TapLog.step("6/6 transaction created. id=\(transaction.id ?? "nil")", since: txnStart)
 
             guard transaction.id != nil else {
                 throw TakeTapPaymentException.couldNotCreateTransaction(
@@ -247,7 +161,6 @@ actor TakeTapPaymentJob: Job {
                 )
             }
 
-            TapLog.step("=== SUCCESS. txnId=\(transaction.id ?? "nil")", since: jobStart)
             return JobResult.success(transaction)
         } catch {
             // The sale is a SALE with AUTO_CONFIRM, so by the time the driver reports anything the
@@ -259,25 +172,17 @@ actor TakeTapPaymentJob: Job {
             // sales unrecorded. `resultBox` holds what the driver's completion delivered, so read
             // that as well. No waiting is needed: the timeout cannot surface until the driver's
             // completion has run, so if a result exists the box already has it.
-            TapLog.step("!!! CAUGHT: \(error)", since: jobStart)
-            TapLog.note("    result=\(result == nil ? "nil" : "set") resultBox=\(resultBox.current == nil ? "empty" : "populated")")
-
             if let toVoid = result ?? resultBox.current {
-                // Which source supplied it is the whole point of the fix — on the timeout path
-                // `result` is nil and only the box has it.
-                TapLog.note("    recovered from \(result != nil ? "result" : "resultBox") — attempting void")
                 await voidTransaction(toVoid, using: driver)
             } else {
-                TapLog.note("    no TransactionResult available — nothing to void (no sale was placed)")
+                print("[TakeTapPaymentJob] no TransactionResult available — nothing to void. error=\(error)")
             }
 
             // If error already conforms to OmniException, return it; otherwise wrap
             if let omni = error as? OmniException {
-                TapLog.step("=== FAILED (OmniException): \(omni)", since: jobStart)
                 return JobResult.failure(omni)
             } else {
                 // Use a generic tap error with detail
-                TapLog.step("=== FAILED (wrapped): \(error)", since: jobStart)
                 return JobResult.failure(
                     TakeTapPaymentException.couldNotCreateTransaction(detail: String(describing: error))
                 )
@@ -340,21 +245,18 @@ actor TakeTapPaymentJob: Job {
     ) async {
         // Nothing was captured, so there is nothing to reverse.
         guard transactionResult.success == true else {
-            TapLog.note("VOID skipped: transaction was not approved, nothing captured")
+            print("[TakeTapPaymentJob] transaction not approved — no void needed")
             return
         }
 
         // `ChipDnaDriver.void` bails out immediately without a user reference, so surface that
         // rather than logging three indistinguishable failed attempts.
         guard let userReference = transactionResult.userReference, !userReference.isEmpty else {
-            TapLog.note("VOID IMPOSSIBLE: approved sale has no USER_REFERENCE. txnId=\(transactionResult.externalId ?? "nil") — this will settle unrecorded")
+            print("[TakeTapPaymentJob] VOID IMPOSSIBLE: approved sale has no USER_REFERENCE. txnId=\(transactionResult.externalId ?? "nil") — this will settle unrecorded")
             return
         }
 
-        TapLog.note("VOID starting. userRef=\(userReference) txnId=\(transactionResult.externalId ?? "nil") amount=\(request.amount.dollars()) maxAttempts=\(voidAttempts)")
-
         for attempt in 1...voidAttempts {
-            let attemptStart = Date()
             let voided: Bool? = try? await performWithTimeout(timeout: voidTimeout) { resume in
                 driver.void(
                     transactionResult: transactionResult,
@@ -363,17 +265,17 @@ actor TakeTapPaymentJob: Job {
             }
 
             if voided == true {
-                TapLog.step("VOID SUCCEEDED on attempt \(attempt)/\(voidAttempts). userRef=\(userReference)", since: attemptStart)
+                print("[TakeTapPaymentJob] void succeeded on attempt \(attempt). userRef=\(userReference) txnId=\(transactionResult.externalId ?? "nil")")
                 return
             }
 
-            let reason = voided == nil ? "timed out" : "was rejected by the gateway"
-            TapLog.step("VOID attempt \(attempt)/\(voidAttempts) \(reason). userRef=\(userReference)", since: attemptStart)
+            let reason = voided == nil ? "timed out" : "was rejected"
+            print("[TakeTapPaymentJob] void \(reason) on attempt \(attempt)/\(voidAttempts). userRef=\(userReference)")
         }
 
         // Every attempt failed. This is the orphan: an approved, captured sale that will
         // settle with no Stax transaction behind it. Log loudly enough to alert on.
-        TapLog.note("VOID FAILED after \(voidAttempts) attempts — captured sale will settle unrecorded. userRef=\(userReference) txnId=\(transactionResult.externalId ?? "nil") amount=\(request.amount.dollars())")
+        print("[TakeTapPaymentJob] VOID FAILED after \(voidAttempts) attempts — captured sale will settle unrecorded. userRef=\(userReference) txnId=\(transactionResult.externalId ?? "nil") amount=\(request.amount.dollars())")
     }
 
     fileprivate func getOrCreateInvoice(id: String?) async throws -> StaxInvoice

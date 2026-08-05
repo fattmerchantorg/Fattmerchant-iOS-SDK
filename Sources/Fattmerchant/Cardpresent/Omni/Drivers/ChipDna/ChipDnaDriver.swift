@@ -9,19 +9,15 @@ final class OnceGuard {
     private let lock = NSLock()
     private var didRun = false
 
-    /// - Returns: `true` if this call is the one that ran the block, `false` if it was already
-    ///   spent. Callers use this to avoid logging work they did not actually do.
-    @discardableResult
-    func run(_ block: () -> Void) -> Bool {
+    func run(_ block: () -> Void) {
         lock.lock()
         if didRun {
             lock.unlock()
-            return false
+            return
         }
         didRun = true
         lock.unlock()
         block()
-        return true
     }
 }
 
@@ -374,20 +370,14 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
         var additionalCardDetails: CCParameters?
 
         transactionListener.onFinished = { result in
-            // Everything from here to `deliver` is time the caller is still blocked, even though
-            // ChipDna has already finished the transaction. Timed against this.
-            let finishedAt = Date()
 
             // For Tap to Pay: check if transaction was terminated before card details
             // If only errors are present (no transaction result), this is an early termination
             let hasTransactionResult = result[CCParamTransactionResult] != nil
             let hasErrors = result[CCParamErrors] != nil && !(result[CCParamErrors]?.isEmpty ?? true)
-
-            TapLog.note("driver: transactionFinished. txnResult=\(result[CCParamTransactionResult] ?? "nil") hasErrors=\(hasErrors)")
-
+            
             // Early termination case: transaction finished before card details
             if !hasTransactionResult && hasErrors {
-                TapLog.note("driver: early termination (no transaction result) — delivering failure immediately")
                 var transactionResult = TransactionResult()
                 transactionResult.source = Self.source
                 transactionResult.request = request
@@ -464,13 +454,10 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
             // optional enrichment, and it runs against a deadline.
             let deliverOnce = OnceGuard()
             let snapshot = transactionResult
-            // Returns whether this call is the one that actually delivered, so the loser of the
-            // race does not log a delivery it did not make.
-            let deliver: (TransactionResult) -> Bool = { finalResult in
+            let deliver: (TransactionResult) -> Void = { finalResult in
                 deliverOnce.run {
                     // Clean up this transaction listener once we're done
                     transactionListener.detachFromChipDna()
-                    TapLog.step("driver: delivering result to caller. cardExp=\(finalResult.cardExpiration ?? "nil")", since: finishedAt)
                     completion(finalResult)
                 }
             }
@@ -481,25 +468,17 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 let securityKey = Self.initializationArgs?.keys.securityKey,
                 let transactionId = result[CCParamTransactionId]
             else {
-                TapLog.note("driver: no cc expiration lookup needed (cardExp=\(transactionResult.cardExpiration ?? "nil"))")
-                _ = deliver(snapshot)
+                deliver(snapshot)
                 return
             }
 
             // Deliver regardless once the cap elapses. The lookup hits the gateway's legacy
             // query API, which is rate limited and slow often enough that it cannot be trusted
             // to gate an approved transaction.
-            TapLog.note("driver: cc expiration missing — querying gateway, capped at \(Self.ccExpirationLookupCap)")
-
             DispatchQueue.global(qos: .userInitiated).asyncAfter(
                 deadline: .now() + Self.ccExpirationLookupCap
             ) {
-                // Only log if the cap actually won the race. Otherwise the lookup already
-                // delivered, and claiming a delivery here would point a reader at the wrong
-                // culprit — which is exactly what this line did the first time round.
-                if deliver(snapshot) {
-                    TapLog.step("driver: cc expiration lookup CAP HIT — delivered without it", since: finishedAt)
-                }
+                deliver(snapshot)
             }
 
             // Get more details about the transaction since ChipDna doesn't get everything
@@ -507,10 +486,9 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 securityKey: securityKey,
                 transactionId: transactionId
             ) { ccExpiration in
-                TapLog.step("driver: cc expiration lookup returned \(ccExpiration ?? "nil")", since: finishedAt)
                 var enriched = snapshot
                 enriched.cardExpiration = ccExpiration
-                _ = deliver(enriched)
+                deliver(enriched)
             }
         }
         
