@@ -114,8 +114,4 @@ class ChipDnaXMLTransactionParser: NSObject, XMLParserDelegate {
   func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
     finish()
   }
-
-  func parser(_ parser: XMLParser, validationErrorOccurred validationError: Error) {
-    finish()
-  }
 }
