@@ -64,9 +64,13 @@ class ChipDnaXMLTransactionParser: NSObject, XMLParserDelegate {
   /// that follow `abortParsing()` (it reports back through `parseErrorOccurred`) cannot
   /// deliver a second result.
   func finish() {
-    guard let completion = completion else { return }
+    guard let completion = completion else {
+      TapLog.note("parser: finish() called again — already reported, ignoring")
+      return
+    }
     self.completion = nil
     parser?.abortParsing()
+    TapLog.note("parser: reporting ccExp=\(ccExpirationDate ?? "nil")")
     completion(ccExpirationDate)
   }
 
@@ -112,6 +116,10 @@ class ChipDnaXMLTransactionParser: NSObject, XMLParserDelegate {
   /// nor `parserDidEndDocument`, so `finish()` never ran and the completion was dropped —
   /// stranding whatever was waiting on it. Report no expiration rather than nothing at all.
   func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
+    // Expected after our own `abortParsing()`, in which case `finish()` no-ops. If it fires
+    // *before* we have reported, the XML was genuinely malformed — which is what used to strand
+    // the completion and hang the caller.
+    TapLog.note("parser: parseErrorOccurred (reported=\(completion == nil)) error=\(parseError.localizedDescription)")
     finish()
   }
 }
