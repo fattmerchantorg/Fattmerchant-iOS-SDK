@@ -184,7 +184,7 @@ actor TakeTapPaymentJob: Job {
                     transactionUpdateDelegate: currentTransactionUpdateDelegate,
                     userNotificationDelegate: currentUserNotificationDelegate
                 ) { txnResult in
-                    TapLog.step("2/6 driver completion fired. success=\(String(describing: txnResult.success)) userRef=\(txnResult.userReference ?? "nil") txnId=\(txnResult.externalId ?? "nil") cardType=\(txnResult.cardType ?? "nil") last4=\(txnResult.maskedPan?.suffix(4).description ?? "nil") cardExp=\(txnResult.cardExpiration ?? "nil") authCode=\(txnResult.authCode ?? "nil")", since: tapStart)
+                    TapLog.step("2/6 driver completion fired. success=\(txnResult.success.map(String.init) ?? "nil") userRef=\(txnResult.userReference ?? "nil") txnId=\(txnResult.externalId ?? "nil") cardType=\(txnResult.cardType ?? "nil") last4=\(txnResult.maskedPan?.suffix(4).description ?? "nil") cardExp=\(txnResult.cardExpiration ?? "nil") authCode=\(txnResult.authCode ?? "nil")", since: tapStart)
                     resultBox.set(txnResult)
                     resume(.success(txnResult))
                 }
