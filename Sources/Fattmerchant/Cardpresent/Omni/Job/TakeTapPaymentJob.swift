@@ -2,11 +2,46 @@ import Foundation
 
 @available(iOS 17.4, *)
 final class SingleShot {
+    private let lock = NSLock()
     private var didResume = false
+
+    /// Locked because the driver's completion and the timeout race from different threads, and
+    /// resuming the same continuation twice traps. Not a timing change — same behaviour, just
+    /// safe against the two arriving together.
     func run(_ block: () -> Void) {
-        guard !didResume else { return }
+        lock.lock()
+        if didResume {
+            lock.unlock()
+            return
+        }
         didResume = true
+        lock.unlock()
         block()
+    }
+}
+
+/// Thread-safe holder for the driver's `TransactionResult`.
+///
+/// `performTransaction`'s completion can land *after* our timeout has already fired — the
+/// tap is approved, but the continuation it resumes has been discarded along with its task
+/// group. Capturing the result here as well means a late approval is still recoverable, so
+/// we can void the sale instead of leaving it to settle with no Stax record behind it.
+@available(iOS 17.4, *)
+final class TransactionResultBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var value: TransactionResult?
+
+    /// Records the first result to arrive. Later calls are ignored.
+    func set(_ result: TransactionResult) {
+        lock.lock()
+        defer { lock.unlock() }
+        if value == nil { value = result }
+    }
+
+    var current: TransactionResult? {
+        lock.lock()
+        defer { lock.unlock() }
+        return value
     }
 }
 
@@ -28,6 +63,11 @@ actor TakeTapPaymentJob: Job {
     private let performTimeout: UInt64 = 90 * 1_000_000_000 // 90s
     private let captureTimeout: UInt64 = 45 * 1_000_000_000 // 45s
     private let voidTimeout: UInt64 = 30 * 1_000_000_000 // 30s
+
+    /// Attempts for a void that reports failure. NMI accepts a void until the batch closes, so a
+    /// transient failure is worth retrying rather than dropping. Reuses `voidTimeout` per attempt
+    /// and does not wait between them, so this adds no timing behaviour of its own.
+    private let voidAttempts = 3
 
     init(
         request: TransactionRequest,
@@ -51,6 +91,10 @@ actor TakeTapPaymentJob: Job {
             return JobResult.failure(OmniGeneralException.uninitialized)
         }
 
+        // Written from `performTransaction`'s completion, which may fire after our timeout has
+        // already abandoned the continuation. Read back in the catch block to recover the sale.
+        let resultBox = TransactionResultBox()
+
         do {
             let currentRequest = self.request
             let currentSignatureProvider = self.signatureProvider
@@ -66,6 +110,7 @@ actor TakeTapPaymentJob: Job {
                     transactionUpdateDelegate: currentTransactionUpdateDelegate,
                     userNotificationDelegate: currentUserNotificationDelegate
                 ) { txnResult in
+                    resultBox.set(txnResult)
                     resume(.success(txnResult))
                 }
             }
@@ -73,8 +118,8 @@ actor TakeTapPaymentJob: Job {
             guard let result = result else {
                 throw TakeTapPaymentException.couldNotCreateInvoice(detail: "No TransactionResult")
             }
-            
-            // If transaction was not successful (cancelled, declined, or error), 
+
+            // If transaction was not successful (cancelled, declined, or error),
             // don't try to create backend records - return the transaction result as-is
             guard result.success == true else {
                 // Create a StaxTransaction representing the failed/cancelled transaction
@@ -90,6 +135,8 @@ actor TakeTapPaymentJob: Job {
                 return JobResult.success(failedTransaction)
             }
         
+            // Everything past here runs with money already captured at the gateway, so any
+            // failure below must reach the void in the catch block.
             let customer = try await createCustomer(from: result, or: self.customer)
             let paymentMethod = try await createPaymentMethod(
                 from: customer,
@@ -116,14 +163,19 @@ actor TakeTapPaymentJob: Job {
 
             return JobResult.success(transaction)
         } catch {
-            // Void the transaction (best-effort) and mark the JobResult as a failure
-            if let result = result {
-                _ = try? await performWithTimeout(timeout: voidTimeout) { resume in
-                    driver.void(
-                        transactionResult: result,
-                        completion: { _ in resume(.success(())) }
-                    )
-                }
+            // The sale is a SALE with AUTO_CONFIRM, so by the time the driver reports anything the
+            // funds are already captured at the gateway. Whatever went wrong above, the only way
+            // to keep this from settling with no Stax record is to void it here.
+            //
+            // `result` is nil on the timeout path, because the assignment never completed — which
+            // is why the old `if let result = result` skipped the void entirely and left captured
+            // sales unrecorded. `resultBox` holds what the driver's completion delivered, so read
+            // that as well. No waiting is needed: the timeout cannot surface until the driver's
+            // completion has run, so if a result exists the box already has it.
+            if let toVoid = result ?? resultBox.current {
+                await voidTransaction(toVoid, using: driver)
+            } else {
+                print("[TakeTapPaymentJob] no TransactionResult available — nothing to void. error=\(error)")
             }
 
             // If error already conforms to OmniException, return it; otherwise wrap
@@ -178,6 +230,52 @@ actor TakeTapPaymentJob: Job {
             // Should be unreachable
             throw TakeTapPaymentException.couldNotCreateTransaction(detail: "Unknown operation error")
         }
+    }
+
+    // MARK: - Void
+
+    /// Voids a transaction, verifying the outcome and retrying on failure.
+    ///
+    /// The previous implementation discarded the driver's `Bool` and swallowed the timeout
+    /// with `try?`, so a void that never happened was indistinguishable from one that did —
+    /// which is how captured sales reached settlement with nothing recorded against them.
+    private func voidTransaction(
+        _ transactionResult: TransactionResult,
+        using driver: TapDriver
+    ) async {
+        // Nothing was captured, so there is nothing to reverse.
+        guard transactionResult.success == true else {
+            print("[TakeTapPaymentJob] transaction not approved — no void needed")
+            return
+        }
+
+        // `ChipDnaDriver.void` bails out immediately without a user reference, so surface that
+        // rather than logging three indistinguishable failed attempts.
+        guard let userReference = transactionResult.userReference, !userReference.isEmpty else {
+            print("[TakeTapPaymentJob] VOID IMPOSSIBLE: approved sale has no USER_REFERENCE. txnId=\(transactionResult.externalId ?? "nil") — this will settle unrecorded")
+            return
+        }
+
+        for attempt in 1...voidAttempts {
+            let voided: Bool? = try? await performWithTimeout(timeout: voidTimeout) { resume in
+                driver.void(
+                    transactionResult: transactionResult,
+                    completion: { success in resume(.success(success)) }
+                )
+            }
+
+            if voided == true {
+                print("[TakeTapPaymentJob] void succeeded on attempt \(attempt). userRef=\(userReference) txnId=\(transactionResult.externalId ?? "nil")")
+                return
+            }
+
+            let reason = voided == nil ? "timed out" : "was rejected"
+            print("[TakeTapPaymentJob] void \(reason) on attempt \(attempt)/\(voidAttempts). userRef=\(userReference)")
+        }
+
+        // Every attempt failed. This is the orphan: an approved, captured sale that will
+        // settle with no Stax transaction behind it. Log loudly enough to alert on.
+        print("[TakeTapPaymentJob] VOID FAILED after \(voidAttempts) attempts — captured sale will settle unrecorded. userRef=\(userReference) txnId=\(transactionResult.externalId ?? "nil") amount=\(request.amount.dollars())")
     }
 
     fileprivate func getOrCreateInvoice(id: String?) async throws -> StaxInvoice
@@ -398,20 +496,6 @@ actor TakeTapPaymentJob: Job {
         transaction.response = gatewayResponseJson
         transaction.token = result.externalId
         transaction.message = result.message
-
-        // DEBUG: Pretty-print the JSON body we are about to send
-        do {
-          let encoder = JSONEncoder()
-          encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-          // Use a stable date format if any dates are included (not expected for create payload)
-          encoder.dateEncodingStrategy = .iso8601
-          let data = try encoder.encode(transaction)
-          if let jsonString = String(data: data, encoding: .utf8) {
-            print("TakeTapPaymentJob.createTransaction JSON body:\n\(jsonString)")
-          }
-        } catch {
-          print("TakeTapPaymentJob.createTransaction JSON encoding failed: \(error)")
-        }
 
         let request = StaxApiRequest<StaxTransaction>(path: "/transaction", method: .post, body: transaction)
         return try await client.perform(request)

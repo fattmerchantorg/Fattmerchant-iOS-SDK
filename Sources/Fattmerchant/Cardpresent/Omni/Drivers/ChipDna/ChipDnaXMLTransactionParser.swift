@@ -59,9 +59,15 @@ class ChipDnaXMLTransactionParser: NSObject, XMLParserDelegate {
   }
 
   /// Stops the parsing and executes the completion block
+  ///
+  /// Idempotent: the completion is cleared before it runs, so the extra delegate callbacks
+  /// that follow `abortParsing()` (it reports back through `parseErrorOccurred`) cannot
+  /// deliver a second result.
   func finish() {
+    guard let completion = completion else { return }
+    self.completion = nil
     parser?.abortParsing()
-    completion?(ccExpirationDate)
+    completion(ccExpirationDate)
   }
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?,
@@ -99,6 +105,13 @@ class ChipDnaXMLTransactionParser: NSObject, XMLParserDelegate {
   }
 
   func parserDidEndDocument(_ parser: XMLParser) {
+    finish()
+  }
+
+  /// Without this, malformed or truncated XML ended the parse through neither `didEndElement`
+  /// nor `parserDidEndDocument`, so `finish()` never ran and the completion was dropped —
+  /// stranding whatever was waiting on it. Report no expiration rather than nothing at all.
+  func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
     finish()
   }
 }
