@@ -1,34 +1,9 @@
 #if !targetEnvironment(simulator)
 import Foundation
 
-/// Runs a block at most once, from whichever thread gets there first.
-///
-/// Used where two independent callbacks race to deliver one result — a network response and
-/// the deadline that bounds it — and delivering twice would be worse than delivering late.
-final class OnceGuard {
-    private let lock = NSLock()
-    private var didRun = false
-
-    func run(_ block: () -> Void) {
-        lock.lock()
-        if didRun {
-            lock.unlock()
-            return
-        }
-        didRun = true
-        lock.unlock()
-        block()
-    }
-}
-
 class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
     static var isStaxRefundsSupported: Bool = true
     static var source: String = "NMI"
-
-    /// Ceiling on the post-approval cc expiration lookup. The transaction is already captured
-    /// by the time it runs, so the caller is told about the sale either way — this only bounds
-    /// how long we will wait for a nicer payment method record.
-    fileprivate static let ccExpirationLookupCap: DispatchTimeInterval = .seconds(5)
 
     /// The ChipDna init params passed in the `initialize` function.
     private static var initializationArgs: ChipDnaInitializationArgs?
@@ -449,46 +424,18 @@ class ChipDnaDriver: NSObject, MobileReaderDriver, TapDriver {
                 }
             }
 
-            // By this point the sale is authorized and confirmed at the gateway, so nothing
-            // below may prevent the caller from hearing about it. Everything that remains is
-            // optional enrichment, and it runs against a deadline.
-            let deliverOnce = OnceGuard()
-            let snapshot = transactionResult
-            let deliver: (TransactionResult) -> Void = { finalResult in
-                deliverOnce.run {
-                    // Clean up this transaction listener once we're done
-                    transactionListener.detachFromChipDna()
-                    completion(finalResult)
-                }
-            }
-
-            // Tap to Pay gets the expiration from the card details event, so the usual path
-            // needs no lookup at all.
-            guard transactionResult.cardExpiration == nil,
-                let securityKey = Self.initializationArgs?.keys.securityKey,
-                let transactionId = result[CCParamTransactionId]
-            else {
-                deliver(snapshot)
-                return
-            }
-
-            // Deliver regardless once the cap elapses. The lookup hits the gateway's legacy
-            // query API, which is rate limited and slow often enough that it cannot be trusted
-            // to gate an approved transaction.
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(
-                deadline: .now() + Self.ccExpirationLookupCap
-            ) {
-                deliver(snapshot)
-            }
-
             // Get more details about the transaction since ChipDna doesn't get everything
             TransactionGateway.getTransactionCcExpiration(
-                securityKey: securityKey,
-                transactionId: transactionId
+                securityKey: Self.initializationArgs!.keys.securityKey,
+                transactionId: result[CCParamTransactionId] ?? ""
             ) { ccExpiration in
-                var enriched = snapshot
-                enriched.cardExpiration = ccExpiration
-                deliver(enriched)
+                // Only override if we don't have expiration from card details
+                if transactionResult.cardExpiration == nil {
+                    transactionResult.cardExpiration = ccExpiration
+                }
+                // Clean up this transaction listener once we're done
+                transactionListener.detachFromChipDna()
+                completion(transactionResult)
             }
         }
         
