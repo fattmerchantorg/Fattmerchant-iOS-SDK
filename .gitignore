@@ -41,6 +41,10 @@ playground.xcworkspace
 # Package.pins
 .build/
 
+# Optional Frameworks
+# CloudCommerce and other optional dependencies tracked with Git LFS
+OptionalFrameworks/
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However

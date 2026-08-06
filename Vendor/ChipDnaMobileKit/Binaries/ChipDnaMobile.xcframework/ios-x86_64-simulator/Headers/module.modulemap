@@ -1,0 +1,5 @@
+module ChipDnaMobile {
+  umbrella "."
+  export *
+  module * { export * }
+}
